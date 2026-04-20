@@ -1,9 +1,10 @@
 /* Goldenflower design tokens — extracted from the original prototype <style> block. */
 :root {
-  /* Paper / canvas */
-  --paper: #ece3cf;
-  --paper-2: #f4ecd7;
-  --paper-3: #e0d5bd;
+  /* Paper / canvas — lifted one step toward 乳白色 in Phase J so the site
+     reads as creamier / less dark. Previous values: #ece3cf, #f4ecd7, #e0d5bd. */
+  --paper: #f4ecd7;
+  --paper-2: #faf5e6;
+  --paper-3: #e8decb;
 
   /* Ink */
   --sumi: #1a1512;

@@ -1,16 +1,9 @@
-// Shop tab — Taipei stockists + online shop + shopping cart
+// Shop tab — online-only shopping cart + order request form.
+// (Physical stockists removed in Phase H — we don't have retail partners yet.)
 import { useState } from 'react';
 import { Divider } from './GoldenFlower.jsx';
 import { IllSoap } from './Illustrations.jsx';
 import { useCart } from '../state/CartContext.jsx';
-
-const STOCKISTS = [
-  { city: 'Taipei', zh: '艋舺 · 本店', addr: '台北市萬華區貴陽街二段 88 號', kind: 'Flagship', hours: '週三–週日 · 11:00–19:00' },
-  { city: 'Taipei', zh: '大稻埕', addr: '台北市大同區迪化街一段 142 號', kind: 'Partner', hours: '每日 · 10:30–20:00' },
-  { city: 'Taipei', zh: '赤峰街', addr: '台北市大同區赤峰街 47 巷 8 號', kind: 'Partner', hours: '週二–週日 · 12:00–20:00' },
-  { city: 'Taipei', zh: '永康街', addr: '台北市大安區永康街 31 巷 9 號', kind: 'Partner', hours: '每日 · 11:00–21:00' },
-  { city: 'Taipei', zh: '富錦街', addr: '台北市松山區富錦街 355 號', kind: 'Partner', hours: '週三–週一 · 12:30–19:30' },
-];
 
 /**
  * Order request form — POSTs cart contents to /api/order, which our Worker
@@ -216,12 +209,8 @@ const inputStyle = {
 };
 
 export function Shop() {
-  const [selectedCity, setSelectedCity] = useState('All');
   const [addingEmail, setAddingEmail] = useState('');
   const { items: cart, subtotal, shipping, total, updateQty, clear } = useCart();
-
-  const cities = ['All', 'Taipei'];
-  const filtered = selectedCity === 'All' ? STOCKISTS : STOCKISTS.filter((s) => s.city === selectedCity);
 
   return (
     <div style={{ position: 'relative', zIndex: 1 }}>
@@ -236,7 +225,7 @@ export function Shop() {
         }}
       >
         <div className="mono" style={{ color: 'var(--red)' }}>
-          Where to find us · 尋皂處
+          線上購皂 · Shop online
         </div>
         <h1
           className="tc gf-h1-md"
@@ -248,285 +237,39 @@ export function Shop() {
             color: 'var(--sumi)',
           }}
         >
-          購皂去處
+          購皂
         </h1>
-        <div className="italic" style={{ fontSize: 22, color: 'var(--gold-3)' }}>
-          Shop online, or visit us in person.
+        {/* Chinese-only subtitle — intentional break from the bilingual pattern,
+            because convenience-store pickup is a Taiwan-specific feature and
+            the audience for this line is local. */}
+        <div
+          className="italic"
+          style={{
+            fontSize: 20,
+            color: 'var(--gold-3)',
+            maxWidth: 640,
+            margin: '0 auto',
+            lineHeight: 1.5,
+          }}
+        >
+          我們在收到訂單後，三個工作天內寄出 · 支援 7-11 與全家店到店付款
         </div>
       </section>
 
-      {/* Two-column: map + cart */}
+      {/* Cart section — single centred column after Phase H simplification */}
       <section
-        className="gf-pad-md gf-stack-md"
+        className="gf-pad-md"
         style={{
-          maxWidth: 1280,
+          maxWidth: 560,
           margin: '0 auto',
           padding: '30px 44px 60px',
-          display: 'grid',
-          gridTemplateColumns: '1.3fr 1fr',
-          gap: 50,
         }}
       >
-        {/* Stockists column */}
-        <div>
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'baseline',
-              marginBottom: 24,
-            }}
-          >
-            <div>
-              <div className="mono" style={{ color: 'var(--gold-3)' }}>
-                Stockists · 店家
-              </div>
-              <div
-                className="tc"
-                style={{
-                  fontSize: 32,
-                  letterSpacing: 6,
-                  marginTop: 6,
-                }}
-              >
-                實體店面
-              </div>
-            </div>
-            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-              {cities.map((c) => (
-                <button
-                  key={c}
-                  onClick={() => setSelectedCity(c)}
-                  style={{
-                    padding: '6px 12px',
-                    fontFamily: '"DM Mono", monospace',
-                    fontSize: 10,
-                    letterSpacing: 2,
-                    textTransform: 'uppercase',
-                    border: `1px solid ${selectedCity === c ? 'var(--red)' : 'var(--ink-15)'}`,
-                    background: selectedCity === c ? 'var(--red)' : 'transparent',
-                    color: selectedCity === c ? 'var(--gold-2)' : 'var(--sumi)',
-                  }}
-                >
-                  {c}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Decorative map — Taipei districts with pins */}
-          <div
-            style={{
-              position: 'relative',
-              background: 'var(--paper-2)',
-              border: '1px solid var(--ink-15)',
-              padding: 24,
-              marginBottom: 30,
-              aspectRatio: '16/9',
-            }}
-          >
-            <svg viewBox="0 0 400 225" style={{ width: '100%', height: '100%' }}>
-              <defs>
-                <pattern id="map-grid" width="20" height="20" patternUnits="userSpaceOnUse">
-                  <path
-                    d="M 20 0 L 0 0 0 20"
-                    fill="none"
-                    stroke="rgba(26,21,18,0.06)"
-                    strokeWidth="0.5"
-                  />
-                </pattern>
-              </defs>
-              <rect width="400" height="225" fill="url(#map-grid)" />
-
-              {/* Tamsui / Keelung river */}
-              <path
-                d="M40 70 C 100 60, 160 90, 220 80 C 280 72, 340 100, 380 90"
-                fill="none"
-                stroke="rgba(77,107,75,0.35)"
-                strokeWidth="3"
-              />
-              <path
-                d="M200 40 C 210 80, 180 130, 200 190"
-                fill="none"
-                stroke="rgba(77,107,75,0.35)"
-                strokeWidth="3"
-              />
-
-              {/* Basin outline */}
-              <path
-                d="M50 60 C 40 120, 70 180, 160 195 C 260 205, 360 170, 370 110 C 375 60, 300 30, 200 35 C 120 40, 60 40, 50 60 Z"
-                fill="rgba(198,154,58,0.12)"
-                stroke="var(--gold-3)"
-                strokeWidth="0.8"
-              />
-
-              {/* District labels */}
-              {[
-                { x: 110, y: 150, label: '萬華' },
-                { x: 150, y: 75, label: '大同' },
-                { x: 230, y: 140, label: '大安' },
-                { x: 310, y: 100, label: '松山' },
-                { x: 250, y: 55, label: '中山' },
-              ].map((d, i) => (
-                <text
-                  key={i}
-                  x={d.x}
-                  y={d.y}
-                  fontFamily='"Noto Serif TC", serif'
-                  fontSize="11"
-                  fill="rgba(26,21,18,0.35)"
-                  textAnchor="middle"
-                >
-                  {d.label}
-                </text>
-              ))}
-
-              {/* Pins */}
-              {[
-                { x: 115, y: 155, label: '本店', kind: 'flag' },
-                { x: 160, y: 90, label: '迪化', kind: '' },
-                { x: 175, y: 70, label: '赤峰', kind: '' },
-                { x: 240, y: 150, label: '永康', kind: '' },
-                { x: 315, y: 105, label: '富錦', kind: '' },
-              ].map((p, i) => (
-                <g key={i}>
-                  <circle cx={p.x} cy={p.y} r={p.kind === 'flag' ? 6 : 4} fill="var(--red)" />
-                  <circle
-                    cx={p.x}
-                    cy={p.y}
-                    r={p.kind === 'flag' ? 12 : 9}
-                    fill="none"
-                    stroke="var(--red)"
-                    opacity="0.3"
-                  />
-                  {p.kind === 'flag' && <circle cx={p.x} cy={p.y} r="3" fill="var(--gold-2)" />}
-                  <text
-                    x={p.x + 10}
-                    y={p.y + 3}
-                    fontFamily='"Noto Serif TC", serif'
-                    fontSize="10"
-                    fill="var(--sumi)"
-                  >
-                    {p.label}
-                  </text>
-                </g>
-              ))}
-
-              {/* Compass */}
-              <g transform="translate(370, 30)">
-                <circle cx="0" cy="0" r="14" fill="none" stroke="var(--gold-3)" strokeWidth="0.6" />
-                <text
-                  x="0"
-                  y="-16"
-                  textAnchor="middle"
-                  fontFamily='"DM Mono", monospace'
-                  fontSize="7"
-                  fill="var(--gold-3)"
-                >
-                  N
-                </text>
-                <path d="M0 8 L-3 0 L0 -8 L3 0 Z" fill="var(--red)" />
-              </g>
-
-              {/* Title */}
-              <text
-                x="24"
-                y="30"
-                fontFamily='"Cormorant Garamond", serif'
-                fontStyle="italic"
-                fontSize="14"
-                fill="var(--gold-3)"
-              >
-                Taipei · 台北
-              </text>
-            </svg>
-            <div
-              style={{
-                position: 'absolute',
-                bottom: 14,
-                left: 24,
-                fontFamily: '"DM Mono", monospace',
-                fontSize: 9,
-                letterSpacing: 2,
-                color: 'var(--ink-60)',
-                textTransform: 'uppercase',
-              }}
-            >
-              5 stockists · all within taipei city
-            </div>
-          </div>
-
-          {/* Stockist list */}
-          <div
-            style={{
-              display: 'grid',
-              gap: 0,
-              border: '1px solid var(--ink-15)',
-            }}
-          >
-            {filtered.map((s, i) => (
-              <div
-                key={i}
-                className="gf-stack-md"
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'auto 1fr auto auto',
-                  gap: 20,
-                  padding: '18px 22px',
-                  borderBottom: i < filtered.length - 1 ? '1px solid var(--ink-15)' : 'none',
-                  background: i % 2 ? 'transparent' : 'rgba(244,236,215,0.5)',
-                  alignItems: 'center',
-                }}
-              >
-                <div>
-                  <div className="tc" style={{ fontSize: 20, letterSpacing: 3 }}>
-                    {s.zh}
-                  </div>
-                  <div className="italic" style={{ fontSize: 13, color: 'var(--gold-3)' }}>
-                    Taipei
-                  </div>
-                </div>
-                <div>
-                  <div style={{ fontSize: 15, color: 'var(--sumi)' }}>{s.addr}</div>
-                  <div className="mono" style={{ color: 'var(--ink-60)', marginTop: 4 }}>
-                    {s.hours}
-                  </div>
-                </div>
-                <div
-                  style={{
-                    padding: '4px 10px',
-                    fontFamily: '"DM Mono", monospace',
-                    fontSize: 9,
-                    letterSpacing: 2,
-                    textTransform: 'uppercase',
-                    border: `1px solid ${s.kind === 'Flagship' ? 'var(--red)' : 'var(--ink-15)'}`,
-                    color: s.kind === 'Flagship' ? 'var(--red)' : 'var(--ink-60)',
-                  }}
-                >
-                  {s.kind}
-                </div>
-                <button
-                  style={{
-                    fontFamily: '"Cormorant Garamond", serif',
-                    fontStyle: 'italic',
-                    fontSize: 15,
-                    color: 'var(--red)',
-                  }}
-                >
-                  directions →
-                </button>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Cart column */}
+        {/* (Stockists column deleted in Phase H — brand is online-only for now.
+            Map SVG and 5-shop list lived here; git preserves it if we ever
+            resurrect retail partners.) */}
         <aside
-          className="gf-cart-md"
           style={{
-            position: 'sticky',
-            top: 160,
-            alignSelf: 'start',
             background: 'var(--paper-2)',
             border: '1px solid var(--ink-15)',
             padding: 28,
@@ -731,7 +474,7 @@ export function Shop() {
               className="italic"
               style={{
                 fontSize: 18,
-                color: 'rgba(236,227,207,0.85)',
+                color: 'rgba(244,236,215,0.85)',
                 maxWidth: 440,
                 lineHeight: 1.6,
               }}
@@ -776,7 +519,7 @@ export function Shop() {
               className="italic"
               style={{
                 fontSize: 18,
-                color: 'rgba(236,227,207,0.85)',
+                color: 'rgba(244,236,215,0.85)',
                 maxWidth: 440,
                 lineHeight: 1.6,
               }}
