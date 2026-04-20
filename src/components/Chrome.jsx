@@ -58,7 +58,7 @@ export function Header({ tab, setTab, tabs }) {
         position: 'sticky',
         top: 0,
         zIndex: 20,
-        background: 'rgba(244,236,215,0.92)',
+        background: 'rgba(247,243,231,0.92)',
         backdropFilter: 'blur(6px)',
         WebkitBackdropFilter: 'blur(6px)',
         borderBottom: '1px solid var(--ink-15)',
@@ -195,7 +195,7 @@ export function Header({ tab, setTab, tabs }) {
           style={{
             borderTop: '1px solid var(--ink-08)',
             borderBottom: '1px solid var(--ink-08)',
-            background: 'rgba(244,236,215,0.6)',
+            background: 'rgba(247,243,231,0.6)',
           }}
         >
           <div
@@ -381,7 +381,7 @@ export function Footer() {
             style={{
               fontSize: 15,
               lineHeight: 1.65,
-              color: 'rgba(244,236,215,0.7)',
+              color: 'rgba(247,243,231,0.7)',
               maxWidth: 320,
             }}
           >
@@ -403,7 +403,7 @@ export function Footer() {
                 <li
                   key={x}
                   className="italic"
-                  style={{ fontSize: 15, color: 'rgba(244,236,215,0.85)' }}
+                  style={{ fontSize: 15, color: 'rgba(247,243,231,0.85)' }}
                 >
                   {x}
                 </li>
@@ -422,7 +422,7 @@ export function Footer() {
           fontSize: 10,
           letterSpacing: 2,
           textTransform: 'uppercase',
-          color: 'rgba(244,236,215,0.55)',
+          color: 'rgba(247,243,231,0.55)',
           maxWidth: 1280,
           margin: '0 auto',
         }}

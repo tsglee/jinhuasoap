@@ -1,10 +1,13 @@
 /* Goldenflower design tokens — extracted from the original prototype <style> block. */
 :root {
-  /* Paper / canvas — lifted one step toward 乳白色 in Phase J so the site
-     reads as creamier / less dark. Previous values: #ece3cf, #f4ecd7, #e0d5bd. */
-  --paper: #f4ecd7;
-  --paper-2: #faf5e6;
-  --paper-3: #e8decb;
+  /* Paper / canvas — shifted toward 暖色的象牙白 (warm ivory white).
+     Earlier Phase J was still reading as too yellow + too dark (#f4ecd7),
+     so dropped saturation ~28% and lifted lightness ~4%.
+     Pre-Phase-J originals: #ece3cf, #f4ecd7, #e0d5bd.
+     Phase J first pass:   #f4ecd7, #faf5e6, #e8decb. */
+  --paper: #f7f3e7;
+  --paper-2: #fcfaf2;
+  --paper-3: #ece4d0;
 
   /* Ink */
   --sumi: #1a1512;

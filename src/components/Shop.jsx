@@ -474,7 +474,7 @@ export function Shop() {
               className="italic"
               style={{
                 fontSize: 18,
-                color: 'rgba(244,236,215,0.85)',
+                color: 'rgba(247,243,231,0.85)',
                 maxWidth: 440,
                 lineHeight: 1.6,
               }}
@@ -519,7 +519,7 @@ export function Shop() {
               className="italic"
               style={{
                 fontSize: 18,
-                color: 'rgba(244,236,215,0.85)',
+                color: 'rgba(247,243,231,0.85)',
                 maxWidth: 440,
                 lineHeight: 1.6,
               }}
