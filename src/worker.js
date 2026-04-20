@@ -177,7 +177,7 @@ function renderOrderEmailHtml({ name, email, note, cart, total, ip }) {
     : '';
 
   return `<!doctype html>
-<html><body style="font-family:'Cormorant Garamond',Georgia,serif;color:#1a1512;background:#f7f3e7;padding:24px;">
+<html><body style="font-family:'Cormorant Garamond',Georgia,serif;color:#1a1512;background:#f8f5eb;padding:24px;">
   <div style="max-width:560px;margin:0 auto;background:#fff;padding:28px;border:1px solid #ddd;">
     <h2 style="margin:0 0 6px;font-weight:500;letter-spacing:4px;">New order request</h2>
     <p style="margin:0 0 18px;color:#666;font-size:13px;letter-spacing:1px;text-transform:uppercase;">金花樓 · Goldenflower</p>
