@@ -1,0 +1,17 @@
+/**
+ * Cloudflare Workers config — deploys this repo as a Workers Static Assets
+ * project from `./dist/`. Bypasses the Cloudflare Vite auto-config (which
+ * requires Vite 6+) by specifying assets directly.
+ *
+ * When we add the `/api/order` endpoint in Phase C of the launch plan, we'll
+ * add `main` + `compatibility_flags` and the Worker entrypoint here.
+ */
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "jinhuasoap",
+  "compatibility_date": "2025-04-01",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "single-page-application"
+  }
+}
