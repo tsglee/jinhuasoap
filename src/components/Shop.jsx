@@ -40,6 +40,7 @@ export function Shop() {
     <div style={{ position: 'relative', zIndex: 1 }}>
       {/* Header */}
       <section
+        className="gf-pad-md gf-tight-md"
         style={{
           maxWidth: 1280,
           margin: '0 auto',
@@ -51,7 +52,7 @@ export function Shop() {
           Where to find us · 尋皂處
         </div>
         <h1
-          className="tc"
+          className="tc gf-h1-md"
           style={{
             fontSize: 72,
             fontWeight: 500,
@@ -69,6 +70,7 @@ export function Shop() {
 
       {/* Two-column: map + cart */}
       <section
+        className="gf-pad-md gf-stack-md"
         style={{
           maxWidth: 1280,
           margin: '0 auto',
@@ -278,6 +280,7 @@ export function Shop() {
             {filtered.map((s, i) => (
               <div
                 key={i}
+                className="gf-stack-md"
                 style={{
                   display: 'grid',
                   gridTemplateColumns: 'auto 1fr auto auto',
@@ -332,6 +335,7 @@ export function Shop() {
 
         {/* Cart column */}
         <aside
+          className="gf-cart-md"
           style={{
             position: 'sticky',
             top: 160,
@@ -402,6 +406,7 @@ export function Shop() {
                 <div style={{ display: 'flex', gap: 6, marginTop: 6, alignItems: 'center' }}>
                   <button
                     onClick={() => updateQty(item.num, -1)}
+                    className="gf-tiny-btn"
                     style={{
                       width: 22,
                       height: 22,
@@ -424,6 +429,7 @@ export function Shop() {
                   </span>
                   <button
                     onClick={() => updateQty(item.num, 1)}
+                    className="gf-tiny-btn"
                     style={{
                       width: 22,
                       height: 22,
@@ -516,6 +522,7 @@ export function Shop() {
 
       {/* Wholesale + newsletter */}
       <section
+        className="gf-pad-md"
         style={{
           background: 'var(--sumi)',
           color: 'var(--paper)',
@@ -523,6 +530,7 @@ export function Shop() {
         }}
       >
         <div
+          className="gf-stack-md"
           style={{
             maxWidth: 1280,
             margin: '0 auto',

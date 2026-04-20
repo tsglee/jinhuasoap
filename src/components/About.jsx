@@ -7,6 +7,7 @@ export function About() {
     <div style={{ position: 'relative', zIndex: 1 }}>
       {/* Hero */}
       <section
+        className="gf-pad-md gf-stack-md gf-tight-md"
         style={{
           maxWidth: 1280,
           margin: '0 auto',
@@ -22,7 +23,7 @@ export function About() {
             Our Story · 本舍小記
           </div>
           <h1
-            className="tc"
+            className="tc gf-h1-md"
             style={{
               fontSize: 72,
               fontWeight: 500,
@@ -106,6 +107,7 @@ export function About() {
         }}
       >
         <div
+          className="gf-pad-md gf-stack-md"
           style={{
             maxWidth: 1280,
             margin: '0 auto',
@@ -173,6 +175,7 @@ export function About() {
 
       {/* Manifesto — vertical chinese + horizontal english */}
       <section
+        className="gf-pad-md gf-stack-md gf-tight-md"
         style={{
           maxWidth: 1280,
           margin: '0 auto',
@@ -183,6 +186,7 @@ export function About() {
         }}
       >
         <div
+          className="gf-vertical-md"
           style={{
             writingMode: 'vertical-rl',
             fontFamily: '"Noto Serif TC", serif',
@@ -208,6 +212,7 @@ export function About() {
             the last warm water of the night.
           </div>
           <div
+            className="gf-stack-md"
             style={{
               marginTop: 40,
               display: 'grid',
@@ -240,6 +245,7 @@ export function About() {
         }}
       >
         <div
+          className="gf-pad-md"
           style={{
             maxWidth: 1280,
             margin: '0 auto',
@@ -253,7 +259,7 @@ export function About() {
             Five Bars · 五皂五境
           </div>
           <h2
-            className="tc"
+            className="tc gf-h2-md"
             style={{
               textAlign: 'center',
               fontSize: 44,
@@ -302,6 +308,7 @@ export function About() {
             };
             return (
               <div
+                className="gf-stack-md"
                 style={{
                   display: 'grid',
                   gridTemplateColumns: '1.05fr 1fr',
@@ -438,6 +445,7 @@ export function About() {
 
           {/* Four smaller scene tiles */}
           <div
+            className="gf-stack-md"
             style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(2, 1fr)',
@@ -496,6 +504,7 @@ export function About() {
             ].map((s, i) => (
               <div
                 key={i}
+                className="gf-stack-md"
                 style={{
                   display: 'grid',
                   gridTemplateColumns: '1fr 1.2fr',

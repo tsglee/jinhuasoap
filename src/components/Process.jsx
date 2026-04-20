@@ -48,6 +48,7 @@ export function Process() {
     <div style={{ position: 'relative', zIndex: 1 }}>
       {/* Header */}
       <section
+        className="gf-pad-md gf-tight-md"
         style={{
           maxWidth: 1280,
           margin: '0 auto',
@@ -59,7 +60,7 @@ export function Process() {
           How it is made · 製皂之序
         </div>
         <h1
-          className="tc"
+          className="tc gf-h1-md"
           style={{
             fontSize: 72,
             fontWeight: 500,
@@ -83,6 +84,7 @@ export function Process() {
 
       {/* Timeline */}
       <section
+        className="gf-pad-md gf-hide-md"
         style={{
           maxWidth: 1280,
           margin: '0 auto',
@@ -138,6 +140,7 @@ export function Process() {
 
       {/* Step details — alternating left/right */}
       <section
+        className="gf-pad-md"
         style={{
           maxWidth: 1180,
           margin: '0 auto',
@@ -149,6 +152,7 @@ export function Process() {
           return (
             <div
               key={s.n}
+              className="gf-stack-md"
               style={{
                 display: 'grid',
                 gridTemplateColumns: '1fr 1fr',
@@ -226,6 +230,7 @@ export function Process() {
         }}
       >
         <div
+          className="gf-pad-md"
           style={{
             maxWidth: 1280,
             margin: '0 auto',
@@ -243,7 +248,7 @@ export function Process() {
               What&apos;s inside · 材料
             </div>
             <h2
-              className="tc"
+              className="tc gf-h2-md"
               style={{
                 fontSize: 64,
                 fontWeight: 400,
@@ -273,6 +278,7 @@ export function Process() {
 
           {/* 4 × 2 photo grid */}
           <div
+            className="gf-cols-2-md"
             style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(4, 1fr)',
@@ -313,6 +319,7 @@ export function Process() {
 
           {/* Caption row beneath the grid — preserves the full notes */}
           <div
+            className="gf-cols-2-md"
             style={{
               marginTop: 40,
               display: 'grid',
@@ -348,6 +355,7 @@ export function Process() {
 
       {/* What we don't use */}
       <section
+        className="gf-pad-md"
         style={{
           maxWidth: 1280,
           margin: '0 auto',
@@ -355,6 +363,7 @@ export function Process() {
         }}
       >
         <div
+          className="gf-stack-md"
           style={{
             display: 'grid',
             gridTemplateColumns: '1fr 1fr',

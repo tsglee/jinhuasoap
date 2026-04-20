@@ -1,0 +1,117 @@
+/**
+ * Responsive utility classes for the Goldenflower site.
+ *
+ * The components were written desktop-first with inline styles. Rather than
+ * refactor every inline style into class-based CSS (a much bigger change),
+ * we use these utility classes + `!important` to override inline styles
+ * at the small-viewport breakpoints.
+ *
+ * Breakpoints follow the tokens in tokens.css:
+ *   --bp-sm: 640px   phone
+ *   --bp-md: 900px   small tablet / large phone landscape
+ *   --bp-lg: 1280px  desktop
+ *
+ * Naming convention: `gf-<intent>-<bp>`
+ */
+
+/* ─── Mobile-first overrides (phone + small tablet, ≤ 900px) ──────────── */
+@media (max-width: 900px) {
+  /* Reduce horizontal page padding on phones (default desktop = 44px). */
+  .gf-pad-md {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+
+  /* Hero <h1> — collapse the desktop letter-spacing and large type. */
+  .gf-h1-md {
+    font-size: clamp(38px, 9vw, 64px) !important;
+    letter-spacing: 2px !important;
+    line-height: 1.1 !important;
+  }
+
+  /* Section <h2> on mobile. */
+  .gf-h2-md {
+    font-size: clamp(30px, 7vw, 44px) !important;
+    letter-spacing: 4px !important;
+  }
+
+  /* Italic lyrical line — scale down on mobile. */
+  .gf-lyrical-md {
+    font-size: clamp(18px, 4.5vw, 26px) !important;
+    line-height: 1.4 !important;
+  }
+
+  /* Collapse any 2/3/4-col grid to a single column. */
+  .gf-stack-md {
+    grid-template-columns: 1fr !important;
+    gap: 32px !important;
+  }
+  /* When stacking, reset any inline `order` so children flow in DOM order
+     (the alternating step layout uses order to flip image/text on desktop). */
+  .gf-stack-md > * {
+    order: 0 !important;
+  }
+
+  /* Collapse a 4-col grid to 2-col on mobile (less aggressive than full stack). */
+  .gf-cols-2-md {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 16px !important;
+  }
+
+  /* Reduce padding on hero / large sections on mobile. */
+  .gf-tight-md {
+    padding-top: 40px !important;
+    padding-bottom: 40px !important;
+  }
+
+  /* Hide an element on mobile (e.g. supplementary chips). */
+  .gf-hide-md {
+    display: none !important;
+  }
+
+  /* Reduce font-size on the .mono utility chips (default desktop = 11px). */
+  .gf-mono-md {
+    font-size: 9px !important;
+    letter-spacing: 1.5px !important;
+  }
+
+  /* Sticky cart aside — make it static-flow on mobile so it doesn't trap. */
+  .gf-cart-md {
+    position: static !important;
+    top: auto !important;
+  }
+
+  /* Vertical Chinese manifesto — switch to horizontal on mobile. */
+  .gf-vertical-md {
+    writing-mode: horizontal-tb !important;
+    height: auto !important;
+    font-size: clamp(20px, 5vw, 30px) !important;
+    line-height: 1.6 !important;
+    letter-spacing: 4px !important;
+  }
+}
+
+/* ─── Show only on mobile (inverse of gf-hide-md). ─────────────────────── */
+.gf-mobile-only {
+  display: none;
+}
+@media (max-width: 900px) {
+  .gf-mobile-only {
+    display: block !important;
+  }
+}
+
+/* ─── Tablet-only (between 640 and 900) ────────────────────────────────── */
+/* Reserved for future use. */
+
+/* ─── Touch-target floor ───────────────────────────────────────────────── */
+/* Any button anywhere needs at least 44×44 on touch devices. */
+@media (max-width: 900px) {
+  button {
+    min-height: 44px;
+  }
+  /* Quantity nudge buttons in the cart are intentionally smaller — opt out. */
+  .gf-tiny-btn {
+    min-height: 22px !important;
+  }
+}

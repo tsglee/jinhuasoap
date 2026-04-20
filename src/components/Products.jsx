@@ -222,6 +222,7 @@ export function Products() {
     <div style={{ position: 'relative', zIndex: 1 }}>
       {/* Page header */}
       <section
+        className="gf-pad-md gf-tight-md"
         style={{
           maxWidth: 1280,
           margin: '0 auto',
@@ -233,7 +234,7 @@ export function Products() {
           The Twelve · 十二花
         </div>
         <h1
-          className="tc"
+          className="tc gf-h1-md"
           style={{
             fontSize: 68,
             fontWeight: 500,
@@ -270,6 +271,7 @@ export function Products() {
 
       {/* Filter bar */}
       <section
+        className="gf-pad-md"
         style={{
           maxWidth: 1280,
           margin: '0 auto',
@@ -310,7 +312,7 @@ export function Products() {
 
       {/* Hero ad — full-bleed, Moonlight-style */}
       {hero && (
-        <section style={{ padding: '40px 44px 0' }}>
+        <section className="gf-pad-md" style={{ padding: '40px 44px 0' }}>
           <div style={{ maxWidth: 1280, margin: '0 auto' }}>
             <div style={{ position: 'relative' }}>
               <div style={{ aspectRatio: '16/9', overflow: 'hidden', position: 'relative' }}>
@@ -387,6 +389,7 @@ export function Products() {
       {/* Editorial pair — two large ad stills side by side */}
       {pair.length > 0 && (
         <section
+          className="gf-pad-md"
           style={{
             maxWidth: 1280,
             margin: '0 auto',
@@ -394,6 +397,7 @@ export function Products() {
           }}
         >
           <div
+            className="gf-stack-md"
             style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(2, 1fr)',
@@ -410,6 +414,7 @@ export function Products() {
       {/* Rest as a grid of smaller ad stills, 3-up */}
       {rest.length > 0 && (
         <section
+          className="gf-pad-md"
           style={{
             maxWidth: 1280,
             margin: '0 auto',
@@ -417,6 +422,7 @@ export function Products() {
           }}
         >
           <div
+            className="gf-cols-2-md"
             style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(3, 1fr)',
@@ -432,6 +438,7 @@ export function Products() {
 
       {/* Gift set banner */}
       <section
+        className="gf-pad-md"
         style={{
           background: 'var(--sumi)',
           color: 'var(--paper)',
@@ -439,6 +446,7 @@ export function Products() {
         }}
       >
         <div
+          className="gf-stack-md"
           style={{
             maxWidth: 1280,
             margin: '0 auto',
