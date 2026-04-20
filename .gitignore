@@ -46,3 +46,6 @@ coverage/
 # Cache
 .eslintcache
 .cache/
+
+# Claude / per-tool agent state
+.claude/
