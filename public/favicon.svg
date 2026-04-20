@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 金花樓 · Goldenflower — simplified lily mark for favicon use (32×32 target).
+     Single gold ink, pared down from the full hand-drawn lily so it stays
+     legible at very small sizes. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none"
+     stroke="#c69a3a" stroke-linecap="round" stroke-linejoin="round">
+  <defs>
+    <linearGradient id="ink" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#e8cd78"/>
+      <stop offset="50%" stop-color="#c69a3a"/>
+      <stop offset="100%" stop-color="#8a6420"/>
+    </linearGradient>
+  </defs>
+  <!-- Stem -->
+  <path d="M100 172 C 102 148, 98 124, 104 100" stroke="url(#ink)" stroke-width="3"/>
+  <!-- 5 petals -->
+  <path d="M104 100 C 76 96, 52 76, 44 50 C 60 58, 80 78, 104 100 Z" stroke="url(#ink)" stroke-width="2.4"/>
+  <path d="M104 100 C 118 74, 130 44, 128 20 C 140 38, 142 72, 118 98" stroke="url(#ink)" stroke-width="2.4"/>
+  <path d="M104 100 C 132 88, 158 78, 170 60 C 162 82, 144 102, 118 110" stroke="url(#ink)" stroke-width="2.4"/>
+  <path d="M104 100 C 86 110, 62 118, 46 132 C 68 132, 94 124, 110 110 Z" stroke="url(#ink)" stroke-width="2.4"/>
+  <path d="M108 104 C 108 124, 116 140, 134 146 C 134 128, 128 112, 114 104 Z" stroke="url(#ink)" stroke-width="2.4"/>
+  <!-- Pistil -->
+  <path d="M104 100 C 96 82, 92 60, 94 34" stroke="#c69a3a" stroke-width="3"/>
+  <!-- Two leaves -->
+  <path d="M100 168 C 82 170, 64 162, 52 146 C 70 152, 86 160, 100 168 Z" stroke="url(#ink)" stroke-width="2"/>
+  <path d="M100 168 C 120 172, 140 168, 156 152 C 138 156, 118 162, 100 168 Z" stroke="url(#ink)" stroke-width="2"/>
+</svg>
