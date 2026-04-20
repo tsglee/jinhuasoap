@@ -1,6 +1,7 @@
 // Products tab — editorial ad-style hero stills, each bar shot like a print ad
 import { useState } from 'react';
 import { IllProductHero, IllGiftBox } from './Illustrations.jsx';
+import { useCart } from '../state/CartContext.jsx';
 
 const PRODUCTS = [
   {
@@ -92,6 +93,15 @@ const PRODUCTS = [
 // Small price/meta footer shared by all cards
 function ProductMeta({ p, size = 'md' }) {
   const big = size === 'lg';
+  const { add } = useCart();
+  const [justAdded, setJustAdded] = useState(false);
+
+  const handleAdd = () => {
+    add(p, 1);
+    setJustAdded(true);
+    window.setTimeout(() => setJustAdded(false), 1400);
+  };
+
   return (
     <div
       style={{
@@ -174,18 +184,21 @@ function ProductMeta({ p, size = 'md' }) {
           NT${p.price}
         </div>
         <button
+          onClick={handleAdd}
+          aria-live="polite"
           style={{
             marginTop: 8,
             fontFamily: '"DM Mono", monospace',
             fontSize: 10,
             letterSpacing: 2,
             textTransform: 'uppercase',
-            color: 'var(--sumi)',
-            borderBottom: '1px solid var(--sumi)',
+            color: justAdded ? 'var(--red)' : 'var(--sumi)',
+            borderBottom: `1px solid ${justAdded ? 'var(--red)' : 'var(--sumi)'}`,
             paddingBottom: 2,
+            transition: 'color 200ms, border-color 200ms',
           }}
         >
-          Add to basket
+          {justAdded ? 'Added ✓' : 'Add to basket'}
         </button>
       </div>
     </div>

@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { Divider } from './GoldenFlower.jsx';
 import { IllSoap } from './Illustrations.jsx';
+import { useCart } from '../state/CartContext.jsx';
 
 const STOCKISTS = [
   { city: 'Taipei', zh: '艋舺 · 本店', addr: '台北市萬華區貴陽街二段 88 號', kind: 'Flagship', hours: '週三–週日 · 11:00–19:00' },
@@ -11,30 +12,216 @@ const STOCKISTS = [
   { city: 'Taipei', zh: '富錦街', addr: '台北市松山區富錦街 355 號', kind: 'Partner', hours: '週三–週一 · 12:30–19:30' },
 ];
 
-const CART_ITEMS = [
-  { num: 'I', zh: '玫瑰', en: 'Rose', qty: 2, price: 380, tone: 'rose' },
-  { num: 'VI', zh: '桂花', en: 'Osmanthus', qty: 1, price: 420, tone: 'warm' },
-];
+/**
+ * Order request form — POSTs cart contents to /api/order, which our Worker
+ * forwards to Resend. This is the "checkout later" model from the launch
+ * plan: no live payments, just an email to the brand owner.
+ */
+function OrderRequestForm({ cart, total, onSent }) {
+  const [open, setOpen] = useState(false);
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [note, setNote] = useState('');
+  const [status, setStatus] = useState('idle'); // 'idle' | 'sending' | 'sent' | 'error'
+  const [errorMsg, setErrorMsg] = useState('');
+
+  const submit = async (e) => {
+    e.preventDefault();
+    if (status === 'sending') return;
+    setStatus('sending');
+    setErrorMsg('');
+    try {
+      const res = await fetch('/api/order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: name.trim(),
+          email: email.trim(),
+          note: note.trim(),
+          cart: cart.map((i) => ({
+            num: i.num,
+            zh: i.zh,
+            en: i.en,
+            qty: i.qty,
+            price: i.price,
+          })),
+          total,
+        }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data.ok) {
+        throw new Error(data.error || `Server returned ${res.status}`);
+      }
+      setStatus('sent');
+      setName('');
+      setEmail('');
+      setNote('');
+      // Clear cart after a brief pause so the user sees the confirmation.
+      window.setTimeout(() => onSent && onSent(), 1500);
+    } catch (err) {
+      setStatus('error');
+      setErrorMsg(err.message || 'Could not send order. Please try again.');
+    }
+  };
+
+  if (status === 'sent') {
+    return (
+      <div
+        style={{
+          marginTop: 20,
+          padding: 18,
+          background: 'rgba(74,107,75,0.08)',
+          border: '1px solid var(--tea)',
+          textAlign: 'center',
+        }}
+      >
+        <div
+          className="tc"
+          style={{ fontSize: 22, letterSpacing: 4, color: 'var(--tea)', marginBottom: 6 }}
+        >
+          收到您的訂單
+        </div>
+        <div className="italic" style={{ fontSize: 15, color: 'var(--sumi)' }}>
+          We&apos;ve received your order request. We&apos;ll reply by email within 24 hours with
+          payment + shipping details.
+        </div>
+      </div>
+    );
+  }
+
+  if (!open) {
+    return (
+      <button
+        onClick={() => setOpen(true)}
+        style={{
+          marginTop: 24,
+          width: '100%',
+          background: 'var(--red)',
+          color: 'var(--gold-2)',
+          padding: '16px',
+          fontFamily: '"DM Mono", monospace',
+          fontSize: 12,
+          letterSpacing: 3,
+          textTransform: 'uppercase',
+          border: '1px solid var(--gold-1)',
+        }}
+      >
+        Request order · 訂購
+      </button>
+    );
+  }
+
+  return (
+    <form
+      onSubmit={submit}
+      style={{
+        marginTop: 24,
+        display: 'grid',
+        gap: 12,
+      }}
+    >
+      <div className="mono" style={{ color: 'var(--gold-3)' }}>
+        Order request · 訂購單
+      </div>
+      <div className="italic" style={{ fontSize: 13, color: 'var(--ink-60)', lineHeight: 1.5 }}>
+        We&apos;ll reply by email within 24 hours with payment + shipping. No card needed yet.
+      </div>
+      <input
+        type="text"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        placeholder="Your name · 姓名"
+        required
+        autoComplete="name"
+        style={inputStyle}
+      />
+      <input
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        placeholder="Your email · 電子郵件"
+        required
+        autoComplete="email"
+        style={inputStyle}
+      />
+      <textarea
+        value={note}
+        onChange={(e) => setNote(e.target.value)}
+        placeholder="Anything we should know? (optional)"
+        rows={3}
+        style={{ ...inputStyle, resize: 'vertical', minHeight: 70, fontFamily: '"Cormorant Garamond", serif' }}
+      />
+      {status === 'error' && (
+        <div
+          style={{
+            color: 'var(--red)',
+            fontSize: 13,
+            padding: '8px 12px',
+            background: 'rgba(138,42,34,0.06)',
+            border: '1px solid var(--red)',
+          }}
+        >
+          {errorMsg}
+        </div>
+      )}
+      <div style={{ display: 'flex', gap: 10 }}>
+        <button
+          type="button"
+          onClick={() => setOpen(false)}
+          style={{
+            flex: 1,
+            padding: '14px',
+            border: '1px solid var(--ink-15)',
+            color: 'var(--sumi)',
+            fontFamily: '"DM Mono", monospace',
+            fontSize: 11,
+            letterSpacing: 2,
+            textTransform: 'uppercase',
+          }}
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          disabled={status === 'sending'}
+          style={{
+            flex: 2,
+            background: 'var(--red)',
+            color: 'var(--gold-2)',
+            padding: '14px',
+            fontFamily: '"DM Mono", monospace',
+            fontSize: 11,
+            letterSpacing: 2,
+            textTransform: 'uppercase',
+            border: '1px solid var(--gold-1)',
+            opacity: status === 'sending' ? 0.6 : 1,
+            cursor: status === 'sending' ? 'wait' : 'pointer',
+          }}
+        >
+          {status === 'sending' ? 'Sending…' : `Send · NT$${total}`}
+        </button>
+      </div>
+    </form>
+  );
+}
+
+const inputStyle = {
+  padding: '12px 14px',
+  background: 'var(--paper)',
+  border: '1px solid var(--ink-15)',
+  color: 'var(--sumi)',
+  fontFamily: '"Cormorant Garamond", serif',
+  fontSize: 16,
+  outline: 'none',
+};
 
 export function Shop() {
   const [selectedCity, setSelectedCity] = useState('All');
-  const [cart, setCart] = useState(CART_ITEMS);
   const [addingEmail, setAddingEmail] = useState('');
+  const { items: cart, subtotal, shipping, total, updateQty, clear } = useCart();
 
   const cities = ['All', 'Taipei'];
   const filtered = selectedCity === 'All' ? STOCKISTS : STOCKISTS.filter((s) => s.city === selectedCity);
-
-  const subtotal = cart.reduce((s, i) => s + i.qty * i.price, 0);
-  const shipping = subtotal > 1200 ? 0 : 120;
-  const total = subtotal + shipping;
-
-  const updateQty = (num, delta) => {
-    setCart((c) =>
-      c
-        .map((i) => (i.num === num ? { ...i, qty: Math.max(0, i.qty + delta) } : i))
-        .filter((i) => i.qty > 0),
-    );
-  };
 
   return (
     <div style={{ position: 'relative', zIndex: 1 }}>
@@ -487,22 +674,7 @@ export function Shop() {
                 </div>
               </div>
 
-              <button
-                style={{
-                  marginTop: 24,
-                  width: '100%',
-                  background: 'var(--red)',
-                  color: 'var(--gold-2)',
-                  padding: '16px',
-                  fontFamily: '"DM Mono", monospace',
-                  fontSize: 12,
-                  letterSpacing: 3,
-                  textTransform: 'uppercase',
-                  border: '1px solid var(--gold-1)',
-                }}
-              >
-                Checkout · 結帳
-              </button>
+              <OrderRequestForm cart={cart} total={total} onSent={clear} />
 
               <div
                 className="italic"

@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { GoldFlower } from './GoldenFlower.jsx';
 import { useIsMobile } from '../hooks/useIsMobile.js';
+import { useCart } from '../state/CartContext.jsx';
 
 function HamburgerIcon({ open }) {
   // 3 horizontal bars; rotates to an X when open
@@ -35,6 +36,7 @@ function HamburgerIcon({ open }) {
 export function Header({ tab, setTab, tabs }) {
   const isMobile = useIsMobile();
   const [menuOpen, setMenuOpen] = useState(false);
+  const { itemCount } = useCart();
 
   // Close the menu whenever the tab changes (after a tap) or on resize-up.
   useEffect(() => {
@@ -175,14 +177,14 @@ export function Header({ tab, setTab, tabs }) {
           )}
           <button
             onClick={() => setTab('shop')}
-            aria-label="Cart"
+            aria-label={`Cart, ${itemCount} item${itemCount === 1 ? '' : 's'}`}
             style={{
               color: 'var(--red)',
               minWidth: isMobile ? 44 : undefined,
               minHeight: isMobile ? 44 : undefined,
             }}
           >
-            Cart · 2
+            Cart · {itemCount}
           </button>
         </div>
       </div>

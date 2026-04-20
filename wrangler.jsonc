@@ -1,17 +1,30 @@
 /**
  * Cloudflare Workers config — deploys this repo as a Workers Static Assets
- * project from `./dist/`. Bypasses the Cloudflare Vite auto-config (which
- * requires Vite 6+) by specifying assets directly.
+ * project from `./dist/`, with a Worker at src/worker.js that handles the
+ * `/api/order` endpoint and falls through to static assets for everything
+ * else.
  *
- * When we add the `/api/order` endpoint in Phase C of the launch plan, we'll
- * add `main` + `compatibility_flags` and the Worker entrypoint here.
+ * Default routing: with `main` set, Cloudflare serves matching assets
+ * directly (no Worker invocation, no cost) and only invokes the Worker
+ * for paths that don't match an asset — so `/api/order` hits the Worker
+ * while `/index.html`, `/assets/*`, etc. are served straight from the
+ * edge. The Worker can call `env.ASSETS.fetch(request)` for fall-through.
+ *
+ * Secrets to set in dashboard (Settings → Variables and Secrets):
+ *   RESEND_API_KEY     (encrypted) — required for /api/order to work
+ *   ORDER_TO_EMAIL     (plain)     — defaults to tsghsunlee@gmail.com
+ *   ORDER_FROM_EMAIL   (plain)     — defaults to onboarding@resend.dev,
+ *                                    switch to noreply@jinhuasoap.com
+ *                                    once the domain is verified in Resend
  */
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "jinhuasoap",
+  "main": "src/worker.js",
   "compatibility_date": "2025-04-01",
   "assets": {
     "directory": "./dist",
+    "binding": "ASSETS",
     "not_found_handling": "single-page-application"
   }
 }

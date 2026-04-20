@@ -5,6 +5,7 @@ import { About } from './components/About.jsx';
 import { Products } from './components/Products.jsx';
 import { Process } from './components/Process.jsx';
 import { Shop } from './components/Shop.jsx';
+import { CartProvider } from './state/CartContext.jsx';
 
 const TABS = [
   { id: 'about', zh: '本舍', en: 'About Us' },
@@ -32,15 +33,17 @@ export default function App() {
   }, [tab]);
 
   return (
-    <div data-screen-label={`Goldenflower · ${tab}`}>
-      <Header tab={tab} setTab={setTab} tabs={TABS} />
-      <main>
-        {tab === 'about' && <About />}
-        {tab === 'products' && <Products />}
-        {tab === 'process' && <Process />}
-        {tab === 'shop' && <Shop />}
-      </main>
-      <Footer />
-    </div>
+    <CartProvider>
+      <div data-screen-label={`Goldenflower · ${tab}`}>
+        <Header tab={tab} setTab={setTab} tabs={TABS} />
+        <main>
+          {tab === 'about' && <About />}
+          {tab === 'products' && <Products />}
+          {tab === 'process' && <Process />}
+          {tab === 'shop' && <Shop />}
+        </main>
+        <Footer />
+      </div>
+    </CartProvider>
   );
 }
