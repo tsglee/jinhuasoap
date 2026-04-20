@@ -1,27 +1,75 @@
-# 金花樓 · Goldenflower — Design Handoff
+# 金花樓 · Goldenflower
 
-A hand-pressed soap brand from Taipei. This package contains a complete, working HTML/React prototype of the brand site and is ready for handoff to **Claude Code** (or any front-end dev) to be productionised.
+A hand-pressed soap brand from Taipei. Brand site, deployed to **Cloudflare Workers Static Assets** at `https://jinhuasoap.com` (custom domain pending) and `https://jinhuasoap.tsghsunlee.workers.dev` (default).
+
+> **History:** this repo started as a single-file CDN+Babel prototype handed off as a design package. It has since been migrated to a real Vite + React build, deployed on Cloudflare, with a Worker at `/api/order` for the "checkout later" order-request flow. The brand sections below (§1, §3–§6) are still the canonical brand reference; the architecture sections (§0, §2, §7, §8) have been updated for the production codebase.
 
 ---
 
-## 0. What's in the box
+## 0. Project layout
 
 ```
-design_handoff_goldenflower_site/
-├── README.md                       ← you are here
-├── Goldenflower Site.html          ← entry point — open this in a browser
-└── site/
-    ├── App.jsx                     ← tab router + Tweaks panel + logo state
-    ├── Chrome.jsx                  ← Header, Footer, announcement bar, tab nav
-    ├── GoldenFlower.jsx            ← The house mark — 7 SVG variants + helpers
-    ├── Illustrations.jsx           ← All hand-drawn SVG illustrations
-    ├── About.jsx                   ← About tab (story, manifesto, 5 ritual bars)
-    ├── Products.jsx                ← Products tab (12 bars, ad-style stills)
-    ├── Process.jsx                 ← Process & Ingredients tab (7 steps)
-    └── Shop.jsx                    ← Shop & Stockists tab (cart + 5 Taipei shops)
+jinhuasoap/
+├── README.md                  ← you are here
+├── index.html                 ← Vite entry; static <head> with SEO meta + JSON-LD
+├── package.json               ← npm scripts + deps
+├── vite.config.js             ← Vite + React config
+├── wrangler.jsonc             ← Cloudflare deploy config (Workers Static Assets)
+├── .nvmrc                     ← Node 20
+├── .eslintrc.cjs / .prettierrc
+├── public/
+│   ├── favicon.svg            ← simplified lily mark
+│   ├── robots.txt
+│   └── sitemap.xml
+└── src/
+    ├── main.jsx               ← React mount point
+    ├── App.jsx                ← tab router + CartProvider
+    ├── worker.js              ← Cloudflare Worker — POST /api/order → Resend
+    ├── styles/
+    │   ├── tokens.css         ← brand design tokens (paper / sumi / gold / red)
+    │   ├── base.css           ← global reset + .mono / .italic / .tc utilities
+    │   └── responsive.css     ← mobile-first overrides (≤900 px)
+    ├── hooks/
+    │   └── useIsMobile.js     ← matchMedia hook used by the header
+    ├── state/
+    │   └── CartContext.jsx    ← localStorage-backed cart state
+    └── components/
+        ├── Chrome.jsx         ← Header (with mobile hamburger), Footer
+        ├── GoldenFlower.jsx   ← The house mark + Divider + PhotoPlaceholder
+        ├── Illustrations.jsx  ← All hand-drawn SVG illustrations
+        ├── About.jsx          ← About tab
+        ├── Products.jsx       ← Products tab (12 bars, Add-to-basket)
+        ├── Process.jsx        ← Process & Ingredients tab
+        └── Shop.jsx           ← Shop & Stockists tab + cart + order form
 ```
 
-To preview: open `Goldenflower Site.html` directly in any modern browser. No build step.
+### Local development
+
+```bash
+nvm use                    # Node 20 (per .nvmrc)
+npm install
+npm run dev                # Vite dev server at http://localhost:5173
+npm run build              # produces dist/
+npm run preview            # serves dist/ on http://localhost:4173
+npm run lint               # ESLint
+npm run format             # Prettier
+```
+
+To test the `/api/order` Worker locally: `npx wrangler dev` after `npm run build`. (The wrangler config points `assets.directory` at `./dist/` so you need a build first.)
+
+### Deploy
+
+Pushes to `main` auto-deploy via Cloudflare Workers' Git integration. Build settings live in the Cloudflare dashboard; the source of truth for runtime config is `wrangler.jsonc`. To trigger a redeploy without code changes, push an empty commit.
+
+### Required Cloudflare dashboard secrets/vars
+
+Set under your Worker → **Settings** → **Variables and Secrets**:
+
+| Name | Type | Required | Notes |
+|---|---|---|---|
+| `RESEND_API_KEY` | Secret | yes | Resend API key. Without this, `/api/order` returns 500. |
+| `ORDER_TO_EMAIL` | Plain | no | Defaults to `tsghsunlee@gmail.com`. |
+| `ORDER_FROM_EMAIL` | Plain | no | Defaults to `onboarding@resend.dev` (Resend's shared sender). Switch to `noreply@jinhuasoap.com` after you verify the domain in Resend. |
 
 ---
 
@@ -38,7 +86,7 @@ To preview: open `Goldenflower Site.html` directly in any modern browser. No bui
 | **Voice** | Quiet, slow, ceremonial. Bilingual zh-Hant + English. Cormorant italics for the lyrical line, Noto Serif TC for headlines, DM Mono for utility. |
 | **Aesthetic reference** | SHIRO-style editorial product stills, Japanese paper texture, vertical Chinese typesetting, gold + 朱紅 + sumi ink. |
 
-### 1.1 Design tokens (defined in `Goldenflower Site.html` `:root`)
+### 1.1 Design tokens (defined in `src/styles/tokens.css` `:root`)
 
 ```css
 --paper:   #ece3cf;    /* primary canvas */
@@ -68,47 +116,54 @@ Body (zh inline)      Noto Serif TC
 Utility / labels      DM Mono, 10–11px, uppercase, letter-spacing 2–3px
 ```
 
-Loaded via Google Fonts in the `<head>` of `Goldenflower Site.html`. Convenience CSS classes:
+Loaded via Google Fonts in the `<head>` of `index.html`. Convenience CSS classes (defined in `src/styles/base.css`):
 - `.tc` → Noto Serif TC
 - `.italic` → Cormorant Garamond italic
 - `.mono` → DM Mono uppercase utility
 
 ---
 
-## 2. Architecture (current prototype)
-
-This is a **single-file HTML prototype** that loads React 18 + Babel from CDN and a sequence of `<script type="text/babel">` JSX files from `site/`. There is no bundler.
-
-### 2.1 Load order (declared in `Goldenflower Site.html`)
+## 2. Architecture
 
 ```
-1. React + ReactDOM + Babel (CDN, pinned + integrity-hashed)
-2. site/GoldenFlower.jsx     ← exports GoldFlower, PhotoPlaceholder, Divider to window
-3. site/Illustrations.jsx    ← exports Ill* components to window
-4. site/Chrome.jsx           ← exports Header, Footer to window
-5. site/About.jsx            ← exports About to window
-6. site/Products.jsx         ← exports Products to window
-7. site/Process.jsx          ← exports Process to window
-8. site/Shop.jsx             ← exports Shop to window
-9. site/App.jsx              ← root — renders into #root
+   ┌─────────────────────────────────────────────┐
+   │ Cloudflare                                   │
+   │  ─ Registrar (jinhuasoap.com)                │
+   │  ─ DNS + global CDN + automatic TLS          │
+   │  ─ Workers Static Assets — serves dist/      │
+   │  ─ Worker (src/worker.js): POST /api/order   │
+   └─────────────────────────────────────────────┘
+                      │
+                      ▼
+             ┌──────────────────┐
+             │  Resend          │  3k emails/mo free
+             │  → tsghsunlee@   │
+             │    gmail.com     │
+             └──────────────────┘
 ```
 
-Each JSX file ends with `Object.assign(window, { ... })` because each `<script type="text/babel">` gets its own scope after Babel transpilation. **When porting to a real bundler (Vite / Next), replace the `window` exports with real ES `export`s and `import` from each file.**
+**No VM, no nginx, no GitHub Actions to maintain.** Cloudflare's Git integration handles build + deploy on every push to `main`. Static assets are served straight from the edge; the Worker is only invoked for `/api/order` (and any other unknown path, which it falls through to assets via `env.ASSETS.fetch`).
+
+### 2.1 React app
+
+A standard Vite + React 18 build. Components live in `src/components/`, each one is a real ES module with named exports — no more window-globals. The brand mark + illustrations are inline SVG (no asset deps). Entry: `src/main.jsx` mounts `<App />` into `#root` inside `<React.StrictMode>` and pulls in the three CSS files (`tokens.css`, `base.css`, `responsive.css`).
 
 ### 2.2 State
 
-Two pieces of app state live in `App` and persist to `localStorage`:
+| Key | Stored in | Purpose | Default |
+|---|---|---|---|
+| `gf_tab` | `localStorage` | Active tab (`about` / `products` / `process` / `shop`) | `about` |
+| `gf_cart` | `localStorage` | Cart contents (array of `{num, zh, en, qty, price, tone}`) | `[]` |
 
-| Key | Purpose | Default |
-|---|---|---|
-| `gf_tab` | Currently active tab (`about` / `products` / `process` / `shop`) | `about` |
-| `gf_logo` | Currently selected logo variant (see §4) | `lily-light` |
+Cart state lives in `src/state/CartContext.jsx` and is exposed via the `useCart()` hook. The cart count in the header, the Add-to-basket buttons in Products, the cart drawer in Shop, and the order-request form all share the same context.
 
-The cart in `Shop.jsx` uses local React state only — **not yet persisted**; see §7 (Productionisation TODO).
+### 2.3 The order endpoint
 
-### 2.3 Tweaks panel (design-time only)
+`POST /api/order` accepts a JSON body of shape `{ name, email, note?, cart: [...], total }`, validates it, and forwards a bilingual HTML+plaintext email to `tsghsunlee@gmail.com` (or whatever `ORDER_TO_EMAIL` is set to) via Resend. Reply-To is set to the customer so the brand can reply directly. Source: `src/worker.js`. No payments, no DB — this is the "checkout later" model from the launch plan.
 
-`App.jsx` implements the host's `__activate_edit_mode` / `__deactivate_edit_mode` postMessage protocol. When tweaks are active, a panel docked bottom-right lets the operator cycle through the 7 logo variants. **Strip this entirely for production** — see §7.
+### 2.4 Mobile responsive layer
+
+The components were authored desktop-first with inline styles. `src/styles/responsive.css` adds mobile overrides at the `≤900 px` breakpoint via utility classes (`gf-stack-md`, `gf-h1-md`, `gf-cart-md`, etc.) using `!important` to win over the inline styles. The header swaps its desktop tab bar for a hamburger drawer at the same breakpoint via `useIsMobile()` (`src/hooks/useIsMobile.js`).
 
 ---
 
@@ -263,70 +318,73 @@ This is the part that's easy to ruin. A few rules to maintain:
 
 ---
 
-## 7. Productionisation TODO (for Claude Code)
+## 7. Production status
 
-A prioritised list of what to do next.
+This section used to be a TODO list for productionisation. Most of it has shipped — see `/Users/tsglee/.claude/plans/go-ahead-and-read-expressive-nygaard.md` for the full launch plan and execution log.
 
-### 7.1 Required for production
+### 7.1 Done
 
-1. **Convert from CDN React + Babel to a real bundler** (Vite + React 18 recommended; or Next.js if SSR/SEO matters — the site is content-heavy and bilingual, so SSR is probably worth it).
-   - Replace `window.X = X` exports in every JSX file with real ESM `export`s.
-   - Move design tokens out of inline `<style>` and into a CSS module / Tailwind config.
-   - Self-host fonts (Noto Serif TC, Cormorant Garamond, DM Mono) for performance and offline support; don't rely on Google Fonts at runtime.
-2. **Strip the Tweaks panel** (entire `TweaksPanel` component in `App.jsx`, plus the `__edit_mode_*` postMessage listener and the `EDITMODE-BEGIN/END` JSON block). Pick **one** logo variant and hard-code it.
-3. **Replace illustrations with real photography** for the Products grid and the Five Bars section. The illustration components are placeholders — they were drawn to set the layout and tone. Keep the wrappers (frame, chip, caption). Recommended shot list:
-   - 12 product hero stills (one per bar in `PRODUCTS`)
-   - 5 use-case lifestyle shots (one per ritual bar in About §3.1.1)
-   - 1 founder-at-workbench shot (replaces `IllWorkbench` in About hero)
-   - 7 process step shots (replaces `IllStep` in Process)
-   - 1 ingredient grid (replaces `IllIngredient` × N in Process)
-4. **Wire the cart to a real backend** (Shopify Storefront API, Stripe, or whatever the brand picks). The current `Shop.jsx` cart is local React state. Add localStorage persistence at minimum. Implement: add / remove / update qty / shipping calc / checkout handoff.
-5. **Real stockist data.** The 5 Taipei shops in `STOCKISTS` are placeholder names — verify with the brand. Add proper geocoding if a map view is wanted.
-6. **i18n properly.** The current site bakes both languages into the JSX. Extract to a translation table (e.g. `react-i18next`) keyed by zh-Hant / en, so future locales (ja, ko) are cheap.
-7. **SEO + meta.** Per-tab `<title>`, OG image (use `medallion` variant rendered to PNG), structured data for products.
-8. **Accessibility.** Audit:
-   - All SVG illustrations need real `<title>` / `aria-label`.
-   - Tab nav in `Header` should be a real `<nav>` with proper `aria-current`.
-   - Cart drawer needs focus trap + ESC to close.
-   - Color contrast for `gold-3` on `paper` is borderline — verify WCAG AA for body copy.
+- ✅ Vite + React 18 build (replaces CDN+Babel prototype)
+- ✅ ESM modules, ESLint, Prettier, .nvmrc (Node 20)
+- ✅ Cart persisted to localStorage via `CartContext`; `Add to basket` wired
+- ✅ Order request endpoint (`POST /api/order`) → Resend → Gmail
+- ✅ Mobile responsive pass (all tabs, hamburger nav, touch targets)
+- ✅ Hosted on Cloudflare Workers Static Assets, push-to-deploy from `main`
+- ✅ Domain `jinhuasoap.com` registered (custom-domain attachment pending)
+- ✅ SEO basics: title, meta description, OG/Twitter cards, JSON-LD
+  Organization + LocalBusiness, favicon, robots.txt, sitemap.xml
 
-### 7.2 Nice to have
+### 7.2 Open before launch (owner sign-off needed)
 
-- **Mobile design.** The current prototype is desktop-first (1280 max-width; multi-column grids). All sections need mobile breakpoints; the hero typography especially will need scaling rules.
-- **Journal / blog.** Footer references "Journal" but no route exists.
-- **Subscription product.** Footer references "Subscription" but no flow exists.
-- **Dark mode.** The brand's sumi/paper palette is monochrome enough that an inverted dark mode could be elegant. Optional.
-- **Print stylesheet** for product pages (cards, tasting notes — feels on-brand for this house).
+1. **Logo variant** — currently hardcoded to the lily mark; the README originally proposed 7 variants but only the lily exists in code. Confirm or expand.
+2. **Real photography** to replace `IllSoap`, `IllProductHero`, `IllWorkbench`, `IllStep`, `IllIngredient` (per the original §7.1 shot list — 12 product stills, 5 ritual lifestyle shots, founder-at-workbench, 7 process steps, ingredient grid).
+3. **Real stockist data** — verify the 5 Taipei addresses in `STOCKISTS` (`src/components/Shop.jsx`).
+4. **Legal copy** — privacy policy, T&Cs, returns/refund policy. Owner-reviewed text needed; not blocking deploy but blocking real commerce.
+5. **Brand inbox** — set up `hello@jinhuasoap.com` via Cloudflare Email Routing (free, forward to Gmail) or Google Workspace ($6/user/mo).
+6. **Verify `jinhuasoap.com` in Resend** — adds 3 DNS records to Cloudflare zone, then we switch `ORDER_FROM_EMAIL` from `onboarding@resend.dev` to `noreply@jinhuasoap.com`.
+7. **OG image** — currently using favicon.svg as placeholder; replace with a 1200×630 PNG once real photography lands.
 
-### 7.3 Things NOT to change without asking
+### 7.3 Future / nice-to-have
+
+- **Plausible analytics** — sign up + add the snippet (≈$9/mo managed, no cookie banner needed).
+- **Journal / blog** — footer references it; no route yet.
+- **Subscription product** — footer references it; no flow yet.
+- **i18n** — bilingual is currently baked into JSX; extract to a translation table only when ja/ko become real plans.
+- **A11y audit** — SVG `<title>`/`aria-label`, cart focus-trap + ESC-to-close, contrast check on `gold-3` body copy.
+- **Self-host fonts** — Noto Serif TC subsetting is non-trivial; revisit only if Lighthouse flags the Google Fonts hop.
+
+### 7.4 Things NOT to change without asking
 
 - The five-bar use-case structure in About (`§3.1.1`) — this is the most recent brand decision and the copy has been carefully tuned.
-- The 7 logo variants in `GoldenFlower.jsx` — keep them all, even if only one is shipping. They're a system.
-- The vertical Chinese typesetting in the manifesto — `writing-mode: vertical-rl` is intentional.
+- The 7-variant logo system documented in `§4` — even though only `lily-light` is in code, the spec is the brand's eventual direction.
+- The vertical Chinese typesetting in the manifesto — `writing-mode: vertical-rl` is intentional (and switches to horizontal only at the mobile breakpoint).
 - The `ritual —` line treatment — it's the single most distinctive voice element on the site.
 
 ---
 
 ## 8. Quick reference
 
-**Run locally:** open `Goldenflower Site.html` in a browser. That's it.
+**Run locally:** `npm install && npm run dev`. Vite dev server at `http://localhost:5173`. Use `npm run dev -- --host` to serve over LAN for phone testing.
 
 **Edit a section:**
-- About story → `site/About.jsx`
-- 12 product catalog → `PRODUCTS` array at top of `site/Products.jsx`
-- 7 process steps → `steps` array inside `Process()` in `site/Process.jsx`
-- Cart / stockists → `site/Shop.jsx`
-- Logo / house mark → `site/GoldenFlower.jsx`
-- Header / footer / tab nav → `site/Chrome.jsx`
-- Design tokens → `:root` block in `Goldenflower Site.html`
+- About story → `src/components/About.jsx`
+- 12 product catalog → `PRODUCTS` array at top of `src/components/Products.jsx`
+- 7 process steps → `steps` array inside `Process()` in `src/components/Process.jsx`
+- Cart / stockists / order form → `src/components/Shop.jsx`
+- Logo / house mark → `src/components/GoldenFlower.jsx`
+- Header / footer / mobile drawer → `src/components/Chrome.jsx`
+- Design tokens → `src/styles/tokens.css`
+- Mobile overrides → `src/styles/responsive.css`
+- Order email template → `renderOrderEmailHtml` in `src/worker.js`
 
 **Add a new tab:**
-1. Add an entry to `TABS` in `App.jsx`.
-2. Create a new `site/<Tab>.jsx` exporting the component to `window`.
-3. Add a `<script type="text/babel" src="site/<Tab>.jsx"></script>` to `Goldenflower Site.html` *before* `App.jsx`.
-4. Add the conditional render in `App.jsx`'s `<main>`.
+1. Add an entry to `TABS` in `src/App.jsx`.
+2. Create `src/components/<Tab>.jsx` exporting a default component.
+3. Import + add the conditional render inside `<main>` in `src/App.jsx`.
 
-**Change the default logo variant:** edit the `TWEAK_DEFAULTS.logoVariant` value at the top of `App.jsx` (or, post-Tweaks-removal, hard-code the prop on `<Header>` and `<Footer>`).
+**Change the default logo variant:** the current code only renders the lily mark via `GoldFlower size={...}`. To support the full 7-variant system from §4, extend `src/components/GoldenFlower.jsx` to switch on a `variant` prop and pass it through `Header`/`Footer`.
+
+**Push to production:** `git push origin main`. Cloudflare auto-builds and deploys in ~60 seconds.
 
 ---
 
