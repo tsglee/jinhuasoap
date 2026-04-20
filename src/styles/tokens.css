@@ -1,0 +1,31 @@
+/* Goldenflower design tokens — extracted from the original prototype <style> block. */
+:root {
+  /* Paper / canvas */
+  --paper: #ece3cf;
+  --paper-2: #f4ecd7;
+  --paper-3: #e0d5bd;
+
+  /* Ink */
+  --sumi: #1a1512;
+  --ink-60: rgba(26, 21, 18, 0.6);
+  --ink-40: rgba(26, 21, 18, 0.4);
+  --ink-15: rgba(26, 21, 18, 0.15);
+  --ink-08: rgba(26, 21, 18, 0.08);
+
+  /* Botanical / brand accents */
+  --clay: #b4956b;
+  --tea: #4d6b4b;
+  --red: #8a2a22;
+  --red-2: #6e2019;
+
+  /* Gold ink */
+  --gold-1: #c69a3a;
+  --gold-2: #e8cd78;
+  --gold-3: #8a6420;
+
+  /* Breakpoints (used in @media queries). Defined here for documentation;
+     CSS doesn't currently let you use var() inside @media without a polyfill. */
+  --bp-sm: 640px;
+  --bp-md: 900px;
+  --bp-lg: 1280px;
+}

@@ -1,0 +1,29 @@
+{
+  "name": "jinhuasoap",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "金花樓 · Goldenflower — hand-pressed natural soap from Taipei. Brand site.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+    "format": "prettier --write \"src/**/*.{js,jsx,css,md}\" \"functions/**/*.{js,ts}\" \"*.{js,json,md,html}\""
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.4",
+    "eslint": "^8.57.1",
+    "eslint-plugin-react": "^7.37.2",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "eslint-plugin-react-refresh": "^0.4.14",
+    "prettier": "^3.4.2",
+    "vite": "^5.4.11"
+  }
+}
