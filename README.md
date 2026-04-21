@@ -1,8 +1,48 @@
 # 金花樓 · Goldenflower
 
-A hand-pressed soap brand from Taipei. Brand site, deployed to **Cloudflare Workers Static Assets** at `https://jinhuasoap.com` (custom domain pending) and `https://jinhuasoap.tsghsunlee.workers.dev` (default).
+A hand-pressed soap brand from Taipei. Brand site, deployed to **Cloudflare Workers Static Assets**.
 
-> **History:** this repo started as a single-file CDN+Babel prototype handed off as a design package. It has since been migrated to a real Vite + React build, deployed on Cloudflare, with a Worker at `/api/order` for the "checkout later" order-request flow. The brand sections below (§1, §3–§6) are still the canonical brand reference; the architecture sections (§0, §2, §7, §8) have been updated for the production codebase.
+---
+
+## Picking up where we are
+
+If you (or a fresh Claude session) are coming back to this project cold, this is everything you need to orient.
+
+**Live URLs**
+- Default: `https://jinhuasoap.tsghsunlee.workers.dev`
+- Custom domain: `jinhuasoap.com` — registered on Cloudflare under `tsghsunlee@gmail.com`. **Attachment to the Worker is one click in the Cloudflare dashboard pending whenever you're ready.**
+
+**Current state of the live site (latest on `main`)**
+- Vite + React 18 build deployed on Cloudflare Workers Static Assets
+- Push to `main` → auto-builds + deploys in ~60 seconds
+- Cart is real — persisted to localStorage, "Request order" POSTs to `/api/order`, Worker emails via Resend, end-to-end test passed
+- Mobile responsive (≤900 px breakpoint, hamburger nav, full-width cart)
+- Paper tokens are in their **Phase J.3 ivory state**: `--paper #f8f5eb`, `--paper-2 #fcfaf2`, `--paper-3 #ece4d0` (owner-approved 暖色的象牙白)
+- Shop tab is **online-only** — no physical stockists. Subtitle is the Chinese-only line about 3-day shipping + 7-11/全家 店到店付款
+- SEO basics shipped (meta + JSON-LD `Organization` + favicon + robots + sitemap)
+- All hand-drawn SVG illustrations still in place as photography placeholders
+
+**Where to look first**
+1. **This README** — architecture, file layout, deploy, secrets, conventions.
+2. **`/Users/tsglee/.claude/plans/go-ahead-and-read-expressive-nygaard.md`** — full plan history, every decision the owner has locked in (with reasoning), execution log of every phase, open follow-ups.
+3. **`public/images/README.md`** — the photography supply contract (filenames, aspect ratios, format specs, batch workflow).
+
+**Open follow-ups (none blocking, all owner-side)**
+1. **Attach `jinhuasoap.com`** to the Worker (Cloudflare dashboard click).
+2. **Real photography** — drop batches into `public/images/` per the contract; I create a `photos-<batch>` branch and wire each batch up.
+3. **Logo variant** — only the lily mark exists in code; §4 documents 7 aspirational variants.
+4. **Plausible analytics** signup, **legal copy** (privacy / T&Cs / returns), **Resend domain verify** (so we can switch `ORDER_FROM_EMAIL` from `onboarding@resend.dev` to `noreply@jinhuasoap.com`), **OG image** (replace favicon fallback with a real 1200×630 PNG).
+
+**Recently shipped (commit history on `main` is the source of truth)**
+- `c4400f7` Phase J.3 — paper to `#f8f5eb` (owner-specified ivory)
+- `e64f66b` Phase J.2 — paper toward 暖色的象牙白
+- `503ede9` Phase I — `public/images/` scaffold + naming contract
+- `bb57e75` Phase H + J.1 — Shop simplified to online-only (stockists deleted), paper tokens lifted
+- `6c7114f` SEO basics
+- `c19e9ad` Phase C — cart persistence + order endpoint
+- `8cdc1f3` Phase B — full mobile responsive pass
+
+Phase K (a SHIRO-style visual restyle on a `redesign-shiro` branch) was tried and **discarded** by owner choice. No trace on `main`. The branch-workflow we used is documented in §0.5 below — useful for any future redesign experiment.
 
 ---
 
@@ -18,9 +58,15 @@ jinhuasoap/
 ├── .nvmrc                     ← Node 20
 ├── .eslintrc.cjs / .prettierrc
 ├── public/
-│   ├── favicon.svg            ← simplified lily mark
+│   ├── favicon.svg            ← simplified lily mark (also acts as OG fallback)
 │   ├── robots.txt
-│   └── sitemap.xml
+│   ├── sitemap.xml
+│   └── images/                ← real photography drops here per the contract
+│       ├── README.md          ← filename + aspect-ratio + format spec
+│       ├── products/          ← 12 product hero shots
+│       ├── rituals/           ← 5 About-page lifestyle shots
+│       ├── process/           ← 7 process step shots
+│       └── ingredients/       ← 8 raw-material tiles
 └── src/
     ├── main.jsx               ← React mount point
     ├── App.jsx                ← tab router + CartProvider
@@ -36,11 +82,11 @@ jinhuasoap/
     └── components/
         ├── Chrome.jsx         ← Header (with mobile hamburger), Footer
         ├── GoldenFlower.jsx   ← The house mark + Divider + PhotoPlaceholder
-        ├── Illustrations.jsx  ← All hand-drawn SVG illustrations
-        ├── About.jsx          ← About tab
-        ├── Products.jsx       ← Products tab (12 bars, Add-to-basket)
-        ├── Process.jsx        ← Process & Ingredients tab
-        └── Shop.jsx           ← Shop & Stockists tab + cart + order form
+        ├── Illustrations.jsx  ← All hand-drawn SVG illustrations (placeholders for photos)
+        ├── About.jsx          ← About tab — story, pillars, manifesto, 5 ritual bars
+        ├── Products.jsx       ← Products tab — 12 bars, Add-to-basket
+        ├── Process.jsx        ← Process & Ingredients tab — 7 steps, 8 ingredients, no-list
+        └── Shop.jsx           ← Shop tab — online-only cart + order request form
 ```
 
 ### Local development
@@ -60,6 +106,33 @@ To test the `/api/order` Worker locally: `npx wrangler dev` after `npm run build
 ### Deploy
 
 Pushes to `main` auto-deploy via Cloudflare Workers' Git integration. Build settings live in the Cloudflare dashboard; the source of truth for runtime config is `wrangler.jsonc`. To trigger a redeploy without code changes, push an empty commit.
+
+### 0.5 Branch workflow for experiments
+
+For any non-trivial change — a redesign experiment, a photography batch wire-up, a copy overhaul — work on a feature branch, never directly on `main`. Cloudflare auto-builds a **preview URL for every branch push**, so the owner can review on a real device before the change touches production.
+
+```bash
+git checkout main && git pull
+git checkout -b <branch-name>           # e.g. redesign-shiro, photos-products-batch-1, copy-overhaul
+# … edit, build, push …
+git push -u origin <branch-name>
+```
+
+Within ~60 s of the first push, the preview is live at:
+
+```
+https://<branch-name>-jinhuasoap.tsghsunlee.workers.dev
+```
+
+Note the **dash** between `<branch-name>` and `jinhuasoap` (not a dot). Cloudflare's Deployments tab in the dashboard always shows the canonical URL for each push.
+
+After review, three outcomes:
+
+- **Merge to main** → `git checkout main && git merge <branch-name> && git push` → site updates in ~60 s.
+- **Discard** → `git checkout main && git branch -D <branch-name> && git push origin --delete <branch-name>`. Cloudflare auto-cleans the preview deployment when the branch disappears. Zero trace on `main`.
+- **Cherry-pick** → keep some commits, drop others; `git checkout main && git cherry-pick <commit-hashes>`.
+
+Photography batches and visual restyle experiments both use this workflow. The plan file documents the SHIRO-restyle Phase K experiment as a worked example (it was discarded after review — the right call, the editorial gold-ink voice is part of the brand identity).
 
 ### Required Cloudflare dashboard secrets/vars
 
@@ -89,14 +162,19 @@ Set under your Worker → **Settings** → **Variables and Secrets**:
 ### 1.1 Design tokens (defined in `src/styles/tokens.css` `:root`)
 
 ```css
---paper:   #ece3cf;    /* primary canvas */
---paper-2: #f4ecd7;    /* warmer surface */
---paper-3: #e0d5bd;    /* deeper paper */
+/* Paper / canvas — Phase J.3 ivory (was #ece3cf in the prototype) */
+--paper:   #f8f5eb;    /* primary canvas — owner-approved 暖色的象牙白 */
+--paper-2: #fcfaf2;    /* warmer surface (banded sections) */
+--paper-3: #ece4d0;    /* deeper paper (About Five-Bars, Process ingredients) */
+
+/* Ink */
 --sumi:    #1a1512;    /* near-black text */
 --ink-60:  rgba(26,21,18,0.6);
 --ink-40:  rgba(26,21,18,0.4);
 --ink-15:  rgba(26,21,18,0.15);   /* hairline borders */
 --ink-08:  rgba(26,21,18,0.08);
+
+/* Botanical / brand accents */
 --clay:    #b4956b;    /* soap body */
 --tea:     #4d6b4b;    /* botanical accent */
 --red:     #8a2a22;    /* 朱紅 — accent / chops */
@@ -105,6 +183,8 @@ Set under your Worker → **Settings** → **Variables and Secrets**:
 --gold-2:  #e8cd78;    /* light gold (highlights) */
 --gold-3:  #8a6420;    /* deep gold (shadows) */
 ```
+
+If you change `--paper`, also update the **hardcoded `rgba(...)` paper-on-sumi text colours** in `src/components/Chrome.jsx` (footer + sticky header) and `src/components/Shop.jsx` (wholesale + newsletter section), plus the email template `background:` in `src/worker.js`. They're all near-duplicates of `--paper` for use on dark backgrounds and don't auto-cascade.
 
 ### 1.2 Type system
 
@@ -225,26 +305,15 @@ VII 包裹   Wrap         — kraft paper, gold thread, ship
 ```
 Followed by an Ingredients section using `IllIngredient` tiles, and a "What we don't use" `IllNoList` tile.
 
-### 3.4 Shop & Stockists (`site/Shop.jsx`)
+### 3.4 Shop (`src/components/Shop.jsx`)
 
-Three components:
-1. **Cart drawer** — slide-in from the right; uses local React state. Items match products by zh name. Shipping rule: free over NT$1,200.
-2. **Stockists list** — 5 Taipei shops with addresses, hours, neighbourhoods. Filterable by city chip (currently only Taipei is populated; "All" is the default).
-3. **Newsletter / journal CTA**.
+Online-only since Phase H. Map and 5-shop stockist list deleted (the brand has no retail partners yet; placeholder data was misleading). Three sections:
 
-```
-CART_ITEMS (initial cart for the prototype):
-  · 玫瑰 × 1
-  · 桂花 × 2
-  · 艾草 × 1
+1. **Header** — kicker `線上購皂 · Shop online`, h1 `購皂`, plus a Chinese-only subtitle: `我們在收到訂單後，三個工作天內寄出 · 支援 7-11 與全家店到店付款`. The Chinese-only subtitle is an intentional break from the bilingual pattern — convenience-store pickup is a Taiwan-specific feature.
+2. **Cart** — single centred 560 px column. Items live in `CartContext` (`src/state/CartContext.jsx`), persisted to `localStorage[gf_cart]`. Shipping rule: free over NT$1,200, otherwise NT$120. **"Request order"** button opens an inline form (name + email + optional note) that POSTs cart contents to `/api/order`. The Worker emails the brand owner via Resend; cart clears on success.
+3. **Wholesale + Newsletter** at the bottom — both inert text/forms for v1. Wholesale references `wholesale@jinhuasoap.com`. Newsletter is a Coming Soon placeholder; if you wire it later, keep the same `gf_*` localStorage namespace for consistency.
 
-STOCKISTS (5 shops, all Taipei):
-  · 金花樓本店       — 艋舺 (Wanhua) flagship
-  · 小器藝廊         — 中山
-  · 富錦樹台菜香檳   — 民生社區
-  · 朋丁              — 中山
-  · 永心堂            — 永康街
-```
+The actual 7-11/全家 fulfilment stays manual: customer submits Order Request → owner replies to the Resend email to arrange shipment + 店到店 payment. A real ECPay / 綠界 integration is a separate future project.
 
 ---
 
@@ -320,35 +389,39 @@ This is the part that's easy to ruin. A few rules to maintain:
 
 ## 7. Production status
 
-This section used to be a TODO list for productionisation. Most of it has shipped — see `/Users/tsglee/.claude/plans/go-ahead-and-read-expressive-nygaard.md` for the full launch plan and execution log.
+This section used to be a TODO list for productionisation. Most of it has shipped — see `/Users/tsglee/.claude/plans/go-ahead-and-read-expressive-nygaard.md` for the full execution log of every phase, with reasoning.
 
 ### 7.1 Done
 
 - ✅ Vite + React 18 build (replaces CDN+Babel prototype)
 - ✅ ESM modules, ESLint, Prettier, .nvmrc (Node 20)
 - ✅ Cart persisted to localStorage via `CartContext`; `Add to basket` wired
-- ✅ Order request endpoint (`POST /api/order`) → Resend → Gmail
-- ✅ Mobile responsive pass (all tabs, hamburger nav, touch targets)
+- ✅ Order request endpoint (`POST /api/order`) → Resend → Gmail (verified end-to-end with a test order)
+- ✅ Mobile responsive pass (all tabs, hamburger nav, ≥44 px touch targets)
 - ✅ Hosted on Cloudflare Workers Static Assets, push-to-deploy from `main`
-- ✅ Domain `jinhuasoap.com` registered (custom-domain attachment pending)
-- ✅ SEO basics: title, meta description, OG/Twitter cards, JSON-LD
-  Organization + LocalBusiness, favicon, robots.txt, sitemap.xml
+- ✅ Domain `jinhuasoap.com` registered on Cloudflare Registrar
+- ✅ SEO basics: title, meta description, OG/Twitter cards, JSON-LD `Organization`, favicon.svg, robots.txt, sitemap.xml
+- ✅ **Phase H** — Shop tab simplified to online-only (stockists deleted, footer "Stockists" column → "Ship to" with `7-11 店到店 / 全家 店到店`, JSON-LD `LocalBusiness` removed)
+- ✅ **Phase I** — `public/images/` folder + naming contract for real photography supply
+- ✅ **Phase J.1 → J.3** — paper tokens lifted from `#ece3cf` → `#f4ecd7` → `#f7f3e7` → `#f8f5eb` (owner-tuned 暖色的象牙白, three iterations)
+- ⏹ **Phase K** — SHIRO-inspired visual restyle attempted on `redesign-shiro` branch; **discarded** by owner choice. The editorial gold-ink voice is part of the brand identity and the experiment confirmed that. No trace on `main`. Branch workflow we used is documented in §0.5.
 
-### 7.2 Open before launch (owner sign-off needed)
+### 7.2 Open (owner sign-off, none blocking)
 
-1. **Logo variant** — currently hardcoded to the lily mark; the README originally proposed 7 variants but only the lily exists in code. Confirm or expand.
-2. **Real photography** to replace `IllSoap`, `IllProductHero`, `IllWorkbench`, `IllStep`, `IllIngredient` (per the original §7.1 shot list — 12 product stills, 5 ritual lifestyle shots, founder-at-workbench, 7 process steps, ingredient grid).
-3. **Real stockist data** — verify the 5 Taipei addresses in `STOCKISTS` (`src/components/Shop.jsx`).
-4. **Legal copy** — privacy policy, T&Cs, returns/refund policy. Owner-reviewed text needed; not blocking deploy but blocking real commerce.
+1. **Custom domain attachment** — `jinhuasoap.com` to the Worker (one Cloudflare-dashboard click).
+2. **Real photography** — drop batches into `public/images/` per `public/images/README.md`. I create a `photos-<batch>` branch per batch, wire each up via a thin `Photo` wrapper that preserves the existing frame/caption.
+3. **Logo variant** — currently the single lily mark in code. README §4 documents an aspirational 7-variant system. Confirm or expand.
+4. **Legal copy** — privacy / T&Cs / returns. Blocks real payment integration, not the current site.
 5. **Brand inbox** — set up `hello@jinhuasoap.com` via Cloudflare Email Routing (free, forward to Gmail) or Google Workspace ($6/user/mo).
-6. **Verify `jinhuasoap.com` in Resend** — adds 3 DNS records to Cloudflare zone, then we switch `ORDER_FROM_EMAIL` from `onboarding@resend.dev` to `noreply@jinhuasoap.com`.
-7. **OG image** — currently using favicon.svg as placeholder; replace with a 1200×630 PNG once real photography lands.
+6. **Verify `jinhuasoap.com` in Resend** — adds 3 DNS records to Cloudflare zone, then switch `ORDER_FROM_EMAIL` from `onboarding@resend.dev` to `noreply@jinhuasoap.com`.
+7. **OG image** — currently using favicon.svg as placeholder; replace with a real 1200×630 PNG once product photography lands.
 
 ### 7.3 Future / nice-to-have
 
-- **Plausible analytics** — sign up + add the snippet (≈$9/mo managed, no cookie banner needed).
+- **Plausible analytics** — sign up + add the snippet (~$9/mo managed, no cookie banner needed).
 - **Journal / blog** — footer references it; no route yet.
 - **Subscription product** — footer references it; no flow yet.
+- **Real ecommerce** — current cart is "checkout later" via Resend email. A real ECPay / 綠界 / 歐付寶 integration for 7-11/全家 店到店付款 is a separate future project (weeks, not days).
 - **i18n** — bilingual is currently baked into JSX; extract to a translation table only when ja/ko become real plans.
 - **A11y audit** — SVG `<title>`/`aria-label`, cart focus-trap + ESC-to-close, contrast check on `gold-3` body copy.
 - **Self-host fonts** — Noto Serif TC subsetting is non-trivial; revisit only if Lighthouse flags the Google Fonts hop.
@@ -370,21 +443,34 @@ This section used to be a TODO list for productionisation. Most of it has shippe
 - About story → `src/components/About.jsx`
 - 12 product catalog → `PRODUCTS` array at top of `src/components/Products.jsx`
 - 7 process steps → `steps` array inside `Process()` in `src/components/Process.jsx`
-- Cart / stockists / order form → `src/components/Shop.jsx`
+- 8 ingredients → `ingredients` array in `Process()`
+- Cart / order form → `src/components/Shop.jsx`
 - Logo / house mark → `src/components/GoldenFlower.jsx`
 - Header / footer / mobile drawer → `src/components/Chrome.jsx`
-- Design tokens → `src/styles/tokens.css`
-- Mobile overrides → `src/styles/responsive.css`
+- Design tokens (paper, ink, gold, red) → `src/styles/tokens.css`
+- Mobile overrides (`gf-stack-md` etc.) → `src/styles/responsive.css`
 - Order email template → `renderOrderEmailHtml` in `src/worker.js`
+- SEO `<head>` (meta tags, JSON-LD) → `index.html`
 
 **Add a new tab:**
 1. Add an entry to `TABS` in `src/App.jsx`.
-2. Create `src/components/<Tab>.jsx` exporting a default component.
+2. Create `src/components/<Tab>.jsx` exporting a named component.
 3. Import + add the conditional render inside `<main>` in `src/App.jsx`.
 
 **Change the default logo variant:** the current code only renders the lily mark via `GoldFlower size={...}`. To support the full 7-variant system from §4, extend `src/components/GoldenFlower.jsx` to switch on a `variant` prop and pass it through `Header`/`Footer`.
 
+**Wire a photography batch:**
+1. Owner drops files into `public/images/<category>/<name>.jpg` per the contract in `public/images/README.md`.
+2. Create a branch: `git checkout -b photos-<batch>`.
+3. Add a thin `<Photo>` wrapper at `src/components/Photo.jsx` (~20 lines, keeps the existing frame + caption chip; falls back to the SVG illustration if the file is missing).
+4. Replace the relevant `IllSoap` / `IllProductHero` / `IllWorkbench` / etc. call with `<Photo src="/images/products/rose.jpg" alt="…" />`.
+5. Push the branch → preview URL → owner reviews → merge → live.
+
+**Spin up a redesign experiment:** see §0.5 (branch workflow). Short version: `git checkout -b redesign-<name>`, commit + push, preview URL is `https://redesign-<name>-jinhuasoap.tsghsunlee.workers.dev`. Owner reviews, then merge or `git push origin --delete`.
+
 **Push to production:** `git push origin main`. Cloudflare auto-builds and deploys in ~60 seconds.
+
+**When the next session starts cold:** read **Picking up where we are** at the top of this README, then `/Users/tsglee/.claude/plans/go-ahead-and-read-expressive-nygaard.md` for full decision history, then `public/images/README.md` if photography is involved.
 
 ---
 
