@@ -588,6 +588,7 @@ export function About() {
                 note: 'ritual — 走遠路的清晨用一塊，那香氣能跟著你一整天。',
                 tone: 'warm',
                 flower: 'chrysanthemum',
+                photo: '/images/products/Gemini_Generated_Image_vxwmqbvxwmqbvxwm.png',
               },
               {
                 kicker: 'NO. 03 · 面',
@@ -637,7 +638,20 @@ export function About() {
                 }}
               >
                 <div style={{ position: 'relative' }}>
-                  <IllSoap label={s.zh} tone={s.tone} flower={s.flower} ratio="4/5" />
+                  {s.photo ? (
+                    <img
+                      src={s.photo}
+                      alt={`${s.zh} · ${s.subtitle}`}
+                      style={{
+                        width: '100%',
+                        aspectRatio: '4/5',
+                        objectFit: 'cover',
+                        display: 'block',
+                      }}
+                    />
+                  ) : (
+                    <IllSoap label={s.zh} tone={s.tone} flower={s.flower} ratio="4/5" />
+                  )}
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column' }}>
                   <div className="mono" style={{ color: 'var(--red)', fontSize: 10 }}>
