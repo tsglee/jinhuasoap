@@ -20,7 +20,7 @@ export function About() {
         }}
       >
         <video
-          src="/images/landingmedia/Animated_Ocean_and_Cloud_Video.mp4"
+          src="/images/landingmedia/Chinese_Ink_Wash_Painting_Animation.mp4"
           autoPlay
           muted
           loop
@@ -441,11 +441,20 @@ export function About() {
                       opacity: 0.3,
                     }}
                   />
-                  <IllSoap
-                    label="一塊走天下 · 燕麥乳 · 洋甘菊"
-                    tone={scene.palette.tone}
-                    flower={scene.palette.flower}
-                    ratio="5/4"
+                  <video
+                    src="/images/about/oceanwithsoap.mp4"
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    preload="auto"
+                    aria-label="一塊走天下 · 燕麥乳 · 洋甘菊"
+                    style={{
+                      width: '100%',
+                      aspectRatio: '5/4',
+                      objectFit: 'cover',
+                      display: 'block',
+                    }}
                   />
                   <div
                     className="mono"
