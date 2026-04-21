@@ -15,6 +15,7 @@ public/images/
 ├── rituals/            5 About-page lifestyle shots
 ├── process/            7 step shots
 ├── ingredients/        8 raw-material tiles
+├── landingmedia/       hero motion (MP4 for the About banner)
 ├── founder.jpg         About hero
 ├── giftbox.jpg         About + Products
 └── og-image.jpg        social share card (1200×630)
@@ -91,6 +92,19 @@ Exact `kind` key from `src/components/Process.jsx`'s `ingredients` array. **Aspe
 | `founder.jpg` | **3:4 portrait**, ~1500×2000 px | `IllWorkbench` | About hero |
 | `giftbox.jpg` | **4:3 landscape**, ~1600×1200 px | `IllGiftBox` | About + Products |
 | `og-image.jpg` | **exactly 1200×630 px** | favicon fallback | Social share preview (Open Graph / Twitter Card) |
+
+### `landingmedia/` — hero motion
+
+A short, silent, looping video plays full-bleed at the top of the About (home) tab — the first thing a visitor sees. One file at a time; the About component hard-codes the path.
+
+| File | Aspect | Used on |
+|---|---|---|
+| `Animated_Ocean_and_Cloud_Video.mp4` (current) | 16:9 landscape, ≤2 MB, H.264, silent | About hero banner |
+
+- **Format:** MP4 (H.264, yuv420p). Silent — the element is muted and has no controls.
+- **Length:** 5–12 s, designed to loop seamlessly.
+- **Size:** keep it under ~2 MB. The banner autoplays on every visit — big files punish mobile users.
+- **Swapping the file:** drop the new MP4 in this folder, then update the `<video src>` in [src/components/About.jsx](../../src/components/About.jsx). No build config to touch.
 
 ---
 

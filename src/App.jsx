@@ -8,10 +8,10 @@ import { Shop } from './components/Shop.jsx';
 import { CartProvider } from './state/CartContext.jsx';
 
 const TABS = [
-  { id: 'about', zh: '本舍', en: 'About Us' },
-  { id: 'products', zh: '十二花', en: 'Products' },
-  { id: 'process', zh: '製皂', en: 'Process & Ingredients' },
-  { id: 'shop', zh: '購皂', en: 'Shop' },
+  { id: 'about', zh: '本舍' },
+  { id: 'products', zh: '十二花' },
+  { id: 'process', zh: '製皂' },
+  { id: 'shop', zh: '購皂' },
 ];
 
 export default function App() {

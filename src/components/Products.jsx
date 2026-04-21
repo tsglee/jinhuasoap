@@ -5,87 +5,75 @@ import { useCart } from '../state/CartContext.jsx';
 
 const PRODUCTS = [
   {
-    zh: '玫瑰', en: 'Rose', lat: 'Rosa centifolia', price: 380, tone: 'rose', num: 'I',
-    notes: ['floral', 'soft', 'rich'], family: 'Floral',
+    zh: '玫瑰', lat: 'Rosa centifolia', price: 380, tone: 'rose', num: 'I',
+    notes: ['花香', '柔和', '醇厚'], family: '花香',
     pitchZh: '千片花瓣，\n只為一方溫柔。',
-    pitchEn: 'A thousand petals, distilled into a single bar.',
     staging: 'bowl',
   },
   {
-    zh: '艾草', en: 'Mugwort', lat: 'Artemisia argyi', price: 320, tone: 'cool', num: 'II',
-    notes: ['warm', 'herbal', 'grounding'], family: 'Herbal',
+    zh: '艾草', lat: 'Artemisia argyi', price: 320, tone: 'cool', num: 'II',
+    notes: ['溫厚', '草本', '安定'], family: '草本',
     pitchZh: '端午掛艾，\n古法入皂。',
-    pitchEn: 'The herb our grandmothers hung at the door, pressed into soap.',
     staging: 'kraft',
   },
   {
-    zh: '柚子', en: 'Pomelo', lat: 'Citrus grandis', price: 300, tone: 'warm', num: 'III',
-    notes: ['zesty', 'bright', 'clean'], family: 'Citrus',
+    zh: '柚子', lat: 'Citrus grandis', price: 300, tone: 'warm', num: 'III',
+    notes: ['清爽', '明亮', '潔淨'], family: '柑橘',
     pitchZh: '中秋的那顆柚子，\n留下了皮。',
-    pitchEn: 'The zest of the mid-autumn fruit, held in cold-pressed oil.',
     staging: 'bowl',
   },
   {
-    zh: '茶花', en: 'Camellia', lat: 'Camellia japonica', price: 400, tone: 'deep', num: 'IV',
-    notes: ['nourishing', 'glossy'], family: 'Floral',
+    zh: '茶花', lat: 'Camellia japonica', price: 400, tone: 'deep', num: 'IV',
+    notes: ['滋養', '亮澤'], family: '花香',
     pitchZh: '山茶之油，\n百年宮中之秘。',
-    pitchEn: 'The oil that dressed a thousand years of black hair.',
     staging: 'kraft',
   },
   {
-    zh: '薑黃', en: 'Turmeric', lat: 'Curcuma longa', price: 340, tone: 'warm', num: 'V',
-    notes: ['warm', 'spiced', 'golden'], family: 'Spice',
+    zh: '薑黃', lat: 'Curcuma longa', price: 340, tone: 'warm', num: 'V',
+    notes: ['溫暖', '辛香', '金黃'], family: '辛香',
     pitchZh: '一寸金色，\n洗去倦容。',
-    pitchEn: 'An inch of gold. A wash of warmth.',
     staging: 'bowl',
   },
   {
-    zh: '桂花', en: 'Osmanthus', lat: 'Osmanthus fragrans', price: 420, tone: 'warm', num: 'VI',
-    notes: ['honeyed', 'soft', 'drowsy'], family: 'Floral',
+    zh: '桂花', lat: 'Osmanthus fragrans', price: 420, tone: 'warm', num: 'VI',
+    notes: ['蜜甜', '柔和', '慵懶'], family: '花香',
     pitchZh: '秋風送來桂花，\n我們把它洗進皮膚。',
-    pitchEn: "Autumn's sweetest scent, pressed slowly into the bar.",
     staging: 'bowl',
   },
   {
-    zh: '白梅', en: 'White Plum', lat: 'Prunus mume', price: 360, tone: 'cool', num: 'VII',
-    notes: ['brisk', 'green', 'linen'], family: 'Floral',
+    zh: '白梅', lat: 'Prunus mume', price: 360, tone: 'cool', num: 'VII',
+    notes: ['清冽', '青翠', '亞麻'], family: '花香',
     pitchZh: '雪未落，\n梅先開。',
-    pitchEn: 'Before the snow, the plum.',
     staging: 'kraft',
   },
   {
-    zh: '檜木', en: 'Hinoki', lat: 'Chamaecyparis obtusa', price: 440, tone: 'deep', num: 'VIII',
-    notes: ['wooded', 'cool', 'quiet'], family: 'Wood',
+    zh: '檜木', lat: 'Chamaecyparis obtusa', price: 440, tone: 'deep', num: 'VIII',
+    notes: ['木質', '沉靜', '幽靜'], family: '木質',
     pitchZh: '阿里山的清晨，\n一塊帶回家。',
-    pitchEn: 'Alishan morning, shaved into a bar.',
     staging: 'bowl',
   },
   {
-    zh: '蜂蜜', en: 'Raw Honey', lat: 'Mel crudum', price: 380, tone: 'warm', num: 'IX',
-    notes: ['mellow', 'sweet', 'rich'], family: 'Food',
+    zh: '蜂蜜', lat: 'Mel crudum', price: 380, tone: 'warm', num: 'IX',
+    notes: ['醇和', '甘甜', '醇厚'], family: '食材',
     pitchZh: '苗栗蜂場的一滴，\n留在你手心。',
-    pitchEn: 'One drop from a Miaoli apiary, warmed on your palms.',
     staging: 'kraft',
   },
   {
-    zh: '海鹽', en: 'Sea Salt', lat: 'Sal maris', price: 320, tone: 'cool', num: 'X',
-    notes: ['crisp', 'exfoliating'], family: 'Mineral',
-    pitchZh: '台南的鹽,\n鹹在肌膚。',
-    pitchEn: 'Tainan salt pans, one crystal at a time.',
+    zh: '海鹽', lat: 'Sal maris', price: 320, tone: 'cool', num: 'X',
+    notes: ['俐落', '去角質'], family: '礦物',
+    pitchZh: '臺南的鹽，\n鹹在肌膚。',
     staging: 'bowl',
   },
   {
-    zh: '青苔', en: 'Moss', lat: 'Hypnum cupressiforme', price: 360, tone: 'deep', num: 'XI',
-    notes: ['earthy', 'cool', 'forest'], family: 'Earth',
-    pitchZh: '林中濕氣,\n一塊涼意。',
-    pitchEn: 'Forest damp, folded into a cold-pressed bar.',
+    zh: '青苔', lat: 'Hypnum cupressiforme', price: 360, tone: 'deep', num: 'XI',
+    notes: ['泥土氣', '沉靜', '林息'], family: '大地',
+    pitchZh: '林中濕氣，\n一塊涼意。',
     staging: 'kraft',
   },
   {
-    zh: '金盞花', en: 'Marigold', lat: 'Calendula officinalis', price: 360, tone: 'warm', num: 'XII',
-    notes: ['soothing', 'golden'], family: 'Floral',
-    pitchZh: '金色花瓣,\n安撫每一吋。',
-    pitchEn: 'Golden petals, calming every inch.',
+    zh: '金盞花', lat: 'Calendula officinalis', price: 360, tone: 'warm', num: 'XII',
+    notes: ['撫慰', '金黃'], family: '花香',
+    pitchZh: '金色花瓣，\n安撫每一吋。',
     staging: 'bowl',
   },
 ];
@@ -113,7 +101,7 @@ function ProductMeta({ p, size = 'md' }) {
       }}
     >
       <div>
-        <div style={{ display: 'flex', alignItems: 'baseline', gap: 10 }}>
+        <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, flexWrap: 'wrap' }}>
           <span
             className="mono"
             style={{
@@ -137,35 +125,24 @@ function ProductMeta({ p, size = 'md' }) {
           <span
             className="italic"
             style={{
-              fontSize: big ? 20 : 15,
+              fontSize: big ? 16 : 13,
               color: 'var(--gold-3)',
             }}
           >
-            {p.en}
+            {p.lat}
           </span>
-        </div>
-        <div
-          className="italic"
-          style={{
-            fontSize: big ? 14 : 12,
-            color: 'var(--ink-60)',
-            marginTop: 4,
-          }}
-        >
-          {p.lat}
         </div>
         <div style={{ marginTop: 10, display: 'flex', gap: 6, flexWrap: 'wrap' }}>
           {p.notes.map((n) => (
             <span
               key={n}
+              className="tc"
               style={{
-                fontFamily: '"DM Mono", monospace',
-                fontSize: 9,
-                letterSpacing: 1.5,
-                textTransform: 'uppercase',
+                fontSize: 11,
+                letterSpacing: 2,
                 color: 'var(--gold-3)',
                 border: '1px solid var(--ink-15)',
-                padding: '3px 8px',
+                padding: '3px 10px',
               }}
             >
               {n}
@@ -186,19 +163,18 @@ function ProductMeta({ p, size = 'md' }) {
         <button
           onClick={handleAdd}
           aria-live="polite"
+          className="tc"
           style={{
             marginTop: 8,
-            fontFamily: '"DM Mono", monospace',
-            fontSize: 10,
-            letterSpacing: 2,
-            textTransform: 'uppercase',
+            fontSize: 13,
+            letterSpacing: 3,
             color: justAdded ? 'var(--red)' : 'var(--sumi)',
             borderBottom: `1px solid ${justAdded ? 'var(--red)' : 'var(--sumi)'}`,
             paddingBottom: 2,
             transition: 'color 200ms, border-color 200ms',
           }}
         >
-          {justAdded ? 'Added ✓' : 'Add to basket'}
+          {justAdded ? '已加入 ✓' : '加入購物籃'}
         </button>
       </div>
     </div>
@@ -213,8 +189,7 @@ function ProductCard({ p, size = 'md' }) {
         staging={p.staging}
         ratio={size === 'lg' ? '4/5' : '4/5'}
         overlayZh={size === 'lg' ? p.pitchZh : undefined}
-        overlayEn={size === 'lg' ? p.pitchEn : undefined}
-        wordmark={p.en.toUpperCase()}
+        wordmark={p.zh}
       />
       <ProductMeta p={p} size={size} />
     </div>
@@ -222,9 +197,9 @@ function ProductCard({ p, size = 'md' }) {
 }
 
 export function Products() {
-  const [filter, setFilter] = useState('All');
-  const families = ['All', 'Floral', 'Herbal', 'Citrus', 'Spice', 'Wood', 'Earth', 'Mineral', 'Food'];
-  const filtered = filter === 'All' ? PRODUCTS : PRODUCTS.filter((p) => p.family === filter);
+  const [filter, setFilter] = useState('全部');
+  const families = ['全部', '花香', '草本', '柑橘', '辛香', '木質', '大地', '礦物', '食材'];
+  const filtered = filter === '全部' ? PRODUCTS : PRODUCTS.filter((p) => p.family === filter);
 
   // Split the list: first is full-bleed ad hero, next two are editorial pair, rest is grid
   const hero = filtered[0];
@@ -244,7 +219,7 @@ export function Products() {
         }}
       >
         <div className="mono" style={{ color: 'var(--red)' }}>
-          The Twelve · 十二花
+          十二花 · 本舍之皂
         </div>
         <h1
           className="tc gf-h1-md"
@@ -259,26 +234,26 @@ export function Products() {
           本舍之皂
         </h1>
         <div
-          className="italic"
+          className="tc"
           style={{
-            fontSize: 22,
+            fontSize: 18,
             color: 'var(--gold-3)',
-            letterSpacing: 4,
+            letterSpacing: 6,
           }}
         >
-          Our soap, by the bar.
+          一月一方 · 一皂一花
         </div>
         <div
+          className="tc"
           style={{
             maxWidth: 560,
             margin: '26px auto 0',
             fontSize: 16,
-            lineHeight: 1.65,
+            lineHeight: 1.85,
             color: 'var(--sumi)',
           }}
         >
-          Twelve recipes — one for each moon. Every bar is cold-pressed, cured forty-two days, and
-          wrapped in unbleached paper with a red-wax seal.
+          十二款配方，對應十二個月。每一塊皆冷製手壓、熟成四十二日，以未漂紙包裹、封以紅蠟。
         </div>
       </section>
 
@@ -302,12 +277,11 @@ export function Products() {
             <button
               key={f}
               onClick={() => setFilter(f)}
+              className="tc"
               style={{
                 padding: '8px 16px',
-                fontFamily: '"DM Mono", monospace',
-                fontSize: 10,
-                letterSpacing: 2,
-                textTransform: 'uppercase',
+                fontSize: 13,
+                letterSpacing: 3,
                 border: `1px solid ${filter === f ? 'var(--red)' : 'var(--ink-15)'}`,
                 background: filter === f ? 'var(--red)' : 'transparent',
                 color: filter === f ? 'var(--gold-2)' : 'var(--sumi)',
@@ -318,8 +292,8 @@ export function Products() {
             </button>
           ))}
         </div>
-        <div className="mono" style={{ color: 'var(--ink-60)' }}>
-          Showing {filtered.length} · Sort: alphabetical
+        <div className="tc" style={{ color: 'var(--ink-60)', fontSize: 13, letterSpacing: 2 }}>
+          共 {filtered.length} 款 · 依序排列
         </div>
       </section>
 
@@ -334,8 +308,7 @@ export function Products() {
                   staging={hero.staging}
                   ratio="16/9"
                   overlayZh={hero.pitchZh}
-                  overlayEn={hero.pitchEn}
-                  wordmark={hero.en.toUpperCase()}
+                  wordmark={hero.zh}
                 />
               </div>
               <div
@@ -352,7 +325,7 @@ export function Products() {
               >
                 <div>
                   <div className="mono" style={{ color: 'var(--gold-3)' }}>
-                    Featured · 本月之花 · № {hero.num}
+                    本月之花 · № {hero.num}
                   </div>
                   <div style={{ marginTop: 6 }}>
                     <span
@@ -363,32 +336,33 @@ export function Products() {
                     </span>
                     <span
                       className="italic"
-                      style={{ marginLeft: 14, fontSize: 18, color: 'var(--gold-3)' }}
+                      style={{ marginLeft: 14, fontSize: 16, color: 'var(--gold-3)' }}
                     >
-                      {hero.en} · <span style={{ fontSize: 14 }}>{hero.lat}</span>
+                      {hero.lat}
                     </span>
                   </div>
                   <div
+                    className="tc"
                     style={{
-                      marginTop: 6,
+                      marginTop: 10,
                       fontSize: 14,
                       color: 'var(--ink-60)',
-                      lineHeight: 1.5,
+                      lineHeight: 1.7,
                       maxWidth: 600,
+                      letterSpacing: 1,
                     }}
                   >
-                    {hero.pitchEn}
+                    {hero.notes.join(' · ')}
                   </div>
                 </div>
                 <button
+                  className="tc"
                   style={{
                     background: 'var(--red)',
                     color: 'var(--gold-2)',
                     padding: '14px 28px',
-                    fontFamily: '"DM Mono", monospace',
-                    fontSize: 11,
-                    letterSpacing: 3,
-                    textTransform: 'uppercase',
+                    fontSize: 14,
+                    letterSpacing: 4,
                   }}
                 >
                   來去逛逛 · NT${hero.price}
@@ -471,7 +445,7 @@ export function Products() {
         >
           <div>
             <div className="mono" style={{ color: 'var(--gold-2)' }}>
-              Gift sets · 四花盒
+              禮盒 · 四花盒
             </div>
             <h2
               className="tc"
@@ -486,31 +460,32 @@ export function Products() {
               四方之花
             </h2>
             <div
-              className="italic"
+              className="tc"
               style={{
-                fontSize: 22,
+                fontSize: 18,
                 color: 'var(--gold-2)',
                 maxWidth: 420,
+                lineHeight: 1.85,
+                letterSpacing: 2,
               }}
             >
-              Four seasonal bars in a cedar box, sealed with red wax and a hand-written tag.
+              四款應季之皂，裝入檜木禮盒，以紅蠟封緘、附手書卡片。
             </div>
             <button
+              className="tc"
               style={{
                 marginTop: 32,
                 background: 'var(--gold-1)',
                 color: 'var(--sumi)',
                 padding: '14px 28px',
-                fontFamily: '"DM Mono", monospace',
-                fontSize: 11,
-                letterSpacing: 3,
-                textTransform: 'uppercase',
+                fontSize: 14,
+                letterSpacing: 4,
               }}
             >
-              Shop gift sets · NT$1,480
+              選購禮盒 · NT$1,480
             </button>
           </div>
-          <IllGiftBox ratio="4/3" label="four-bar cedar gift box" />
+          <IllGiftBox ratio="4/3" label="四花檜木禮盒" />
         </div>
       </section>
     </div>

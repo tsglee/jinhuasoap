@@ -89,6 +89,11 @@
     line-height: 1.6 !important;
     letter-spacing: 4px !important;
   }
+
+  /* Hero video banner — shrink from the desktop height to a calmer mobile one. */
+  .gf-hero-video-md {
+    height: min(40vh, 340px) !important;
+  }
 }
 
 /* ─── Show only on mobile (inverse of gf-hide-md). ─────────────────────── */

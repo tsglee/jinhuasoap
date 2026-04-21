@@ -15,7 +15,7 @@ function OrderRequestForm({ cart, total, onSent }) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [note, setNote] = useState('');
-  const [status, setStatus] = useState('idle'); // 'idle' | 'sending' | 'sent' | 'error'
+  const [status, setStatus] = useState('idle');
   const [errorMsg, setErrorMsg] = useState('');
 
   const submit = async (e) => {
@@ -34,7 +34,7 @@ function OrderRequestForm({ cart, total, onSent }) {
           cart: cart.map((i) => ({
             num: i.num,
             zh: i.zh,
-            en: i.en,
+            lat: i.lat,
             qty: i.qty,
             price: i.price,
           })),
@@ -43,17 +43,16 @@ function OrderRequestForm({ cart, total, onSent }) {
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok || !data.ok) {
-        throw new Error(data.error || `Server returned ${res.status}`);
+        throw new Error(data.error || `伺服器回應 ${res.status}`);
       }
       setStatus('sent');
       setName('');
       setEmail('');
       setNote('');
-      // Clear cart after a brief pause so the user sees the confirmation.
       window.setTimeout(() => onSent && onSent(), 1500);
     } catch (err) {
       setStatus('error');
-      setErrorMsg(err.message || 'Could not send order. Please try again.');
+      setErrorMsg(err.message || '訂單未能送出，請稍後再試。');
     }
   };
 
@@ -74,9 +73,11 @@ function OrderRequestForm({ cart, total, onSent }) {
         >
           收到您的訂單
         </div>
-        <div className="italic" style={{ fontSize: 15, color: 'var(--sumi)' }}>
-          We&apos;ve received your order request. We&apos;ll reply by email within 24 hours with
-          payment + shipping details.
+        <div
+          className="tc"
+          style={{ fontSize: 14, color: 'var(--sumi)', lineHeight: 1.7, letterSpacing: 1 }}
+        >
+          我們已收到您的訂購請求，將於 24 小時內以電子郵件回覆付款與寄送方式。
         </div>
       </div>
     );
@@ -86,20 +87,19 @@ function OrderRequestForm({ cart, total, onSent }) {
     return (
       <button
         onClick={() => setOpen(true)}
+        className="tc"
         style={{
           marginTop: 24,
           width: '100%',
           background: 'var(--red)',
           color: 'var(--gold-2)',
           padding: '16px',
-          fontFamily: '"DM Mono", monospace',
-          fontSize: 12,
-          letterSpacing: 3,
-          textTransform: 'uppercase',
+          fontSize: 15,
+          letterSpacing: 4,
           border: '1px solid var(--gold-1)',
         }}
       >
-        Request order · 訂購
+        送出訂購
       </button>
     );
   }
@@ -114,16 +114,19 @@ function OrderRequestForm({ cart, total, onSent }) {
       }}
     >
       <div className="mono" style={{ color: 'var(--gold-3)' }}>
-        Order request · 訂購單
+        訂購單
       </div>
-      <div className="italic" style={{ fontSize: 13, color: 'var(--ink-60)', lineHeight: 1.5 }}>
-        We&apos;ll reply by email within 24 hours with payment + shipping. No card needed yet.
+      <div
+        className="tc"
+        style={{ fontSize: 13, color: 'var(--ink-60)', lineHeight: 1.7, letterSpacing: 1 }}
+      >
+        將於 24 小時內以電子郵件回覆付款與寄送方式。無需先付款。
       </div>
       <input
         type="text"
         value={name}
         onChange={(e) => setName(e.target.value)}
-        placeholder="Your name · 姓名"
+        placeholder="姓名"
         required
         autoComplete="name"
         style={inputStyle}
@@ -132,7 +135,7 @@ function OrderRequestForm({ cart, total, onSent }) {
         type="email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
-        placeholder="Your email · 電子郵件"
+        placeholder="電子郵件"
         required
         autoComplete="email"
         style={inputStyle}
@@ -140,18 +143,20 @@ function OrderRequestForm({ cart, total, onSent }) {
       <textarea
         value={note}
         onChange={(e) => setNote(e.target.value)}
-        placeholder="Anything we should know? (optional)"
+        placeholder="備註（選填）"
         rows={3}
-        style={{ ...inputStyle, resize: 'vertical', minHeight: 70, fontFamily: '"Cormorant Garamond", serif' }}
+        style={{ ...inputStyle, resize: 'vertical', minHeight: 70 }}
       />
       {status === 'error' && (
         <div
+          className="tc"
           style={{
             color: 'var(--red)',
             fontSize: 13,
             padding: '8px 12px',
             background: 'rgba(138,42,34,0.06)',
             border: '1px solid var(--red)',
+            letterSpacing: 1,
           }}
         >
           {errorMsg}
@@ -161,37 +166,35 @@ function OrderRequestForm({ cart, total, onSent }) {
         <button
           type="button"
           onClick={() => setOpen(false)}
+          className="tc"
           style={{
             flex: 1,
             padding: '14px',
             border: '1px solid var(--ink-15)',
             color: 'var(--sumi)',
-            fontFamily: '"DM Mono", monospace',
-            fontSize: 11,
-            letterSpacing: 2,
-            textTransform: 'uppercase',
+            fontSize: 14,
+            letterSpacing: 3,
           }}
         >
-          Cancel
+          取消
         </button>
         <button
           type="submit"
           disabled={status === 'sending'}
+          className="tc"
           style={{
             flex: 2,
             background: 'var(--red)',
             color: 'var(--gold-2)',
             padding: '14px',
-            fontFamily: '"DM Mono", monospace',
-            fontSize: 11,
-            letterSpacing: 2,
-            textTransform: 'uppercase',
+            fontSize: 14,
+            letterSpacing: 3,
             border: '1px solid var(--gold-1)',
             opacity: status === 'sending' ? 0.6 : 1,
             cursor: status === 'sending' ? 'wait' : 'pointer',
           }}
         >
-          {status === 'sending' ? 'Sending…' : `Send · NT$${total}`}
+          {status === 'sending' ? '寄送中…' : `送出 · NT$${total}`}
         </button>
       </div>
     </form>
@@ -203,8 +206,9 @@ const inputStyle = {
   background: 'var(--paper)',
   border: '1px solid var(--ink-15)',
   color: 'var(--sumi)',
-  fontFamily: '"Cormorant Garamond", serif',
-  fontSize: 16,
+  fontFamily: '"Noto Serif TC", serif',
+  fontSize: 15,
+  letterSpacing: 1,
   outline: 'none',
 };
 
@@ -225,7 +229,7 @@ export function Shop() {
         }}
       >
         <div className="mono" style={{ color: 'var(--red)' }}>
-          線上購皂 · Shop online
+          線上購皂
         </div>
         <h1
           className="tc gf-h1-md"
@@ -239,20 +243,18 @@ export function Shop() {
         >
           購皂
         </h1>
-        {/* Chinese-only subtitle — intentional break from the bilingual pattern,
-            because convenience-store pickup is a Taiwan-specific feature and
-            the audience for this line is local. */}
         <div
-          className="italic"
+          className="tc"
           style={{
-            fontSize: 20,
+            fontSize: 17,
             color: 'var(--gold-3)',
             maxWidth: 640,
             margin: '0 auto',
-            lineHeight: 1.5,
+            lineHeight: 1.85,
+            letterSpacing: 3,
           }}
         >
-          我們在收到訂單後，三個工作天內寄出 · 支援 7-11 與全家店到店付款
+          收到訂單後三個工作天內寄出 · 支援 7-11 與全家店到店付款
         </div>
       </section>
 
@@ -265,9 +267,6 @@ export function Shop() {
           padding: '30px 44px 60px',
         }}
       >
-        {/* (Stockists column deleted in Phase H — brand is online-only for now.
-            Map SVG and 5-shop list lived here; git preserves it if we ever
-            resurrect retail partners.) */}
         <aside
           style={{
             background: 'var(--paper-2)',
@@ -285,14 +284,14 @@ export function Shop() {
           >
             <div>
               <div className="mono" style={{ color: 'var(--red)' }}>
-                Shop online · 線上
+                購物籃
               </div>
               <div className="tc" style={{ fontSize: 26, letterSpacing: 4, marginTop: 4 }}>
                 您的籃子
               </div>
             </div>
-            <div className="italic" style={{ fontSize: 14, color: 'var(--gold-3)' }}>
-              {cart.length} bar{cart.length !== 1 ? 's' : ''}
+            <div className="tc" style={{ fontSize: 14, color: 'var(--gold-3)', letterSpacing: 2 }}>
+              {cart.length} 款
             </div>
           </div>
 
@@ -300,14 +299,16 @@ export function Shop() {
 
           {cart.length === 0 && (
             <div
+              className="tc"
               style={{
                 textAlign: 'center',
                 padding: '40px 0',
                 color: 'var(--ink-60)',
-                fontStyle: 'italic',
+                fontSize: 15,
+                letterSpacing: 2,
               }}
             >
-              Your basket is empty.
+              籃中尚無皂塊。
             </div>
           )}
 
@@ -324,19 +325,20 @@ export function Shop() {
               }}
             >
               <div style={{ width: 60, height: 60 }}>
-                <IllSoap ratio="1/1" label={item.en} tone={item.tone} flower="rose" />
+                <IllSoap ratio="1/1" label={item.num} tone={item.tone} flower="rose" />
               </div>
               <div>
                 <div className="tc" style={{ fontSize: 18, letterSpacing: 3 }}>
                   {item.zh}
                 </div>
                 <div className="italic" style={{ fontSize: 13, color: 'var(--gold-3)' }}>
-                  {item.en} · No. {item.num}
+                  {item.lat} · № {item.num}
                 </div>
                 <div style={{ display: 'flex', gap: 6, marginTop: 6, alignItems: 'center' }}>
                   <button
                     onClick={() => updateQty(item.num, -1)}
                     className="gf-tiny-btn"
+                    aria-label={`${item.zh} 減少一件`}
                     style={{
                       width: 22,
                       height: 22,
@@ -360,6 +362,7 @@ export function Shop() {
                   <button
                     onClick={() => updateQty(item.num, 1)}
                     className="gf-tiny-btn"
+                    aria-label={`${item.zh} 增加一件`}
                     style={{
                       width: 22,
                       height: 22,
@@ -385,19 +388,21 @@ export function Shop() {
                   marginTop: 20,
                   display: 'grid',
                   gap: 8,
-                  fontFamily: '"DM Mono", monospace',
-                  fontSize: 11,
-                  letterSpacing: 1,
+                  fontSize: 14,
+                  letterSpacing: 2,
                 }}
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <span style={{ color: 'var(--ink-60)' }}>SUBTOTAL</span>
-                  <span>NT${subtotal}</span>
+                  <span className="tc" style={{ color: 'var(--ink-60)' }}>小計</span>
+                  <span className="mono">NT${subtotal}</span>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <span style={{ color: 'var(--ink-60)' }}>SHIPPING · ISLAND</span>
-                  <span style={{ color: shipping === 0 ? 'var(--red)' : 'var(--sumi)' }}>
-                    {shipping === 0 ? 'FREE' : `NT$${shipping}`}
+                  <span className="tc" style={{ color: 'var(--ink-60)' }}>運費 · 本島</span>
+                  <span
+                    className={shipping === 0 ? 'tc' : 'mono'}
+                    style={{ color: shipping === 0 ? 'var(--red)' : 'var(--sumi)' }}
+                  >
+                    {shipping === 0 ? '免運' : `NT$${shipping}`}
                   </span>
                 </div>
                 <div
@@ -407,28 +412,27 @@ export function Shop() {
                     paddingTop: 10,
                     marginTop: 6,
                     borderTop: '1px solid var(--sumi)',
-                    fontFamily: '"Cormorant Garamond", serif',
-                    fontStyle: 'italic',
                     fontSize: 20,
                   }}
                 >
-                  <span>Total</span>
-                  <span style={{ color: 'var(--red)' }}>NT${total}</span>
+                  <span className="tc" style={{ letterSpacing: 4 }}>合計</span>
+                  <span className="italic" style={{ color: 'var(--red)' }}>NT${total}</span>
                 </div>
               </div>
 
               <OrderRequestForm cart={cart} total={total} onSent={clear} />
 
               <div
-                className="italic"
+                className="tc"
                 style={{
                   marginTop: 14,
                   fontSize: 13,
                   color: 'var(--ink-60)',
                   textAlign: 'center',
+                  letterSpacing: 2,
                 }}
               >
-                Ships Thursdays · hand-wrapped · red wax seal
+                每週四出貨 · 手工包裝 · 紅蠟封緘
               </div>
             </>
           )}
@@ -456,7 +460,7 @@ export function Shop() {
         >
           <div>
             <div className="mono" style={{ color: 'var(--gold-2)' }}>
-              Wholesale · 批發合作
+              批發合作
             </div>
             <h2
               className="tc"
@@ -471,37 +475,36 @@ export function Shop() {
               開店合作
             </h2>
             <div
-              className="italic"
+              className="tc"
               style={{
-                fontSize: 18,
+                fontSize: 16,
                 color: 'rgba(248,245,235,0.85)',
                 maxWidth: 440,
-                lineHeight: 1.6,
+                lineHeight: 1.85,
+                letterSpacing: 1,
               }}
             >
-              We partner with a small number of independent shops. If your counter would feel at
-              home with our soap, write to us — minimum order twelve bars.
+              本舍與少數獨立店家合作。若您的店面與我們的皂氣質相投，請來信一敘 — 最低訂量十二塊。
             </div>
             <button
+              className="tc"
               style={{
                 marginTop: 28,
                 background: 'transparent',
                 color: 'var(--gold-2)',
                 border: '1px solid var(--gold-1)',
                 padding: '14px 26px',
-                fontFamily: '"DM Mono", monospace',
-                fontSize: 11,
+                fontSize: 14,
                 letterSpacing: 3,
-                textTransform: 'uppercase',
               }}
             >
-              Apply to stock · wholesale@jinhuasoap.com
+              申請批發 · wholesale@jinhuasoap.com
             </button>
           </div>
 
           <div>
             <div className="mono" style={{ color: 'var(--gold-2)' }}>
-              Journal · 月訊
+              月訊
             </div>
             <h2
               className="tc"
@@ -516,16 +519,16 @@ export function Shop() {
               月信
             </h2>
             <div
-              className="italic"
+              className="tc"
               style={{
-                fontSize: 18,
+                fontSize: 16,
                 color: 'rgba(248,245,235,0.85)',
                 maxWidth: 440,
-                lineHeight: 1.6,
+                lineHeight: 1.85,
+                letterSpacing: 1,
               }}
             >
-              One letter a month — new batches, the ingredient we&apos;re thinking about, and a
-              small essay from the cure room. No sales, no plastic talk.
+              每月一封 — 新一批的皂、本月所思之材、與一小段熟成室的隨筆。不推銷、不聒噪。
             </div>
             <form
               onSubmit={(e) => {
@@ -538,7 +541,7 @@ export function Shop() {
                 type="email"
                 value={addingEmail}
                 onChange={(e) => setAddingEmail(e.target.value)}
-                placeholder="your email"
+                placeholder="您的電子郵件"
                 style={{
                   flex: 1,
                   padding: '14px 16px',
@@ -546,24 +549,23 @@ export function Shop() {
                   border: '1px solid var(--gold-1)',
                   borderRight: 'none',
                   color: 'var(--paper)',
-                  fontFamily: '"Cormorant Garamond", serif',
-                  fontStyle: 'italic',
-                  fontSize: 16,
+                  fontFamily: '"Noto Serif TC", serif',
+                  fontSize: 15,
+                  letterSpacing: 1,
                   outline: 'none',
                 }}
               />
               <button
+                className="tc"
                 style={{
                   background: 'var(--gold-1)',
                   color: 'var(--sumi)',
                   padding: '14px 22px',
-                  fontFamily: '"DM Mono", monospace',
-                  fontSize: 11,
-                  letterSpacing: 2,
-                  textTransform: 'uppercase',
+                  fontSize: 14,
+                  letterSpacing: 3,
                 }}
               >
-                Subscribe
+                訂閱
               </button>
             </form>
           </div>

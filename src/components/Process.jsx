@@ -4,44 +4,44 @@ import { IllStep, IllIngredient, IllNoList } from './Illustrations.jsx';
 export function Process() {
   const steps = [
     {
-      n: 'I', zh: '採集', en: 'Gather',
-      body: 'Every Monday we drive to our growers in Yilan and Yangmingshan — oils, herbs, spring water. Everything is weighed before it leaves the farm.',
+      n: 'I', zh: '採集',
+      body: '每週一，我們親赴宜蘭與陽明山的小農 — 取油、取草、取山泉。離地前皆已秤重入冊。',
     },
     {
-      n: 'II', zh: '煉油', en: 'Render',
-      body: 'Oils are warmed to 40°C in a copper pot, stirred by hand. No heat above body temperature — this keeps the fatty acids intact.',
+      n: 'II', zh: '煉油',
+      body: '油料於銅鍋中溫至 40°C，以手攪拌。溫度不過體溫 — 為保脂肪酸完整。',
     },
     {
-      n: 'III', zh: '調鹼', en: 'Mix the lye',
-      body: 'Spring water meets food-grade sodium hydroxide. The solution cools overnight in a stoneware jar.',
+      n: 'III', zh: '調鹼',
+      body: '山泉水遇食用級氫氧化鈉。鹼水入陶甕，靜置一夜冷卻。',
     },
     {
-      n: 'IV', zh: '入模', en: 'Pour',
-      body: 'Oils and lye meet, we stir until trace, fold in the botanicals, and pour into cedar moulds lined with unbleached paper.',
+      n: 'IV', zh: '入模',
+      body: '油與鹼相遇，攪至 trace，拌入花材，倒入鋪有未漂紙之檜木模。',
     },
     {
-      n: 'V', zh: '切皂', en: 'Cut',
-      body: 'After 48 hours we unmould and slice by hand with a wire — each bar stamped with the golden flower seal.',
+      n: 'V', zh: '切皂',
+      body: '四十八小時後脫模，以金屬線手工切塊 — 每塊蓋上金花印記。',
     },
     {
-      n: 'VI', zh: '慢熟', en: 'Cure',
-      body: 'Bars rest on cedar racks for forty-two days. They harden, mellow, and lose the last of their alkali — this is the step machines cannot hurry.',
+      n: 'VI', zh: '慢熟',
+      body: '皂塊靜置檜木架上四十二日。逐日堅實、醇和、鹼性盡退 — 此步驟機器無法催熟。',
     },
     {
-      n: 'VII', zh: '封蠟', en: 'Seal',
-      body: 'Each bar is wrapped in kozo paper, tied with hemp, and sealed with a drop of red wax pressed with our chop.',
+      n: 'VII', zh: '封蠟',
+      body: '每塊以楮紙包裹、麻繩繫縛，點一滴紅蠟、押以朱印。',
     },
   ];
 
   const ingredients = [
-    { kind: 'olive', zh: '橄欖油', en: 'Olive oil', origin: 'Chiayi, TW', ratio: '32%', benefit: '滋潤', note: 'The base. Gentle, conditioning, slow to lather.' },
-    { kind: 'coconut', zh: '椰子油', en: 'Coconut oil', origin: 'Fair trade, PH', ratio: '26%', benefit: '起泡', note: 'The lather. Crisp, bubbly, cleansing.' },
-    { kind: 'castor', zh: '蓖麻油', en: 'Castor oil', origin: 'India', ratio: '6%', benefit: '潤滑', note: 'The finish. Silky, long-lasting bubbles.' },
-    { kind: 'water', zh: '山泉水', en: 'Spring water', origin: 'Yangmingshan', ratio: '14%', benefit: '淨', note: 'Drawn weekly from a mountain spring north of Taipei.' },
-    { kind: 'lye', zh: '食用鹼', en: 'Sodium hydroxide', origin: 'Food-grade, JP', ratio: '12%', benefit: '皂化', note: 'Fully reacted in curing — no lye remains in the finished bar.' },
-    { kind: 'botanical', zh: '花材', en: 'Botanicals', origin: 'Yilan growers', ratio: '~8%', benefit: '香氣', note: 'Pressed, infused, or powdered — depending on the recipe.' },
-    { kind: 'salt', zh: '海鹽', en: 'Sea salt', origin: 'Tainan salt flats', ratio: '1%', benefit: '礦物', note: 'A whisper of crunch and minerality, added after trace.' },
-    { kind: 'honey', zh: '蜂蜜', en: 'Raw honey', origin: 'Miaoli apiaries', ratio: '1%', benefit: '保濕', note: 'In select recipes. Mellowing, humectant, slightly sweet.' },
+    { kind: 'olive', zh: '橄欖油', lat: 'Olea europaea', origin: '嘉義 · 臺灣', ratio: '32%', benefit: '滋潤', note: '根基。親膚、柔潤、泡沫緩慢。' },
+    { kind: 'coconut', zh: '椰子油', lat: 'Cocos nucifera', origin: '菲律賓 · 公平貿易', ratio: '26%', benefit: '起泡', note: '泡沫。清脆、綿密、去污。' },
+    { kind: 'castor', zh: '蓖麻油', lat: 'Ricinus communis', origin: '印度', ratio: '6%', benefit: '潤滑', note: '收尾。絲滑、泡沫持久。' },
+    { kind: 'water', zh: '山泉水', lat: 'Aqua fontis', origin: '陽明山', ratio: '14%', benefit: '淨', note: '每週取自臺北以北山中泉眼。' },
+    { kind: 'lye', zh: '食用鹼', lat: 'Natrii hydroxidum', origin: '食品級 · 日本', ratio: '12%', benefit: '皂化', note: '熟成期完全反應 — 成皂之中已無殘鹼。' },
+    { kind: 'botanical', zh: '花材', lat: 'Botanica', origin: '宜蘭農家', ratio: '~8%', benefit: '香氣', note: '壓榨、浸泡或磨粉 — 視配方而定。' },
+    { kind: 'salt', zh: '海鹽', lat: 'Sal maris', origin: '臺南鹽田', ratio: '1%', benefit: '礦物', note: '加於 trace 之後，帶一絲脆度與礦氣。' },
+    { kind: 'honey', zh: '蜂蜜', lat: 'Mel crudum', origin: '苗栗蜂場', ratio: '1%', benefit: '保濕', note: '選配入皂。滋潤、吸濕、微帶蜜香。' },
   ];
 
   return (
@@ -57,7 +57,7 @@ export function Process() {
         }}
       >
         <div className="mono" style={{ color: 'var(--red)' }}>
-          How it is made · 製皂之序
+          製皂之序
         </div>
         <h1
           className="tc gf-h1-md"
@@ -72,13 +72,14 @@ export function Process() {
           七步慢皂
         </h1>
         <div
-          className="italic"
+          className="tc"
           style={{
-            fontSize: 22,
+            fontSize: 18,
             color: 'var(--gold-3)',
+            letterSpacing: 6,
           }}
         >
-          Seven steps, forty-two days, one small bar.
+          七道工序 · 四十二日 · 一塊小皂
         </div>
       </section>
 
@@ -110,7 +111,7 @@ export function Process() {
               }}
             >
               <div className="mono" style={{ color: 'var(--gold-3)' }}>
-                Step {s.n}
+                第 {s.n} 序
               </div>
               <div
                 className="tc"
@@ -122,16 +123,6 @@ export function Process() {
                 }}
               >
                 {s.zh}
-              </div>
-              <div
-                className="italic"
-                style={{
-                  fontSize: 16,
-                  color: 'var(--red)',
-                  marginTop: 2,
-                }}
-              >
-                {s.en}
               </div>
             </div>
           ))}
@@ -163,7 +154,7 @@ export function Process() {
               }}
             >
               <div style={{ order: flip ? 2 : 1, position: 'relative' }}>
-                <IllStep step={s.n} ratio="4/3" label={`step ${s.n} — ${s.en.toLowerCase()}`} />
+                <IllStep step={s.n} ratio="4/3" label={`第 ${s.n} 序 — ${s.zh}`} />
                 <div
                   style={{
                     position: 'absolute',
@@ -188,31 +179,30 @@ export function Process() {
               </div>
               <div style={{ order: flip ? 1 : 2 }}>
                 <div className="mono" style={{ color: 'var(--gold-3)' }}>
-                  No. {s.n}
+                  第 {s.n} 序
                 </div>
                 <div
                   className="tc"
                   style={{
-                    fontSize: 48,
+                    fontSize: 56,
                     fontWeight: 500,
-                    letterSpacing: 6,
-                    margin: '10px 0 4px',
+                    letterSpacing: 10,
+                    margin: '10px 0 18px',
                     color: 'var(--sumi)',
                   }}
                 >
                   {s.zh}
                 </div>
                 <div
-                  className="italic"
+                  className="tc"
                   style={{
-                    fontSize: 26,
-                    color: 'var(--red)',
-                    marginBottom: 18,
+                    fontSize: 17,
+                    lineHeight: 1.85,
+                    letterSpacing: 1,
+                    color: 'var(--sumi)',
+                    maxWidth: 460,
                   }}
                 >
-                  {s.en}
-                </div>
-                <div style={{ fontSize: 17, lineHeight: 1.7, color: 'var(--sumi)', maxWidth: 460 }}>
                   {s.body}
                 </div>
               </div>
@@ -245,7 +235,7 @@ export function Process() {
             }}
           >
             <div className="mono" style={{ color: 'var(--red)' }}>
-              What&apos;s inside · 材料
+              本舍所用 · 材料
             </div>
             <h2
               className="tc gf-h2-md"
@@ -259,20 +249,24 @@ export function Process() {
             >
               八樣材料
             </h2>
-            <div className="italic" style={{ fontSize: 22, color: 'var(--gold-3)' }}>
-              Eight ingredients, nothing else.
+            <div
+              className="tc"
+              style={{ fontSize: 18, color: 'var(--gold-3)', letterSpacing: 6 }}
+            >
+              八樣之外 · 別無他物
             </div>
             <div
+              className="tc"
               style={{
                 maxWidth: 560,
                 margin: '18px auto 0',
                 fontSize: 15,
-                lineHeight: 1.7,
+                lineHeight: 1.85,
                 color: 'var(--ink-60)',
+                letterSpacing: 1,
               }}
             >
-              Ratios shift by recipe — a turmeric bar will lean harder on olive oil, a sea-salt bar
-              on coconut. These are the house averages.
+              配方不同，比例各異 — 薑黃皂重橄欖，海鹽皂倚椰子。此為本舍平均數。
             </div>
           </div>
 
@@ -288,8 +282,8 @@ export function Process() {
             }}
           >
             {ingredients.map((x) => (
-              <div key={x.en} style={{ position: 'relative' }}>
-                <IllIngredient kind={x.kind} zh={x.zh} en={x.en} benefit={x.benefit} />
+              <div key={x.kind} style={{ position: 'relative' }}>
+                <IllIngredient kind={x.kind} zh={x.zh} en={x.lat} benefit={x.benefit} />
                 {/* Small metadata strip at bottom */}
                 <div
                   style={{
@@ -301,17 +295,15 @@ export function Process() {
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'baseline',
-                    fontFamily: '"DM Mono", monospace',
-                    fontSize: 10,
+                    fontSize: 11,
                     letterSpacing: 2,
-                    textTransform: 'uppercase',
                     color: 'rgba(244,236,215,0.75)',
                     textShadow: '0 1px 6px rgba(0,0,0,0.5)',
                     pointerEvents: 'none',
                   }}
                 >
-                  <span>{x.origin}</span>
-                  <span style={{ color: 'var(--gold-2)' }}>{x.ratio}</span>
+                  <span className="tc">{x.origin}</span>
+                  <span className="mono" style={{ color: 'var(--gold-2)' }}>{x.ratio}</span>
                 </div>
               </div>
             ))}
@@ -328,23 +320,33 @@ export function Process() {
             }}
           >
             {ingredients.map((x) => (
-              <div key={`note-${x.en}`}>
+              <div key={`note-${x.kind}`}>
                 <div
                   style={{
                     display: 'flex',
                     alignItems: 'baseline',
                     gap: 10,
                     marginBottom: 6,
+                    flexWrap: 'wrap',
                   }}
                 >
-                  <span className="italic" style={{ fontSize: 18, color: 'var(--sumi)' }}>
-                    {x.en}
+                  <span
+                    className="tc"
+                    style={{ fontSize: 20, fontWeight: 500, letterSpacing: 3, color: 'var(--sumi)' }}
+                  >
+                    {x.zh}
+                  </span>
+                  <span className="italic" style={{ fontSize: 14, color: 'var(--gold-3)' }}>
+                    {x.lat}
                   </span>
                   <span className="mono" style={{ color: 'var(--gold-3)' }}>
                     · {x.ratio}
                   </span>
                 </div>
-                <div style={{ fontSize: 14, lineHeight: 1.55, color: 'var(--ink-60)' }}>
+                <div
+                  className="tc"
+                  style={{ fontSize: 14, lineHeight: 1.7, color: 'var(--ink-60)', letterSpacing: 1 }}
+                >
                   {x.note}
                 </div>
               </div>
@@ -372,11 +374,11 @@ export function Process() {
           }}
         >
           <div style={{ position: 'relative' }}>
-            <IllNoList ratio="1/1" label="the no list" />
+            <IllNoList ratio="1/1" label="不入之物" />
           </div>
           <div>
             <div className="mono" style={{ color: 'var(--red)' }}>
-              The &ldquo;no&rdquo; list · 不入之物
+              不入之物
             </div>
             <h2
               className="tc"
@@ -398,11 +400,11 @@ export function Process() {
               }}
             >
               {[
-                { zh: '不用棕櫚油', en: 'No palm oil — we replace it with Taiwan-pressed olive and coconut.' },
-                { zh: '不加香精', en: 'No synthetic fragrance — scent comes from the botanical itself.' },
-                { zh: '不加色素', en: 'No dye — colour comes from clay, turmeric, charcoal, and time.' },
-                { zh: '不過度包裝', en: 'No plastic wrap — kozo paper, hemp string, a drop of wax.' },
-                { zh: '不催熟', en: 'No accelerated cure — forty-two days, every time.' },
+                { zh: '不用棕櫚油', body: '以臺灣冷壓橄欖油與椰子油替代 — 不碰棕櫚。' },
+                { zh: '不加香精', body: '香氣只從花材本身而來 — 無合成香料。' },
+                { zh: '不加色素', body: '色彩取自泥、薑黃、炭、與時間 — 不加染料。' },
+                { zh: '不過度包裝', body: '楮紙一張、麻繩一段、紅蠟一滴 — 不用塑膠。' },
+                { zh: '不催熟', body: '四十二日熟成 — 不加速、不減日。' },
               ].map((x, i) => (
                 <div
                   key={i}
@@ -426,8 +428,11 @@ export function Process() {
                   >
                     {x.zh}
                   </span>
-                  <span className="italic" style={{ fontSize: 17 }}>
-                    {x.en}
+                  <span
+                    className="tc"
+                    style={{ fontSize: 16, lineHeight: 1.7, letterSpacing: 1 }}
+                  >
+                    {x.body}
                   </span>
                 </div>
               ))}

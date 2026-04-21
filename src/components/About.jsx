@@ -5,6 +5,66 @@ import { IllSoap, IllWorkbench } from './Illustrations.jsx';
 export function About() {
   return (
     <div style={{ position: 'relative', zIndex: 1 }}>
+      {/* Hero video banner — full-bleed, autoplay muted loop */}
+      <section
+        className="gf-hero-video-md"
+        aria-label="金花樓 · 手壓皂 · 序幕"
+        style={{
+          position: 'relative',
+          width: '100vw',
+          marginLeft: 'calc(50% - 50vw)',
+          height: 'min(56vh, 560px)',
+          overflow: 'hidden',
+          background: 'var(--sumi)',
+          borderBottom: '1px solid var(--ink-15)',
+        }}
+      >
+        <video
+          src="/images/landingmedia/Animated_Ocean_and_Cloud_Video.mp4"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          aria-label="手壓皂的動態影像"
+          style={{
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            display: 'block',
+          }}
+        />
+        {/* Soft fade to paper so the banner blends into the hero below */}
+        <div
+          aria-hidden="true"
+          style={{
+            position: 'absolute',
+            inset: 'auto 0 0 0',
+            height: 120,
+            background:
+              'linear-gradient(to bottom, rgba(248,245,235,0) 0%, var(--paper) 100%)',
+            pointerEvents: 'none',
+          }}
+        />
+        {/* Mono caption chip — bottom-right, matches the existing site pattern */}
+        <div
+          className="mono"
+          style={{
+            position: 'absolute',
+            bottom: 22,
+            right: 24,
+            background: 'var(--paper)',
+            color: 'var(--gold-3)',
+            padding: '10px 14px',
+            border: '1px solid var(--ink-15)',
+            fontSize: 10,
+            letterSpacing: 2,
+          }}
+        >
+          手壓皂 · 臺北艋舺 · MMXXVI
+        </div>
+      </section>
+
       {/* Hero */}
       <section
         className="gf-pad-md gf-stack-md gf-tight-md"
@@ -20,7 +80,7 @@ export function About() {
       >
         <div>
           <div className="mono" style={{ color: 'var(--red)', marginBottom: 24 }}>
-            Our Story · 本舍小記
+            本舍小記
           </div>
           <h1
             className="tc gf-h1-md"
@@ -40,32 +100,32 @@ export function About() {
             <span style={{ color: 'var(--red)' }}>金花。</span>
           </h1>
           <div
-            className="italic"
+            className="tc"
             style={{
-              marginTop: 24,
-              fontSize: 26,
-              lineHeight: 1.35,
+              marginTop: 28,
+              fontSize: 22,
+              lineHeight: 1.6,
+              letterSpacing: 4,
               color: 'var(--gold-3)',
               maxWidth: 480,
             }}
           >
-            A single goldenflower
-            <br />
-            on the mountain —<br />
-            soap, to wash the dust of mind.
+            一方小皂 · 洗塵心 · 照夜夢。
           </div>
           <div
+            className="tc"
             style={{
               marginTop: 32,
               maxWidth: 480,
               fontSize: 17,
-              lineHeight: 1.7,
+              lineHeight: 1.9,
+              letterSpacing: 1,
               color: 'var(--sumi)',
             }}
           >
-            金花樓 is a small soap house in Taipei. We press bars by hand from oils, botanicals, and
-            water drawn on the island — one recipe at a time, one batch at a time, cured for six
-            weeks before we&apos;ll let them go.
+            金花樓是臺北艋舺的一間小小皂舍。我們以島上的油、花材、山泉水，
+            一方一方地手壓肥皂 ── 一次一個配方、一批四十二日，慢慢陳化，
+            直到皂心乾實，才讓它走入別人的日常。
           </div>
         </div>
         <div style={{ position: 'relative' }}>
@@ -77,7 +137,16 @@ export function About() {
               opacity: 0.35,
             }}
           />
-          <IllWorkbench label="founder at workbench · morning light" ratio="3/4" />
+          <img
+            src="/images/about/workbench.JPG"
+            alt="本舍手壓皂一批 · 金盞花與蜂巢皂塊陳列於工作檯"
+            style={{
+              width: '100%',
+              aspectRatio: '3/4',
+              objectFit: 'cover',
+              display: 'block',
+            }}
+          />
           <div
             style={{
               position: 'absolute',
@@ -93,7 +162,7 @@ export function About() {
               color: 'var(--gold-3)',
             }}
           >
-            Taipei · 艋舺 · 2026
+            臺北 · 艋舺 · MMXXVI
           </div>
         </div>
       </section>
@@ -120,18 +189,15 @@ export function About() {
           {[
             {
               zh: '純手工',
-              en: 'By hand, only.',
-              body: 'Every bar is cut, stamped, and wrapped by one of four people in our studio. No machines press our soap.',
+              body: '每一塊皂 ── 切、印、包 ── 都由工坊裡四個人親手完成。從不假機器之力。',
             },
             {
               zh: '天然材料',
-              en: 'Nothing synthetic.',
-              body: 'Cold-pressed oils, stone-ground botanicals, spring water from Yangmingshan. No palm, no fragrance, no dye.',
+              body: '冷壓油脂、石磨花材、陽明山泉水。不加棕櫚油、不加香精、不加色粉。',
             },
             {
               zh: '慢製',
-              en: 'Slow-cured.',
-              body: "We don't rush. Every bar cures forty-two days on cedar racks before it reaches the shelf — so it lasts, and so it's kind.",
+              body: '我們不趕工。每一塊皂在雪松架上陳化四十二日，才送到架上 ── 這樣它才耐用，才溫柔。',
             },
           ].map((p, i) => (
             <div key={i}>
@@ -146,22 +212,14 @@ export function About() {
               >
                 {p.zh}
               </div>
-              <div
-                className="italic"
-                style={{
-                  fontSize: 22,
-                  marginTop: 4,
-                  color: 'var(--gold-3)',
-                }}
-              >
-                {p.en}
-              </div>
               <Divider />
               <div
+                className="tc"
                 style={{
                   marginTop: 16,
                   fontSize: 16,
-                  lineHeight: 1.65,
+                  lineHeight: 1.85,
+                  letterSpacing: 1,
                   color: 'var(--sumi)',
                   maxWidth: 300,
                 }}
@@ -202,14 +260,19 @@ export function About() {
         </div>
         <div>
           <div className="mono" style={{ color: 'var(--gold-3)', marginBottom: 20 }}>
-            Manifesto · 本舍之約
+            本舍之約
           </div>
           <div
-            className="italic"
-            style={{ fontSize: 30, lineHeight: 1.4, color: 'var(--sumi)', maxWidth: 620 }}
+            className="tc"
+            style={{
+              fontSize: 28,
+              lineHeight: 1.6,
+              letterSpacing: 3,
+              color: 'var(--sumi)',
+              maxWidth: 620,
+            }}
           >
-            We believe a bar of soap can be a small ceremony — the first cold water of the morning,
-            the last warm water of the night.
+            我們相信，一方肥皂也能是日常裡的小儀式 ── 清晨的第一盆涼水，夜裡的最後一盆溫水。
           </div>
           <div
             className="gf-stack-md"
@@ -219,21 +282,70 @@ export function About() {
               gridTemplateColumns: '1fr 1fr',
               gap: 40,
               fontSize: 16,
-              lineHeight: 1.7,
+              lineHeight: 1.9,
+              letterSpacing: 1,
               color: 'var(--sumi)',
             }}
           >
-            <p>
-              We started in a kitchen in Wanhua with one recipe and an olive oil press. The first
-              batch — twelve bars of mugwort — sold out to neighbours in an afternoon, and
-              we&apos;ve been pressing a new batch every Thursday since.
+            <p className="tc">
+              本舍起於艋舺一間小廚房，一個配方、一台橄欖油壓。第一批 ──
+              十二塊艾草皂 ── 一個下午就被街坊收光。從那以後，每個禮拜四，
+              我們都壓一批新的。
             </p>
-            <p>
-              Our rule is simple: if we wouldn&apos;t put it on our grandmother&apos;s skin, it
-              doesn&apos;t go in our soap. That quietly rules out most of what the big factories
-              make — and it gives us room to do the small thing very, very well.
+            <p className="tc">
+              我們的規矩很簡單：自己的阿嬤皮膚不能用的，就不放進皂裡。
+              這樣一來，大工廠做的大半東西都進不了我們的皂 ──
+              我們也得以把這一件小事，慢慢地、好好地做。
             </p>
           </div>
+        </div>
+      </section>
+
+      {/* Water interlude — echoes the 「涼水 / 溫水」 line in the manifesto */}
+      <section
+        className="gf-hero-video-md"
+        aria-label="一盞涼水 · 一盞溫水"
+        style={{
+          position: 'relative',
+          width: '100vw',
+          marginLeft: 'calc(50% - 50vw)',
+          height: 'min(48vh, 480px)',
+          overflow: 'hidden',
+          background: 'var(--sumi)',
+          borderTop: '1px solid var(--ink-15)',
+          borderBottom: '1px solid var(--ink-15)',
+        }}
+      >
+        <video
+          src="/images/about/water.mp4"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          aria-label="山泉水流動的影像"
+          style={{
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            display: 'block',
+          }}
+        />
+        <div
+          className="mono"
+          style={{
+            position: 'absolute',
+            bottom: 22,
+            right: 24,
+            background: 'var(--paper)',
+            color: 'var(--gold-3)',
+            padding: '10px 14px',
+            border: '1px solid var(--ink-15)',
+            fontSize: 10,
+            letterSpacing: 2,
+          }}
+        >
+          一盞涼水 · 一盞溫水
         </div>
       </section>
 
@@ -256,7 +368,7 @@ export function About() {
             className="mono"
             style={{ color: 'var(--red)', textAlign: 'center', marginBottom: 8 }}
           >
-            Five Bars · 五皂五境
+            五皂五境
           </div>
           <h2
             className="tc gf-h2-md"
@@ -272,39 +384,39 @@ export function About() {
             一皂一境
           </h2>
           <div
-            className="italic"
+            className="tc"
             style={{
               textAlign: 'center',
               fontSize: 22,
+              letterSpacing: 4,
               color: 'var(--gold-3)',
               maxWidth: 640,
               margin: '0 auto 56px',
-              lineHeight: 1.45,
+              lineHeight: 1.7,
             }}
           >
-            One bar for every ritual — from the morning shower
+            一方皂，一種日常 ── 從清晨的第一盆水，
             <br />
-            to the long ride home. Each pressed for a different kind of day.
+            到夜裡長路歸來的那一瓢。每一塊皂，都是為了那一刻。
           </div>
 
           {/* Hero scene — the all-in-one bar (largest tile) */}
           {(() => {
             const scene = {
               zh: '一塊走天下',
-              en: 'The All-in-One Bar',
               subtitle: '髮 · 身 · 面 一塊搞定',
-              tagline: 'From crown to heel, one bar.',
+              tagline: '頂至踵，一塊即可。',
               palette: { tone: 'warm', flower: 'rose' },
-              kicker: 'NO. 01 · ALL-OVER',
-              body: 'Pressed for the traveller, the minimalist, the small bathroom. A gentle castile base with oat milk and chamomile — soft enough for hair, strong enough to take the day off your shoulders. Lathers the same in hard tap water or hot-spring water; rinses without residue.',
+              kicker: 'NO. 01 · 全能',
+              body: '為旅人、極簡者、也為那間小浴室而壓。卡斯提亞皂基配上燕麥乳與洋甘菊 ── 溫和得能洗頭髮，也足以洗去一日的疲。硬水、熱泉水一樣能起泡，洗完不留皂垢。',
               tags: [
-                'castile base',
-                'oat milk · chamomile',
+                '卡斯提亞皂基',
+                '燕麥乳 · 洋甘菊',
                 'pH 8.9',
-                'hair · face · body',
-                '105 g bar',
+                '髮 · 面 · 身',
+                '105 g',
               ],
-              note: 'ritual — pack one bar for a three-day trip, unwrap the cedar paper at the hotel, and your whole routine fits in a pocket.',
+              note: 'ritual — 打包三天的行囊，只帶這一塊。旅店一進門拆開雪松紙，整套沐浴都進了你的口袋。',
             };
             return (
               <div
@@ -330,12 +442,13 @@ export function About() {
                     }}
                   />
                   <IllSoap
-                    label="all-in-one bar · oat milk + chamomile"
+                    label="一塊走天下 · 燕麥乳 · 洋甘菊"
                     tone={scene.palette.tone}
                     flower={scene.palette.flower}
                     ratio="5/4"
                   />
                   <div
+                    className="mono"
                     style={{
                       position: 'absolute',
                       bottom: -16,
@@ -343,13 +456,11 @@ export function About() {
                       background: 'var(--sumi)',
                       color: 'var(--gold-2)',
                       padding: '10px 14px',
-                      fontFamily: '"DM Mono", monospace',
                       fontSize: 10,
                       letterSpacing: 2,
-                      textTransform: 'uppercase',
                     }}
                   >
-                    HERO · {scene.kicker}
+                    主皂 · {scene.kicker}
                   </div>
                 </div>
                 <div>
@@ -379,11 +490,12 @@ export function About() {
                     {scene.subtitle}
                   </div>
                   <div
-                    className="italic"
+                    className="tc"
                     style={{
                       marginTop: 18,
-                      fontSize: 26,
-                      lineHeight: 1.35,
+                      fontSize: 24,
+                      lineHeight: 1.45,
+                      letterSpacing: 3,
                       color: 'var(--gold-3)',
                     }}
                   >
@@ -391,10 +503,12 @@ export function About() {
                   </div>
                   <Divider />
                   <p
+                    className="tc"
                     style={{
                       marginTop: 18,
                       fontSize: 17,
-                      lineHeight: 1.7,
+                      lineHeight: 1.9,
+                      letterSpacing: 1,
                       color: 'var(--sumi)',
                       maxWidth: 520,
                     }}
@@ -426,10 +540,12 @@ export function About() {
                     ))}
                   </div>
                   <div
-                    className="italic"
+                    className="tc"
                     style={{
                       marginTop: 22,
                       fontSize: 15,
+                      lineHeight: 1.7,
+                      letterSpacing: 1,
                       color: 'var(--ink-60)',
                       paddingLeft: 14,
                       borderLeft: '2px solid var(--red)',
@@ -454,50 +570,46 @@ export function About() {
           >
             {[
               {
-                kicker: 'NO. 02 · HAIR',
+                kicker: 'NO. 02 · 髮',
                 zh: '髮餅',
-                en: 'Hair Cake',
-                subtitle: '洗髮皂 · for the head',
-                tagline: 'The morning bar — for hair that smells of rice water and rest.',
-                body: "Fermented rice water, camellia oil, and shikakai — a long recipe from the island's grandmothers, pressed into a cake that lasts roughly 60 washes. Rinse with a splash of cool water; finish with a rice-vinegar tea if your hair is long.",
-                tags: ['camellia · shikakai', 'rice water ferment', '~60 washes', '90 g cake'],
-                note: 'ritual — use on the morning of a long walk; the scent carries for a day.',
+                subtitle: '洗髮皂',
+                tagline: '清晨第一塊，洗出淡淡米水與歇息的香。',
+                body: '發酵米水、茶花油、無患子 ── 一條長長的配方，從島上的阿嬤手裡傳下來，壓成一塊大約能洗六十次的皂餅。冷水一瓢沖淨；若頭髮長，再以米醋茶收尾。',
+                tags: ['茶花油 · 無患子', '發酵米水', '約 60 次洗髮', '90 g 皂餅'],
+                note: 'ritual — 走遠路的清晨用一塊，那香氣能跟著你一整天。',
                 tone: 'warm',
                 flower: 'chrysanthemum',
               },
               {
-                kicker: 'NO. 03 · FACE',
+                kicker: 'NO. 03 · 面',
                 zh: '洗面皂',
-                en: 'Face Bar',
-                subtitle: '洗臉用 · for the face',
-                tagline: 'For the 10-second pause before mirror and morning.',
-                body: 'Goat-milk and honey base with a whisper of ground azuki. A small bar — sized for one cupped palm — built around gentleness. No fragrance, no essential oils near the eyes. Works the same under eye makeup as it does after a long cry.',
-                tags: ['goat milk · honey', 'azuki flour', 'fragrance-free', '60 g small bar'],
-                note: 'ritual — wet your hands first, not the bar. Two slow circles between the palms, then the face.',
+                subtitle: '洗臉用',
+                tagline: '鏡前清晨，那短短十秒的停頓。',
+                body: '羊乳與蜂蜜為底，加入磨得極細的紅豆粉。一塊小皂 ── 恰好一只掌心的大小 ── 以溫柔為尺度。不加香料，亦不加近眼的精油。妝前可用，一場久哭過後也可用。',
+                tags: ['羊乳 · 蜂蜜', '紅豆粉', '無香', '60 g 小塊'],
+                note: 'ritual — 先濕手、再沾皂。掌間慢慢繞兩圈，才輕輕帶到臉上。',
                 tone: 'cool',
                 flower: 'pine',
               },
               {
-                kicker: 'NO. 04 · BODY',
+                kicker: 'NO. 04 · 身',
                 zh: '沐浴皂',
-                en: 'Bathing Bar',
-                subtitle: '身體沐浴 · for the bath',
-                tagline: 'For the long shower on a cold Taipei evening.',
-                body: 'Cold-pressed olive and sweet-almond oil, cured long enough that the lather is slow and cream-thick. Generous 120g — two palms\u2019 worth — scented only with yuzu peel from Pingtung farms, pressed in December for the new year.',
-                tags: ['olive · sweet almond', 'yuzu peel', 'creamy lather', '120 g bar'],
-                note: 'ritual — draw a hot bath; the bar floats. Keep it on a cedar rack so it dries between uses.',
+                subtitle: '身體沐浴',
+                tagline: '臺北微涼的夜裡，那一場長長的熱水澡。',
+                body: '冷壓橄欖油與甜杏仁油，陳化得夠久，泡沫細而綿，如乳。120 g 的份量，兩掌可握。只以屏東柚子皮為香 ── 十二月壓的那批，為新年而備。',
+                tags: ['橄欖 · 甜杏仁', '屏東柚子皮', '綿密泡沫', '120 g'],
+                note: 'ritual — 放一缸熱水，皂會浮上來。洗完放在雪松架上，讓它好好乾燥。',
                 tone: 'deep',
                 flower: 'rose',
               },
               {
-                kicker: 'NO. 05 · ATHLETE',
+                kicker: 'NO. 05 · 動',
                 zh: '運動皂',
-                en: "Athlete's Bar",
-                subtitle: '運動後全身皂 · after the ride',
-                tagline: 'Built for the 40km ride, the 10km run, the 5am pool.',
-                body: "Activated charcoal and bentonite clay draw out the day's sweat; peppermint and eucalyptus lift sore calves and shoulders. Firmer press, longer cure — it survives a gym-bag shuttle and outlasts its bottle-shampoo cousins by a factor of three.",
-                tags: ['charcoal · bentonite', 'peppermint · eucalyptus', 'gym-bag tough', '110 g bar'],
-                note: 'ritual — wrap it in linen, toss it in the pannier bag. It dries itself between workouts.',
+                subtitle: '運動後全身皂',
+                tagline: '為 40 公里的騎行、10 公里的路跑、清晨五點的泳池而做。',
+                body: '竹炭與膨潤土拉走一日的汗；薄荷與尤加利喚醒痠了的小腿與肩。壓得更緊、陳化得更久 ── 能在運動袋裡與你一起來回，耐用得比瓶裝沐浴乳多上三倍。',
+                tags: ['竹炭 · 膨潤土', '薄荷 · 尤加利', '耐裝耐帶', '110 g'],
+                note: 'ritual — 以麻布包好，扔進自行車側包。它會在兩次訓練之間，自己風乾。',
                 tone: 'cool',
                 flower: 'mugwort',
               },
@@ -516,7 +628,7 @@ export function About() {
                 }}
               >
                 <div style={{ position: 'relative' }}>
-                  <IllSoap label={`${s.en} · ${s.zh}`} tone={s.tone} flower={s.flower} ratio="4/5" />
+                  <IllSoap label={s.zh} tone={s.tone} flower={s.flower} ratio="4/5" />
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column' }}>
                   <div className="mono" style={{ color: 'var(--red)', fontSize: 10 }}>
@@ -536,34 +648,35 @@ export function About() {
                     {s.zh}
                   </div>
                   <div
-                    className="italic"
+                    className="tc"
                     style={{
-                      marginTop: 2,
-                      fontSize: 16,
+                      marginTop: 6,
+                      fontSize: 14,
+                      letterSpacing: 4,
                       color: 'var(--gold-3)',
                     }}
                   >
-                    {s.en} ·{' '}
-                    <span style={{ fontStyle: 'normal' }} className="mono">
-                      {s.subtitle.split(' · ')[1]}
-                    </span>
+                    {s.subtitle}
                   </div>
                   <div
-                    className="italic"
+                    className="tc"
                     style={{
                       marginTop: 12,
                       fontSize: 17,
-                      lineHeight: 1.35,
+                      lineHeight: 1.6,
+                      letterSpacing: 2,
                       color: 'var(--gold-3)',
                     }}
                   >
                     {s.tagline}
                   </div>
                   <div
+                    className="tc"
                     style={{
                       marginTop: 12,
                       fontSize: 14.5,
-                      lineHeight: 1.6,
+                      lineHeight: 1.85,
+                      letterSpacing: 1,
                       color: 'var(--sumi)',
                     }}
                   >
@@ -595,14 +708,15 @@ export function About() {
                     ))}
                   </div>
                   <div
-                    className="italic"
+                    className="tc"
                     style={{
                       marginTop: 12,
                       fontSize: 13,
+                      lineHeight: 1.7,
+                      letterSpacing: 1,
                       color: 'var(--ink-60)',
                       paddingLeft: 10,
                       borderLeft: '2px solid var(--red)',
-                      lineHeight: 1.4,
                     }}
                   >
                     {s.note}

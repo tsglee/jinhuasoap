@@ -608,7 +608,7 @@ export function IllGiftBox({ label = 'cedar gift box', ratio = '4/3' }) {
 }
 
 // ── Ingredient "no" list — crossed-out bottles ──────────────────────────
-export function IllNoList({ label = 'the no list', ratio = '1/1' }) {
+export function IllNoList({ label = '不入之物', ratio = '1/1' }) {
   return (
     <PaperBg tone="paper" style={{ aspectRatio: ratio, width: '100%' }}>
       <CornerMarks />
@@ -684,7 +684,7 @@ export function IllNoList({ label = 'the no list', ratio = '1/1' }) {
             letterSpacing="2"
             fill={ART.red}
           >
-            NOT IN
+            未收
           </text>
         </g>
       </svg>
@@ -694,7 +694,7 @@ export function IllNoList({ label = 'the no list', ratio = '1/1' }) {
 }
 
 // ── Hero portrait for About (founder at workbench) ──────────────────────
-export function IllWorkbench({ label = 'founder at workbench, morning light', ratio = '3/4' }) {
+export function IllWorkbench({ label = '晨光中的工坊', ratio = '3/4' }) {
   return (
     <PaperBg tone="paper" style={{ aspectRatio: ratio, width: '100%' }}>
       <CornerMarks />
@@ -1077,7 +1077,7 @@ export function IllProductHero({
   staging = 'bowl', // "bowl" | "kraft"
   overlayZh,
   overlayEn,
-  wordmark = 'GOLDENFLOWER',
+  wordmark = '金花樓',
   ratio = '4/5',
 }) {
   const palettes = {
@@ -1285,7 +1285,7 @@ export function IllProductHero({
                   letterSpacing="4"
                   fill={p.stamp}
                 >
-                  HAND PRESSED · TAIPEI
+                  手壓 · 臺北
                 </text>
               </g>
             </g>
@@ -1325,13 +1325,12 @@ export function IllProductHero({
                 x="140"
                 y="126"
                 textAnchor="middle"
-                fontFamily='"Cormorant Garamond", serif'
-                fontStyle="italic"
+                fontFamily='"Noto Serif TC", serif'
                 fontSize="11"
-                letterSpacing="4"
+                letterSpacing="6"
                 fill="#5a3a14"
               >
-                Goldenflower
+                手壓天然皂
               </text>
               {/* tiny botanical ornament */}
               <g
@@ -1375,26 +1374,25 @@ export function IllProductHero({
               </text>
               <text
                 x="0"
-                y="28"
+                y="30"
                 textAnchor="middle"
-                fontFamily='"Cormorant Garamond", serif'
-                fontStyle="italic"
-                fontSize="14"
-                letterSpacing="4"
+                fontFamily='"Noto Serif TC", serif'
+                fontSize="13"
+                letterSpacing="6"
                 fill={p.stamp}
               >
-                Goldenflower
+                手壓天然皂
               </text>
               <text
                 x="0"
-                y="50"
+                y="52"
                 textAnchor="middle"
-                fontFamily='"DM Mono", monospace'
-                fontSize="8"
-                letterSpacing="3"
+                fontFamily='"Noto Serif TC", serif'
+                fontSize="9"
+                letterSpacing="4"
                 fill={p.stamp}
               >
-                HAND PRESSED
+                臺北艋舺
               </text>
             </g>
           </g>

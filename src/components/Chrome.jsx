@@ -79,8 +79,8 @@ export function Header({ tab, setTab, tabs }) {
         }}
       >
         {isMobile
-          ? 'Free island shipping over NT$1,200'
-          : '春日新品 · Spring collection no. VII now pressing · free island shipping over NT$1,200'}
+          ? '本島滿 NT$1,200 免運'
+          : '春日新品 · 第 VII 批慢製中 · 本島滿 NT$1,200 免運'}
       </div>
 
       <div
@@ -95,11 +95,11 @@ export function Header({ tab, setTab, tabs }) {
           gap: isMobile ? 12 : 20,
         }}
       >
-        {/* Left: hamburger (mobile) or tagline (desktop) */}
+        {/* Left: hamburger on mobile, empty spacer on desktop */}
         {isMobile ? (
           <button
             onClick={() => setMenuOpen((v) => !v)}
-            aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+            aria-label={menuOpen ? '關閉選單' : '開啟選單'}
             aria-expanded={menuOpen}
             aria-controls="gf-mobile-nav"
             style={{
@@ -114,9 +114,7 @@ export function Header({ tab, setTab, tabs }) {
             <HamburgerIcon open={menuOpen} />
           </button>
         ) : (
-          <div className="mono" style={{ color: 'var(--gold-3)' }}>
-            Taipei · Est. MMXXVI
-          </div>
+          <div />
         )}
 
         {/* Center: logo */}
@@ -141,27 +139,14 @@ export function Header({ tab, setTab, tabs }) {
           >
             金花樓
           </div>
-          {!isMobile && (
-            <div
-              style={{
-                fontFamily: '"Cormorant Garamond", serif',
-                fontStyle: 'italic',
-                fontSize: 11,
-                letterSpacing: 4,
-                color: 'var(--gold-3)',
-              }}
-            >
-              Goldenflower
-            </div>
-          )}
         </button>
 
-        {/* Right: cart (always) + search/journal (desktop only) */}
+        {/* Right: cart only */}
         <div
           style={{
             display: 'flex',
             justifyContent: 'flex-end',
-            gap: isMobile ? 0 : 22,
+            gap: 0,
             fontFamily: '"DM Mono", monospace',
             fontSize: 11,
             letterSpacing: 2,
@@ -169,22 +154,16 @@ export function Header({ tab, setTab, tabs }) {
             color: 'var(--sumi)',
           }}
         >
-          {!isMobile && (
-            <>
-              <button>Search</button>
-              <button>Journal</button>
-            </>
-          )}
           <button
             onClick={() => setTab('shop')}
-            aria-label={`Cart, ${itemCount} item${itemCount === 1 ? '' : 's'}`}
+            aria-label={`購物籃，${itemCount} 件`}
             style={{
               color: 'var(--red)',
               minWidth: isMobile ? 44 : undefined,
               minHeight: isMobile ? 44 : undefined,
             }}
           >
-            Cart · {itemCount}
+            購物籃 · {itemCount}
           </button>
         </div>
       </div>
@@ -217,11 +196,9 @@ export function Header({ tab, setTab, tabs }) {
                   style={{
                     padding: '16px 28px',
                     position: 'relative',
-                    fontFamily: '"Cormorant Garamond", serif',
                     fontSize: 17,
                     letterSpacing: 2,
                     color: active ? 'var(--red)' : 'var(--sumi)',
-                    fontStyle: active ? 'italic' : 'normal',
                     fontWeight: active ? 500 : 400,
                     display: 'flex',
                     alignItems: 'baseline',
@@ -247,8 +224,6 @@ export function Header({ tab, setTab, tabs }) {
                   >
                     {t.zh}
                   </span>
-                  <span style={{ opacity: 0.5, fontSize: 14 }}>·</span>
-                  <span style={{ letterSpacing: 2 }}>{t.en}</span>
                   {active && (
                     <span
                       style={{
@@ -299,10 +274,9 @@ export function Header({ tab, setTab, tabs }) {
                   background: active ? 'rgba(138,42,34,0.06)' : 'transparent',
                   color: active ? 'var(--red)' : 'var(--sumi)',
                   textAlign: 'left',
-                  fontFamily: '"Cormorant Garamond", serif',
                   fontSize: 18,
                   letterSpacing: 2,
-                  fontStyle: active ? 'italic' : 'normal',
+                  fontWeight: active ? 500 : 400,
                 }}
               >
                 <span
@@ -317,8 +291,6 @@ export function Header({ tab, setTab, tabs }) {
                 <span className="tc" style={{ fontSize: 17, letterSpacing: 4 }}>
                   {t.zh}
                 </span>
-                <span style={{ opacity: 0.4 }}>·</span>
-                <span>{t.en}</span>
               </button>
             );
           })}
@@ -365,34 +337,34 @@ export function Footer() {
                 金花樓
               </div>
               <div
-                className="italic"
+                className="tc"
                 style={{
-                  fontSize: 13,
-                  letterSpacing: 3,
+                  fontSize: 12,
+                  letterSpacing: 4,
                   color: 'var(--gold-2)',
                 }}
               >
-                Goldenflower Soap Works
+                手壓天然皂
               </div>
             </div>
           </div>
           <div
-            className="italic"
+            className="tc"
             style={{
               fontSize: 15,
-              lineHeight: 1.65,
+              lineHeight: 1.85,
               color: 'rgba(248,245,235,0.7)',
               maxWidth: 320,
             }}
           >
-            A small soap house in Taipei, pressing natural soap by hand since the spring of 2026.
+            一間位於臺北艋舺的小小皂舍。自 MMXXVI 年春起，每週手壓一批天然皂 ── 慢火、細料、日復一日。
           </div>
         </div>
 
         {[
-          ['Shop', ['All soap', 'Gift sets', 'Gifting cloth', 'Subscription']],
-          ['House', ['Our story', 'The process', 'Ingredients', 'Journal']],
-          ['Ship to', ['Taiwan 台灣本島', 'Outlying islands 離島', '7-11 店到店', '全家 店到店']],
+          ['購皂', ['全系列', '禮盒', '包布', '訂閱']],
+          ['本舍', ['本舍小記', '製皂之序', '食材', '誌']],
+          ['寄送', ['臺灣本島', '離島', '7-11 店到店', '全家 店到店']],
         ].map(([title, items]) => (
           <div key={title}>
             <div className="mono" style={{ color: 'var(--gold-2)', marginBottom: 18 }}>
@@ -402,8 +374,8 @@ export function Footer() {
               {items.map((x) => (
                 <li
                   key={x}
-                  className="italic"
-                  style={{ fontSize: 15, color: 'rgba(248,245,235,0.85)' }}
+                  className="tc"
+                  style={{ fontSize: 15, letterSpacing: 2, color: 'rgba(248,245,235,0.85)' }}
                 >
                   {x}
                 </li>
@@ -427,8 +399,8 @@ export function Footer() {
           margin: '0 auto',
         }}
       >
-        <span>© MMXXVI 金花樓 · All rights reserved</span>
-        <span>pressed in taipei · 台北艋舺</span>
+        <span>© MMXXVI 金花樓 · 版權所有</span>
+        <span>手壓於臺北艋舺</span>
       </div>
     </footer>
   );

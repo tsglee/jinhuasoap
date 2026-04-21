@@ -21,51 +21,46 @@ export default {
 
     if (url.pathname === '/api/order') {
       if (request.method !== 'POST') {
-        return jsonResponse({ ok: false, error: 'Method not allowed' }, 405, {
+        return jsonResponse({ ok: false, error: '不支援此請求方式' }, 405, {
           Allow: 'POST',
         });
       }
       return handleOrder(request, env);
     }
 
-    // Anything else: pass through to the static site.
     return env.ASSETS.fetch(request);
   },
 };
 
 async function handleOrder(request, env) {
-  // 1. Parse + validate
   let payload;
   try {
     payload = await request.json();
   } catch {
-    return jsonResponse({ ok: false, error: 'Invalid JSON body' }, 400);
+    return jsonResponse({ ok: false, error: '請求內容格式錯誤' }, 400);
   }
 
   const errors = validateOrder(payload);
   if (errors.length) {
-    return jsonResponse({ ok: false, error: errors.join('; ') }, 400);
+    return jsonResponse({ ok: false, error: errors.join('；') }, 400);
   }
 
   if (!env.RESEND_API_KEY) {
-    // Misconfiguration on our side, not a client error.
     return jsonResponse(
-      { ok: false, error: 'Email transport not configured (RESEND_API_KEY missing)' },
+      { ok: false, error: '寄件服務尚未設定，請稍後再試。' },
       500,
     );
   }
 
-  // 2. Build email
   const toEmail = env.ORDER_TO_EMAIL || 'tsghsunlee@gmail.com';
   const fromEmail = env.ORDER_FROM_EMAIL || 'onboarding@resend.dev';
   const { name, email, note, cart, total } = payload;
-  const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
+  const ip = request.headers.get('CF-Connecting-IP') || '未知';
 
-  const subject = `[金花樓] New order request from ${name} (NT$${total})`;
+  const subject = `[金花樓] 新訂購請求 · ${name} · NT$${total}`;
   const html = renderOrderEmailHtml({ name, email, note, cart, total, ip });
   const text = renderOrderEmailText({ name, email, note, cart, total, ip });
 
-  // 3. Send via Resend
   try {
     const res = await fetch('https://api.resend.com/emails', {
       method: 'POST',
@@ -74,7 +69,7 @@ async function handleOrder(request, env) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: `Goldenflower <${fromEmail}>`,
+        from: `金花樓 <${fromEmail}>`,
         to: [toEmail],
         reply_to: email,
         subject,
@@ -86,12 +81,12 @@ async function handleOrder(request, env) {
     if (!res.ok) {
       const detail = await res.text().catch(() => '');
       return jsonResponse(
-        { ok: false, error: `Email transport rejected the request (${res.status})`, detail },
+        { ok: false, error: `寄件服務回應錯誤（${res.status}）`, detail },
         502,
       );
     }
   } catch (err) {
-    return jsonResponse({ ok: false, error: `Email transport failed: ${err.message}` }, 502);
+    return jsonResponse({ ok: false, error: `寄件失敗：${err.message}` }, 502);
   }
 
   return jsonResponse({ ok: true });
@@ -100,11 +95,11 @@ async function handleOrder(request, env) {
 function validateOrder(payload) {
   const errors = [];
   if (!payload || typeof payload !== 'object') {
-    errors.push('Body must be a JSON object');
+    errors.push('請求格式必須為 JSON 物件');
     return errors;
   }
   if (!payload.name || typeof payload.name !== 'string' || payload.name.length > 200) {
-    errors.push('Name is required (≤200 chars)');
+    errors.push('請填寫姓名（不超過 200 字）');
   }
   if (
     !payload.email ||
@@ -112,32 +107,32 @@ function validateOrder(payload) {
     !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.email) ||
     payload.email.length > 200
   ) {
-    errors.push('Valid email is required');
+    errors.push('請填寫正確的電子郵件');
   }
   if (payload.note != null && (typeof payload.note !== 'string' || payload.note.length > 2000)) {
-    errors.push('Note must be a string ≤2000 chars');
+    errors.push('備註不得超過 2000 字');
   }
   if (!Array.isArray(payload.cart) || payload.cart.length === 0 || payload.cart.length > 50) {
-    errors.push('Cart must be a non-empty array (≤50 items)');
+    errors.push('購物籃須為非空陣列（不超過 50 項）');
   } else {
     for (const item of payload.cart) {
       if (
         !item ||
         typeof item.num !== 'string' ||
         typeof item.zh !== 'string' ||
-        typeof item.en !== 'string' ||
+        typeof item.lat !== 'string' ||
         typeof item.qty !== 'number' ||
         typeof item.price !== 'number' ||
         item.qty < 1 ||
         item.qty > 99
       ) {
-        errors.push('Invalid cart item shape');
+        errors.push('購物籃項目格式錯誤');
         break;
       }
     }
   }
   if (typeof payload.total !== 'number' || payload.total < 0) {
-    errors.push('Total must be a non-negative number');
+    errors.push('合計金額不正確');
   }
   return errors;
 }
@@ -160,7 +155,7 @@ function renderOrderEmailHtml({ name, email, note, cart, total, ip }) {
             №&nbsp;${escapeHtml(i.num)}
           </td>
           <td style="padding:6px 10px;border-bottom:1px solid #eee;">
-            <strong>${escapeHtml(i.zh)}</strong> · ${escapeHtml(i.en)}
+            <strong>${escapeHtml(i.zh)}</strong> · <em style="color:#8a6420;">${escapeHtml(i.lat)}</em>
           </td>
           <td style="padding:6px 10px;border-bottom:1px solid #eee;text-align:center;">
             ×&nbsp;${i.qty}
@@ -173,31 +168,31 @@ function renderOrderEmailHtml({ name, email, note, cart, total, ip }) {
     .join('');
 
   const noteBlock = note
-    ? `<p style="margin:18px 0 0;padding:10px 14px;background:#fcfaf2;border-left:3px solid #8a2a22;color:#1a1512;font-style:italic;">${escapeHtml(note)}</p>`
+    ? `<p style="margin:18px 0 0;padding:10px 14px;background:#fcfaf2;border-left:3px solid #8a2a22;color:#1a1512;">${escapeHtml(note)}</p>`
     : '';
 
   return `<!doctype html>
-<html><body style="font-family:'Cormorant Garamond',Georgia,serif;color:#1a1512;background:#f8f5eb;padding:24px;">
+<html lang="zh-Hant"><body style="font-family:'Noto Serif TC',Georgia,serif;color:#1a1512;background:#f8f5eb;padding:24px;">
   <div style="max-width:560px;margin:0 auto;background:#fff;padding:28px;border:1px solid #ddd;">
-    <h2 style="margin:0 0 6px;font-weight:500;letter-spacing:4px;">New order request</h2>
-    <p style="margin:0 0 18px;color:#666;font-size:13px;letter-spacing:1px;text-transform:uppercase;">金花樓 · Goldenflower</p>
+    <h2 style="margin:0 0 6px;font-weight:500;letter-spacing:6px;">新訂購請求</h2>
+    <p style="margin:0 0 18px;color:#666;font-size:13px;letter-spacing:3px;">金花樓 · 手壓天然皂</p>
 
     <p style="margin:0 0 4px;"><strong>${escapeHtml(name)}</strong></p>
     <p style="margin:0 0 12px;"><a href="mailto:${escapeHtml(email)}">${escapeHtml(email)}</a></p>
 
     <table style="width:100%;border-collapse:collapse;margin-top:8px;">
       <thead>
-        <tr style="text-align:left;color:#666;font-size:11px;text-transform:uppercase;letter-spacing:1.5px;">
-          <th style="padding:6px 10px;border-bottom:1px solid #ccc;">No.</th>
-          <th style="padding:6px 10px;border-bottom:1px solid #ccc;">Item</th>
-          <th style="padding:6px 10px;border-bottom:1px solid #ccc;text-align:center;">Qty</th>
-          <th style="padding:6px 10px;border-bottom:1px solid #ccc;text-align:right;">Subtotal</th>
+        <tr style="text-align:left;color:#666;font-size:12px;letter-spacing:2px;">
+          <th style="padding:6px 10px;border-bottom:1px solid #ccc;">編號</th>
+          <th style="padding:6px 10px;border-bottom:1px solid #ccc;">品項</th>
+          <th style="padding:6px 10px;border-bottom:1px solid #ccc;text-align:center;">數量</th>
+          <th style="padding:6px 10px;border-bottom:1px solid #ccc;text-align:right;">小計</th>
         </tr>
       </thead>
       <tbody>${rows}</tbody>
       <tfoot>
         <tr>
-          <td colspan="3" style="padding:10px;text-align:right;font-style:italic;">Total</td>
+          <td colspan="3" style="padding:10px;text-align:right;letter-spacing:4px;">合計</td>
           <td style="padding:10px;text-align:right;color:#8a2a22;font-size:18px;">NT$${total}</td>
         </tr>
       </tfoot>
@@ -206,7 +201,7 @@ function renderOrderEmailHtml({ name, email, note, cart, total, ip }) {
     ${noteBlock}
 
     <p style="margin:24px 0 0;color:#999;font-size:11px;">
-      Submitted from ${escapeHtml(ip)} via jinhuasoap.com
+      來自 ${escapeHtml(ip)} · jinhuasoap.com
     </p>
   </div>
 </body></html>`;
@@ -214,20 +209,20 @@ function renderOrderEmailHtml({ name, email, note, cart, total, ip }) {
 
 function renderOrderEmailText({ name, email, note, cart, total, ip }) {
   const lines = [
-    `New order request — 金花樓 · Goldenflower`,
+    `新訂購請求 — 金花樓 · 手壓天然皂`,
     ``,
-    `Name:  ${name}`,
-    `Email: ${email}`,
+    `姓名：${name}`,
+    `電郵：${email}`,
     ``,
-    `Cart:`,
-    ...cart.map((i) => `  No. ${i.num}  ${i.zh} (${i.en})  × ${i.qty}  =  NT$${i.qty * i.price}`),
+    `購物籃：`,
+    ...cart.map((i) => `  № ${i.num}  ${i.zh}（${i.lat}）× ${i.qty}  =  NT$${i.qty * i.price}`),
     ``,
-    `Total: NT$${total}`,
+    `合計：NT$${total}`,
   ];
   if (note) {
-    lines.push('', 'Note:', note);
+    lines.push('', '備註：', note);
   }
-  lines.push('', `Submitted from ${ip} via jinhuasoap.com`);
+  lines.push('', `來自 ${ip} · jinhuasoap.com`);
   return lines.join('\n');
 }
 
