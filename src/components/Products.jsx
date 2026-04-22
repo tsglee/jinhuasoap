@@ -9,72 +9,84 @@ const PRODUCTS = [
     notes: ['花香', '柔和', '醇厚'], family: '花香',
     pitchZh: '千片花瓣，\n只為一方溫柔。',
     staging: 'bowl',
+    familyZh: '橄欖家族為主 · 溫潤滑順', allergens: '無', usage: '洗手 · 洗身', wash: '約 40–60 次',
   },
   {
     zh: '艾草', lat: 'Artemisia argyi', price: 320, tone: 'cool', num: 'II',
     notes: ['溫厚', '草本', '安定'], family: '草本',
     pitchZh: '端午掛艾，\n古法入皂。',
     staging: 'kraft',
+    familyZh: '橄欖家族 · 艾草浸油 · 溫潤中帶草本', allergens: '無', usage: '全身', wash: '約 40–60 次',
   },
   {
     zh: '柚子', lat: 'Citrus grandis', price: 300, tone: 'warm', num: 'III',
     notes: ['清爽', '明亮', '潔淨'], family: '柑橘',
     pitchZh: '中秋的那顆柚子，\n留下了皮。',
     staging: 'bowl',
+    familyZh: '橄欖與椰子平衡 · 清爽起泡', allergens: '柑橘精油（具光敏性）', usage: '洗身（建議夜用，避免直接日曬）', wash: '約 40–60 次',
   },
   {
     zh: '茶花', lat: 'Camellia japonica', price: 400, tone: 'deep', num: 'IV',
     notes: ['滋養', '亮澤'], family: '花香',
     pitchZh: '山茶之油，\n百年宮中之秘。',
     staging: 'kraft',
+    familyZh: '茶花油家族為主 · 滋養滑順', allergens: '無', usage: '洗臉 · 洗身', wash: '約 45–65 次',
   },
   {
     zh: '薑黃', lat: 'Curcuma longa', price: 340, tone: 'warm', num: 'V',
     notes: ['溫暖', '辛香', '金黃'], family: '辛香',
     pitchZh: '一寸金色，\n洗去倦容。',
     staging: 'bowl',
+    familyZh: '橄欖家族 · 薑黃粉 · 清爽帶溫', allergens: '初用皂泡或染淺黃（會退）', usage: '洗身', wash: '約 40–60 次',
   },
   {
     zh: '桂花', lat: 'Osmanthus fragrans', price: 420, tone: 'warm', num: 'VI',
     notes: ['蜜甜', '柔和', '慵懶'], family: '花香',
     pitchZh: '秋風送來桂花，\n我們把它洗進皮膚。',
     staging: 'bowl',
+    familyZh: '橄欖家族 · 桂花浸油 · 溫潤花香', allergens: '無', usage: '洗手 · 洗身', wash: '約 40–60 次',
   },
   {
     zh: '白梅', lat: 'Prunus mume', price: 360, tone: 'cool', num: 'VII',
     notes: ['清冽', '青翠', '亞麻'], family: '花香',
     pitchZh: '雪未落，\n梅先開。',
     staging: 'kraft',
+    familyZh: '橄欖與甜杏仁 · 清透滑順', allergens: '堅果類（甜杏仁油）', usage: '全身', wash: '約 40–60 次',
   },
   {
     zh: '檜木', lat: 'Chamaecyparis obtusa', price: 440, tone: 'deep', num: 'VIII',
     notes: ['木質', '沉靜', '幽靜'], family: '木質',
     pitchZh: '阿里山的清晨，\n一塊帶回家。',
     staging: 'bowl',
+    familyZh: '橄欖家族 · 檜木精油 · 溫潤沉靜', allergens: '針葉類精油（孕期請留意）', usage: '洗身', wash: '約 45–65 次',
   },
   {
     zh: '蜂蜜', lat: 'Mel crudum', price: 380, tone: 'warm', num: 'IX',
     notes: ['醇和', '甘甜', '醇厚'], family: '食材',
     pitchZh: '苗栗蜂場的一滴，\n留在你手心。',
     staging: 'kraft',
+    familyZh: '橄欖家族 · 苗栗蜂蜜 · 溫潤保濕', allergens: '蜂製品（一歲以下嬰兒請避免）', usage: '洗臉 · 洗手 · 洗身', wash: '約 40–60 次',
   },
   {
     zh: '海鹽', lat: 'Sal maris', price: 320, tone: 'cool', num: 'X',
     notes: ['俐落', '去角質'], family: '礦物',
     pitchZh: '臺南的鹽，\n鹹在肌膚。',
     staging: 'bowl',
+    familyZh: '椰子油家族為主 · 臺南鹽田海鹽 · 清潔稍高', allergens: '無', usage: '洗身（去角質日用）', wash: '約 30–45 次（快熔）',
   },
   {
     zh: '青苔', lat: 'Hypnum cupressiforme', price: 360, tone: 'deep', num: 'XI',
     notes: ['泥土氣', '沉靜', '林息'], family: '大地',
     pitchZh: '林中濕氣，\n一塊涼意。',
     staging: 'kraft',
+    familyZh: '橄欖家族 · 礦泥 · 溫潤收斂', allergens: '無', usage: '洗身', wash: '約 40–60 次',
   },
   {
     zh: '金盞花', lat: 'Calendula officinalis', price: 360, tone: 'warm', num: 'XII',
     notes: ['撫慰', '金黃'], family: '花香',
     pitchZh: '金色花瓣，\n安撫每一吋。',
     staging: 'bowl',
+    familyZh: '橄欖家族 · 金盞花浸油 · 溫潤撫慰', allergens: '菊科植物（極少數敏感者請留意）', usage: '洗臉 · 洗手 · 洗身（敏感肌友善）', wash: '約 40–60 次',
   },
 ];
 
@@ -181,6 +193,58 @@ function ProductMeta({ p, size = 'md' }) {
   );
 }
 
+function ProductInfo({ p, compact = false }) {
+  if (!p.familyZh && !p.allergens && !p.usage && !p.wash) return null;
+  const rows = [
+    ['家族', p.familyZh],
+    ['使用', p.usage],
+    ['可洗', p.wash],
+    ['敏原', p.allergens],
+  ].filter(([, v]) => v);
+  return (
+    <div className="edu-block" style={{ marginTop: compact ? 14 : 18 }}>
+      <span className="edu-label">透明資訊</span>
+      <dl
+        style={{
+          margin: 0,
+          display: 'grid',
+          gridTemplateColumns: 'auto 1fr',
+          rowGap: 6,
+          columnGap: 14,
+        }}
+      >
+        {rows.map(([k, v]) => (
+          <div key={k} style={{ display: 'contents' }}>
+            <dt
+              className="mono"
+              style={{
+                color: 'var(--gold-3)',
+                fontSize: 9,
+                letterSpacing: 2,
+                lineHeight: 1.85,
+              }}
+            >
+              {k}
+            </dt>
+            <dd
+              className="tc"
+              style={{
+                margin: 0,
+                fontSize: compact ? 12.5 : 13,
+                lineHeight: 1.7,
+                letterSpacing: 0.5,
+                color: 'var(--ink-60)',
+              }}
+            >
+              {v}
+            </dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  );
+}
+
 function ProductCard({ p, size = 'md' }) {
   return (
     <div style={{ position: 'relative' }}>
@@ -192,6 +256,7 @@ function ProductCard({ p, size = 'md' }) {
         wordmark={p.zh}
       />
       <ProductMeta p={p} size={size} />
+      <ProductInfo p={p} compact={size !== 'lg'} />
     </div>
   );
 }
@@ -353,6 +418,9 @@ export function Products() {
                     }}
                   >
                     {hero.notes.join(' · ')}
+                  </div>
+                  <div style={{ maxWidth: 600, marginTop: 4 }}>
+                    <ProductInfo p={hero} />
                   </div>
                 </div>
                 <button

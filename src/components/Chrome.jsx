@@ -300,7 +300,39 @@ export function Header({ tab, setTab, tabs }) {
   );
 }
 
-export function Footer() {
+export function Footer({ navigate }) {
+  const columns = [
+    {
+      title: '購皂',
+      items: [{ label: '全系列' }, { label: '禮盒' }, { label: '包布' }, { label: '訂閱' }],
+    },
+    {
+      title: '本舍',
+      items: [
+        { label: '本舍小記' },
+        { label: '製皂之序' },
+        { label: '食材' },
+        { label: '誌', href: '/journal' },
+      ],
+    },
+    {
+      title: '寄送',
+      items: [
+        { label: '臺灣本島' },
+        { label: '離島' },
+        { label: '7-11 店到店' },
+        { label: '全家 店到店' },
+      ],
+    },
+    {
+      title: '法律',
+      items: [
+        { label: '隱私權', href: '/legal/privacy' },
+        { label: '退換貨', href: '/legal/returns' },
+        { label: '服務條款', href: '/legal/terms' },
+      ],
+    },
+  ];
   return (
     <footer
       style={{
@@ -318,7 +350,7 @@ export function Footer() {
           margin: '0 auto',
           padding: '60px 44px 30px',
           display: 'grid',
-          gridTemplateColumns: '1.3fr 1fr 1fr 1fr',
+          gridTemplateColumns: '1.3fr repeat(4, 1fr)',
           gap: 40,
         }}
       >
@@ -361,11 +393,7 @@ export function Footer() {
           </div>
         </div>
 
-        {[
-          ['購皂', ['全系列', '禮盒', '包布', '訂閱']],
-          ['本舍', ['本舍小記', '製皂之序', '食材', '誌']],
-          ['寄送', ['臺灣本島', '離島', '7-11 店到店', '全家 店到店']],
-        ].map(([title, items]) => (
+        {columns.map(({ title, items }) => (
           <div key={title}>
             <div className="mono" style={{ color: 'var(--gold-2)', marginBottom: 18 }}>
               {title}
@@ -373,11 +401,25 @@ export function Footer() {
             <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'grid', gap: 10 }}>
               {items.map((x) => (
                 <li
-                  key={x}
+                  key={x.label}
                   className="tc"
                   style={{ fontSize: 15, letterSpacing: 2, color: 'rgba(248,245,235,0.85)' }}
                 >
-                  {x}
+                  {x.href && navigate ? (
+                    <a
+                      href={x.href}
+                      onClick={(e) => {
+                        if (e.metaKey || e.ctrlKey || e.shiftKey) return;
+                        e.preventDefault();
+                        navigate(x.href);
+                      }}
+                      style={{ color: 'inherit' }}
+                    >
+                      {x.label}
+                    </a>
+                  ) : (
+                    x.label
+                  )}
                 </li>
               ))}
             </ul>

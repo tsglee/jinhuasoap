@@ -62,3 +62,37 @@ button {
 .tc {
   font-family: 'Noto Serif TC', serif;
 }
+
+/* Education layer — sibling to the red-bordered `ritual —` treatment,
+   but for knowledge / provenance / technique. The gold dotted rule sits
+   above the whole block (label + body), not between them.
+   Use as:
+     <div class="edu-block">
+       <span class="edu-label">設計之念</span>
+       <p class="edu-note">…</p>
+     </div>
+*/
+.edu-block {
+  padding-top: 14px;
+  margin-top: 20px;
+  border-top: 1px dotted var(--gold-3);
+}
+
+.edu-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--gold-3);
+  display: block;
+  margin-bottom: 10px;
+}
+
+.edu-note {
+  font-family: 'Noto Serif TC', serif;
+  font-size: 14.5px;
+  line-height: 1.9;
+  letter-spacing: 1px;
+  color: var(--ink-60);
+  margin: 0;
+}

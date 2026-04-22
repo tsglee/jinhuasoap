@@ -54,12 +54,25 @@ async function handleOrder(request, env) {
 
   const toEmail = env.ORDER_TO_EMAIL || 'tsghsunlee@gmail.com';
   const fromEmail = env.ORDER_FROM_EMAIL || 'onboarding@resend.dev';
-  const { name, email, note, cart, total } = payload;
+  const {
+    name,
+    email,
+    phone,
+    shipMethod,
+    shipKind,
+    storeId,
+    recipientName,
+    address,
+    note,
+    cart,
+    total,
+  } = payload;
   const ip = request.headers.get('CF-Connecting-IP') || '未知';
 
+  const shipFields = { phone, shipMethod, shipKind, storeId, recipientName, address };
   const subject = `[金花樓] 新訂購請求 · ${name} · NT$${total}`;
-  const html = renderOrderEmailHtml({ name, email, note, cart, total, ip });
-  const text = renderOrderEmailText({ name, email, note, cart, total, ip });
+  const html = renderOrderEmailHtml({ name, email, note, cart, total, ip, ...shipFields });
+  const text = renderOrderEmailText({ name, email, note, cart, total, ip, ...shipFields });
 
   try {
     const res = await fetch('https://api.resend.com/emails', {
@@ -109,6 +122,39 @@ function validateOrder(payload) {
   ) {
     errors.push('請填寫正確的電子郵件');
   }
+  if (
+    !payload.phone ||
+    typeof payload.phone !== 'string' ||
+    !/^09\d{8}$/.test(payload.phone.replace(/[\s-]/g, ''))
+  ) {
+    errors.push('請填寫正確的台灣手機號碼');
+  }
+  const allowedKinds = ['store', 'home', 'pickup'];
+  if (
+    !payload.shipMethod ||
+    typeof payload.shipMethod !== 'string' ||
+    payload.shipMethod.length > 60 ||
+    !allowedKinds.includes(payload.shipKind)
+  ) {
+    errors.push('請選擇寄送方式');
+  } else {
+    if (payload.shipKind === 'store') {
+      if (!payload.storeId || typeof payload.storeId !== 'string' || payload.storeId.length > 60) {
+        errors.push('請填寫超商店號');
+      }
+    }
+    if (payload.shipKind === 'home') {
+      if (!payload.address || typeof payload.address !== 'string' || payload.address.length > 300) {
+        errors.push('請填寫完整的收件地址');
+      }
+    }
+  }
+  if (
+    payload.recipientName != null &&
+    (typeof payload.recipientName !== 'string' || payload.recipientName.length > 200)
+  ) {
+    errors.push('收件人姓名格式錯誤');
+  }
   if (payload.note != null && (typeof payload.note !== 'string' || payload.note.length > 2000)) {
     errors.push('備註不得超過 2000 字');
   }
@@ -146,7 +192,20 @@ function escapeHtml(str) {
     .replace(/'/g, '&#39;');
 }
 
-function renderOrderEmailHtml({ name, email, note, cart, total, ip }) {
+function renderOrderEmailHtml({
+  name,
+  email,
+  phone,
+  shipMethod,
+  shipKind,
+  storeId,
+  recipientName,
+  address,
+  note,
+  cart,
+  total,
+  ip,
+}) {
   const rows = cart
     .map(
       (i) => `
@@ -171,6 +230,20 @@ function renderOrderEmailHtml({ name, email, note, cart, total, ip }) {
     ? `<p style="margin:18px 0 0;padding:10px 14px;background:#fcfaf2;border-left:3px solid #8a2a22;color:#1a1512;">${escapeHtml(note)}</p>`
     : '';
 
+  const shipRow = (label, value) =>
+    value
+      ? `<tr><td style="padding:4px 10px;color:#666;width:90px;letter-spacing:2px;">${escapeHtml(label)}</td><td style="padding:4px 10px;">${escapeHtml(value)}</td></tr>`
+      : '';
+
+  const shipBlock = `
+    <table style="width:100%;border-collapse:collapse;margin:14px 0 20px;background:#fcfaf2;border:1px solid #e4dcc4;">
+      ${shipRow('手機', phone)}
+      ${shipRow('寄送方式', shipMethod)}
+      ${shipKind === 'store' ? shipRow('超商店號', storeId) : ''}
+      ${shipKind === 'home' ? shipRow('地址', address) : ''}
+      ${recipientName && recipientName !== name ? shipRow('收件人', recipientName) : ''}
+    </table>`;
+
   return `<!doctype html>
 <html lang="zh-Hant"><body style="font-family:'Noto Serif TC',Georgia,serif;color:#1a1512;background:#f8f5eb;padding:24px;">
   <div style="max-width:560px;margin:0 auto;background:#fff;padding:28px;border:1px solid #ddd;">
@@ -178,7 +251,9 @@ function renderOrderEmailHtml({ name, email, note, cart, total, ip }) {
     <p style="margin:0 0 18px;color:#666;font-size:13px;letter-spacing:3px;">金花樓 · 手壓天然皂</p>
 
     <p style="margin:0 0 4px;"><strong>${escapeHtml(name)}</strong></p>
-    <p style="margin:0 0 12px;"><a href="mailto:${escapeHtml(email)}">${escapeHtml(email)}</a></p>
+    <p style="margin:0 0 6px;"><a href="mailto:${escapeHtml(email)}">${escapeHtml(email)}</a></p>
+
+    ${shipBlock}
 
     <table style="width:100%;border-collapse:collapse;margin-top:8px;">
       <thead>
@@ -207,18 +282,38 @@ function renderOrderEmailHtml({ name, email, note, cart, total, ip }) {
 </body></html>`;
 }
 
-function renderOrderEmailText({ name, email, note, cart, total, ip }) {
+function renderOrderEmailText({
+  name,
+  email,
+  phone,
+  shipMethod,
+  shipKind,
+  storeId,
+  recipientName,
+  address,
+  note,
+  cart,
+  total,
+  ip,
+}) {
   const lines = [
     `新訂購請求 — 金花樓 · 手壓天然皂`,
     ``,
     `姓名：${name}`,
     `電郵：${email}`,
+    `手機：${phone}`,
+  ];
+  if (shipMethod) lines.push(`寄送方式：${shipMethod}`);
+  if (shipKind === 'store' && storeId) lines.push(`超商店號：${storeId}`);
+  if (shipKind === 'home' && address) lines.push(`地址：${address}`);
+  if (recipientName && recipientName !== name) lines.push(`收件人：${recipientName}`);
+  lines.push(
     ``,
     `購物籃：`,
     ...cart.map((i) => `  № ${i.num}  ${i.zh}（${i.lat}）× ${i.qty}  =  NT$${i.qty * i.price}`),
     ``,
     `合計：NT$${total}`,
-  ];
+  );
   if (note) {
     lines.push('', '備註：', note);
   }

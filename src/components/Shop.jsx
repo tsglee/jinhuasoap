@@ -10,26 +10,67 @@ import { useCart } from '../state/CartContext.jsx';
  * forwards to Resend. This is the "checkout later" model from the launch
  * plan: no live payments, just an email to the brand owner.
  */
+const SHIP_METHODS = [
+  { id: 'seven', label: '7-11 店到店', kind: 'store' },
+  { id: 'family', label: '全家 店到店', kind: 'store' },
+  { id: 'tcat', label: '黑貓宅配', kind: 'home' },
+  { id: 'pickup', label: '自取（艋舺）', kind: 'pickup' },
+];
+
+function shipKind(method) {
+  return SHIP_METHODS.find((m) => m.id === method)?.kind;
+}
+
 function OrderRequestForm({ cart, total, onSent }) {
   const [open, setOpen] = useState(false);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [shipMethod, setShipMethod] = useState('');
+  const [storeId, setStoreId] = useState('');
+  const [recipientName, setRecipientName] = useState('');
+  const [address, setAddress] = useState('');
   const [note, setNote] = useState('');
   const [status, setStatus] = useState('idle');
   const [errorMsg, setErrorMsg] = useState('');
 
+  const kind = shipKind(shipMethod);
+
+  const validate = () => {
+    if (!name.trim()) return '請留下您的姓名，我們才知道這批皂要寄給誰。';
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) return '請留下正確的電子郵件 —— 訂單回信要用。';
+    if (!/^09\d{8}$/.test(phone.replace(/[\s-]/g, ''))) return '請留下台灣手機號碼（09 開頭、共十碼）。';
+    if (!shipMethod) return '請選一個寄送方式。';
+    if (kind === 'store' && !storeId.trim()) return '請留下超商店號（可於 7-11 或全家 App 查到）。';
+    if (kind === 'home' && !address.trim()) return '請留下完整的收件地址（含郵遞區號）。';
+    return null;
+  };
+
   const submit = async (e) => {
     e.preventDefault();
     if (status === 'sending') return;
+    const clientError = validate();
+    if (clientError) {
+      setStatus('error');
+      setErrorMsg(clientError);
+      return;
+    }
     setStatus('sending');
     setErrorMsg('');
     try {
+      const selected = SHIP_METHODS.find((m) => m.id === shipMethod);
       const res = await fetch('/api/order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name: name.trim(),
           email: email.trim(),
+          phone: phone.replace(/[\s-]/g, ''),
+          shipMethod: selected?.label || shipMethod,
+          shipKind: kind,
+          storeId: kind === 'store' ? storeId.trim() : '',
+          recipientName: (recipientName.trim() || name.trim()),
+          address: kind === 'home' ? address.trim() : '',
           note: note.trim(),
           cart: cart.map((i) => ({
             num: i.num,
@@ -48,6 +89,11 @@ function OrderRequestForm({ cart, total, onSent }) {
       setStatus('sent');
       setName('');
       setEmail('');
+      setPhone('');
+      setShipMethod('');
+      setStoreId('');
+      setRecipientName('');
+      setAddress('');
       setNote('');
       window.setTimeout(() => onSent && onSent(), 1500);
     } catch (err) {
@@ -140,6 +186,57 @@ function OrderRequestForm({ cart, total, onSent }) {
         autoComplete="email"
         style={inputStyle}
       />
+      <input
+        type="tel"
+        value={phone}
+        onChange={(e) => setPhone(e.target.value)}
+        placeholder="手機號碼（09XX-XXX-XXX）"
+        required
+        autoComplete="tel"
+        style={inputStyle}
+      />
+      <select
+        value={shipMethod}
+        onChange={(e) => setShipMethod(e.target.value)}
+        required
+        style={{ ...inputStyle, appearance: 'none', background: 'var(--paper)' }}
+      >
+        <option value="">── 選擇寄送方式 ──</option>
+        {SHIP_METHODS.map((m) => (
+          <option key={m.id} value={m.id}>{m.label}</option>
+        ))}
+      </select>
+      {kind === 'store' && (
+        <input
+          type="text"
+          value={storeId}
+          onChange={(e) => setStoreId(e.target.value)}
+          placeholder="超商店號（於超商 App 查詢）"
+          required
+          style={inputStyle}
+        />
+      )}
+      {kind === 'home' && (
+        <textarea
+          value={address}
+          onChange={(e) => setAddress(e.target.value)}
+          placeholder="完整地址（含郵遞區號）"
+          rows={2}
+          required
+          autoComplete="street-address"
+          style={{ ...inputStyle, resize: 'vertical', minHeight: 60 }}
+        />
+      )}
+      {kind && kind !== 'pickup' && (
+        <input
+          type="text"
+          value={recipientName}
+          onChange={(e) => setRecipientName(e.target.value)}
+          placeholder="收件人姓名（若與上方不同）"
+          autoComplete="name"
+          style={inputStyle}
+        />
+      )}
       <textarea
         value={note}
         onChange={(e) => setNote(e.target.value)}

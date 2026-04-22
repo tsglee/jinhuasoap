@@ -6,42 +6,57 @@ export function Process() {
     {
       n: 'I', zh: '採集',
       body: '每週一，我們親赴宜蘭與陽明山的小農 — 取油、取草、取山泉。離地前皆已秤重入冊。',
+      eduZh: '親採的原因很實在 ── 油與花的壽命從離地那一刻起算。愈接近新鮮，脂肪酸愈完整，花香也還留在瓣上。',
     },
     {
       n: 'II', zh: '煉油',
       body: '油料於銅鍋中溫至 40°C，以手攪拌。溫度不過體溫 — 為保脂肪酸完整。',
+      eduZh: '脂肪酸怕熱。逾 60°C 則色變、風味走 ── 把溫度壓在體溫之下，為的是把「洗感的本體」完整地留到皂裡。',
     },
     {
       n: 'III', zh: '調鹼',
       body: '山泉水遇食用級氫氧化鈉。鹼水入陶甕，靜置一夜冷卻。',
+      eduZh: '氫氧化鈉遇水會瞬間放熱到 80°C 以上。靜置一夜冷回常溫，才能與油相遇 ── 否則皂化暴衝，成塊易裂。',
     },
     {
       n: 'IV', zh: '入模',
       body: '油與鹼相遇，攪至 trace，拌入花材，倒入鋪有未漂紙之檜木模。',
+      eduZh: 'trace 是油鹼乳化的臨界點 ── 液面能拉出淡淡一道痕跡。此時倒模才均勻不分層；早一分鐘水油分離，晚一分鐘則已成固。',
     },
     {
       n: 'V', zh: '切皂',
       body: '四十八小時後脫模，以金屬線手工切塊 — 每塊蓋上金花印記。',
+      eduZh: '四十八小時後，皂塊剛好進入「軟凝」狀態 ── 切面俐落、花材不崩、邊緣不塌。早切會黏刀，晚切則脆得像石膏。',
     },
     {
       n: 'VI', zh: '慢熟',
       body: '皂塊靜置檜木架上四十二日。逐日堅實、醇和、鹼性盡退 — 此步驟機器無法催熟。',
+      eduZh: '皂化反應其實數小時就完成；四十二日是為了退鹼、穩定 pH、讓晶體結構緩緩鎖定。少一日，肥皂澀；多一日，香氣退。',
     },
     {
       n: 'VII', zh: '封蠟',
       body: '每塊以楮紙包裹、麻繩繫縛，點一滴紅蠟、押以朱印。',
+      eduZh: '楮紙透氣，讓皂繼續呼吸；紅蠟鎖住一部分香氣與水分。紅蠟是古時信物的語彙 ── 一塊皂像一封寫好的信，到了手上才拆。',
     },
   ];
 
   const ingredients = [
-    { kind: 'olive', zh: '橄欖油', lat: 'Olea europaea', origin: '嘉義 · 臺灣', ratio: '32%', benefit: '滋潤', note: '根基。親膚、柔潤、泡沫緩慢。' },
-    { kind: 'coconut', zh: '椰子油', lat: 'Cocos nucifera', origin: '菲律賓 · 公平貿易', ratio: '26%', benefit: '起泡', note: '泡沫。清脆、綿密、去污。' },
-    { kind: 'castor', zh: '蓖麻油', lat: 'Ricinus communis', origin: '印度', ratio: '6%', benefit: '潤滑', note: '收尾。絲滑、泡沫持久。' },
-    { kind: 'water', zh: '山泉水', lat: 'Aqua fontis', origin: '陽明山', ratio: '14%', benefit: '淨', note: '每週取自臺北以北山中泉眼。' },
-    { kind: 'lye', zh: '食用鹼', lat: 'Natrii hydroxidum', origin: '食品級 · 日本', ratio: '12%', benefit: '皂化', note: '熟成期完全反應 — 成皂之中已無殘鹼。' },
-    { kind: 'botanical', zh: '花材', lat: 'Botanica', origin: '宜蘭農家', ratio: '~8%', benefit: '香氣', note: '壓榨、浸泡或磨粉 — 視配方而定。' },
-    { kind: 'salt', zh: '海鹽', lat: 'Sal maris', origin: '臺南鹽田', ratio: '1%', benefit: '礦物', note: '加於 trace 之後，帶一絲脆度與礦氣。' },
-    { kind: 'honey', zh: '蜂蜜', lat: 'Mel crudum', origin: '苗栗蜂場', ratio: '1%', benefit: '保濕', note: '選配入皂。滋潤、吸濕、微帶蜜香。' },
+    { kind: 'olive', zh: '橄欖油', lat: 'Olea europaea', origin: '嘉義 · 臺灣', ratio: '32%', benefit: '滋潤',
+      note: '嘉義山腳小農冷壓橄欖油，低溫榨取、脂肪酸保存完整。在皂裡給的是「溫潤」與「滑順」── 泡沫綿而緩，是本舍配方的根基。' },
+    { kind: 'coconut', zh: '椰子油', lat: 'Cocos nucifera', origin: '菲律賓 · 公平貿易', ratio: '26%', benefit: '起泡',
+      note: '菲律賓椰農合作社直採的公平貿易椰子油。在皂裡給的是「泡沫」與「清潔」── 起泡快、綿而豐。比例刻意不拉太高，以免洗完乾澀。' },
+    { kind: 'castor', zh: '蓖麻油', lat: 'Ricinus communis', origin: '印度', ratio: '6%', benefit: '潤滑',
+      note: '印度冷壓蓖麻油。黏稠得像琥珀，卻是整款皂的「滑順收尾」── 給的是洗後那一秒仍留在指間的溫潤。' },
+    { kind: 'water', zh: '山泉水', lat: 'Aqua fontis', origin: '陽明山', ratio: '14%', benefit: '淨',
+      note: '陽明山竹子湖一帶的山泉，每週五清晨取。礦物輕、鐵質低，皂體不易濁、泡沫乾淨 ── 從我們的小廚房到山口，車程剛好四十分鐘。' },
+    { kind: 'lye', zh: '食用鹼', lat: 'Natrii hydroxidum', origin: '食品級 · 日本', ratio: '12%', benefit: '皂化',
+      note: '日本食品級氫氧化鈉，皂化反應的唯一催化劑。熟成四十二日後，鹼已與油完全反應 ── 成皂之中無殘鹼，這是化學，不是口號。' },
+    { kind: 'botanical', zh: '花材', lat: 'Botanica', origin: '宜蘭農家', ratio: '~8%', benefit: '香氣',
+      note: '宜蘭農家當季花材，以壓榨、浸泡、磨粉三法入皂。花是「風韻」而不是主角 ── 油脂才是洗感的本體，這是本舍堅持的順序。' },
+    { kind: 'salt', zh: '海鹽', lat: 'Sal maris', origin: '臺南鹽田', ratio: '1%', benefit: '礦物',
+      note: '臺南七股鹽田日曬海鹽，於 trace 之後投入。少量為點綴、多量則成「鹽皂」── 給的是輕微的物理去角質與一絲礦氣。' },
+    { kind: 'honey', zh: '蜂蜜', lat: 'Mel crudum', origin: '苗栗蜂場', ratio: '1%', benefit: '保濕',
+      note: '苗栗單一蜂場的龍眼蜜，選配入皂。給的是「保濕」與微甜蜜香。一歲以下嬰兒因蜂製品疑慮，請避免使用。' },
   ];
 
   return (
@@ -205,6 +220,12 @@ export function Process() {
                 >
                   {s.body}
                 </div>
+                {s.eduZh && (
+                  <div className="edu-block" style={{ maxWidth: 460 }}>
+                    <span className="edu-label">工序之念</span>
+                    <p className="edu-note tc">{s.eduZh}</p>
+                  </div>
+                )}
               </div>
             </div>
           );
