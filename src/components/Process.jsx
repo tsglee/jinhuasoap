@@ -61,6 +61,54 @@ export function Process() {
 
   return (
     <div style={{ position: 'relative', zIndex: 1 }}>
+      {/* Hero video banner — mirrors About's opener */}
+      <section
+        className="gf-hero-video-md"
+        aria-label="金花樓 · 製皂之序 · 序幕"
+        style={{
+          position: 'relative',
+          width: '100vw',
+          marginLeft: 'calc(50% - 50vw)',
+          height: 'min(56vh, 560px)',
+          overflow: 'hidden',
+          background: 'var(--sumi)',
+        }}
+      >
+        <video
+          src="/images/landingmedia/Chinese_Ink_Wash_Painting_Animation.mp4"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          aria-label="水墨山居 · 手壓皂的序幕"
+          style={{
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            display: 'block',
+            transform: 'scale(1.18)',
+            transformOrigin: 'center center',
+          }}
+        />
+        <div
+          className="mono"
+          style={{
+            position: 'absolute',
+            bottom: 22,
+            right: 24,
+            background: 'var(--paper)',
+            color: 'var(--gold-3)',
+            padding: '10px 14px',
+            border: '1px solid var(--ink-15)',
+            fontSize: 10,
+            letterSpacing: 2,
+          }}
+        >
+          七步慢皂 · 臺北艋舺 · MMXXVI
+        </div>
+      </section>
+
       {/* Header */}
       <section
         className="gf-pad-md gf-tight-md"

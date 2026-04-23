@@ -16,11 +16,10 @@ export function About() {
           height: 'min(56vh, 560px)',
           overflow: 'hidden',
           background: 'var(--sumi)',
-          borderBottom: '1px solid var(--ink-15)',
         }}
       >
         <video
-          src="/images/landingmedia/Chinese_Ink_Wash_Painting_Animation.mp4"
+          src="/images/landingmedia/1930s_Shanghai_street_202604231129.mp4"
           autoPlay
           muted
           loop
@@ -32,18 +31,8 @@ export function About() {
             height: '100%',
             objectFit: 'cover',
             display: 'block',
-          }}
-        />
-        {/* Soft fade to paper so the banner blends into the hero below */}
-        <div
-          aria-hidden="true"
-          style={{
-            position: 'absolute',
-            inset: 'auto 0 0 0',
-            height: 120,
-            background:
-              'linear-gradient(to bottom, rgba(248,245,235,0) 0%, var(--paper) 100%)',
-            pointerEvents: 'none',
+            transform: 'scale(1.18)',
+            transformOrigin: 'center center',
           }}
         />
         {/* Mono caption chip — bottom-right, matches the existing site pattern */}
