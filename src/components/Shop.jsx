@@ -237,13 +237,24 @@ function OrderRequestForm({ cart, total, onSent }) {
           style={inputStyle}
         />
       )}
-      <textarea
-        value={note}
-        onChange={(e) => setNote(e.target.value)}
-        placeholder="備註（選填）"
-        rows={3}
-        style={{ ...inputStyle, resize: 'vertical', minHeight: 70 }}
-      />
+      <div style={{ display: 'grid', gap: 6, marginTop: 4 }}>
+        <label
+          htmlFor="gf-order-note"
+          className="mono"
+          style={{ color: 'var(--gold-3)', fontSize: 10, letterSpacing: 2 }}
+        >
+          想給我們留一句話？（選填）
+        </label>
+        <textarea
+          id="gf-order-note"
+          value={note}
+          onChange={(e) => setNote(e.target.value)}
+          placeholder="送禮對象、想要的包裝、到貨時間，或任何想告訴我們的事。"
+          rows={4}
+          maxLength={2000}
+          style={{ ...inputStyle, resize: 'vertical', minHeight: 96 }}
+        />
+      </div>
       {status === 'error' && (
         <div
           className="tc"

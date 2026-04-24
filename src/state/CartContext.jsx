@@ -38,7 +38,9 @@ export function CartProvider({ children }) {
   /**
    * Add a product to the cart, or increment quantity if it's already there.
    * Each product is keyed by `num` (its Roman numeral product number).
-   * `product` shape: { num, zh, en, price, tone? }
+   * `product` shape: { num, zh, lat, price, tone? }
+   * (`lat` is the botanical Latin name — preserved so the order email
+   * and cart row can show `玫瑰 · Rosa centifolia · № I`.)
    */
   const add = useCallback((product, qty = 1) => {
     setItems((current) => {
@@ -48,8 +50,8 @@ export function CartProvider({ children }) {
           i.num === product.num ? { ...i, qty: i.qty + qty } : i,
         );
       }
-      const { num, zh, en, price, tone = 'warm' } = product;
-      return [...current, { num, zh, en, price, tone, qty }];
+      const { num, zh, lat, price, tone = 'warm' } = product;
+      return [...current, { num, zh, lat, price, tone, qty }];
     });
   }, []);
 

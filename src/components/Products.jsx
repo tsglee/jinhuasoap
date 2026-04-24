@@ -90,17 +90,97 @@ const PRODUCTS = [
   },
 ];
 
-// Small price/meta footer shared by all cards
-function ProductMeta({ p, size = 'md' }) {
-  const big = size === 'lg';
+// Gift-box "pseudo-product" sold alongside the twelve single bars.
+const GIFT_BOX = {
+  num: 'GIFT-IV',
+  zh: '四花檜木禮盒',
+  lat: 'Four Bars · Cedar Box',
+  price: 1480,
+  tone: 'warm',
+};
+
+/**
+ * Shared add-to-cart button. Handles the "just added ✓" micro-feedback
+ * and the 1.4s revert, so every CTA on this page stays in sync.
+ *
+ * variants:
+ *   · pill  — bordered chip used on each of the twelve tiles
+ *   · solid — filled red CTA on the 本月之花 hero
+ *   · gold  — filled gold CTA on the dark gift-box banner
+ */
+function BuyButton({ product, variant = 'pill', priceSuffix = false, children, ariaLabel }) {
   const { add } = useCart();
   const [justAdded, setJustAdded] = useState(false);
-
-  const handleAdd = () => {
-    add(p, 1);
+  const handle = () => {
+    add(product, 1);
     setJustAdded(true);
     window.setTimeout(() => setJustAdded(false), 1400);
   };
+
+  const label = justAdded
+    ? '已加入購物籃 ✓'
+    : priceSuffix
+      ? `${children} · NT$${product.price}`
+      : children;
+
+  const base = {
+    fontFamily: 'inherit',
+    cursor: 'pointer',
+    transition: 'color 200ms, background 200ms, border-color 200ms',
+  };
+
+  let style;
+  if (variant === 'solid') {
+    style = {
+      ...base,
+      background: justAdded ? 'var(--sumi)' : 'var(--red)',
+      color: 'var(--gold-2)',
+      padding: '14px 28px',
+      fontSize: 14,
+      letterSpacing: 4,
+      border: 'none',
+    };
+  } else if (variant === 'gold') {
+    style = {
+      ...base,
+      background: justAdded ? 'var(--paper)' : 'var(--gold-1)',
+      color: 'var(--sumi)',
+      padding: '14px 28px',
+      fontSize: 14,
+      letterSpacing: 4,
+      border: 'none',
+    };
+  } else {
+    // pill — prominent enough to notice, quiet enough to respect the layout
+    style = {
+      ...base,
+      marginTop: 10,
+      padding: '8px 14px',
+      fontSize: 12,
+      letterSpacing: 3,
+      color: justAdded ? 'var(--red)' : 'var(--sumi)',
+      background: justAdded ? 'var(--paper)' : 'transparent',
+      border: `1px solid ${justAdded ? 'var(--red)' : 'var(--sumi)'}`,
+    };
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={handle}
+      aria-live="polite"
+      aria-label={ariaLabel}
+      className="tc"
+      style={style}
+    >
+      {label}
+    </button>
+  );
+}
+
+// Small price/meta footer shared by all cards
+function ProductMeta({ p, size = 'md' }) {
+  const big = size === 'lg';
 
   return (
     <div
@@ -172,22 +252,9 @@ function ProductMeta({ p, size = 'md' }) {
         >
           NT${p.price}
         </div>
-        <button
-          onClick={handleAdd}
-          aria-live="polite"
-          className="tc"
-          style={{
-            marginTop: 8,
-            fontSize: 13,
-            letterSpacing: 3,
-            color: justAdded ? 'var(--red)' : 'var(--sumi)',
-            borderBottom: `1px solid ${justAdded ? 'var(--red)' : 'var(--sumi)'}`,
-            paddingBottom: 2,
-            transition: 'color 200ms, border-color 200ms',
-          }}
-        >
-          {justAdded ? '已加入 ✓' : '加入購物籃'}
-        </button>
+        <BuyButton product={p} variant="pill" ariaLabel={`加入購物籃 · ${p.zh}`}>
+          加入購物籃
+        </BuyButton>
       </div>
     </div>
   );
@@ -423,18 +490,14 @@ export function Products() {
                     <ProductInfo p={hero} />
                   </div>
                 </div>
-                <button
-                  className="tc"
-                  style={{
-                    background: 'var(--red)',
-                    color: 'var(--gold-2)',
-                    padding: '14px 28px',
-                    fontSize: 14,
-                    letterSpacing: 4,
-                  }}
+                <BuyButton
+                  product={hero}
+                  variant="solid"
+                  priceSuffix
+                  ariaLabel={`加入購物籃 · ${hero.zh}`}
                 >
-                  來去逛逛 · NT${hero.price}
-                </button>
+                  加入購物籃
+                </BuyButton>
               </div>
             </div>
           </div>
@@ -539,19 +602,16 @@ export function Products() {
             >
               四款應季之皂，裝入檜木禮盒，以紅蠟封緘、附手書卡片。
             </div>
-            <button
-              className="tc"
-              style={{
-                marginTop: 32,
-                background: 'var(--gold-1)',
-                color: 'var(--sumi)',
-                padding: '14px 28px',
-                fontSize: 14,
-                letterSpacing: 4,
-              }}
-            >
-              選購禮盒 · NT$1,480
-            </button>
+            <div style={{ marginTop: 32 }}>
+              <BuyButton
+                product={GIFT_BOX}
+                variant="gold"
+                priceSuffix
+                ariaLabel="加入購物籃 · 四花檜木禮盒"
+              >
+                選購禮盒
+              </BuyButton>
+            </div>
           </div>
           <IllGiftBox ratio="4/3" label="四花檜木禮盒" />
         </div>
