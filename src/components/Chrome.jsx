@@ -55,13 +55,17 @@ export function Header({ tab, setTab, tabs }) {
   return (
     <header
       style={{
-        position: 'sticky',
+        // Desktop: header uses display:contents so the inner <nav> can stick
+        // to the document, not just within header's bounds. Mobile keeps the
+        // full header sticky so the hamburger stays reachable.
+        display: isMobile ? 'block' : 'contents',
+        position: isMobile ? 'sticky' : 'relative',
         top: 0,
         zIndex: 20,
         background: 'rgba(248,245,235,0.92)',
-        backdropFilter: 'blur(6px)',
-        WebkitBackdropFilter: 'blur(6px)',
-        borderBottom: '1px solid var(--ink-15)',
+        backdropFilter: isMobile ? 'blur(6px)' : 'none',
+        WebkitBackdropFilter: isMobile ? 'blur(6px)' : 'none',
+        borderBottom: isMobile ? '1px solid var(--ink-15)' : 'none',
       }}
     >
       {/* Announcement bar */}
@@ -88,7 +92,7 @@ export function Header({ tab, setTab, tabs }) {
         style={{
           maxWidth: 1280,
           margin: '0 auto',
-          padding: '18px 44px',
+          padding: '0 44px',
           display: 'grid',
           gridTemplateColumns: isMobile ? 'auto 1fr auto' : '1fr auto 1fr',
           alignItems: 'center',
@@ -127,18 +131,7 @@ export function Header({ tab, setTab, tabs }) {
             gap: 4,
           }}
         >
-          <GoldFlower size={isMobile ? 96 : 140} />
-          <div
-            className="tc"
-            style={{
-              fontWeight: 500,
-              fontSize: isMobile ? 16 : 20,
-              letterSpacing: isMobile ? 4 : 6,
-              lineHeight: 1,
-            }}
-          >
-            金花樓
-          </div>
+          <GoldFlower size={isMobile ? 100 : 144} />
         </button>
 
         {/* Right: cart only */}
@@ -168,13 +161,18 @@ export function Header({ tab, setTab, tabs }) {
         </div>
       </div>
 
-      {/* Tab bar (desktop) */}
+      {/* Tab bar (desktop) — sticks to top after the hero/logo scrolls past */}
       {!isMobile && (
         <nav
           style={{
+            position: 'sticky',
+            top: 0,
+            zIndex: 20,
             borderTop: '1px solid var(--ink-08)',
             borderBottom: '1px solid var(--ink-08)',
-            background: 'rgba(248,245,235,0.6)',
+            background: 'rgba(248,245,235,0.92)',
+            backdropFilter: 'blur(6px)',
+            WebkitBackdropFilter: 'blur(6px)',
           }}
         >
           <div
