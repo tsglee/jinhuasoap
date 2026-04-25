@@ -9,7 +9,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-    "format": "prettier --write \"src/**/*.{js,jsx,css,md}\" \"functions/**/*.{js,ts}\" \"*.{js,json,md,html}\""
+    "format": "prettier --write \"src/**/*.{js,jsx,css,md}\" \"functions/**/*.{js,ts}\" \"*.{js,json,md,html}\"",
+    "optimize:images": "node scripts/optimize-images.js"
   },
   "dependencies": {
     "react": "^18.3.1",
@@ -24,6 +25,7 @@
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-react-refresh": "^0.4.14",
     "prettier": "^3.4.2",
+    "sharp": "^0.34.5",
     "vite": "^5.4.11"
   }
 }

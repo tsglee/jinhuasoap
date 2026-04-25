@@ -2,6 +2,31 @@
 import { Divider, PhotoPlaceholder } from './GoldenFlower.jsx';
 import { IllSoap } from './Illustrations.jsx';
 
+// Resolves a `*.png` path to its AVIF/WebP siblings (produced by
+// scripts/optimize-images.js). The original PNG is no longer requested —
+// AVIF/WebP coverage is universal in target browsers.
+function SoapPhoto({ src, alt, ratio = '4/5' }) {
+  const base = src.replace(/\.(png|jpe?g)$/i, '');
+  return (
+    <picture>
+      <source type="image/avif" srcSet={`${base}.avif`} />
+      <source type="image/webp" srcSet={`${base}.webp`} />
+      <img
+        src={`${base}.webp`}
+        alt={alt}
+        loading="lazy"
+        decoding="async"
+        style={{
+          width: '100%',
+          aspectRatio: ratio,
+          objectFit: 'cover',
+          display: 'block',
+        }}
+      />
+    </picture>
+  );
+}
+
 export function About() {
   return (
     <div style={{ position: 'relative', zIndex: 1 }}>
@@ -650,15 +675,10 @@ export function About() {
                       opacity: 0.3,
                     }}
                   />
-                  <img
+                  <SoapPhoto
                     src="/images/products/海棠.png"
                     alt="海棠修復 · 瓊崖海棠 · 碧玉"
-                    style={{
-                      width: '100%',
-                      aspectRatio: '5/4',
-                      objectFit: 'cover',
-                      display: 'block',
-                    }}
+                    ratio="5/4"
                   />
                   <div
                     className="mono"
@@ -888,16 +908,7 @@ export function About() {
               >
                 <div style={{ position: 'relative' }}>
                   {s.photo ? (
-                    <img
-                      src={s.photo}
-                      alt={`${s.zh} · ${s.subtitle}`}
-                      style={{
-                        width: '100%',
-                        aspectRatio: '4/5',
-                        objectFit: 'cover',
-                        display: 'block',
-                      }}
-                    />
+                    <SoapPhoto src={s.photo} alt={`${s.zh} · ${s.subtitle}`} />
                   ) : (
                     <IllSoap label={s.zh} tone={s.tone} flower={s.flower} ratio="4/5" />
                   )}
