@@ -1,5 +1,5 @@
 // About tab — brand story, heritage, philosophy, founders
-import { Divider } from './GoldenFlower.jsx';
+import { Divider, PhotoPlaceholder } from './GoldenFlower.jsx';
 import { IllSoap } from './Illustrations.jsx';
 
 export function About() {
@@ -19,13 +19,13 @@ export function About() {
         }}
       >
         <video
-          src="/images/landingmedia/1930s_Shanghai_street_202604231129.mp4"
+          src="/images/landingmedia/Animated_Ink_Wash_Banner_Scene_Generation.mp4"
           autoPlay
           muted
           loop
           playsInline
           preload="auto"
-          aria-label="手壓皂的動態影像"
+          aria-label="水墨山居 · 手壓皂的動態影像"
           style={{
             width: '100%',
             height: '100%',
@@ -35,6 +35,81 @@ export function About() {
             transformOrigin: 'center center',
           }}
         />
+        {/* Editorial overlay — the whole 本舍小記 lives on the hero ink-wash */}
+        <div
+          className="gf-hero-overlay-md"
+          style={{
+            position: 'absolute',
+            top: 0,
+            bottom: 0,
+            left: 'clamp(40px, 12vw, 180px)',
+            width: 'min(52%, 600px)',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            padding: '4vh 2vw',
+            color: 'var(--sumi)',
+            pointerEvents: 'none',
+          }}
+        >
+          <div
+            className="mono"
+            style={{
+              color: 'var(--red)',
+              fontSize: 11,
+              letterSpacing: 4,
+              marginBottom: 18,
+            }}
+          >
+            本舍小記
+          </div>
+          <h1
+            className="tc"
+            style={{
+              fontSize: 'clamp(38px, 5.4vw, 72px)',
+              fontWeight: 500,
+              lineHeight: 1.05,
+              letterSpacing: 'clamp(2px, 0.4vw, 4px)',
+              margin: 0,
+              color: 'var(--sumi)',
+              textShadow: '0 1px 0 rgba(248,245,235,0.5)',
+            }}
+          >
+            山中
+            <br />
+            一盞
+            <br />
+            <span style={{ color: 'var(--red)' }}>金花。</span>
+          </h1>
+          <div
+            className="tc"
+            style={{
+              marginTop: 'clamp(14px, 2vh, 28px)',
+              fontSize: 'clamp(14px, 1.5vw, 20px)',
+              lineHeight: 1.6,
+              letterSpacing: 3,
+              color: 'var(--gold-3)',
+            }}
+          >
+            一方小皂 · 洗塵心 · 照夜夢。
+          </div>
+          <div
+            className="tc gf-hide-md"
+            style={{
+              marginTop: 'clamp(14px, 2vh, 28px)',
+              fontSize: 'clamp(13px, 1.1vw, 16px)',
+              lineHeight: 1.85,
+              letterSpacing: 1,
+              color: 'var(--sumi)',
+              textShadow: '0 1px 0 rgba(248,245,235,0.5)',
+              maxWidth: 460,
+            }}
+          >
+            金花樓是臺北艋舺的一間小小皂舍。我們以島上的油、花材、山泉水，
+            一方一方地手壓肥皂 ── 一次一個配方、一批四十二日，慢慢陳化。
+          </div>
+        </div>
+
         {/* Mono caption chip — bottom-right, matches the existing site pattern */}
         <div
           className="mono"
@@ -51,108 +126,6 @@ export function About() {
           }}
         >
           手壓皂 · 臺北艋舺 · MMXXVI
-        </div>
-      </section>
-
-      {/* Hero */}
-      <section
-        className="gf-pad-md gf-stack-md gf-tight-md"
-        style={{
-          maxWidth: 1280,
-          margin: '0 auto',
-          padding: '80px 44px 60px',
-          display: 'grid',
-          gridTemplateColumns: '1.1fr 1fr',
-          gap: 80,
-          alignItems: 'center',
-        }}
-      >
-        <div>
-          <div className="mono" style={{ color: 'var(--red)', marginBottom: 24 }}>
-            本舍小記
-          </div>
-          <h1
-            className="tc gf-h1-md"
-            style={{
-              fontSize: 72,
-              fontWeight: 500,
-              lineHeight: 1.05,
-              letterSpacing: 4,
-              margin: 0,
-              color: 'var(--sumi)',
-            }}
-          >
-            山中
-            <br />
-            一盞
-            <br />
-            <span style={{ color: 'var(--red)' }}>金花。</span>
-          </h1>
-          <div
-            className="tc"
-            style={{
-              marginTop: 28,
-              fontSize: 22,
-              lineHeight: 1.6,
-              letterSpacing: 4,
-              color: 'var(--gold-3)',
-              maxWidth: 480,
-            }}
-          >
-            一方小皂 · 洗塵心 · 照夜夢。
-          </div>
-          <div
-            className="tc"
-            style={{
-              marginTop: 32,
-              maxWidth: 480,
-              fontSize: 17,
-              lineHeight: 1.9,
-              letterSpacing: 1,
-              color: 'var(--sumi)',
-            }}
-          >
-            金花樓是臺北艋舺的一間小小皂舍。我們以島上的油、花材、山泉水，
-            一方一方地手壓肥皂 ── 一次一個配方、一批四十二日，慢慢陳化，
-            直到皂心乾實，才讓它走入別人的日常。
-          </div>
-        </div>
-        <div style={{ position: 'relative' }}>
-          <div
-            style={{
-              position: 'absolute',
-              inset: -20,
-              border: '1px solid var(--gold-3)',
-              opacity: 0.35,
-            }}
-          />
-          <img
-            src="/images/about/workbench.JPG"
-            alt="本舍手壓皂一批 · 金盞花與蜂巢皂塊陳列於工作檯"
-            style={{
-              width: '100%',
-              aspectRatio: '3/4',
-              objectFit: 'cover',
-              display: 'block',
-            }}
-          />
-          <div
-            style={{
-              position: 'absolute',
-              bottom: -20,
-              right: -20,
-              background: 'var(--paper)',
-              padding: '14px 18px',
-              border: '1px solid var(--ink-15)',
-              fontFamily: '"DM Mono", monospace',
-              fontSize: 10,
-              letterSpacing: 2,
-              textTransform: 'uppercase',
-              color: 'var(--gold-3)',
-            }}
-          >
-            臺北 · 艋舺 · MMXXVI
-          </div>
         </div>
       </section>
 
@@ -179,17 +152,45 @@ export function About() {
             {
               zh: '純手工',
               body: '每一塊皂的切、印、包，都出自我們二人的手 ── 一對夫妻，沒有別人。不假機器、不外包代工。',
+              tone: 'warm',
+              photo: null,
             },
             {
               zh: '天然材料',
               body: '冷壓油脂、石磨花材、陽明山泉水。不加棕櫚油、不加香精、不加色粉。',
+              tone: 'cool',
+              photo: null,
             },
             {
               zh: '慢製',
               body: '我們不趕工。每一塊皂在雪松架上陳化四十二日，才送到架上 ── 這樣它才耐用，才溫柔。',
+              tone: 'deep',
+              photo: null,
             },
           ].map((p, i) => (
             <div key={i}>
+              <div
+                style={{
+                  width: 120,
+                  margin: '0 auto 24px',
+                }}
+              >
+                {p.photo ? (
+                  <img
+                    src={p.photo}
+                    alt={p.zh}
+                    style={{
+                      width: '100%',
+                      aspectRatio: '1/1',
+                      objectFit: 'cover',
+                      display: 'block',
+                      borderRadius: 2,
+                    }}
+                  />
+                ) : (
+                  <PhotoPlaceholder ratio="1/1" label={p.zh} tone={p.tone} />
+                )}
+              </div>
               <div
                 className="tc"
                 style={{
@@ -220,13 +221,95 @@ export function About() {
         </div>
       </section>
 
+      {/* Manifesto film — placeholder slot. When the film is ready, swap the
+          inner placeholder div for a <video> element pointing at the new mp4
+          (e.g. /images/about/manifesto.mp4) — the wrapper sizing stays the same. */}
+      <section
+        className="gf-pad-md"
+        style={{
+          maxWidth: 1280,
+          margin: '0 auto',
+          padding: '80px 44px 0',
+        }}
+      >
+        <div className="mono" style={{ color: 'var(--red)', marginBottom: 18 }}>
+          本舍之約 · 影片
+        </div>
+        <div
+          style={{
+            position: 'relative',
+            width: '100%',
+            aspectRatio: '16/9',
+            maxHeight: 600,
+            overflow: 'hidden',
+            background: 'var(--paper-2)',
+            border: '1px solid var(--ink-15)',
+          }}
+        >
+          {/*
+            ── 影片就緒後，把下方 placeholder 替換為： ──
+            <video
+              src="/images/about/manifesto.mp4"
+              autoPlay muted loop playsInline preload="auto"
+              aria-label="本舍之約 · 影片"
+              style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+            />
+          */}
+          <div
+            className="mono"
+            style={{
+              position: 'absolute',
+              inset: 0,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: 14,
+              color: 'var(--gold-3)',
+              fontSize: 12,
+              letterSpacing: 4,
+              background:
+                'repeating-linear-gradient(135deg, transparent 0 18px, rgba(138,100,32,0.18) 18px 36px)',
+            }}
+          >
+            {/* Play-triangle glyph so the slot reads as a video */}
+            <svg viewBox="0 0 80 80" width="64" height="64" aria-hidden="true">
+              <circle cx="40" cy="40" r="38" fill="none" stroke="var(--gold-3)" strokeWidth="1.5" opacity="0.6" />
+              <polygon points="32,26 32,54 56,40" fill="var(--gold-3)" opacity="0.85" />
+            </svg>
+            <span style={{ fontSize: 18, letterSpacing: 8, color: 'var(--sumi)' }}>
+              本舍之約 · 影片預留位
+            </span>
+            <span style={{ fontSize: 11, letterSpacing: 2, color: 'var(--ink-60)' }}>
+              16 : 9 · MP4 · 請放至 /public/images/about/manifesto.mp4
+            </span>
+          </div>
+          <div
+            className="mono"
+            style={{
+              position: 'absolute',
+              bottom: 18,
+              right: 20,
+              background: 'var(--paper)',
+              color: 'var(--gold-3)',
+              padding: '8px 12px',
+              border: '1px solid var(--ink-15)',
+              fontSize: 10,
+              letterSpacing: 2,
+            }}
+          >
+            金花樓 · MMXXVI
+          </div>
+        </div>
+      </section>
+
       {/* Manifesto — vertical chinese + horizontal english */}
       <section
         className="gf-pad-md gf-stack-md gf-tight-md"
         style={{
           maxWidth: 1280,
           margin: '0 auto',
-          padding: '90px 44px',
+          padding: '60px 44px 90px',
           display: 'grid',
           gridTemplateColumns: 'auto 1fr',
           gap: 80,
@@ -437,12 +520,10 @@ export function About() {
           height: 'min(48vh, 480px)',
           overflow: 'hidden',
           background: 'var(--sumi)',
-          borderTop: '1px solid var(--ink-15)',
-          borderBottom: '1px solid var(--ink-15)',
         }}
       >
         <video
-          src="/images/about/water.mp4"
+          src="/images/process/09wash.mp4"
           autoPlay
           muted
           loop
@@ -528,24 +609,23 @@ export function About() {
           {/* Hero scene — the all-in-one bar (largest tile) */}
           {(() => {
             const scene = {
-              zh: '一塊走天下',
-              subtitle: '髮 · 身 · 面 一塊搞定',
-              tagline: '頂至踵，一塊即可。',
-              palette: { tone: 'warm', flower: 'rose' },
-              kicker: 'NO. 01 · 全能',
-              body: '為旅人、極簡者、也為那間小浴室而壓。卡斯提亞皂基配上燕麥乳與洋甘菊 ── 溫和得能洗頭髮，也足以洗去一日的疲。硬水、熱泉水一樣能起泡，洗完不留皂垢。',
+              zh: '海棠修復',
+              subtitle: '敏弱 · 痘肌 · 受損 一塊修護',
+              tagline: '補回那一寸瑕，留下玉石的光。',
+              palette: { tone: 'cool', flower: 'rose' },
+              kicker: 'NO. 01 · 修復',
+              body: '為敏弱、痘困、走過幾道瑕疵的肌膚而壓。瓊崖海棠油是這方皂的主角 ── 修復的力來自它；乳油木果脂接在後面，把鎖住的水分守好。洗時是一抹深沉的木質堅果香，泡泡細緻如凝脂；沖完，肌膚會回到溫潤的玉石光澤。',
               tags: [
-                '卡斯提亞皂基',
-                '燕麥乳 · 洋甘菊',
-                'pH 8.9',
-                '髮 · 面 · 身',
-                '105 g',
+                '瓊崖海棠油',
+                '乳油木果脂 · 甜杏仁',
+                '敏弱 · 痘肌 · 受損',
+                '木質堅果香',
               ],
               edu: {
                 label: '設計之念',
-                body: '「一塊走天下」的設計，走的是五力中段 ── 以橄欖油為主的卡斯提亞家族，給的是「溫潤」與「滑順」。清潔力刻意收斂，才能同一塊同時走過頭皮、臉與身；燕麥乳與洋甘菊是緩衝，讓中段溫和得不容易有誰意外受傷。',
+                body: '海棠修復走的是五力中的「溫潤」與「修復」 ── 瓊崖海棠油是主角，因為它補的不只是表面，是肌膚自己想長回去的那一寸；乳油木果脂接在後面，把那一刻鎖回的水分守住，不至於太快流失。椰子油刻意壓得低一些，是替敏弱與痘肌留一條退路 ── 該洗的洗掉，不該帶走的，留給肌膚自己慢慢回。',
               },
-              note: 'ritual — 打包三天的行囊，只帶這一塊。旅店一進門拆開雪松紙，整套沐浴都進了你的口袋。',
+              note: 'ritual — 入夜的最後一盆溫水。一塊碧玉色的皂，洗去一日的塵與躁；睡前，肌膚會記得這道光澤。',
             };
             return (
               <div
@@ -570,14 +650,9 @@ export function About() {
                       opacity: 0.3,
                     }}
                   />
-                  <video
-                    src="/images/about/oceanwithsoap.mp4"
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    preload="auto"
-                    aria-label="一塊走天下 · 燕麥乳 · 洋甘菊"
+                  <img
+                    src="/images/products/海棠.png"
+                    alt="海棠修復 · 瓊崖海棠 · 碧玉"
                     style={{
                       width: '100%',
                       aspectRatio: '5/4',
@@ -715,34 +790,45 @@ export function About() {
             {[
               {
                 kicker: 'NO. 02 · 髮',
-                zh: '髮餅',
-                subtitle: '洗髮皂',
-                tagline: '清晨第一塊，洗出淡淡米水與歇息的香。',
-                body: '發酵米水、茶花油、無患子 ── 一條長長的配方，從島上的阿嬤手裡傳下來，壓成一塊大約能洗六十次的皂餅。冷水一瓢沖淨；若頭髮長，再以米醋茶收尾。',
-                tags: ['茶花油 · 無患子', '發酵米水', '約 60 次洗髮', '90 g 皂餅'],
+                zh: '山茶淨髮',
+                subtitle: '植萃髮餅',
+                tagline: '清晨第一塊，洗出山茶與一夜歇息的香。',
+                body: '山茶花油、蠶絲蛋白、玉米澱粉、甘油 ── 四味為主，壓成一塊大約能洗六十次的髮餅。冷水一瓢沖淨；硬水區，再以檸檬酸或一勺米醋茶收尾。山茶花油是這支的主香 ── 淡而不黏，像清晨剛開的那一朵。',
+                tags: [
+                  '山茶花油 · 蠶絲蛋白',
+                  '玉米澱粉 · 甘油',
+                  '約 60 次洗髮',
+                  '90 g 皂餅',
+                ],
                 edu: {
                   label: '設計之念',
-                  body: '髮餅的設計有一處較真 ── pH 5–6，弱酸，貼近頭皮本來的酸鹼。另一處較真是 BTMS：陽離子的順毛鱗片成分，洗後不澀、不打結 ── 沒有它的洗髮皂，會變成「洗完澀澀的那種」，是太太做壞幾塊才學到的事。',
+                  body: '髮餅有兩處較真。一是 pH 5–6 ── 弱酸，貼近頭皮本來的酸鹼；大多數鹼性洗髮皂會把這道酸鹼推遠，洗久了就澀。二是蠶絲蛋白：細小的多胜肽會順著毛鱗片排列，洗後不澀、不打結 ──「洗完澀澀的那種」是被它擋下的。山茶花油補一層輕脂；玉米澱粉扛起成型，沒有它，髮餅就壓不結實。',
                 },
-                note: 'ritual — 走遠路的清晨用一塊，那香氣能跟著你一整天。',
+                note: 'ritual — 走遠路的清晨用一塊，山茶花香能跟著你一整天。',
                 tone: 'warm',
                 flower: 'chrysanthemum',
-                photo: '/images/products/Gemini_Generated_Image_vxwmqbvxwmqbvxwm.png',
+                photo: '/images/products/髮餅.png',
               },
               {
-                kicker: 'NO. 03 · 面',
-                zh: '洗面皂',
-                subtitle: '洗臉用',
-                tagline: '鏡前清晨，那短短十秒的停頓。',
-                body: '羊乳與蜂蜜為底，加入磨得極細的紅豆粉。一塊小皂 ── 恰好一只掌心的大小 ── 以溫柔為尺度。不加香料，亦不加近眼的精油。妝前可用，一場久哭過後也可用。',
-                tags: ['羊乳 · 蜂蜜', '紅豆粉', '無香', '60 g 小塊'],
+                kicker: 'NO. 03 · 香',
+                zh: '茉莉沐膚',
+                subtitle: '香氛沐浴餅',
+                tagline: '水汽起時，茉莉就先開了。',
+                body: '茉莉花萃取粉、玉米澱粉、甘油 ── 三味為主，壓成一塊掌心大小的沐浴餅。pH 5–6，弱酸，泡沫綿密細緻，洗完不緊繃。茉莉花是這支的主香 ── 不是精油，不是香精，是真實的花瓣磨成粉；水熱了，香就慢慢開了。',
+                tags: [
+                  '茉莉花萃取粉',
+                  '玉米澱粉 · 甘油',
+                  'pH 5–6',
+                  '100 g 沐浴餅',
+                ],
                 edu: {
                   label: '設計之念',
-                  body: '洗面皂的五力刻意退 ── 清潔最淡，滑順推高，泡沫綿而不豐。羊乳與蜂蜜的油脂家族只給「溫潤」，不走脫脂；紅豆粉極細，只做一點物理輕拂。無香、無精油，是為了一場久哭後眼周也還能用。',
+                  body: '沐浴餅的骨架是弱酸的表活組合 ── pH 5–6，貼近肌膚原生環境，泡沫綿密但不脫脂。茉莉花萃取粉是植萃之妙：本舍信奉「先讓配方站得住，再讓植萃為它加分」── 香不是用來補配方的。茉莉粉量刻意壓在低位，過了就會擠掉泡沫；玉米澱粉扛起成型，把鬆鬆的表活組合塑成一塊好握的小餅。',
                 },
-                note: 'ritual — 先濕手、再沾皂。掌間慢慢繞兩圈，才輕輕帶到臉上。',
+                note: 'ritual — 熱水放好前，先用掌心暖一暖這塊餅。下了水，茉莉就走了出來。',
                 tone: 'cool',
                 flower: 'pine',
+                photo: '/images/products/沐浴餅.png',
               },
               {
                 kicker: 'NO. 04 · 身',

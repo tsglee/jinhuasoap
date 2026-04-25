@@ -1,7 +1,26 @@
-// Shared GoldFlower emblem — a hand-drawn gold line-art lily.
-// Scalable; accepts size. The `tone` and `stroke` props remain for API compat
-// but the lily uses a single gold ink line on no background.
+// Shared GoldFlower emblem — the 金花樓 brand mark.
+// Renders /public/logo.png. `size` is treated as the rendered HEIGHT so the
+// portrait card keeps its natural aspect ratio. `tone` is kept for API compat
+// (the PNG carries its own colour treatment).
+// eslint-disable-next-line no-unused-vars
 export function GoldFlower({ size = 120, tone = 'gold' }) {
+  return (
+    <img
+      src="/logo.png"
+      alt="金花樓"
+      style={{
+        height: size,
+        width: 'auto',
+        display: 'block',
+        objectFit: 'contain',
+      }}
+    />
+  );
+}
+
+// Legacy SVG lily — kept for reference / future use. Not rendered.
+// eslint-disable-next-line no-unused-vars
+function _LegacyLily({ size = 120, tone = 'gold' }) {
   const gold1 = '#c69a3a';
   const gold2 = '#e8cd78';
   const gold3 = '#8a6420';

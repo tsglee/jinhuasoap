@@ -127,7 +127,7 @@ export function Header({ tab, setTab, tabs }) {
             gap: 4,
           }}
         >
-          <GoldFlower size={isMobile ? 40 : 56} />
+          <GoldFlower size={isMobile ? 96 : 140} />
           <div
             className="tc"
             style={{
@@ -356,7 +356,7 @@ export function Footer({ navigate }) {
       >
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 16 }}>
-            <GoldFlower size={56} />
+            <GoldFlower size={120} />
             <div>
               <div
                 className="tc"
