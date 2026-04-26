@@ -27,7 +27,19 @@ function SoapPhoto({ src, alt, ratio = '4/5' }) {
   );
 }
 
-export function About() {
+export function About({ setTab }) {
+  // Deep-link from About product card → Products tab + scroll to that product.
+  // sessionStorage hand-off keeps URL clean; Products.jsx reads + clears it.
+  const goToProduct = (num) => {
+    if (!setTab) return;
+    try {
+      sessionStorage.setItem('gf_jump_product', num);
+    } catch {
+      /* sessionStorage may be unavailable; tab switch still happens */
+    }
+    setTab('products');
+  };
+
   return (
     <div style={{ position: 'relative', zIndex: 1 }}>
       {/* Hero video banner — full-bleed, autoplay muted loop */}
@@ -634,6 +646,7 @@ export function About() {
           {/* Hero scene — the all-in-one bar (largest tile) */}
           {(() => {
             const scene = {
+              productNum: '壹',
               zh: '海棠修復',
               subtitle: '敏弱 · 痘肌 · 受損 一塊修護',
               tagline: '補回那一寸瑕，留下玉石的光。',
@@ -654,6 +667,16 @@ export function About() {
             };
             return (
               <div
+                role="button"
+                tabIndex={0}
+                onClick={() => goToProduct(scene.productNum)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    goToProduct(scene.productNum);
+                  }
+                }}
+                aria-label={`查看 ${scene.zh} 詳情`}
                 className="gf-stack-md"
                 style={{
                   display: 'grid',
@@ -664,6 +687,7 @@ export function About() {
                   borderTop: '1px solid var(--ink-15)',
                   borderBottom: '1px solid var(--ink-15)',
                   marginBottom: 60,
+                  cursor: 'pointer',
                 }}
               >
                 <div style={{ position: 'relative' }}>
@@ -809,6 +833,7 @@ export function About() {
           >
             {[
               {
+                productNum: '玖',
                 kicker: 'NO. 02 · 髮',
                 zh: '山茶淨髮',
                 subtitle: '植萃髮餅',
@@ -827,9 +852,10 @@ export function About() {
                 note: 'ritual — 走遠路的清晨用一塊，山茶花香能跟著你一整天。',
                 tone: 'warm',
                 flower: 'chrysanthemum',
-                photo: '/images/products/髮餅.png',
+                photo: '/images/products/山茶淨髮.png',
               },
               {
+                productNum: '拾',
                 kicker: 'NO. 03 · 香',
                 zh: '茉莉沐膚',
                 subtitle: '香氛沐浴餅',
@@ -848,9 +874,10 @@ export function About() {
                 note: 'ritual — 熱水放好前，先用掌心暖一暖這塊餅。下了水，茉莉就走了出來。',
                 tone: 'cool',
                 flower: 'pine',
-                photo: '/images/products/沐浴餅.png',
+                photo: '/images/products/茉莉沐膚.png',
               },
               {
+                productNum: '伍',
                 kicker: 'NO. 04 · 舒',
                 zh: '金盞舒緩',
                 subtitle: '長濱金 · 舒膚皂',
@@ -872,6 +899,7 @@ export function About() {
                 photo: '/images/products/金盞花.png',
               },
               {
+                productNum: '拾壹',
                 kicker: 'NO. 05 · 動',
                 zh: '一皂到底',
                 subtitle: '清爽款 · 水仙清透',
@@ -895,6 +923,16 @@ export function About() {
             ].map((s, i) => (
               <div
                 key={i}
+                role="button"
+                tabIndex={0}
+                onClick={() => goToProduct(s.productNum)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    goToProduct(s.productNum);
+                  }
+                }}
+                aria-label={`查看 ${s.zh} 詳情`}
                 className="gf-stack-md"
                 style={{
                   display: 'grid',
@@ -904,6 +942,7 @@ export function About() {
                   background: 'var(--paper)',
                   border: '1px solid var(--ink-15)',
                   position: 'relative',
+                  cursor: 'pointer',
                 }}
               >
                 <div style={{ position: 'relative' }}>

@@ -81,7 +81,7 @@ export default function App() {
   } else if (route.type === 'legal') {
     body = <Legal page={route.page} navigate={navigate} />;
   } else if (tab === 'about') {
-    body = <About />;
+    body = <About setTab={selectTab} />;
   } else if (tab === 'products') {
     body = <Products />;
   } else if (tab === 'process') {
