@@ -68,6 +68,7 @@ export function About({ setTab }) {
             height: '100%',
             objectFit: 'cover',
             display: 'block',
+            mixBlendMode: 'multiply',
           }}
         />
         {/* Editorial overlay — the whole 本舍小記 lives on the hero ink-wash */}
@@ -188,40 +189,32 @@ export function About({ setTab }) {
               zh: '純手工',
               body: '每一塊皂的切、印、包，都出自我們二人的手 ── 一對夫妻，沒有別人。不假機器、不外包代工。',
               tone: 'warm',
-              photo: null,
+              photo: '/images/about/純手工.jpeg',
             },
             {
               zh: '天然材料',
               body: '冷壓油脂、石磨花材、陽明山泉水。不加棕櫚油、不加香精、不加色粉。',
               tone: 'cool',
-              photo: null,
+              photo: '/images/about/天然材料.png',
             },
             {
               zh: '慢製',
               body: '我們不趕工。每一塊皂在雪松架上陳化四十二日，才送到架上 ── 這樣它才耐用，才溫柔。',
               tone: 'deep',
-              photo: null,
+              photo: '/images/about/慢製.png',
             },
           ].map((p, i) => (
             <div key={i}>
               <div
                 style={{
-                  width: 120,
-                  margin: '0 auto 24px',
+                  width: 180,
+                  margin: '0 auto 28px',
                 }}
               >
                 {p.photo ? (
-                  <img
-                    src={p.photo}
-                    alt={p.zh}
-                    style={{
-                      width: '100%',
-                      aspectRatio: '1/1',
-                      objectFit: 'cover',
-                      display: 'block',
-                      borderRadius: 2,
-                    }}
-                  />
+                  <div className="gf-pillar-photo">
+                    <SoapPhoto src={p.photo} alt={p.zh} ratio="1/1" />
+                  </div>
                 ) : (
                   <PhotoPlaceholder ratio="1/1" label={p.zh} tone={p.tone} />
                 )}
@@ -476,13 +469,13 @@ export function About({ setTab }) {
           {[
             {
               roleMono: '配方 · 生產',
-              roleZh: '研發的那位',
+              roleZh: '研發的老婆大人',
               body: '配方、手壓、切皂、熟成的守候 ── 都是她。廚房裡的那口銅鍋、雪松架上的四十二日，都歸她管。第一批十二塊艾草皂，也是她做的。',
               edu: '她的口頭禪是：「自己的阿嬤皮膚不能用的，就不做。」五力的自檢表壓在鍋邊，每一張新配方先過她那一關。',
             },
             {
               roleMono: '網頁 · 行銷',
-              roleZh: '寫字的那位',
+              roleZh: '寫字的創作老公',
               body: '這一頁的字是我寫的 ── 但皂不是我做的。我的工作是把她的慢工，用不吵的方式說給更多人聽；網站、文案、寄件回信，也都在我這一端。',
               edu: '我相信一個品牌應該像一封信 ── 寫得慢、讀得久、不催促。這是我這一端的底線：不加上「amazing / premium / luxurious」這類詞彙。',
             },
@@ -546,15 +539,15 @@ export function About({ setTab }) {
 
       {/* Water interlude — echoes the 「涼水 / 溫水」 line in the manifesto */}
       <section
-        className="gf-hero-video-md"
         aria-label="一盞涼水 · 一盞溫水"
         style={{
           position: 'relative',
-          width: '100vw',
-          marginLeft: 'calc(50% - 50vw)',
-          height: 'min(48vh, 480px)',
+          width: '100%',
+          maxWidth: 1280,
+          margin: '0 auto',
+          aspectRatio: '1280 / 720',
           overflow: 'hidden',
-          background: 'var(--sumi)',
+          background: 'var(--paper)',
         }}
       >
         <video

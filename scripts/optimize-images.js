@@ -15,6 +15,8 @@ const SRC_DIRS = [
   path.join(__dirname, '..', 'public', 'images', 'process', 'png'),
   // 八樣花材 — botanical ingredient photos
   path.join(__dirname, '..', 'public', 'images', 'ingredients'),
+  // 三大支柱（本舍） — 純手工 / 天然材料 / 慢製
+  path.join(__dirname, '..', 'public', 'images', 'about'),
 ];
 const MAX_WIDTH = 1200;
 const AVIF_QUALITY = 65;
