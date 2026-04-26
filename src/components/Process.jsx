@@ -157,15 +157,15 @@ export function Process() {
     <div style={{ position: 'relative', zIndex: 1 }}>
       {/* Hero video banner — mirrors About's opener */}
       <section
-        className="gf-hero-video-md"
         aria-label="金花樓 · 製皂之序 · 序幕"
         style={{
           position: 'relative',
-          width: '100vw',
-          marginLeft: 'calc(50% - 50vw)',
-          height: 'min(56vh, 560px)',
+          width: '100%',
+          maxWidth: 1280,
+          margin: '0 auto',
+          aspectRatio: '1280 / 720',
           overflow: 'hidden',
-          background: 'var(--sumi)',
+          background: 'var(--paper)',
         }}
       >
         <video
@@ -181,8 +181,6 @@ export function Process() {
             height: '100%',
             objectFit: 'cover',
             display: 'block',
-            transform: 'scale(1.18)',
-            transformOrigin: 'center center',
           }}
         />
         <div

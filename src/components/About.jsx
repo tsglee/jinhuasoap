@@ -44,13 +44,13 @@ export function About({ setTab }) {
     <div style={{ position: 'relative', zIndex: 1 }}>
       {/* Hero video banner — full-bleed, autoplay muted loop */}
       <section
-        className="gf-hero-video-md"
         aria-label="金花樓 · 手壓皂 · 序幕"
         style={{
           position: 'relative',
-          width: '100vw',
-          marginLeft: 'calc(50% - 50vw)',
-          height: 'min(56vh, 560px)',
+          width: '100%',
+          maxWidth: 1280,
+          margin: '0 auto',
+          aspectRatio: '1280 / 540',
           overflow: 'hidden',
           background: 'var(--paper)',
         }}
@@ -68,8 +68,6 @@ export function About({ setTab }) {
             height: '100%',
             objectFit: 'cover',
             display: 'block',
-            transform: 'scale(1.4)',
-            transformOrigin: 'center center',
           }}
         />
         {/* Editorial overlay — the whole 本舍小記 lives on the hero ink-wash */}
