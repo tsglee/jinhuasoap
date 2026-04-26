@@ -1,4 +1,4 @@
-// Generate AVIF + WebP next to each PNG/JPG in public/images/products/.
+// Generate AVIF + WebP next to each PNG/JPG in the configured source dirs.
 // Idempotent: skips outputs that are newer than the source.
 // Run with: npm run optimize:images
 
@@ -9,7 +9,13 @@ import { fileURLToPath } from 'node:url';
 import sharp from 'sharp';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const SRC_DIRS = [path.join(__dirname, '..', 'public', 'images', 'products')];
+const SRC_DIRS = [
+  path.join(__dirname, '..', 'public', 'images', 'products'),
+  // Process-step stills (poster frames for the 八步慢皂 videos)
+  path.join(__dirname, '..', 'public', 'images', 'process', 'png'),
+  // 八樣花材 — botanical ingredient photos
+  path.join(__dirname, '..', 'public', 'images', 'ingredients'),
+];
 const MAX_WIDTH = 1200;
 const AVIF_QUALITY = 65;
 const WEBP_QUALITY = 80;
