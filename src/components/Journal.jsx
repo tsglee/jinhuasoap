@@ -142,12 +142,12 @@ function InkLink({ href, navigate, children, style }) {
 
 export function JournalIndex({ navigate }) {
   useEffect(() => {
-    document.title = '誌 · 金花樓';
+    document.title = '金花樓日誌 · 金花樓';
   }, []);
 
   return (
     <div style={{ position: 'relative', zIndex: 1 }}>
-      <PageHeader kicker="金花樓 · 誌" title="誌" subtitle="慢慢寫 · 慢慢讀" />
+      <PageHeader kicker="金花樓 · 日誌" title="金花樓日誌" subtitle="慢慢寫 · 慢慢讀" />
       <section
         className="gf-pad-md"
         style={{
@@ -240,7 +240,7 @@ export function JournalPost({ slug, navigate }) {
   const post = POSTS.find((p) => p.slug === slug);
 
   useEffect(() => {
-    if (post) document.title = `${post.title} · 誌 · 金花樓`;
+    if (post) document.title = `${post.title} · 金花樓日誌 · 金花樓`;
   }, [post]);
 
   if (!post) {
@@ -264,7 +264,7 @@ export function JournalPost({ slug, navigate }) {
         </p>
         <div style={{ marginTop: 32 }}>
           <InkLink href="/journal" navigate={navigate}>
-            回誌
+            回日誌
           </InkLink>
         </div>
       </div>
@@ -310,7 +310,7 @@ export function JournalPost({ slug, navigate }) {
           }}
         >
           <InkLink href="/journal" navigate={navigate} style={{ fontSize: 14 }}>
-            ← 回誌
+            ← 回日誌
           </InkLink>
           <span
             className="mono"

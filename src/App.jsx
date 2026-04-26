@@ -14,6 +14,7 @@ const TABS = [
   { id: 'products', zh: '十二花' },
   { id: 'process', zh: '製皂' },
   { id: 'shop', zh: '購皂' },
+  { id: 'journal', zh: '金花樓日誌', path: '/journal' },
 ];
 
 function parseRoute() {
@@ -64,6 +65,11 @@ export default function App() {
 
   const selectTab = useCallback(
     (id) => {
+      const t = TABS.find((x) => x.id === id);
+      if (t?.path) {
+        navigate(t.path);
+        return;
+      }
       setTab(id);
       if (route.type !== 'tab') {
         navigate('/');
@@ -96,10 +102,12 @@ export default function App() {
     ? `legal/${route.page}`
     : tab;
 
+  const activeTabId = route.type === 'journal' ? 'journal' : tab;
+
   return (
     <CartProvider>
       <div data-screen-label={`Goldenflower · ${screenLabel}`}>
-        <Header tab={tab} setTab={selectTab} tabs={TABS} />
+        <Header tab={activeTabId} setTab={selectTab} tabs={TABS} />
         <main>{body}</main>
         <Footer navigate={navigate} />
       </div>

@@ -83,8 +83,8 @@ export function Header({ tab, setTab, tabs }) {
         }}
       >
         {isMobile
-          ? '本島滿 NT$1,200 免運'
-          : '春日新品 · 第 VII 批慢製中 · 本島滿 NT$1,200 免運'}
+          ? '本島滿 NT$500 免運'
+          : '春日新品 · 第 VII 批慢製中 · 本島滿 NT$500 免運'}
       </div>
 
       <div
@@ -310,7 +310,7 @@ export function Footer({ navigate }) {
         { label: '本舍小記' },
         { label: '製皂之序' },
         { label: '食材' },
-        { label: '誌', href: '/journal' },
+        { label: '金花樓日誌', href: '/journal' },
       ],
     },
     {

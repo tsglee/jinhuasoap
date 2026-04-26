@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Divider } from './GoldenFlower.jsx';
 import { IllSoap } from './Illustrations.jsx';
 import { useCart } from '../state/CartContext.jsx';
+import { TierNotice } from './TierNotice.jsx';
 
 /**
  * Order request form — POSTs cart contents to /api/order, which our Worker
@@ -322,7 +323,7 @@ const inputStyle = {
 
 export function Shop() {
   const [addingEmail, setAddingEmail] = useState('');
-  const { items: cart, subtotal, shipping, total, updateQty, clear } = useCart();
+  const { items: cart, subtotal, discount, discountRate, shipping, total, updateQty, clear } = useCart();
 
   return (
     <div style={{ position: 'relative', zIndex: 1 }}>
@@ -491,6 +492,7 @@ export function Shop() {
 
           {cart.length > 0 && (
             <>
+              <TierNotice variant="cart" subtotal={subtotal} />
               <div
                 style={{
                   marginTop: 20,
@@ -504,6 +506,14 @@ export function Shop() {
                   <span className="tc" style={{ color: 'var(--ink-60)' }}>小計</span>
                   <span className="mono">NT${subtotal}</span>
                 </div>
+                {discount > 0 && (
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span className="tc" style={{ color: 'var(--red)' }}>
+                      {discountRate === 0.10 ? '9 折優惠' : '95 折優惠'}
+                    </span>
+                    <span className="mono" style={{ color: 'var(--red)' }}>− NT${discount}</span>
+                  </div>
+                )}
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                   <span className="tc" style={{ color: 'var(--ink-60)' }}>運費 · 本島</span>
                   <span

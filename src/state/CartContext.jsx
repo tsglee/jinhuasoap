@@ -6,8 +6,13 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 
 const STORAGE_KEY = 'gf_cart';
-const FREE_SHIPPING_THRESHOLD = 1200; // NTD
+const FREE_SHIPPING_THRESHOLD = 500; // NTD
 const FLAT_SHIPPING = 120; // NTD, island
+// Tiers ordered high → low so .find returns the best applicable tier.
+const DISCOUNT_TIERS = [
+  { threshold: 1000, rate: 0.10 },
+  { threshold: 500, rate: 0.05 },
+];
 
 const CartContext = createContext(null);
 
@@ -73,12 +78,17 @@ export function CartProvider({ children }) {
   const value = useMemo(() => {
     const subtotal = items.reduce((s, i) => s + i.qty * i.price, 0);
     const itemCount = items.reduce((s, i) => s + i.qty, 0);
+    const tier = DISCOUNT_TIERS.find((t) => subtotal >= t.threshold);
+    const discountRate = tier?.rate ?? 0;
+    const discount = Math.round(subtotal * discountRate);
     const shipping = subtotal === 0 ? 0 : subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : FLAT_SHIPPING;
-    const total = subtotal + shipping;
+    const total = subtotal - discount + shipping;
     return {
       items,
       itemCount,
       subtotal,
+      discount,
+      discountRate,
       shipping,
       total,
       add,

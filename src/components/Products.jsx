@@ -4,6 +4,7 @@
 import { useEffect, useState } from 'react';
 import { Divider } from './GoldenFlower.jsx';
 import { useCart } from '../state/CartContext.jsx';
+import { TierNotice } from './TierNotice.jsx';
 
 // ── Product data ────────────────────────────────────────────────────────
 // Source: 金花樓 · 十二花神官網系列文案 V7 (PDF) + jh_mk wiki for the
@@ -23,7 +24,7 @@ const PRODUCTS = [
     subtitle: '瓊崖海棠修復皂',
     photo: '/images/products/海棠.png',
     weight: '105 g',
-    price: 0,
+    price: 380,
     skinType: '敏弱肌、痘痘困擾肌、瑕疵受損肌。',
     coreIngredients:
       '有機初榨瓊崖海棠油、義大利純橄欖油、精製乳油木果脂、甜杏仁油、蓖麻油、椰子油、棕櫚油。',
@@ -41,7 +42,7 @@ const PRODUCTS = [
     subtitle: '霧峰蜜 · 潤玉皂',
     photo: '/images/products/霧蜜.png',
     weight: '105 g',
-    price: 0,
+    price: 300,
     skinType: '極乾燥肌、熟齡肌。',
     coreIngredients:
       '霧峰特產純蜂蜜、義大利純橄欖油、乳油木果脂、甜杏仁油、蓖麻油、椰子油、棕櫚油。',
@@ -59,7 +60,7 @@ const PRODUCTS = [
     subtitle: '潤玉澡豆',
     photo: '/images/products/綠豆.png',
     weight: '100 g',
-    price: 0,
+    price: 280,
     skinType: '角質肥厚、膚色暗沉、粉刺肌。',
     coreIngredients:
       '研磨綠豆粉、本草萃取粉、義大利純橄欖油、乳油木果脂、椰子油、棕櫚油。',
@@ -77,7 +78,7 @@ const PRODUCTS = [
     subtitle: '蝶豆花美顏皂',
     photo: '/images/products/蝶豆花.png',
     weight: '100 g',
-    price: 0,
+    price: 320,
     skinType: '疲憊暗沉肌、輕熟齡肌、需加強代謝之肌膚。',
     coreIngredients:
       '蝶豆花浸泡橄欖油、甜杏仁油、米糠油、乳油木果脂、椰子油、棕櫚油。',
@@ -97,7 +98,7 @@ const PRODUCTS = [
     subtitle: '長濱金 · 舒膚皂',
     photo: '/images/products/金盞花.png',
     weight: '110 g',
-    price: 0,
+    price: 320,
     skinType: '敏感肌、過冬乾燥肌、走過幾道刺激的肌膚。',
     coreIngredients:
       '長濱金盞花浸泡油、義大利純橄欖油、乳油木果脂、甜杏仁油、椰子油、棕櫚油。',
@@ -115,7 +116,7 @@ const PRODUCTS = [
     subtitle: '三星米 · 暖心皂',
     photo: '/images/products/大米.png',
     weight: '105 g',
-    price: 0,
+    price: 300,
     skinType: '偏乾肌、季節敏感肌、需要溫和滋潤者。',
     coreIngredients:
       '宜蘭三星米漿、米糠油、義大利純橄欖油、乳油木果脂、椰子油、棕櫚油。',
@@ -133,7 +134,7 @@ const PRODUCTS = [
     subtitle: '醉月酒粕',
     photo: '/images/products/酒粕.png',
     weight: '105 g',
-    price: 0,
+    price: 320,
     skinType: '暗沉肌、紋路深沉肌、需要光澤感的成熟肌。',
     coreIngredients:
       '清酒酒粕精華、米糠油、義大利純橄欖油、乳油木果脂、椰子油、棕櫚油。',
@@ -151,7 +152,7 @@ const PRODUCTS = [
     subtitle: '桂花潤膚皂',
     photo: '/images/products/桂花.png',
     weight: '105 g',
-    price: 0,
+    price: 360,
     skinType: '一般肌、追求香氣的日常肌、皮膚薄者。',
     coreIngredients:
       '桂花浸泡橄欖油、甜杏仁油、米糠油、乳油木果脂、椰子油。',
@@ -171,7 +172,7 @@ const PRODUCTS = [
     subtitle: '植萃髮餅',
     photo: '/images/products/山茶淨髮.png',
     weight: '90 g',
-    price: 0,
+    price: 320,
     skinType: '一般髮質、敏感頭皮、追求弱酸護髮者。',
     coreIngredients: '山茶花油、蠶絲蛋白萃取液、玉米澱粉、甘油。',
     oilProfile:
@@ -188,7 +189,7 @@ const PRODUCTS = [
     subtitle: '香氛沐浴餅',
     photo: '/images/products/茉莉沐膚.png',
     weight: '100 g',
-    price: 0,
+    price: 320,
     skinType: '全身肌、夏日想要香氛體驗者。',
     coreIngredients: '茉莉花萃取粉、玉米澱粉、甘油。',
     oilProfile:
@@ -207,7 +208,7 @@ const PRODUCTS = [
     subtitle: '水仙清透',
     photo: '/images/products/一皂到底清爽2.png',
     weight: '110 g',
-    price: 0,
+    price: 320,
     skinType: '運動後肌、油脂分泌旺、夏日想清爽過一天的全身肌。',
     coreIngredients: '荷荷芭油、薰衣草粉、植物性甘油。',
     oilProfile:
@@ -224,7 +225,7 @@ const PRODUCTS = [
     subtitle: '待命名',
     photo: '/images/products/一皂到底保濕.png',
     weight: '110 g',
-    price: 0,
+    price: 320,
     skinType: '乾燥肌、季節敏感肌、追求一塊到底滋潤者。',
     coreIngredients: '成分待補。',
     oilProfile: '原料特性待補。',
@@ -589,23 +590,7 @@ export function Products() {
         </div>
       </section>
 
-      {/* Draft notice — many descriptions are inferred drafts pending owner review */}
-      <section
-        style={{
-          background: 'rgba(244,236,215,0.6)',
-          borderTop: '1px solid var(--ink-15)',
-          borderBottom: '1px solid var(--ink-15)',
-          padding: '14px 24px',
-          textAlign: 'center',
-        }}
-      >
-        <span
-          className="mono"
-          style={{ color: 'var(--gold-3)', fontSize: 11, letterSpacing: 3 }}
-        >
-          草稿版 · 文案與規格陸續調整中。價格暫未開放，標示「待定」者請改用「取貨約訂」。
-        </span>
-      </section>
+      <TierNotice variant="static" />
 
       {/* Series sections */}
       {grouped.map((s) => (
