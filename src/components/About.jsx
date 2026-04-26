@@ -52,7 +52,7 @@ export function About({ setTab }) {
           marginLeft: 'calc(50% - 50vw)',
           height: 'min(56vh, 560px)',
           overflow: 'hidden',
-          background: 'var(--sumi)',
+          background: 'var(--paper)',
         }}
       >
         <video
@@ -68,7 +68,7 @@ export function About({ setTab }) {
             height: '100%',
             objectFit: 'cover',
             display: 'block',
-            transform: 'scale(1.18)',
+            transform: 'scale(1.4)',
             transformOrigin: 'center center',
           }}
         />

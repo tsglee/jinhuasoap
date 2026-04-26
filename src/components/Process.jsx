@@ -440,14 +440,13 @@ export function Process() {
           {/* Alternating bands: 4 photos → 4 notes → 4 photos → 4 notes */}
           {[ingredients.slice(0, 4), ingredients.slice(4, 8)].map((row, rowIdx) => (
             <div key={`band-${rowIdx}`} style={{ marginTop: rowIdx === 0 ? 0 : 56 }}>
-              {/* Photo strip — hairline 0.5px gap on dark bg */}
+              {/* Photo strip — soft gap, page bg shows through */}
               <div
                 className="gf-cols-2-md"
                 style={{
                   display: 'grid',
                   gridTemplateColumns: 'repeat(4, 1fr)',
-                  gap: 0.5,
-                  background: 'var(--sumi)',
+                  gap: 6,
                 }}
               >
                 {row.map((x) => (
