@@ -13,7 +13,7 @@ export const HERO = {
   intro:
     '金花樓是林口的一間小小皂舍。我們以島上的油、花材、山泉水，' +
     '一方一方地手壓肥皂 ── 一次一個配方、一批四十二日，慢慢陳化。',
-  caption: '手壓皂 · 林口 · MMXXVI',
+  caption: '手壓皂 · 林口 · MMXXII',
 };
 
 export const PILLARS = [

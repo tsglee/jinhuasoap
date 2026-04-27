@@ -387,7 +387,7 @@ export function Footer({ navigate, setTab }) {
               maxWidth: 320,
             }}
           >
-            一間位於林口的小小皂舍。自 MMXXVI 年春起，每週手壓一批天然皂 ── 慢火、細料、日復一日。
+            一間位於林口的小小皂舍。自 2022 年春起，每週手壓一批天然皂 ── 慢火、細料、日復一日。
           </div>
         </div>
 
@@ -456,7 +456,7 @@ export function Footer({ navigate, setTab }) {
           margin: '0 auto',
         }}
       >
-        <span>© MMXXVI 金花樓 · 版權所有</span>
+        <span>© 2026 金花樓 · 版權所有</span>
         <span>手壓於林口</span>
       </div>
       <div
