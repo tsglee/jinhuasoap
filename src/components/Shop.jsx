@@ -59,6 +59,7 @@ function OrderRequestForm({ cart, total, onSent }) {
   const [note, setNote] = useState('');
   const [status, setStatus] = useState('idle');
   const [errorMsg, setErrorMsg] = useState('');
+  const [orderId, setOrderId] = useState('');
 
   const kind = shipKind(shipMethod);
 
@@ -195,6 +196,7 @@ function OrderRequestForm({ cart, total, onSent }) {
       if (!res.ok || !data.ok) {
         throw new Error(data.error || `伺服器回應 ${res.status}`);
       }
+      setOrderId(data.orderId || '');
       setStatus('sent');
       setName('');
       setEmail('');
@@ -217,7 +219,7 @@ function OrderRequestForm({ cart, total, onSent }) {
       <div
         style={{
           marginTop: 20,
-          padding: 18,
+          padding: 22,
           background: 'rgba(74,107,75,0.08)',
           border: '1px solid var(--tea)',
           textAlign: 'center',
@@ -229,11 +231,39 @@ function OrderRequestForm({ cart, total, onSent }) {
         >
           收到您的訂單
         </div>
+        {orderId && (
+          <div
+            style={{
+              margin: '14px auto 16px',
+              padding: '10px 14px',
+              display: 'inline-block',
+              background: 'var(--paper)',
+              border: '1px solid var(--gold-1)',
+            }}
+          >
+            <div
+              className="mono"
+              style={{ color: 'var(--gold-3)', fontSize: 10, letterSpacing: 2, marginBottom: 4 }}
+            >
+              訂單編號 · 請保留
+            </div>
+            <div
+              style={{
+                fontFamily: '"DM Mono", monospace',
+                fontSize: 18,
+                letterSpacing: 3,
+                color: 'var(--red)',
+              }}
+            >
+              {orderId}
+            </div>
+          </div>
+        )}
         <div
           className="tc"
           style={{ fontSize: 14, color: 'var(--sumi)', lineHeight: 1.7, letterSpacing: 1 }}
         >
-          我們已收到您的訂購請求，將於 24 小時內以電子郵件回覆付款與寄送方式。
+          請加我們 Line（右下角按鈕）並告知此訂單編號，我們會在 24 小時內回覆付款與寄送方式。
         </div>
       </div>
     );

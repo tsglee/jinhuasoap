@@ -99,6 +99,24 @@ async function handleStoreCallback(request) {
   });
 }
 
+// JH-YYMMDD-XXXX — 訂單編號。日期讓 user 一眼看出哪天的單，4 碼隨機
+// （base32 字元集去掉 0/O/1/I/L 等易混字）讓同一天多單不會撞號。
+// 純運算、不需要儲存；如果某天哪兩單剛好撞了 4 碼（碰撞率 < 1/10⁶），
+// 兩封 email 看到的單也不會弄錯，因為 subject 還會帶名字 + 金額。
+const ID_ALPHABET = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
+function generateOrderId(date = new Date()) {
+  const tz = new Date(date.getTime() + 8 * 60 * 60 * 1000); // GMT+8（台北時區）
+  const yymmdd =
+    String(tz.getUTCFullYear()).slice(-2) +
+    String(tz.getUTCMonth() + 1).padStart(2, '0') +
+    String(tz.getUTCDate()).padStart(2, '0');
+  const buf = new Uint8Array(4);
+  crypto.getRandomValues(buf);
+  let suffix = '';
+  for (const b of buf) suffix += ID_ALPHABET[b % ID_ALPHABET.length];
+  return `JH-${yymmdd}-${suffix}`;
+}
+
 async function handleOrder(request, env) {
   let payload;
   try {
@@ -137,10 +155,11 @@ async function handleOrder(request, env) {
   } = payload;
   const ip = request.headers.get('CF-Connecting-IP') || '未知';
 
+  const orderId = generateOrderId();
   const shipFields = { phone, shipMethod, shipKind, storeId, storeName, recipientName, address };
-  const subject = `[金花樓] 新訂購請求 · ${name} · NT$${total}`;
-  const html = renderOrderEmailHtml({ name, email, note, cart, total, ip, ...shipFields });
-  const text = renderOrderEmailText({ name, email, note, cart, total, ip, ...shipFields });
+  const subject = `[金花樓] ${orderId} · ${name} · NT$${total}`;
+  const html = renderOrderEmailHtml({ orderId, name, email, note, cart, total, ip, ...shipFields });
+  const text = renderOrderEmailText({ orderId, name, email, note, cart, total, ip, ...shipFields });
 
   try {
     const res = await fetch('https://api.resend.com/emails', {
@@ -170,7 +189,7 @@ async function handleOrder(request, env) {
     return jsonResponse({ ok: false, error: `寄件失敗：${err.message}` }, 502);
   }
 
-  return jsonResponse({ ok: true });
+  return jsonResponse({ ok: true, orderId });
 }
 
 function validateOrder(payload) {
@@ -267,6 +286,7 @@ function escapeHtml(str) {
 }
 
 function renderOrderEmailHtml({
+  orderId,
   name,
   email,
   phone,
@@ -324,7 +344,8 @@ function renderOrderEmailHtml({
 <html lang="zh-Hant"><body style="font-family:'Noto Serif TC',Georgia,serif;color:#1a1512;background:#f8f5eb;padding:24px;">
   <div style="max-width:560px;margin:0 auto;background:#fff;padding:28px;border:1px solid #ddd;">
     <h2 style="margin:0 0 6px;font-weight:500;letter-spacing:6px;">新訂購請求</h2>
-    <p style="margin:0 0 18px;color:#666;font-size:13px;letter-spacing:3px;">金花樓 · 手壓天然皂</p>
+    <p style="margin:0 0 6px;color:#666;font-size:13px;letter-spacing:3px;">金花樓 · 手壓天然皂</p>
+    <p style="margin:0 0 18px;font-family:'DM Mono',monospace;font-size:14px;letter-spacing:2px;color:#8a2a22;">訂單編號 · ${escapeHtml(orderId)}</p>
 
     <p style="margin:0 0 4px;"><strong>${escapeHtml(name)}</strong></p>
     <p style="margin:0 0 6px;"><a href="mailto:${escapeHtml(email)}">${escapeHtml(email)}</a></p>
@@ -359,6 +380,7 @@ function renderOrderEmailHtml({
 }
 
 function renderOrderEmailText({
+  orderId,
   name,
   email,
   phone,
@@ -375,6 +397,7 @@ function renderOrderEmailText({
 }) {
   const lines = [
     `新訂購請求 — 金花樓 · 手壓天然皂`,
+    `訂單編號：${orderId}`,
     ``,
     `姓名：${name}`,
     `電郵：${email}`,
