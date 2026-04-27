@@ -115,7 +115,7 @@ export function Process() {
       video: '/images/process/07測試.mp4',
       poster: '/images/process/png/7test.avif',
       body: '出舍前，每一批皂取一塊以 pH 試紙測之；舌尖輕觸皂面，無刺感者為合格。',
-      eduZh: 'pH 8.5 以下、舌尖不刺，才是真的退完了鹼。化學不是口號 ── 不到的那一批，回架上再走七日。',
+      eduZh: '再次確認酸鹼值跟洗手感都跟我們預期的一樣。',
     },
     {
       n: '捌', zh: '包裝',
@@ -431,7 +431,7 @@ export function Process() {
                 letterSpacing: 1,
               }}
             >
-              花材是配方的風韻，不是主角 ── 油脂才是洗感的本體。八樣輪番進皂，依當月香氣與配方而選，比例多在 2–5% 之間。
+              花材是配方的風韻；油脂才是洗感的本體。八樣輪番進皂，依當月香氣與配方而選，比例多在 2–5% 之間。
             </div>
           </div>
 
