@@ -738,7 +738,7 @@ export function Shop() {
               letterSpacing: 1,
             }}
           >
-            本舍與少數獨立店家合作。若您的店面與我們的皂氣質相投，請來信一敘 — 最低訂量十二塊。
+            本舍與少數獨立店家合作。若您的店面與我們的皂氣質相投，請加我們 Line 一敘 — 最低訂量十二塊。
           </div>
           <a
             href="https://lin.ee/7m167md"
