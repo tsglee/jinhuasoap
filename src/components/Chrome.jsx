@@ -1,7 +1,6 @@
 // Header (top nav) + Footer for the site
 import { useEffect, useState } from 'react';
 import { GoldFlower } from './GoldenFlower.jsx';
-import { LineCTA } from './LineCTA.jsx';
 import { useIsMobile } from '../hooks/useIsMobile.js';
 import { useCart } from '../state/CartContext.jsx';
 
@@ -458,17 +457,6 @@ export function Footer({ navigate, setTab }) {
       >
         <span>© 2026 金花樓 · 版權所有</span>
         <span>手壓於林口</span>
-      </div>
-      <div
-        style={{
-          padding: '20px 44px 28px',
-          display: 'flex',
-          justifyContent: 'center',
-          maxWidth: 1280,
-          margin: '0 auto',
-        }}
-      >
-        <LineCTA caption="客服窗口 · 加 Line 聯絡本舍" />
       </div>
     </footer>
   );

@@ -1,6 +1,5 @@
 // Legal pages — Privacy, Returns, Terms. Brand-voiced, not lawyer-voiced.
 import { useEffect } from 'react';
-import { LineCTA } from './LineCTA.jsx';
 
 const PAGES = {
   privacy: {
@@ -305,17 +304,6 @@ export function Legal({ page, navigate }) {
                 {label}
               </a>
             ))}
-        </div>
-
-        <div
-          style={{
-            marginTop: 60,
-            padding: '30px 0 10px',
-            borderTop: '1px solid var(--ink-15)',
-            textAlign: 'center',
-          }}
-        >
-          <LineCTA caption="有任何疑問？加 Line 聯絡客服。" />
         </div>
       </article>
     </div>

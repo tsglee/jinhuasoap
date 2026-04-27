@@ -2,7 +2,6 @@
 // (Physical stockists removed in Phase H — we don't have retail partners yet.)
 import { useEffect, useState } from 'react';
 import { Divider } from './GoldenFlower.jsx';
-import { LineCTA } from './LineCTA.jsx';
 import { useCart } from '../state/CartContext.jsx';
 import { TierNotice } from './TierNotice.jsx';
 
@@ -235,9 +234,6 @@ function OrderRequestForm({ cart, total, onSent }) {
           style={{ fontSize: 14, color: 'var(--sumi)', lineHeight: 1.7, letterSpacing: 1 }}
         >
           我們已收到您的訂購請求，將於 24 小時內以電子郵件回覆付款與寄送方式。
-        </div>
-        <div style={{ marginTop: 18, display: 'flex', justifyContent: 'center' }}>
-          <LineCTA caption="想加快回覆？加 Line 直接和我們聯絡。" />
         </div>
       </div>
     );

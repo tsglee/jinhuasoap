@@ -2,6 +2,7 @@
 import { lazy, Suspense, useCallback, useEffect, useState } from 'react';
 import { Header, Footer } from './components/Chrome.jsx';
 import { About } from './components/About/index.jsx';
+import { LineFloat } from './components/LineFloat.jsx';
 import { CartProvider } from './state/CartContext.jsx';
 
 // About is the default tab — kept in the main bundle for instant first
@@ -134,6 +135,7 @@ export default function App() {
           <Suspense fallback={<TabFallback />}>{body}</Suspense>
         </main>
         <Footer navigate={navigate} setTab={selectTab} />
+        <LineFloat />
       </div>
     </CartProvider>
   );
