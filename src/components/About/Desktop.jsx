@@ -1,6 +1,8 @@
-// About tab — brand story, heritage, philosophy, founders
-import { Divider, PhotoPlaceholder } from './GoldenFlower.jsx';
-import { IllSoap } from './Illustrations.jsx';
+// About tab — Desktop variant. Brand story, heritage, philosophy, founders.
+// Mobile lives in ./Mobile.jsx; ./index.jsx picks one based on viewport.
+import { Divider, PhotoPlaceholder } from '../GoldenFlower.jsx';
+import { IllSoap } from '../Illustrations.jsx';
+import { HERO, PILLARS, CREW } from './content.js';
 
 // Resolves a `*.png` path to its AVIF/WebP siblings (produced by
 // scripts/optimize-images.js). The original PNG is no longer requested —
@@ -27,7 +29,7 @@ function SoapPhoto({ src, alt, ratio = '4/5' }) {
   );
 }
 
-export function About({ setTab }) {
+export function AboutDesktop({ setTab }) {
   // Deep-link from About product card → Products tab + scroll to that product.
   // sessionStorage hand-off keeps URL clean; Products.jsx reads + clears it.
   const goToProduct = (num) => {
@@ -56,8 +58,8 @@ export function About({ setTab }) {
         }}
       >
         <video
-          src="/images/landingmedia/Animated_Ink_Wash_Banner_Scene_Generation.mp4"
-          poster="/images/landingmedia/hero-poster.webp"
+          src={HERO.videoSrc}
+          poster={HERO.poster}
           autoPlay
           muted
           loop
@@ -98,7 +100,7 @@ export function About({ setTab }) {
               marginBottom: 18,
             }}
           >
-            本舍小記
+            {HERO.micro}
           </div>
           <h1
             className="tc"
@@ -112,11 +114,18 @@ export function About({ setTab }) {
               textShadow: '0 1px 0 rgba(248,245,235,0.5)',
             }}
           >
-            山中
-            <br />
-            一盞
-            <br />
-            <span style={{ color: 'var(--red)' }}>金花。</span>
+            {HERO.titleLines.map((line, i) => (
+              <span
+                key={i}
+                style={{
+                  display: 'block',
+                  color:
+                    i === HERO.titleAccentIndex ? 'var(--red)' : 'inherit',
+                }}
+              >
+                {line}
+              </span>
+            ))}
           </h1>
           <div
             className="tc"
@@ -128,7 +137,7 @@ export function About({ setTab }) {
               color: 'var(--gold-3)',
             }}
           >
-            一方小皂 · 洗塵心 · 照夜夢。
+            {HERO.tagline}
           </div>
           <div
             className="tc gf-hide-md"
@@ -142,8 +151,7 @@ export function About({ setTab }) {
               maxWidth: 460,
             }}
           >
-            金花樓是臺北艋舺的一間小小皂舍。我們以島上的油、花材、山泉水，
-            一方一方地手壓肥皂 ── 一次一個配方、一批四十二日，慢慢陳化。
+            {HERO.intro}
           </div>
         </div>
 
@@ -162,7 +170,7 @@ export function About({ setTab }) {
             letterSpacing: 2,
           }}
         >
-          手壓皂 · 臺北艋舺 · MMXXVI
+          {HERO.caption}
         </div>
       </section>
 
@@ -185,26 +193,7 @@ export function About({ setTab }) {
             gap: 60,
           }}
         >
-          {[
-            {
-              zh: '純手工',
-              body: '每一塊皂的切、印、包，都出自我們二人的手 ── 一對夫妻，沒有別人。不假機器、不外包代工。',
-              tone: 'warm',
-              photo: '/images/about/純手工.jpeg',
-            },
-            {
-              zh: '天然材料',
-              body: '冷壓油脂、石磨花材、陽明山泉水。不加棕櫚油、不加香精、不加色粉。',
-              tone: 'cool',
-              photo: '/images/about/天然材料.png',
-            },
-            {
-              zh: '慢製',
-              body: '我們不趕工。每一塊皂在雪松架上陳化四十二日，才送到架上 ── 這樣它才耐用，才溫柔。',
-              tone: 'deep',
-              photo: '/images/about/慢製.png',
-            },
-          ].map((p, i) => (
+          {PILLARS.map((p, i) => (
             <div key={i}>
               <div
                 style={{
@@ -423,7 +412,7 @@ export function About({ setTab }) {
       >
         <div style={{ textAlign: 'center', marginBottom: 50 }}>
           <div className="mono" style={{ color: 'var(--red)' }}>
-            工坊的人
+            {CREW.micro}
           </div>
           <h2
             className="tc gf-h2-md"
@@ -435,13 +424,13 @@ export function About({ setTab }) {
               color: 'var(--sumi)',
             }}
           >
-            我們二人
+            {CREW.title}
           </h2>
           <div
             className="tc"
             style={{ fontSize: 18, color: 'var(--gold-3)', letterSpacing: 6 }}
           >
-            一對夫妻 · 沒有別的員工
+            {CREW.subtitle}
           </div>
           <div
             className="tc"
@@ -454,8 +443,7 @@ export function About({ setTab }) {
               letterSpacing: 1,
             }}
           >
-            金花樓只有兩個人 ── 一位守著配方與鍋前，一位守著文字與頁面。
-            這一頁，是我們願意讓你知道的彼此。
+            {CREW.intro}
           </div>
         </div>
 
@@ -467,20 +455,7 @@ export function About({ setTab }) {
             gap: 40,
           }}
         >
-          {[
-            {
-              roleMono: '配方 · 生產',
-              roleZh: '研發的老婆大人',
-              body: '配方、手壓、切皂、熟成的守候 ── 都是她。廚房裡的那口銅鍋、雪松架上的四十二日，都歸她管。第一批十二塊艾草皂，也是她做的。',
-              edu: '她的口頭禪是：「自己的阿嬤皮膚不能用的，就不做。」五力的自檢表壓在鍋邊，每一張新配方先過她那一關。',
-            },
-            {
-              roleMono: '網頁 · 行銷',
-              roleZh: '寫字的創作老公',
-              body: '這一頁的字是我寫的 ── 但皂不是我做的。我的工作是把她的慢工，用不吵的方式說給更多人聽；網站、文案、寄件回信，也都在我這一端。',
-              edu: '我相信一個品牌應該像一封信 ── 寫得慢、讀得久、不催促。這是我這一端的底線：不加上「amazing / premium / luxurious」這類詞彙。',
-            },
-          ].map((r, i) => (
+          {CREW.members.map((r, i) => (
             <div
               key={i}
               style={{

@@ -1,7 +1,7 @@
 // App — tab router + minimal path-based routes for /journal and /legal/*
 import { lazy, Suspense, useCallback, useEffect, useState } from 'react';
 import { Header, Footer } from './components/Chrome.jsx';
-import { About } from './components/About.jsx';
+import { About } from './components/About/index.jsx';
 import { CartProvider } from './state/CartContext.jsx';
 
 // About is the default tab — kept in the main bundle for instant first
