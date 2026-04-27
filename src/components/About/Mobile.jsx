@@ -1,30 +1,9 @@
 // Mobile-first About — 4 essential sections, single-column vertical
-// scroll. Keeps the brand poetry (hero), the three pillars, the founders,
-// and a CTA into the product catalogue. Long-form / decorative sections
-// from Desktop.jsx (manifesto, water interlude, 五皂五境) are intentionally
-// omitted — those overlap with the 02 十二花 catalogue or are decorative.
+// scroll. Hero is a full-bleed image with title overlaid; the bottom
+// section shows the 12 products inline (tap to deep-link to 02 十二花).
 import { Divider } from '../GoldenFlower.jsx';
 import { HERO, PILLARS, CREW } from './content.js';
-
-function HeroPhoto() {
-  return (
-    <picture>
-      <source type="image/avif" srcSet="/images/landingmedia/hero-poster.avif" />
-      <source type="image/webp" srcSet={HERO.poster} />
-      <img
-        src={HERO.poster}
-        alt="金花樓 · 山居水墨"
-        decoding="async"
-        style={{
-          width: '100%',
-          aspectRatio: '4 / 3',
-          objectFit: 'cover',
-          display: 'block',
-        }}
-      />
-    </picture>
-  );
-}
+import { PRODUCTS } from '../../data/products.js';
 
 function PillarPhoto({ src, alt }) {
   const base = src.replace(/\.(png|jpe?g)$/i, '');
@@ -48,13 +27,84 @@ function PillarPhoto({ src, alt }) {
   );
 }
 
+function ProductCardPhoto({ src, alt }) {
+  const base = src.replace(/\.(png|jpe?g)$/i, '');
+  return (
+    <picture>
+      <source type="image/avif" srcSet={`${base}.avif`} />
+      <source type="image/webp" srcSet={`${base}.webp`} />
+      <img
+        src={`${base}.webp`}
+        alt={alt}
+        loading="lazy"
+        decoding="async"
+        style={{
+          width: '100%',
+          aspectRatio: '4 / 5',
+          objectFit: 'cover',
+          display: 'block',
+        }}
+      />
+    </picture>
+  );
+}
+
 export function AboutMobile({ setTab }) {
+  const goToProduct = (num) => {
+    if (!setTab) return;
+    try {
+      sessionStorage.setItem('gf_jump_product', num);
+    } catch {
+      /* sessionStorage may be unavailable; tab switch still happens */
+    }
+    setTab('products');
+  };
+
   return (
     <div style={{ position: 'relative', zIndex: 1 }}>
-      {/* 1 · Hero — poster image (no video on mobile to save bandwidth + LCP) */}
-      <section aria-label="金花樓 · 序幕">
-        <HeroPhoto />
-        <div style={{ padding: '32px 24px 40px', background: 'var(--paper)' }}>
+      {/* 1 · Hero — full-bleed image, title overlaid bottom-left.
+          aspect 3/4 gives ~500px tall at 375 wide — enough for a centred
+          ink-wash scene with breathing room above the text block. */}
+      <section
+        aria-label="金花樓 · 序幕"
+        style={{ position: 'relative', overflow: 'hidden' }}
+      >
+        <picture>
+          <source type="image/avif" srcSet="/images/landingmedia/hero-poster.avif" />
+          <source type="image/webp" srcSet={HERO.poster} />
+          <img
+            src={HERO.poster}
+            alt="金花樓 · 山居水墨"
+            decoding="async"
+            style={{
+              width: '100%',
+              aspectRatio: '3 / 4',
+              objectFit: 'cover',
+              objectPosition: '78% center',
+              display: 'block',
+            }}
+          />
+        </picture>
+        {/* Soft fade at the bottom so the overlay text reads cleanly even
+            against the busy cobblestone area of the illustration. */}
+        <div
+          aria-hidden="true"
+          style={{
+            position: 'absolute',
+            inset: '40% 0 0',
+            background:
+              'linear-gradient(180deg, rgba(248,245,235,0) 0%, rgba(248,245,235,0.65) 60%, rgba(248,245,235,0.92) 100%)',
+            pointerEvents: 'none',
+          }}
+        />
+        <div
+          style={{
+            position: 'absolute',
+            left: 24,
+            right: 24,
+            bottom: 28,
+          }}
+        >
           <div
             className="mono"
             style={{ color: 'var(--red)', fontSize: 11, letterSpacing: 4 }}
@@ -66,9 +116,9 @@ export function AboutMobile({ setTab }) {
             style={{
               fontSize: 52,
               fontWeight: 500,
-              lineHeight: 1.1,
+              lineHeight: 1.05,
               letterSpacing: 4,
-              margin: '14px 0 0',
+              margin: '12px 0 0',
               color: 'var(--sumi)',
             }}
           >
@@ -88,28 +138,32 @@ export function AboutMobile({ setTab }) {
           <div
             className="tc"
             style={{
-              marginTop: 18,
-              fontSize: 16,
-              lineHeight: 1.6,
+              marginTop: 14,
+              fontSize: 15,
+              lineHeight: 1.5,
               letterSpacing: 3,
               color: 'var(--gold-3)',
             }}
           >
             {HERO.tagline}
           </div>
-          <p
-            className="tc"
-            style={{
-              marginTop: 18,
-              fontSize: 15,
-              lineHeight: 1.85,
-              letterSpacing: 1,
-              color: 'var(--sumi)',
-            }}
-          >
-            {HERO.intro}
-          </p>
         </div>
+      </section>
+
+      {/* Brand intro — small typographic section right after the hero */}
+      <section style={{ padding: '28px 24px 36px' }}>
+        <p
+          className="tc"
+          style={{
+            margin: 0,
+            fontSize: 15,
+            lineHeight: 1.85,
+            letterSpacing: 1,
+            color: 'var(--sumi)',
+          }}
+        >
+          {HERO.intro}
+        </p>
       </section>
 
       {/* 2 · 三大支柱 — vertical stack */}
@@ -133,20 +187,10 @@ export function AboutMobile({ setTab }) {
         >
           本舍三事
         </div>
-        <div
-          style={{
-            display: 'grid',
-            gap: 44,
-          }}
-        >
+        <div style={{ display: 'grid', gap: 44 }}>
           {PILLARS.map((p) => (
             <div key={p.zh}>
-              <div
-                style={{
-                  width: '70%',
-                  margin: '0 auto 22px',
-                }}
-              >
+              <div style={{ width: '70%', margin: '0 auto 22px' }}>
                 <PillarPhoto src={p.photo} alt={p.zh} />
               </div>
               <div
@@ -182,7 +226,7 @@ export function AboutMobile({ setTab }) {
         </div>
       </section>
 
-      {/* 3 · 我們二人 — couple bios, stacked */}
+      {/* 3 · 我們二人 — couple bios stacked */}
       <section style={{ padding: '60px 24px 50px' }}>
         <div style={{ textAlign: 'center', marginBottom: 32 }}>
           <div
@@ -278,69 +322,106 @@ export function AboutMobile({ setTab }) {
         </div>
       </section>
 
-      {/* 4 · CTA → 02 十二花 */}
+      {/* 4 · 十二款皂 — inline grid (replaces CTA button). Tap a card to
+          jump straight to that product on 02 十二花. */}
       <section
         style={{
-          padding: '50px 24px 70px',
-          background: 'var(--sumi)',
-          color: 'var(--paper)',
-          textAlign: 'center',
+          padding: '50px 18px 70px',
+          borderTop: '1px solid var(--ink-15)',
         }}
       >
-        <div
-          className="mono"
-          style={{
-            color: 'var(--gold-2)',
-            fontSize: 11,
-            letterSpacing: 4,
-            marginBottom: 14,
-          }}
-        >
-          看看本舍的皂
+        <div style={{ textAlign: 'center', marginBottom: 28, padding: '0 6px' }}>
+          <div
+            className="mono"
+            style={{ color: 'var(--red)', fontSize: 11, letterSpacing: 4 }}
+          >
+            十二花
+          </div>
+          <h2
+            className="tc"
+            style={{
+              fontSize: 36,
+              fontWeight: 400,
+              letterSpacing: 8,
+              margin: '12px 0 8px',
+              color: 'var(--sumi)',
+            }}
+          >
+            十二款，一款一境
+          </h2>
+          <p
+            className="tc"
+            style={{
+              fontSize: 14,
+              lineHeight: 1.85,
+              letterSpacing: 1,
+              color: 'var(--ink-60)',
+              maxWidth: 320,
+              margin: '0 auto',
+            }}
+          >
+            每一塊都從一個季節、一個材料、一段日常出發。點開看細節。
+          </p>
         </div>
-        <h2
-          className="tc"
+        <div
           style={{
-            fontSize: 36,
-            fontWeight: 400,
-            letterSpacing: 8,
-            margin: '0 0 22px',
-            color: 'var(--paper)',
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr',
+            gap: 14,
           }}
         >
-          十二款，一款一境
-        </h2>
-        <p
-          className="tc"
-          style={{
-            fontSize: 14.5,
-            lineHeight: 1.85,
-            letterSpacing: 1,
-            color: 'rgba(248,245,235,0.8)',
-            maxWidth: 320,
-            margin: '0 auto 28px',
-          }}
-        >
-          每一塊都從一個季節、一個材料、一段日常出發。慢慢看，挑你最對得上的。
-        </p>
-        <button
-          type="button"
-          onClick={() => setTab && setTab('products')}
-          className="tc"
-          style={{
-            display: 'inline-block',
-            padding: '14px 30px',
-            background: 'var(--gold-1)',
-            color: 'var(--sumi)',
-            border: '1px solid var(--gold-1)',
-            fontFamily: '"Noto Serif TC", serif',
-            fontSize: 15,
-            letterSpacing: 4,
-            cursor: 'pointer',
-          }}
-        >
-          看看 12 款皂  ▸
-        </button>
+          {PRODUCTS.map((p) => (
+            <button
+              key={p.num}
+              type="button"
+              onClick={() => goToProduct(p.num)}
+              aria-label={`查看 ${p.zh} 詳情`}
+              style={{
+                display: 'block',
+                textAlign: 'left',
+                padding: 0,
+                background: 'transparent',
+                border: 'none',
+                cursor: 'pointer',
+              }}
+            >
+              <ProductCardPhoto src={p.photo} alt={p.zh} />
+              <div
+                className="mono"
+                style={{
+                  marginTop: 8,
+                  color: 'var(--gold-3)',
+                  fontSize: 9,
+                  letterSpacing: 2,
+                }}
+              >
+                № {p.num}
+              </div>
+              <div
+                className="tc"
+                style={{
+                  marginTop: 4,
+                  fontSize: 14,
+                  letterSpacing: 2,
+                  color: 'var(--sumi)',
+                  lineHeight: 1.4,
+                }}
+              >
+                {p.zh}
+              </div>
+              <div
+                className="italic"
+                style={{
+                  marginTop: 4,
+                  fontSize: 14,
+                  color: 'var(--red)',
+                }}
+              >
+                {p.price > 0 ? `NT$${p.price}` : 'NT$ 待定'}
+              </div>
+            </button>
+          ))}
+        </div>
       </section>
     </div>
   );
