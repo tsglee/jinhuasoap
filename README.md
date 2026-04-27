@@ -24,8 +24,9 @@ If you (or a fresh Claude session) are coming back to this project cold, this is
 
 **Where to look first**
 1. **This README** — architecture, file layout, deploy, secrets, conventions.
-2. **`/Users/tsglee/.claude/plans/go-ahead-and-read-expressive-nygaard.md`** — full plan history, every decision the owner has locked in (with reasoning), execution log of every phase, open follow-ups.
-3. **`public/images/README.md`** — the photography supply contract (filenames, aspect ratios, format specs, batch workflow).
+2. **[`VERSIONING.md`](VERSIONING.md)** — version rules（SemVer），rollback paths，Cloudflare vars vs. secrets 陷阱。
+3. **`/Users/tsglee/.claude/plans/go-ahead-and-read-expressive-nygaard.md`** — full plan history, every decision the owner has locked in (with reasoning), execution log of every phase, open follow-ups.
+4. **`public/images/README.md`** — the photography supply contract (filenames, aspect ratios, format specs, batch workflow).
 
 **Open follow-ups (none blocking, all owner-side)**
 1. **Attach `jinhuasoap.com`** to the Worker (Cloudflare dashboard click).
