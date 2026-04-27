@@ -745,21 +745,37 @@ export function Shop() {
             本舍與少數獨立店家合作。若您的店面與我們的皂氣質相投，請來信一敘 — 最低訂量十二塊。
           </div>
           <a
-            href="mailto:wholesale@jinhuasoap.com"
-            className="tc"
+            href="https://lin.ee/7m167md"
+            target="_blank"
+            rel="noopener noreferrer"
             style={{
               display: 'inline-block',
               marginTop: 28,
-              background: 'transparent',
-              color: 'var(--gold-2)',
+              padding: 16,
+              background: 'var(--paper)',
               border: '1px solid var(--gold-1)',
-              padding: '14px 26px',
-              fontSize: 14,
-              letterSpacing: 3,
               textDecoration: 'none',
+              color: 'inherit',
             }}
           >
-            申請批發 · wholesale@jinhuasoap.com
+            <img
+              src="https://qr-official.line.me/gs/M_867ryfzn_GW.png?oat__id=6629290&oat_content=qr"
+              alt="掃 QR · 加入金花樓官方 Line 洽詢批發"
+              width="180"
+              height="180"
+              style={{ display: 'block' }}
+            />
+            <div
+              className="tc"
+              style={{
+                marginTop: 12,
+                fontSize: 13,
+                color: 'var(--sumi)',
+                letterSpacing: 2,
+              }}
+            >
+              掃 QR · 加入好友洽詢
+            </div>
           </a>
         </div>
       </section>
