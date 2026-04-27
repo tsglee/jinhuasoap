@@ -2,6 +2,7 @@
 // (Physical stockists removed in Phase H — we don't have retail partners yet.)
 import { useEffect, useState } from 'react';
 import { Divider } from './GoldenFlower.jsx';
+import { LineCTA } from './LineCTA.jsx';
 import { useCart } from '../state/CartContext.jsx';
 import { TierNotice } from './TierNotice.jsx';
 
@@ -235,6 +236,9 @@ function OrderRequestForm({ cart, total, onSent }) {
         >
           我們已收到您的訂購請求，將於 24 小時內以電子郵件回覆付款與寄送方式。
         </div>
+        <div style={{ marginTop: 18, display: 'flex', justifyContent: 'center' }}>
+          <LineCTA caption="想加快回覆？加 Line 直接和我們聯絡。" />
+        </div>
       </div>
     );
   }
@@ -462,7 +466,6 @@ const inputStyle = {
 };
 
 export function Shop() {
-  const [addingEmail, setAddingEmail] = useState('');
   const { items: cart, subtotal, discount, discountRate, shipping, total, updateQty, clear } = useCart();
 
   return (
@@ -697,7 +700,7 @@ export function Shop() {
         </aside>
       </section>
 
-      {/* Wholesale + newsletter */}
+      {/* Wholesale */}
       <section
         className="gf-pad-md"
         style={{
@@ -707,126 +710,57 @@ export function Shop() {
         }}
       >
         <div
-          className="gf-stack-md"
           style={{
-            maxWidth: 1280,
+            maxWidth: 560,
             margin: '0 auto',
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
-            gap: 60,
+            textAlign: 'center',
           }}
         >
-          <div>
-            <div className="mono" style={{ color: 'var(--gold-2)' }}>
-              批發合作
-            </div>
-            <h2
-              className="tc"
-              style={{
-                fontSize: 44,
-                fontWeight: 400,
-                letterSpacing: 8,
-                margin: '12px 0',
-                color: 'var(--paper)',
-              }}
-            >
-              開店合作
-            </h2>
-            <div
-              className="tc"
-              style={{
-                fontSize: 16,
-                color: 'rgba(248,245,235,0.85)',
-                maxWidth: 440,
-                lineHeight: 1.85,
-                letterSpacing: 1,
-              }}
-            >
-              本舍與少數獨立店家合作。若您的店面與我們的皂氣質相投，請來信一敘 — 最低訂量十二塊。
-            </div>
-            <button
-              className="tc"
-              style={{
-                marginTop: 28,
-                background: 'transparent',
-                color: 'var(--gold-2)',
-                border: '1px solid var(--gold-1)',
-                padding: '14px 26px',
-                fontSize: 14,
-                letterSpacing: 3,
-              }}
-            >
-              申請批發 · wholesale@jinhuasoap.com
-            </button>
+          <div className="mono" style={{ color: 'var(--gold-2)' }}>
+            批發合作
           </div>
-
-          <div>
-            <div className="mono" style={{ color: 'var(--gold-2)' }}>
-              月訊
-            </div>
-            <h2
-              className="tc"
-              style={{
-                fontSize: 44,
-                fontWeight: 400,
-                letterSpacing: 8,
-                margin: '12px 0',
-                color: 'var(--paper)',
-              }}
-            >
-              月信
-            </h2>
-            <div
-              className="tc"
-              style={{
-                fontSize: 16,
-                color: 'rgba(248,245,235,0.85)',
-                maxWidth: 440,
-                lineHeight: 1.85,
-                letterSpacing: 1,
-              }}
-            >
-              每月一封 — 新一批的皂、本月所思之材、與一小段熟成室的隨筆。不推銷、不聒噪。
-            </div>
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                setAddingEmail('');
-              }}
-              style={{ marginTop: 24, display: 'flex', gap: 0 }}
-            >
-              <input
-                type="email"
-                value={addingEmail}
-                onChange={(e) => setAddingEmail(e.target.value)}
-                placeholder="您的電子郵件"
-                style={{
-                  flex: 1,
-                  padding: '14px 16px',
-                  background: 'transparent',
-                  border: '1px solid var(--gold-1)',
-                  borderRight: 'none',
-                  color: 'var(--paper)',
-                  fontFamily: '"Noto Serif TC", serif',
-                  fontSize: 15,
-                  letterSpacing: 1,
-                  outline: 'none',
-                }}
-              />
-              <button
-                className="tc"
-                style={{
-                  background: 'var(--gold-1)',
-                  color: 'var(--sumi)',
-                  padding: '14px 22px',
-                  fontSize: 14,
-                  letterSpacing: 3,
-                }}
-              >
-                訂閱
-              </button>
-            </form>
+          <h2
+            className="tc"
+            style={{
+              fontSize: 44,
+              fontWeight: 400,
+              letterSpacing: 8,
+              margin: '12px 0',
+              color: 'var(--paper)',
+            }}
+          >
+            開店合作
+          </h2>
+          <div
+            className="tc"
+            style={{
+              fontSize: 16,
+              color: 'rgba(248,245,235,0.85)',
+              maxWidth: 440,
+              margin: '0 auto',
+              lineHeight: 1.85,
+              letterSpacing: 1,
+            }}
+          >
+            本舍與少數獨立店家合作。若您的店面與我們的皂氣質相投，請來信一敘 — 最低訂量十二塊。
           </div>
+          <a
+            href="mailto:wholesale@jinhuasoap.com"
+            className="tc"
+            style={{
+              display: 'inline-block',
+              marginTop: 28,
+              background: 'transparent',
+              color: 'var(--gold-2)',
+              border: '1px solid var(--gold-1)',
+              padding: '14px 26px',
+              fontSize: 14,
+              letterSpacing: 3,
+              textDecoration: 'none',
+            }}
+          >
+            申請批發 · wholesale@jinhuasoap.com
+          </a>
         </div>
       </section>
     </div>

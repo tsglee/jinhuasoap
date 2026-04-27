@@ -2,6 +2,7 @@
 // Mobile lives in ./Mobile.jsx; ./index.jsx picks one based on viewport.
 import { Divider, PhotoPlaceholder } from '../GoldenFlower.jsx';
 import { IllSoap } from '../Illustrations.jsx';
+import { LineCTA } from '../LineCTA.jsx';
 import { HERO, PILLARS, CREW } from './content.js';
 
 // Resolves a `*.png` path to its AVIF/WebP siblings (produced by
@@ -91,17 +92,6 @@ export function AboutDesktop({ setTab }) {
             pointerEvents: 'none',
           }}
         >
-          <div
-            className="mono"
-            style={{
-              color: 'var(--red)',
-              fontSize: 11,
-              letterSpacing: 4,
-              marginBottom: 18,
-            }}
-          >
-            {HERO.micro}
-          </div>
           <h1
             className="tc"
             style={{
@@ -378,7 +368,7 @@ export function AboutDesktop({ setTab }) {
             }}
           >
             <p className="tc">
-              本舍起於艋舺一間小廚房，一個配方、一台橄欖油壓。第一批 ──
+              本舍起於林口一間小廚房，一個配方、一台橄欖油壓。第一批 ──
               十二塊艾草皂 ── 一個下午就被街坊收光。從那以後，每個禮拜四，
               我們都壓一批新的。
             </p>
@@ -1026,6 +1016,35 @@ export function AboutDesktop({ setTab }) {
             ))}
           </div>
         </div>
+      </section>
+
+      {/* Contact CTA — Line 加入好友 */}
+      <section
+        style={{
+          padding: '70px 44px',
+          textAlign: 'center',
+          borderTop: '1px solid var(--ink-15)',
+        }}
+      >
+        <div
+          className="mono"
+          style={{ color: 'var(--red)', fontSize: 11, letterSpacing: 4 }}
+        >
+          聯絡本舍
+        </div>
+        <h2
+          className="tc"
+          style={{
+            fontSize: 36,
+            fontWeight: 400,
+            letterSpacing: 8,
+            margin: '14px 0 22px',
+            color: 'var(--sumi)',
+          }}
+        >
+          有問題？我們在 Line 上
+        </h2>
+        <LineCTA caption={null} />
       </section>
     </div>
   );

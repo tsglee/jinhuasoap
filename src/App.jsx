@@ -36,7 +36,7 @@ const TABS = [
   { id: 'products', zh: '十二花' },
   { id: 'process', zh: '製皂' },
   { id: 'shop', zh: '購皂' },
-  { id: 'journal', zh: '金花樓日誌', path: '/journal' },
+  { id: 'journal', zh: '本舍小記', path: '/journal' },
 ];
 
 function parseRoute() {
@@ -133,7 +133,7 @@ export default function App() {
         <main>
           <Suspense fallback={<TabFallback />}>{body}</Suspense>
         </main>
-        <Footer navigate={navigate} />
+        <Footer navigate={navigate} setTab={selectTab} />
       </div>
     </CartProvider>
   );

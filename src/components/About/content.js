@@ -6,15 +6,14 @@
 export const HERO = {
   videoSrc: '/images/landingmedia/Animated_Ink_Wash_Banner_Scene_Generation.mp4',
   poster: '/images/landingmedia/hero-poster.webp',
-  micro: '本舍小記',
   // Desktop renders these stacked with a <br> between; Mobile inlines them.
   titleLines: ['山中', '一盞', '金花。'],
   titleAccentIndex: 2, // index of the line painted in --red
   tagline: '一方小皂 · 洗塵心 · 照夜夢。',
   intro:
-    '金花樓是臺北艋舺的一間小小皂舍。我們以島上的油、花材、山泉水，' +
+    '金花樓是林口的一間小小皂舍。我們以島上的油、花材、山泉水，' +
     '一方一方地手壓肥皂 ── 一次一個配方、一批四十二日，慢慢陳化。',
-  caption: '手壓皂 · 臺北艋舺 · MMXXVI',
+  caption: '手壓皂 · 林口 · MMXXVI',
 };
 
 export const PILLARS = [

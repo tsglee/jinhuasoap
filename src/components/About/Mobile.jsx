@@ -2,6 +2,7 @@
 // scroll. Hero is a full-bleed image with title overlaid; the bottom
 // section shows the 12 products inline (tap to deep-link to 02 十二花).
 import { Divider } from '../GoldenFlower.jsx';
+import { LineCTA } from '../LineCTA.jsx';
 import { HERO, PILLARS, CREW } from './content.js';
 import { PRODUCTS } from '../../data/products.js';
 
@@ -105,12 +106,6 @@ export function AboutMobile({ setTab }) {
             bottom: 28,
           }}
         >
-          <div
-            className="mono"
-            style={{ color: 'var(--red)', fontSize: 11, letterSpacing: 4 }}
-          >
-            {HERO.micro}
-          </div>
           <h1
             className="tc"
             style={{
@@ -422,6 +417,35 @@ export function AboutMobile({ setTab }) {
             </button>
           ))}
         </div>
+      </section>
+
+      {/* 5 · Contact CTA — Line 加入好友 */}
+      <section
+        style={{
+          padding: '60px 24px',
+          textAlign: 'center',
+          borderTop: '1px solid var(--ink-15)',
+        }}
+      >
+        <div
+          className="mono"
+          style={{ color: 'var(--red)', fontSize: 11, letterSpacing: 4 }}
+        >
+          聯絡本舍
+        </div>
+        <h2
+          className="tc"
+          style={{
+            fontSize: 28,
+            fontWeight: 400,
+            letterSpacing: 6,
+            margin: '14px 0 22px',
+            color: 'var(--sumi)',
+          }}
+        >
+          有問題？我們在 Line 上
+        </h2>
+        <LineCTA caption={null} />
       </section>
     </div>
   );

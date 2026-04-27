@@ -55,7 +55,7 @@ const POSTS = [
     lead: '從我們的小廚房到竹子湖山口，車程剛好四十分鐘。每週五清晨取水。',
     body: [
       '製皂要的水不是礦泉水，也不是純水。它要「軟」── 礦物含量低、鐵與鈣少 ── 這樣皂體不易濁、泡沫也乾淨。',
-      '台北這座城市有一件很稀有的事：它北邊就是陽明山。從艋舺開上仰德大道，轉進竹子湖，一路往上，會在某個轉彎撞見一眼安安靜靜的泉水 ── 山裡的鄰居們一直都用它泡茶、燒飯。',
+      '台北這座城市有一件很稀有的事：它北邊就是陽明山。從林口開上仰德大道，轉進竹子湖，一路往上，會在某個轉彎撞見一眼安安靜靜的泉水 ── 山裡的鄰居們一直都用它泡茶、燒飯。',
       '我們每週五清晨出發，車上擺四只十公升的玻璃瓶。取水、秤重、貼上日期標 ── 這批水屬於哪一批皂，紀錄得清清楚楚。',
       '為什麼是週五？因為週一要親採花材、週二調鹼、週三入模、週四切皂。水必須在週日之前調好，才能銜接下一輪。這個節奏跑了幾個月，慢慢成了我們家的小習慣。',
       '有人問，自來水過濾一下不就好了嗎？可以的，我們也做過對照 ── 自來水煮沸再過濾，皂體會偏灰一點、泡沫會稍微鬆散。差別不大，但存在。',
@@ -142,12 +142,12 @@ function InkLink({ href, navigate, children, style }) {
 
 export function JournalIndex({ navigate }) {
   useEffect(() => {
-    document.title = '金花樓日誌 · 金花樓';
+    document.title = '本舍小記 · 金花樓';
   }, []);
 
   return (
     <div style={{ position: 'relative', zIndex: 1 }}>
-      <PageHeader kicker="金花樓 · 日誌" title="金花樓日誌" subtitle="慢慢寫 · 慢慢讀" />
+      <PageHeader kicker="金花樓 · 本舍" title="本舍小記" subtitle="慢慢寫 · 慢慢讀" />
       <section
         className="gf-pad-md"
         style={{
@@ -240,7 +240,7 @@ export function JournalPost({ slug, navigate }) {
   const post = POSTS.find((p) => p.slug === slug);
 
   useEffect(() => {
-    if (post) document.title = `${post.title} · 金花樓日誌 · 金花樓`;
+    if (post) document.title = `${post.title} · 本舍小記 · 金花樓`;
   }, [post]);
 
   if (!post) {

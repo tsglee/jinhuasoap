@@ -1392,7 +1392,7 @@ export function IllProductHero({
                 letterSpacing="4"
                 fill={p.stamp}
               >
-                臺北艋舺
+                林口
               </text>
             </g>
           </g>

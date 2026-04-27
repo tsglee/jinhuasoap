@@ -197,7 +197,7 @@ export function Process() {
             letterSpacing: 2,
           }}
         >
-          八步慢皂 · 臺北艋舺 · MMXXVI
+          八步慢皂 · 林口 · MMXXVI
         </div>
       </section>
 

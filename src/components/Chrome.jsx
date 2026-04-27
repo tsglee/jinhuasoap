@@ -1,6 +1,7 @@
 // Header (top nav) + Footer for the site
 import { useEffect, useState } from 'react';
 import { GoldFlower } from './GoldenFlower.jsx';
+import { LineCTA } from './LineCTA.jsx';
 import { useIsMobile } from '../hooks/useIsMobile.js';
 import { useCart } from '../state/CartContext.jsx';
 
@@ -298,19 +299,18 @@ export function Header({ tab, setTab, tabs }) {
   );
 }
 
-export function Footer({ navigate }) {
+export function Footer({ navigate, setTab }) {
   const columns = [
     {
       title: '購皂',
-      items: [{ label: '全系列' }, { label: '禮盒' }, { label: '包布' }, { label: '訂閱' }],
+      items: [{ label: '全系列', tab: 'products' }, { label: '禮盒' }],
     },
     {
       title: '本舍',
       items: [
-        { label: '本舍小記' },
         { label: '製皂之序' },
         { label: '食材' },
-        { label: '金花樓日誌', href: '/journal' },
+        { label: '本舍小記', href: '/journal' },
       ],
     },
     {
@@ -387,7 +387,7 @@ export function Footer({ navigate }) {
               maxWidth: 320,
             }}
           >
-            一間位於臺北艋舺的小小皂舍。自 MMXXVI 年春起，每週手壓一批天然皂 ── 慢火、細料、日復一日。
+            一間位於林口的小小皂舍。自 MMXXVI 年春起，每週手壓一批天然皂 ── 慢火、細料、日復一日。
           </div>
         </div>
 
@@ -403,7 +403,24 @@ export function Footer({ navigate }) {
                   className="tc"
                   style={{ fontSize: 15, letterSpacing: 2, color: 'rgba(248,245,235,0.85)' }}
                 >
-                  {x.href && navigate ? (
+                  {x.tab && setTab ? (
+                    <button
+                      type="button"
+                      onClick={() => setTab(x.tab)}
+                      style={{
+                        color: 'inherit',
+                        background: 'transparent',
+                        border: 'none',
+                        padding: 0,
+                        cursor: 'pointer',
+                        font: 'inherit',
+                        letterSpacing: 'inherit',
+                        textAlign: 'left',
+                      }}
+                    >
+                      {x.label}
+                    </button>
+                  ) : x.href && navigate ? (
                     <a
                       href={x.href}
                       onClick={(e) => {
@@ -440,7 +457,18 @@ export function Footer({ navigate }) {
         }}
       >
         <span>© MMXXVI 金花樓 · 版權所有</span>
-        <span>手壓於臺北艋舺</span>
+        <span>手壓於林口</span>
+      </div>
+      <div
+        style={{
+          padding: '20px 44px 28px',
+          display: 'flex',
+          justifyContent: 'center',
+          maxWidth: 1280,
+          margin: '0 auto',
+        }}
+      >
+        <LineCTA caption="客服窗口 · 加 Line 聯絡本舍" />
       </div>
     </footer>
   );
