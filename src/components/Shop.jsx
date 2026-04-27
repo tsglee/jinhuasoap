@@ -72,19 +72,31 @@ function ThankYou({ orderId, setTab }) {
         >
           謝謝你的購買
         </h1>
+        <div
+          className="tc"
+          style={{
+            fontSize: 18,
+            lineHeight: 1.7,
+            letterSpacing: 4,
+            color: 'var(--gold-3)',
+            margin: '0 auto 18px',
+          }}
+        >
+          您的支持是我們最大的動力
+        </div>
         <p
           className="tc"
           style={{
-            fontSize: 17,
+            fontSize: 16,
             lineHeight: 1.85,
-            letterSpacing: 2,
-            color: 'var(--gold-3)',
-            maxWidth: 480,
+            letterSpacing: 1,
+            color: 'var(--sumi)',
+            maxWidth: 520,
             margin: '0 auto',
           }}
         >
-          我們收到了。趙老闆娘會為你慢慢做這一批 ──
-          慢火、細料、四十二日。
+          我們收到了，闆娘會開始使喚老公執行出貨事宜。
+          收到訂單後最多兩個工作天內一定會出貨。
         </p>
 
         {orderId && (
@@ -176,18 +188,6 @@ function ThankYou({ orderId, setTab }) {
           >
             回首頁
           </button>
-        </div>
-
-        <div
-          className="tc"
-          style={{
-            marginTop: 60,
-            fontSize: 13,
-            color: 'var(--ink-60)',
-            letterSpacing: 2,
-          }}
-        >
-          每週四出貨 · 手工包裝 · 紅蠟封緘
         </div>
       </section>
     </div>
