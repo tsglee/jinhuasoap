@@ -29,9 +29,6 @@ export default {
     }
 
     if (url.pathname === '/api/store-callback') {
-      if (request.method !== 'POST') {
-        return new Response('Method not allowed', { status: 405, headers: { Allow: 'POST' } });
-      }
       return handleStoreCallback(request);
     }
 
@@ -57,21 +54,27 @@ export default {
   },
 };
 
-// ECPay 物流選店地圖會把選到的店 POST 回這裡（form-urlencoded）。
-// 我們回一段 HTML：postMessage 給開啟此 popup 的頁面（window.opener），
-// 再 window.close()。沒做 CheckMacValue 驗證 — 此 callback 不寫入任何
-// 訂單狀態，最壞情況使用者拿到錯店號（與手動輸錯同等）。
+// ECPay 物流選店地圖會把選到的店導回這裡，依使用者點哪個按鈕、有無
+// ClientReplyURL 等條件，可能是 POST form-urlencoded 或 GET query string。
+// 我們兩種都吃；回一段 HTML：postMessage 給開啟此 popup 的頁面
+// （window.opener），再 window.close()。
+// 沒做 CheckMacValue 驗證 — callback 不寫入任何訂單狀態，最壞情況
+// 使用者拿到錯店號（與手動輸錯同等）。
 async function handleStoreCallback(request) {
-  let id = '';
-  let name = '';
-  let addr = '';
-  try {
-    const fd = await request.formData();
-    id = String(fd.get('CVSStoreID') || '');
-    name = String(fd.get('CVSStoreName') || '');
-    addr = String(fd.get('CVSStoreAddress') || fd.get('CVSAddress') || '');
-  } catch {
-    // fall through with empty values
+  const url = new URL(request.url);
+  const q = url.searchParams;
+  let id = q.get('CVSStoreID') || '';
+  let name = q.get('CVSStoreName') || '';
+  let addr = q.get('CVSStoreAddress') || q.get('CVSAddress') || '';
+  if (request.method === 'POST') {
+    try {
+      const fd = await request.formData();
+      id = id || String(fd.get('CVSStoreID') || '');
+      name = name || String(fd.get('CVSStoreName') || '');
+      addr = addr || String(fd.get('CVSStoreAddress') || fd.get('CVSAddress') || '');
+    } catch {
+      // keep query values
+    }
   }
   const payload = JSON.stringify({
     type: 'gf:store-picked',
