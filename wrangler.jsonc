@@ -10,12 +10,22 @@
  * while `/index.html`, `/assets/*`, etc. are served straight from the
  * edge. The Worker can call `env.ASSETS.fetch(request)` for fall-through.
  *
- * Secrets to set in dashboard (Settings → Variables and Secrets):
- *   RESEND_API_KEY     (encrypted) — required for /api/order to work
- *   ORDER_TO_EMAIL     (plain)     — defaults to tsghsunlee@gmail.com
- *   ORDER_FROM_EMAIL   (plain)     — defaults to onboarding@resend.dev,
- *                                    switch to noreply@jinhuasoap.com
- *                                    once the domain is verified in Resend
+ * vars vs. secrets:
+ *   - Plaintext `vars` defined here are the canonical truth. Each
+ *     `wrangler deploy` syncs the dashboard to whatever's in this file —
+ *     anything dashboard-only gets wiped. Put non-sensitive config here.
+ *   - Encrypted secrets (set with `wrangler secret put` or via the
+ *     dashboard "Add" → "Secret") are stored separately and survive
+ *     deploys. Use these for credentials / API keys.
+ *
+ * Secrets to keep in dashboard (encrypted, do NOT add here):
+ *   RESEND_API_KEY     — required for /api/order to work
+ *
+ * Optional plaintext overrides (defaults are baked into worker.js):
+ *   ORDER_TO_EMAIL     — defaults to tsghsunlee@gmail.com
+ *   ORDER_FROM_EMAIL   — defaults to onboarding@resend.dev; switch to
+ *                        noreply@jinhuasoap.com once the domain is
+ *                        verified in Resend.
  */
 {
   "$schema": "node_modules/wrangler/config-schema.json",
@@ -27,5 +37,8 @@
     "binding": "ASSETS",
     "not_found_handling": "single-page-application",
     "run_worker_first": ["/api/*"]
+  },
+  "vars": {
+    "ECPAY_MERCHANT_ID": "3498678"
   }
 }
