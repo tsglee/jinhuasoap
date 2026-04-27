@@ -53,6 +53,17 @@
       }
     </script>
 
+    <!-- Preload the About hero video poster — it's the LCP element on the
+         landing page, so kicking off the fetch in <head> shaves hundreds
+         of ms off LCP on slow connections. 57 KB WebP. -->
+    <link
+      rel="preload"
+      as="image"
+      type="image/webp"
+      href="/images/landingmedia/hero-poster.webp"
+      fetchpriority="high"
+    />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <!-- Non-blocking font load: preload as style, swap to stylesheet onload.

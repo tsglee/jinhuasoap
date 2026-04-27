@@ -57,11 +57,12 @@ export function About({ setTab }) {
       >
         <video
           src="/images/landingmedia/Animated_Ink_Wash_Banner_Scene_Generation.mp4"
+          poster="/images/landingmedia/hero-poster.webp"
           autoPlay
           muted
           loop
           playsInline
-          preload="auto"
+          preload="metadata"
           aria-label="水墨山居 · 手壓皂的動態影像"
           style={{
             width: '100%',

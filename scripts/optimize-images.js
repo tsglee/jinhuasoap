@@ -17,6 +17,8 @@ const SRC_DIRS = [
   path.join(__dirname, '..', 'public', 'images', 'ingredients'),
   // 三大支柱（本舍） — 純手工 / 天然材料 / 慢製
   path.join(__dirname, '..', 'public', 'images', 'about'),
+  // Hero video poster (extracted via ffmpeg, see About.jsx)
+  path.join(__dirname, '..', 'public', 'images', 'landingmedia'),
 ];
 const MAX_WIDTH = 1200;
 const AVIF_QUALITY = 65;
