@@ -307,8 +307,8 @@ export function Footer({ navigate, setTab }) {
     {
       title: '本舍',
       items: [
-        { label: '製皂之序' },
-        { label: '食材' },
+        { label: '製皂之序', tab: 'process' },
+        { label: '花材', tab: 'process', anchor: 'ingredients' },
         { label: '本舍小記', href: '/journal' },
       ],
     },
@@ -405,7 +405,16 @@ export function Footer({ navigate, setTab }) {
                   {x.tab && setTab ? (
                     <button
                       type="button"
-                      onClick={() => setTab(x.tab)}
+                      onClick={() => {
+                        if (x.anchor) {
+                          try {
+                            sessionStorage.setItem('gf_jump_section', x.anchor);
+                          } catch {
+                            /* sessionStorage may be unavailable */
+                          }
+                        }
+                        setTab(x.tab);
+                      }}
                       style={{
                         color: 'inherit',
                         background: 'transparent',

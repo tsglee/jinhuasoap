@@ -67,6 +67,26 @@ function IngredientPhoto({ src, alt }) {
 }
 
 export function Process() {
+  // Honour an in-page jump from Footer / About: the caller writes
+  // sessionStorage.gf_jump_section with an element id (e.g. 'ingredients'),
+  // we scroll to it after mount, then clear the value so refreshes don't
+  // re-trigger the jump.
+  useEffect(() => {
+    let anchor;
+    try {
+      anchor = sessionStorage.getItem('gf_jump_section');
+      if (anchor) sessionStorage.removeItem('gf_jump_section');
+    } catch {
+      return;
+    }
+    if (!anchor) return;
+    const el = document.getElementById(anchor);
+    if (el) {
+      // Defer to next frame so layout is settled.
+      requestAnimationFrame(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+    }
+  }, []);
+
   const steps = [
     {
       n: '壹', zh: '煉油',
@@ -378,6 +398,7 @@ export function Process() {
 
       {/* Ingredient grid — SHIRO-style photo tiles */}
       <section
+        id="ingredients"
         style={{
           background: 'var(--paper-3)',
           borderTop: '1px solid var(--ink-15)',
