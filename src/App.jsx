@@ -1,13 +1,35 @@
 // App — tab router + minimal path-based routes for /journal and /legal/*
-import { useCallback, useEffect, useState } from 'react';
+import { lazy, Suspense, useCallback, useEffect, useState } from 'react';
 import { Header, Footer } from './components/Chrome.jsx';
 import { About } from './components/About.jsx';
-import { Products } from './components/Products.jsx';
-import { Process } from './components/Process.jsx';
-import { Shop } from './components/Shop.jsx';
-import { JournalIndex, JournalPost } from './components/Journal.jsx';
-import { Legal } from './components/Legal.jsx';
 import { CartProvider } from './state/CartContext.jsx';
+
+// About is the default tab — kept in the main bundle for instant first
+// paint. Everything else loads on tab switch / direct navigation. The
+// .then(m => ({ default: ... })) shim adapts our named exports to React.lazy's
+// default-export contract.
+const Products = lazy(() =>
+  import('./components/Products.jsx').then((m) => ({ default: m.Products })),
+);
+const Process = lazy(() =>
+  import('./components/Process.jsx').then((m) => ({ default: m.Process })),
+);
+const Shop = lazy(() =>
+  import('./components/Shop.jsx').then((m) => ({ default: m.Shop })),
+);
+const JournalIndex = lazy(() =>
+  import('./components/Journal.jsx').then((m) => ({ default: m.JournalIndex })),
+);
+const JournalPost = lazy(() =>
+  import('./components/Journal.jsx').then((m) => ({ default: m.JournalPost })),
+);
+const Legal = lazy(() =>
+  import('./components/Legal.jsx').then((m) => ({ default: m.Legal })),
+);
+
+// Empty placeholder while a lazy chunk loads. Sized to roughly match the
+// first viewport so the page doesn't snap shorter during the brief load.
+const TabFallback = () => <div style={{ minHeight: '60vh' }} />;
 
 const TABS = [
   { id: 'about', zh: '本舍' },
@@ -108,7 +130,9 @@ export default function App() {
     <CartProvider>
       <div data-screen-label={`Goldenflower · ${screenLabel}`}>
         <Header tab={activeTabId} setTab={selectTab} tabs={TABS} />
-        <main>{body}</main>
+        <main>
+          <Suspense fallback={<TabFallback />}>{body}</Suspense>
+        </main>
         <Footer navigate={navigate} />
       </div>
     </CartProvider>
