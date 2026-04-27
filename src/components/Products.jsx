@@ -328,6 +328,7 @@ function BuyBlock({ p }) {
     zh: p.zh,
     lat: p.subtitle,
     price: p.price,
+    photo: p.photo,
     tone: 'warm',
   };
   const handle = () => {

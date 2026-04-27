@@ -1,10 +1,13 @@
 // Shop tab — online-only shopping cart + order request form.
 // (Physical stockists removed in Phase H — we don't have retail partners yet.)
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Divider } from './GoldenFlower.jsx';
-import { IllSoap } from './Illustrations.jsx';
 import { useCart } from '../state/CartContext.jsx';
 import { TierNotice } from './TierNotice.jsx';
+
+const ECPAY_EMAP_URL =
+  import.meta.env.VITE_ECPAY_EMAP_URL || 'https://logistics.ecpay.com.tw/Express/map';
+const ECPAY_SUBTYPE = { seven: 'UNIMARTC2C', family: 'FAMIC2C' };
 
 /**
  * Order request form — POSTs cart contents to /api/order, which our Worker
@@ -12,11 +15,32 @@ import { TierNotice } from './TierNotice.jsx';
  * plan: no live payments, just an email to the brand owner.
  */
 const SHIP_METHODS = [
-  { id: 'seven', label: '7-11 店到店', kind: 'store' },
-  { id: 'family', label: '全家 店到店', kind: 'store' },
-  { id: 'tcat', label: '黑貓宅配', kind: 'home' },
-  { id: 'pickup', label: '自取（艋舺）', kind: 'pickup' },
+  { id: 'seven', label: '7-11 店到店（貨到付款）', kind: 'store' },
+  { id: 'family', label: '全家 店到店（貨到付款）', kind: 'store' },
 ];
+
+function CartPhoto({ src, alt }) {
+  if (!src) return null;
+  const base = src.replace(/\.(png|jpe?g)$/i, '');
+  return (
+    <picture>
+      <source type="image/avif" srcSet={`${base}.avif`} />
+      <source type="image/webp" srcSet={`${base}.webp`} />
+      <img
+        src={`${base}.webp`}
+        alt={alt}
+        loading="lazy"
+        decoding="async"
+        style={{
+          width: 60,
+          height: 60,
+          objectFit: 'cover',
+          display: 'block',
+        }}
+      />
+    </picture>
+  );
+}
 
 function shipKind(method) {
   return SHIP_METHODS.find((m) => m.id === method)?.kind;
@@ -29,13 +53,70 @@ function OrderRequestForm({ cart, total, onSent }) {
   const [phone, setPhone] = useState('');
   const [shipMethod, setShipMethod] = useState('');
   const [storeId, setStoreId] = useState('');
+  const [storeName, setStoreName] = useState('');
+  const [pickerError, setPickerError] = useState('');
   const [recipientName, setRecipientName] = useState('');
-  const [address, setAddress] = useState('');
   const [note, setNote] = useState('');
   const [status, setStatus] = useState('idle');
   const [errorMsg, setErrorMsg] = useState('');
 
   const kind = shipKind(shipMethod);
+
+  // ECPay eMap 把使用者選的店號 POST 回 /api/store-callback；
+  // 那個 endpoint 回一段 HTML 做 postMessage 到 window.opener。
+  useEffect(() => {
+    const onMessage = (e) => {
+      if (e.data?.type !== 'gf:store-picked') return;
+      setStoreId(e.data.store?.id || '');
+      setStoreName(e.data.store?.name || '');
+      setPickerError('');
+    };
+    window.addEventListener('message', onMessage);
+    return () => window.removeEventListener('message', onMessage);
+  }, []);
+
+  const openStorePicker = () => {
+    const subType = ECPAY_SUBTYPE[shipMethod];
+    if (!subType) return;
+    const merchantId = import.meta.env.VITE_ECPAY_MERCHANT_ID;
+    if (!merchantId) {
+      setPickerError('未設定 ECPay 商編，無法開啟選店地圖。');
+      return;
+    }
+    const popup = window.open(
+      'about:blank',
+      'gfStorePicker',
+      'width=720,height=720,resizable=yes,scrollbars=yes',
+    );
+    if (!popup) {
+      setPickerError('請允許彈出視窗以開啟選店地圖。');
+      return;
+    }
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = ECPAY_EMAP_URL;
+    form.target = 'gfStorePicker';
+    form.style.display = 'none';
+    const fields = {
+      MerchantID: merchantId,
+      LogisticsType: 'CVS',
+      LogisticsSubType: subType,
+      IsCollection: 'Y',
+      ServerReplyURL: `${window.location.origin}/api/store-callback`,
+      Device: /Mobi|Android|iPhone/.test(navigator.userAgent) ? '1' : '0',
+    };
+    for (const [k, v] of Object.entries(fields)) {
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = k;
+      input.value = v;
+      form.appendChild(input);
+    }
+    document.body.appendChild(form);
+    form.submit();
+    form.remove();
+    setPickerError('');
+  };
 
   const validate = () => {
     if (!name.trim()) return '請留下您的姓名，我們才知道這批皂要寄給誰。';
@@ -43,7 +124,6 @@ function OrderRequestForm({ cart, total, onSent }) {
     if (!/^09\d{8}$/.test(phone.replace(/[\s-]/g, ''))) return '請留下台灣手機號碼（09 開頭、共十碼）。';
     if (!shipMethod) return '請選一個寄送方式。';
     if (kind === 'store' && !storeId.trim()) return '請留下超商店號（可於 7-11 或全家 App 查到）。';
-    if (kind === 'home' && !address.trim()) return '請留下完整的收件地址（含郵遞區號）。';
     return null;
   };
 
@@ -70,8 +150,9 @@ function OrderRequestForm({ cart, total, onSent }) {
           shipMethod: selected?.label || shipMethod,
           shipKind: kind,
           storeId: kind === 'store' ? storeId.trim() : '',
+          storeName: kind === 'store' ? storeName.trim() : '',
           recipientName: (recipientName.trim() || name.trim()),
-          address: kind === 'home' ? address.trim() : '',
+          address: '',
           note: note.trim(),
           cart: cart.map((i) => ({
             num: i.num,
@@ -93,8 +174,9 @@ function OrderRequestForm({ cart, total, onSent }) {
       setPhone('');
       setShipMethod('');
       setStoreId('');
+      setStoreName('');
+      setPickerError('');
       setRecipientName('');
-      setAddress('');
       setNote('');
       window.setTimeout(() => onSent && onSent(), 1500);
     } catch (err) {
@@ -198,7 +280,12 @@ function OrderRequestForm({ cart, total, onSent }) {
       />
       <select
         value={shipMethod}
-        onChange={(e) => setShipMethod(e.target.value)}
+        onChange={(e) => {
+          setShipMethod(e.target.value);
+          setStoreId('');
+          setStoreName('');
+          setPickerError('');
+        }}
         required
         style={{ ...inputStyle, appearance: 'none', background: 'var(--paper)' }}
       >
@@ -208,27 +295,53 @@ function OrderRequestForm({ cart, total, onSent }) {
         ))}
       </select>
       {kind === 'store' && (
-        <input
-          type="text"
-          value={storeId}
-          onChange={(e) => setStoreId(e.target.value)}
-          placeholder="超商店號（於超商 App 查詢）"
-          required
-          style={inputStyle}
-        />
+        <div style={{ display: 'grid', gap: 6 }}>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <input
+              type="text"
+              value={storeId}
+              onChange={(e) => setStoreId(e.target.value)}
+              placeholder="超商店號"
+              required
+              style={{ ...inputStyle, flex: 1, minWidth: 0 }}
+            />
+            <button
+              type="button"
+              onClick={openStorePicker}
+              className="tc"
+              style={{
+                padding: '0 16px',
+                border: '1px solid var(--ink-15)',
+                background: 'var(--paper)',
+                color: 'var(--sumi)',
+                fontSize: 13,
+                letterSpacing: 2,
+                whiteSpace: 'nowrap',
+                cursor: 'pointer',
+              }}
+            >
+              {storeId ? '重選門市' : '選擇門市'}
+            </button>
+          </div>
+          {storeName && (
+            <div
+              className="tc"
+              style={{ fontSize: 13, color: 'var(--gold-3)', letterSpacing: 1 }}
+            >
+              ☑ {storeName}
+            </div>
+          )}
+          {pickerError && (
+            <div
+              className="tc"
+              style={{ fontSize: 13, color: 'var(--red)', letterSpacing: 1 }}
+            >
+              {pickerError}
+            </div>
+          )}
+        </div>
       )}
-      {kind === 'home' && (
-        <textarea
-          value={address}
-          onChange={(e) => setAddress(e.target.value)}
-          placeholder="完整地址（含郵遞區號）"
-          rows={2}
-          required
-          autoComplete="street-address"
-          style={{ ...inputStyle, resize: 'vertical', minHeight: 60 }}
-        />
-      )}
-      {kind && kind !== 'pickup' && (
+      {kind === 'store' && (
         <input
           type="text"
           value={recipientName}
@@ -434,7 +547,7 @@ export function Shop() {
               }}
             >
               <div style={{ width: 60, height: 60 }}>
-                <IllSoap ratio="1/1" label={item.num} tone={item.tone} flower="rose" />
+                <CartPhoto src={item.photo} alt={`${item.zh} · ${item.lat}`} />
               </div>
               <div>
                 <div className="tc" style={{ fontSize: 18, letterSpacing: 3 }}>

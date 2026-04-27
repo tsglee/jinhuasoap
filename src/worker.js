@@ -28,9 +28,55 @@ export default {
       return handleOrder(request, env);
     }
 
+    if (url.pathname === '/api/store-callback') {
+      if (request.method !== 'POST') {
+        return new Response('Method not allowed', { status: 405, headers: { Allow: 'POST' } });
+      }
+      return handleStoreCallback(request);
+    }
+
     return env.ASSETS.fetch(request);
   },
 };
+
+// ECPay 物流選店地圖會把選到的店 POST 回這裡（form-urlencoded）。
+// 我們回一段 HTML：postMessage 給開啟此 popup 的頁面（window.opener），
+// 再 window.close()。沒做 CheckMacValue 驗證 — 此 callback 不寫入任何
+// 訂單狀態，最壞情況使用者拿到錯店號（與手動輸錯同等）。
+async function handleStoreCallback(request) {
+  let id = '';
+  let name = '';
+  let addr = '';
+  try {
+    const fd = await request.formData();
+    id = String(fd.get('CVSStoreID') || '');
+    name = String(fd.get('CVSStoreName') || '');
+    addr = String(fd.get('CVSStoreAddress') || fd.get('CVSAddress') || '');
+  } catch {
+    // fall through with empty values
+  }
+  const payload = JSON.stringify({
+    type: 'gf:store-picked',
+    store: { id, name, addr },
+  });
+  const html = `<!doctype html>
+<meta charset="utf-8">
+<title>已選擇門市</title>
+<script>
+  try { window.opener && window.opener.postMessage(${payload}, '*'); } catch (e) {}
+  window.close();
+</script>
+<body style="font-family:-apple-system,'Noto Serif TC',serif;padding:40px;text-align:center;color:#1a1512;">
+  <p>已選擇 ${escapeHtml(name)}（${escapeHtml(id)}）。</p>
+  <p style="color:#666;font-size:13px;">可關閉此視窗。</p>
+</body>`;
+  return new Response(html, {
+    headers: {
+      'Content-Type': 'text/html; charset=utf-8',
+      'Cache-Control': 'no-store',
+    },
+  });
+}
 
 async function handleOrder(request, env) {
   let payload;
@@ -61,6 +107,7 @@ async function handleOrder(request, env) {
     shipMethod,
     shipKind,
     storeId,
+    storeName,
     recipientName,
     address,
     note,
@@ -69,7 +116,7 @@ async function handleOrder(request, env) {
   } = payload;
   const ip = request.headers.get('CF-Connecting-IP') || '未知';
 
-  const shipFields = { phone, shipMethod, shipKind, storeId, recipientName, address };
+  const shipFields = { phone, shipMethod, shipKind, storeId, storeName, recipientName, address };
   const subject = `[金花樓] 新訂購請求 · ${name} · NT$${total}`;
   const html = renderOrderEmailHtml({ name, email, note, cart, total, ip, ...shipFields });
   const text = renderOrderEmailText({ name, email, note, cart, total, ip, ...shipFields });
@@ -155,6 +202,12 @@ function validateOrder(payload) {
   ) {
     errors.push('收件人姓名格式錯誤');
   }
+  if (
+    payload.storeName != null &&
+    (typeof payload.storeName !== 'string' || payload.storeName.length > 200)
+  ) {
+    errors.push('門市名稱格式錯誤');
+  }
   if (payload.note != null && (typeof payload.note !== 'string' || payload.note.length > 2000)) {
     errors.push('備註不得超過 2000 字');
   }
@@ -199,6 +252,7 @@ function renderOrderEmailHtml({
   shipMethod,
   shipKind,
   storeId,
+  storeName,
   recipientName,
   address,
   note,
@@ -240,6 +294,7 @@ function renderOrderEmailHtml({
       ${shipRow('手機', phone)}
       ${shipRow('寄送方式', shipMethod)}
       ${shipKind === 'store' ? shipRow('超商店號', storeId) : ''}
+      ${shipKind === 'store' ? shipRow('門市', storeName) : ''}
       ${shipKind === 'home' ? shipRow('地址', address) : ''}
       ${recipientName && recipientName !== name ? shipRow('收件人', recipientName) : ''}
     </table>`;
@@ -289,6 +344,7 @@ function renderOrderEmailText({
   shipMethod,
   shipKind,
   storeId,
+  storeName,
   recipientName,
   address,
   note,
@@ -305,6 +361,7 @@ function renderOrderEmailText({
   ];
   if (shipMethod) lines.push(`寄送方式：${shipMethod}`);
   if (shipKind === 'store' && storeId) lines.push(`超商店號：${storeId}`);
+  if (shipKind === 'store' && storeName) lines.push(`門市：${storeName}`);
   if (shipKind === 'home' && address) lines.push(`地址：${address}`);
   if (recipientName && recipientName !== name) lines.push(`收件人：${recipientName}`);
   lines.push(

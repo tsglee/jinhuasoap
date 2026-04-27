@@ -7,7 +7,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState } 
 
 const STORAGE_KEY = 'gf_cart';
 const FREE_SHIPPING_THRESHOLD = 500; // NTD
-const FLAT_SHIPPING = 120; // NTD, island
+const FLAT_SHIPPING = 60; // NTD, island
 // Tiers ordered high → low so .find returns the best applicable tier.
 const DISCOUNT_TIERS = [
   { threshold: 1000, rate: 0.10 },
@@ -43,7 +43,7 @@ export function CartProvider({ children }) {
   /**
    * Add a product to the cart, or increment quantity if it's already there.
    * Each product is keyed by `num` (its Roman numeral product number).
-   * `product` shape: { num, zh, lat, price, tone? }
+   * `product` shape: { num, zh, lat, price, photo?, tone? }
    * (`lat` is the botanical Latin name — preserved so the order email
    * and cart row can show `玫瑰 · Rosa centifolia · № I`.)
    */
@@ -55,8 +55,8 @@ export function CartProvider({ children }) {
           i.num === product.num ? { ...i, qty: i.qty + qty } : i,
         );
       }
-      const { num, zh, lat, price, tone = 'warm' } = product;
-      return [...current, { num, zh, lat, price, tone, qty }];
+      const { num, zh, lat, price, photo = '', tone = 'warm' } = product;
+      return [...current, { num, zh, lat, price, photo, tone, qty }];
     });
   }, []);
 
