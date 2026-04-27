@@ -19,6 +19,8 @@ const SRC_DIRS = [
   path.join(__dirname, '..', 'public', 'images', 'about'),
   // Hero video poster (extracted via ffmpeg, see About.jsx)
   path.join(__dirname, '..', 'public', 'images', 'landingmedia'),
+  // ThankYou page illustration
+  path.join(__dirname, '..', 'public', 'images', 'thanku'),
 ];
 const MAX_WIDTH = 1200;
 const AVIF_QUALITY = 65;

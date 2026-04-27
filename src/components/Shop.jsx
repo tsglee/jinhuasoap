@@ -99,6 +99,20 @@ function ThankYou({ orderId, setTab }) {
           收到訂單後最多兩個工作天內一定會出貨。
         </p>
 
+        <div style={{ margin: '40px auto 0', maxWidth: 600 }}>
+          <picture>
+            <source type="image/avif" srcSet="/images/thanku/thanks.avif" />
+            <source type="image/webp" srcSet="/images/thanku/thanks.webp" />
+            <img
+              src="/images/thanku/thanks.jpeg"
+              alt="金花樓夫妻檔在工坊裡做皂、包貨"
+              loading="lazy"
+              decoding="async"
+              style={{ width: '100%', height: 'auto', display: 'block' }}
+            />
+          </picture>
+        </div>
+
         {orderId && (
           <div
             style={{
