@@ -35,6 +35,24 @@ export default {
       return handleStoreCallback(request);
     }
 
+    if (url.pathname === '/api/config') {
+      // Public client config (MerchantID is non-sensitive — appears in
+      // the form payload anyway). Read at runtime so dashboard env
+      // changes take effect without rebuilding the JS bundle.
+      return jsonResponse(
+        {
+          ecpayMerchantId:
+            env.ECPAY_MERCHANT_ID || env.VITE_ECPAY_MERCHANT_ID || '',
+          ecpayEmapUrl:
+            env.ECPAY_EMAP_URL ||
+            env.VITE_ECPAY_EMAP_URL ||
+            'https://logistics.ecpay.com.tw/Express/map',
+        },
+        200,
+        { 'Cache-Control': 'public, max-age=300' },
+      );
+    }
+
     return env.ASSETS.fetch(request);
   },
 };

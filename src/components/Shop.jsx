@@ -5,9 +5,8 @@ import { Divider } from './GoldenFlower.jsx';
 import { useCart } from '../state/CartContext.jsx';
 import { TierNotice } from './TierNotice.jsx';
 
-const ECPAY_EMAP_URL =
-  import.meta.env.VITE_ECPAY_EMAP_URL || 'https://logistics.ecpay.com.tw/Express/map';
 const ECPAY_SUBTYPE = { seven: 'UNIMARTC2C', family: 'FAMIC2C' };
+const ECPAY_DEFAULT_EMAP_URL = 'https://logistics.ecpay.com.tw/Express/map';
 
 /**
  * Order request form — POSTs cart contents to /api/order, which our Worker
@@ -55,6 +54,7 @@ function OrderRequestForm({ cart, total, onSent }) {
   const [storeId, setStoreId] = useState('');
   const [storeName, setStoreName] = useState('');
   const [pickerError, setPickerError] = useState('');
+  const [ecpayConfig, setEcpayConfig] = useState(null);
   const [recipientName, setRecipientName] = useState('');
   const [note, setNote] = useState('');
   const [status, setStatus] = useState('idle');
@@ -75,11 +75,38 @@ function OrderRequestForm({ cart, total, onSent }) {
     return () => window.removeEventListener('message', onMessage);
   }, []);
 
+  // ECPay MerchantID 走 runtime config（Worker /api/config）。
+  // 這樣 dashboard 改值不必 rebuild。本地 vite dev server 抓不到 worker，
+  // 退回 .env.local 的 VITE_* 變數。
+  useEffect(() => {
+    let cancelled = false;
+    const fallback = {
+      ecpayMerchantId: import.meta.env.VITE_ECPAY_MERCHANT_ID || '',
+      ecpayEmapUrl:
+        import.meta.env.VITE_ECPAY_EMAP_URL || ECPAY_DEFAULT_EMAP_URL,
+    };
+    fetch('/api/config')
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (cancelled) return;
+        setEcpayConfig(data && data.ecpayMerchantId ? data : fallback);
+      })
+      .catch(() => {
+        if (!cancelled) setEcpayConfig(fallback);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   const openStorePicker = () => {
     const subType = ECPAY_SUBTYPE[shipMethod];
     if (!subType) return;
-    const merchantId = import.meta.env.VITE_ECPAY_MERCHANT_ID;
-    if (!merchantId) {
+    if (!ecpayConfig) {
+      setPickerError('正在載入選店設定，請稍候再試。');
+      return;
+    }
+    if (!ecpayConfig.ecpayMerchantId) {
       setPickerError('未設定 ECPay 商編，無法開啟選店地圖。');
       return;
     }
@@ -94,11 +121,11 @@ function OrderRequestForm({ cart, total, onSent }) {
     }
     const form = document.createElement('form');
     form.method = 'POST';
-    form.action = ECPAY_EMAP_URL;
+    form.action = ecpayConfig.ecpayEmapUrl || ECPAY_DEFAULT_EMAP_URL;
     form.target = 'gfStorePicker';
     form.style.display = 'none';
     const fields = {
-      MerchantID: merchantId,
+      MerchantID: ecpayConfig.ecpayMerchantId,
       LogisticsType: 'CVS',
       LogisticsSubType: subType,
       IsCollection: 'Y',
