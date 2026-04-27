@@ -45,6 +45,155 @@ function shipKind(method) {
   return SHIP_METHODS.find((m) => m.id === method)?.kind;
 }
 
+function ThankYou({ orderId, setTab }) {
+  return (
+    <div style={{ position: 'relative', zIndex: 1 }}>
+      <section
+        className="gf-pad-md gf-tight-md"
+        style={{
+          maxWidth: 720,
+          margin: '0 auto',
+          padding: '120px 44px 60px',
+          textAlign: 'center',
+        }}
+      >
+        <div className="mono" style={{ color: 'var(--red)' }}>
+          訂單已送出
+        </div>
+        <h1
+          className="tc gf-h1-md"
+          style={{
+            fontSize: 64,
+            fontWeight: 500,
+            letterSpacing: 14,
+            margin: '16px 0 14px',
+            color: 'var(--sumi)',
+          }}
+        >
+          謝謝你的購買
+        </h1>
+        <p
+          className="tc"
+          style={{
+            fontSize: 17,
+            lineHeight: 1.85,
+            letterSpacing: 2,
+            color: 'var(--gold-3)',
+            maxWidth: 480,
+            margin: '0 auto',
+          }}
+        >
+          我們收到了。趙老闆娘會為你慢慢做這一批 ──
+          慢火、細料、四十二日。
+        </p>
+
+        {orderId && (
+          <div
+            style={{
+              margin: '40px auto 28px',
+              padding: '18px 28px',
+              display: 'inline-block',
+              background: 'var(--paper)',
+              border: '1px solid var(--gold-1)',
+            }}
+          >
+            <div
+              className="mono"
+              style={{
+                color: 'var(--gold-3)',
+                fontSize: 10,
+                letterSpacing: 2,
+                marginBottom: 6,
+              }}
+            >
+              訂單編號 · 請保留
+            </div>
+            <div
+              style={{
+                fontFamily: '"DM Mono", monospace',
+                fontSize: 22,
+                letterSpacing: 4,
+                color: 'var(--red)',
+              }}
+            >
+              {orderId}
+            </div>
+          </div>
+        )}
+
+        <p
+          className="tc"
+          style={{
+            fontSize: 15,
+            lineHeight: 1.85,
+            letterSpacing: 1,
+            color: 'var(--sumi)',
+            maxWidth: 480,
+            margin: '0 auto 40px',
+          }}
+        >
+          接下來請加我們 Line（右下角的綠色按鈕）並告知這個編號，
+          我們會在 24 小時內回覆付款與寄送方式。
+        </p>
+
+        <div
+          style={{
+            display: 'flex',
+            gap: 14,
+            justifyContent: 'center',
+            flexWrap: 'wrap',
+          }}
+        >
+          <button
+            type="button"
+            onClick={() => setTab && setTab('products')}
+            className="tc"
+            style={{
+              padding: '14px 26px',
+              background: 'var(--red)',
+              color: 'var(--gold-2)',
+              border: '1px solid var(--gold-1)',
+              fontSize: 14,
+              letterSpacing: 3,
+              cursor: 'pointer',
+            }}
+          >
+            繼續逛十二花  ▸
+          </button>
+          <button
+            type="button"
+            onClick={() => setTab && setTab('about')}
+            className="tc"
+            style={{
+              padding: '14px 26px',
+              background: 'transparent',
+              color: 'var(--sumi)',
+              border: '1px solid var(--ink-15)',
+              fontSize: 14,
+              letterSpacing: 3,
+              cursor: 'pointer',
+            }}
+          >
+            回首頁
+          </button>
+        </div>
+
+        <div
+          className="tc"
+          style={{
+            marginTop: 60,
+            fontSize: 13,
+            color: 'var(--ink-60)',
+            letterSpacing: 2,
+          }}
+        >
+          每週四出貨 · 手工包裝 · 紅蠟封緘
+        </div>
+      </section>
+    </div>
+  );
+}
+
 function OrderRequestForm({ cart, total, onSent }) {
   const [open, setOpen] = useState(false);
   const [name, setName] = useState('');
@@ -59,7 +208,6 @@ function OrderRequestForm({ cart, total, onSent }) {
   const [note, setNote] = useState('');
   const [status, setStatus] = useState('idle');
   const [errorMsg, setErrorMsg] = useState('');
-  const [orderId, setOrderId] = useState('');
 
   const kind = shipKind(shipMethod);
 
@@ -196,78 +344,14 @@ function OrderRequestForm({ cart, total, onSent }) {
       if (!res.ok || !data.ok) {
         throw new Error(data.error || `伺服器回應 ${res.status}`);
       }
-      setOrderId(data.orderId || '');
-      setStatus('sent');
-      setName('');
-      setEmail('');
-      setPhone('');
-      setShipMethod('');
-      setStoreId('');
-      setStoreName('');
-      setPickerError('');
-      setRecipientName('');
-      setNote('');
-      window.setTimeout(() => onSent && onSent(), 1500);
+      // Form unmounts when Shop switches to ThankYou — no need to clear
+      // local state here. Just bubble up the orderId.
+      onSent && onSent(data.orderId || '');
     } catch (err) {
       setStatus('error');
       setErrorMsg(err.message || '訂單未能送出，請稍後再試。');
     }
   };
-
-  if (status === 'sent') {
-    return (
-      <div
-        style={{
-          marginTop: 20,
-          padding: 22,
-          background: 'rgba(74,107,75,0.08)',
-          border: '1px solid var(--tea)',
-          textAlign: 'center',
-        }}
-      >
-        <div
-          className="tc"
-          style={{ fontSize: 22, letterSpacing: 4, color: 'var(--tea)', marginBottom: 6 }}
-        >
-          收到您的訂單
-        </div>
-        {orderId && (
-          <div
-            style={{
-              margin: '14px auto 16px',
-              padding: '10px 14px',
-              display: 'inline-block',
-              background: 'var(--paper)',
-              border: '1px solid var(--gold-1)',
-            }}
-          >
-            <div
-              className="mono"
-              style={{ color: 'var(--gold-3)', fontSize: 10, letterSpacing: 2, marginBottom: 4 }}
-            >
-              訂單編號 · 請保留
-            </div>
-            <div
-              style={{
-                fontFamily: '"DM Mono", monospace',
-                fontSize: 18,
-                letterSpacing: 3,
-                color: 'var(--red)',
-              }}
-            >
-              {orderId}
-            </div>
-          </div>
-        )}
-        <div
-          className="tc"
-          style={{ fontSize: 14, color: 'var(--sumi)', lineHeight: 1.7, letterSpacing: 1 }}
-        >
-          請加我們 Line（右下角按鈕）並告知此訂單編號，我們會在 24 小時內回覆付款與寄送方式。
-        </div>
-      </div>
-    );
-  }
 
   if (!open) {
     return (
@@ -306,7 +390,7 @@ function OrderRequestForm({ cart, total, onSent }) {
         className="tc"
         style={{ fontSize: 13, color: 'var(--ink-60)', lineHeight: 1.7, letterSpacing: 1 }}
       >
-        將於 24 小時內以電子郵件回覆付款與寄送方式。無需先付款。
+        送出後請加我們 Line 並告知訂單編號，我們會在 24 小時內回覆付款與寄送方式。無需先付款。
       </div>
       <input
         type="text"
@@ -491,8 +575,16 @@ const inputStyle = {
   outline: 'none',
 };
 
-export function Shop() {
+export function Shop({ setTab }) {
   const { items: cart, subtotal, discount, discountRate, shipping, total, updateQty, clear } = useCart();
+  // After successful submit we replace the whole shop UI with the
+  // ThankYou page. State is component-local — navigating away (or to
+  // another tab) unmounts Shop and resets back to the cart view.
+  const [thanks, setThanks] = useState(null);
+
+  if (thanks) {
+    return <ThankYou orderId={thanks.orderId} setTab={setTab} />;
+  }
 
   return (
     <div style={{ position: 'relative', zIndex: 1 }}>
@@ -707,7 +799,14 @@ export function Shop() {
                 </div>
               </div>
 
-              <OrderRequestForm cart={cart} total={total} onSent={clear} />
+              <OrderRequestForm
+                cart={cart}
+                total={total}
+                onSent={(orderId) => {
+                  setThanks({ orderId });
+                  clear();
+                }}
+              />
 
               <div
                 className="tc"

@@ -116,7 +116,7 @@ export default function App() {
   } else if (tab === 'process') {
     body = <Process />;
   } else if (tab === 'shop') {
-    body = <Shop />;
+    body = <Shop setTab={selectTab} />;
   }
 
   const screenLabel = route.type === 'journal'
