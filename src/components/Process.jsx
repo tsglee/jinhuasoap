@@ -163,7 +163,7 @@ export function Process() {
           width: '100%',
           maxWidth: 1280,
           margin: '0 auto',
-          aspectRatio: '1280 / 720',
+          aspectRatio: '1280 / 520',
           overflow: 'hidden',
           background: 'var(--paper)',
         }}
