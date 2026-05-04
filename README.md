@@ -135,6 +135,50 @@ After review, three outcomes:
 
 Photography batches and visual restyle experiments both use this workflow. The plan file documents the SHIRO-restyle Phase K experiment as a worked example (it was discarded after review — the right call, the editorial gold-ink voice is part of the brand identity).
 
+### 0.6 Mobile workflow (Claude.ai App)
+
+主軸：iPhone Claude.ai App + GitHub connector，配 GitHub mobile App 做 review/merge。Cloudflare 自動 deploy 接在後面。
+
+**標準流程**：
+
+1. Claude.ai App 開對話：「幫我把 X 改成 Y」（文案改、加 Journal、改設定值都可以）
+2. Claude 用 GitHub connector 開一條 feature branch + PR
+3. 在 GitHub mobile App 看 PR，點 branch preview URL（`<branch>-jinhuasoap.tsghsunlee.workers.dev`）確認沒事
+4. PR description 跟著 `.github/pull_request_template.md` 走，手動勾完 checklist
+5. 在 GitHub mobile 按 Merge → Cloudflare 約 60 秒後 deploy 完成
+6. （重要 release）跟 Claude 喊「打 tag」走 [VERSIONING.md](VERSIONING.md) 流程
+
+**手機 App 適合的任務**：文案修改、開關功能、改設定值、新增 Journal、approve/merge PR、緊急 rollback。
+
+**何時回桌面 Claude Code**：多檔重構、新增 dependency、改 build/deploy 設定、改 UI 元件結構、photography batch 接入、redesign 實驗。
+
+**接入 jh_mk 知識庫**：太太的做皂技術 wiki（`tsglee/goldenflower-soap-wiki`）已是 GitHub repo。在 Claude.ai App 把這個 repo 也加進 GitHub connector，之後寫教育型文案時 Claude 能直接抓 wiki 為事實來源，不會憑空編。
+
+### 0.7 Operations playbook（出事怎麼救）
+
+三個常見場景的 SOP。
+
+**1. 網頁看起來壞了 / 掛了**
+
+→ [VERSIONING.md](VERSIONING.md) Path A：Cloudflare Dashboard → Workers & Pages → `jinhuasoap` → Deployments → 找上一個正常的 deploy → 點 **Rollback**。即時生效，不用 push、不用等 build。
+
+**2. 合併錯 PR 進 main**
+
+→ 兩個選擇：
+- GitHub web/mobile 開那個 PR → 點 **Revert** 按鈕 → 它會幫你開一個 revert PR → merge 即可。
+- 或在桌面端 `git revert <commit-hash> && git push origin main`。
+
+兩條路徑最後都觸發 Cloudflare 重新 deploy。**不要用 `git push --force` 直接抹掉 commit**，那會讓歷史不一致；revert 是 forward-only safe 的方式。
+
+**3. 訂單 email 沒收到（Resend 出事）**
+
+→ 排查順序：
+- a. Cloudflare Dashboard → Workers & Pages → `jinhuasoap` → **Logs**（即時 tail），看 `/api/order` 有沒有 5xx 錯誤。
+- b. 開 https://resend.com/emails，確認當天有沒有寄出紀錄。
+- c. 如果使用者拿到「訂單編號 JH-XXX，我們稍後會主動聯繫」的訊息，代表 fallback 啟動了 — 訂單 payload 在 `ORDER_FALLBACK` KV namespace 裡（30 天 TTL）。在 Cloudflare Dashboard → Workers & Pages → KV → `gf_order_fallback` 用 prefix `order/` 撈出來，靠 `orderId` 比對 → 人工聯絡客戶 follow up。
+
+> 訂單 fallback 機制：每筆訂單**先寫進 KV**再呼叫 Resend，寄信成功後刪 KV、寄信失敗就保留 KV。實作見 [src/worker.js](src/worker.js) `handleOrder()`、binding 見 [wrangler.jsonc](wrangler.jsonc)。
+
 ### Required Cloudflare dashboard secrets/vars
 
 Set under your Worker → **Settings** → **Variables and Secrets**:
