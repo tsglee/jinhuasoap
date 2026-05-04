@@ -388,6 +388,47 @@ export function Footer({ navigate, setTab }) {
           >
             一間位於林口的小小皂舍。自 2022 年春起，每週手壓一批天然皂 ── 慢火、細料、日復一日。
           </div>
+          <div
+            style={{
+              marginTop: 24,
+              paddingTop: 18,
+              borderTop: '1px solid rgba(200,162,74,0.18)',
+              maxWidth: 320,
+            }}
+          >
+            <div className="mono" style={{ color: 'var(--gold-2)', marginBottom: 14 }}>
+              聯絡 · Contact
+            </div>
+            <div
+              className="tc"
+              style={{
+                fontSize: 14,
+                lineHeight: 1.95,
+                color: 'rgba(248,245,235,0.7)',
+              }}
+            >
+              <div>
+                Line ·{' '}
+                <a
+                  href="https://lin.ee/7m167md"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ color: 'inherit' }}
+                >
+                  lin.ee/7m167md
+                </a>
+              </div>
+              <div>
+                Email ·{' '}
+                <a
+                  href="mailto:tsghsunlee@gmail.com"
+                  style={{ color: 'inherit' }}
+                >
+                  tsghsunlee@gmail.com
+                </a>
+              </div>
+            </div>
+          </div>
         </div>
 
         {columns.map(({ title, items }) => (
