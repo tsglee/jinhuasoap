@@ -164,6 +164,8 @@ iPhone Claude.ai App + GitHub connector：
 
 → [VERSIONING.md](VERSIONING.md) Path A：Cloudflare Dashboard → Workers & Pages → `jinhuasoap` → Deployments → 找上一個正常的 deploy → 點 **Rollback**。即時生效，不用 push、不用等 build。
 
+> **Rollback 對話框長什麼樣**（半夜慌張的自己看）：標題 `Rollback jinhuasoap`，上半 **Current deployed version**（顯示目前 main HEAD 的 commit hash + commit 訊息 + branch + 作者 + 時間），中間一個 ↓ 箭頭，下半 **Rolling back to version**（要回退到的 deploy 同樣顯示 commit + 訊息）。再下面是 optional **Message** 輸入框（預設 `Rollback to previous version`）+ **Cancel** / **Rollback** 兩顆按鈕。**確認上下兩個版本是你要的 → Rollback。** 按了即時換版，不可逆但可以再 rollback 回去。
+
 **2. 合併錯 PR 進 main**
 
 → 兩個選擇：
