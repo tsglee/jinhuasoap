@@ -135,6 +135,54 @@ After review, three outcomes:
 
 Photography batches and visual restyle experiments both use this workflow. The plan file documents the SHIRO-restyle Phase K experiment as a worked example (it was discarded after review — the right call, the editorial gold-ink voice is part of the brand identity).
 
+### 0.6 桌面為主 + 手機補充的協作模式
+
+**主要流程在桌面端 Claude Code**：多檔改動、改 UI、加套件、跑 build、debug 都是桌面做。Claude.ai 手機 App 只在「人不在電腦前但有小事要改」時用 — 例如改錯字、商品文案調整、緊急 rollback。
+
+#### 桌面端（主要）
+跟桌面 Claude Code 講需求 → Claude 開 feature branch + PR → 在本機跑 build / 打開 [branch preview URL](javascript:void(0))（`<branch>-jinhuasoap.tsghsunlee.workers.dev`）→ merge → Cloudflare auto-deploy。所有非 trivial 改動（多檔、改 UI 結構、build/deploy 設定、photography batch 接入、redesign）都走這條。
+
+#### 手機 App（小事補充）
+iPhone Claude.ai App + GitHub connector：
+
+1. App 內對話：「幫我把首頁 X 改成 Y」（單檔文案、設定值、Journal 文章）
+2. Claude 開 feature branch + PR
+3. GitHub mobile App 看 PR，點 preview URL 確認，按 Merge
+
+**適合手機的限度**：單一檔案的文案 / 設定改動、approve & merge PR、緊急 rollback（透過 Cloudflare dashboard 網頁版）。多檔重構、新 dependency、build 改動 — 留給桌面 session。
+
+#### 通用規則
+- 不論桌面 / 手機，所有改動走 PR（`main` 分支已啟用 branch protection，禁止直接 push）
+- 重要 release 跟 Claude 喊「打 tag」走 [VERSIONING.md](VERSIONING.md) 流程
+- 接入 jh_mk 知識庫：太太的做皂技術 wiki（`tsglee/goldenflower-soap-wiki`）已是 GitHub repo，桌面或手機 Claude 都可以加進 GitHub connector，寫教育型文案時抓 wiki 為事實來源
+
+### 0.7 Operations playbook（出事怎麼救）
+
+三個常見場景的 SOP。
+
+**1. 網頁看起來壞了 / 掛了**
+
+→ [VERSIONING.md](VERSIONING.md) Path A：Cloudflare Dashboard → Workers & Pages → `jinhuasoap` → Deployments → 找上一個正常的 deploy → 點 **Rollback**。即時生效，不用 push、不用等 build。
+
+> **Rollback 對話框長什麼樣**（半夜慌張的自己看）：標題 `Rollback jinhuasoap`，上半 **Current deployed version**（顯示目前 main HEAD 的 commit hash + commit 訊息 + branch + 作者 + 時間），中間一個 ↓ 箭頭，下半 **Rolling back to version**（要回退到的 deploy 同樣顯示 commit + 訊息）。再下面是 optional **Message** 輸入框（預設 `Rollback to previous version`）+ **Cancel** / **Rollback** 兩顆按鈕。**確認上下兩個版本是你要的 → Rollback。** 按了即時換版，不可逆但可以再 rollback 回去。
+
+**2. 合併錯 PR 進 main**
+
+→ 兩個選擇：
+- GitHub web/mobile 開那個 PR → 點 **Revert** 按鈕 → 它會幫你開一個 revert PR → merge 即可。
+- 或在桌面端 `git revert <commit-hash> && git push origin main`。
+
+兩條路徑最後都觸發 Cloudflare 重新 deploy。**不要用 `git push --force` 直接抹掉 commit**，那會讓歷史不一致；revert 是 forward-only safe 的方式。
+
+**3. 訂單 email 沒收到（Resend 出事）**
+
+→ 排查順序：
+- a. Cloudflare Dashboard → Workers & Pages → `jinhuasoap` → **Logs**（即時 tail），看 `/api/order` 有沒有 5xx 錯誤。
+- b. 開 https://resend.com/emails，確認當天有沒有寄出紀錄。
+- c. 如果使用者拿到「訂單編號 JH-XXX，我們稍後會主動聯繫」的訊息，代表 fallback 啟動了 — 訂單 payload 在 `ORDER_FALLBACK` KV namespace 裡（30 天 TTL）。在 Cloudflare Dashboard → Workers & Pages → KV → `gf-order-fallback` 用 prefix `order/` 撈出來，靠 `orderId` 比對 → 人工聯絡客戶 follow up。
+
+> 訂單 fallback 機制：每筆訂單**先寫進 KV**再呼叫 Resend，寄信成功後刪 KV、寄信失敗就保留 KV。實作見 [src/worker.js](src/worker.js) `handleOrder()`、binding 見 [wrangler.jsonc](wrangler.jsonc)。
+
 ### Required Cloudflare dashboard secrets/vars
 
 Set under your Worker → **Settings** → **Variables and Secrets**:

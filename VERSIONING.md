@@ -2,26 +2,24 @@
 
 簡單到能一個人維護、出事能立刻 rollback 的兩條路徑。
 
-## 版號規則（SemVer）
+## 版號規則
 
-`MAJOR.MINOR.PATCH` — 從 `v0.1.0` 起算。
+`release-YYYY-MM-DD-HHMM` — **台灣時間**，每次想 release 跟 Claude 喊「打 tag」就用當下時間。
 
-| 改動類型 | 版號動作 | 範例 |
-|---|---|---|
-| 新功能批次（一個 tab 改版、加新整段內容、新接金流等） | MINOR ＋1 | `v0.1.0` → `v0.2.0` |
-| 修 bug、文案微調、文件補充 | PATCH ＋1 | `v0.1.0` → `v0.1.1` |
-| 大改版 / breaking change（網域換、整站重設計） | MAJOR ＋1 | `v0.x.y` → `v1.0.0` |
+例：`release-2026-05-04-1701`
+
+> **為什麼不用 SemVer**：單人小品牌站不需要 MAJOR/MINOR/PATCH 紀律；日期時間直接告訴你「這版是哪天哪時候的狀態」，rollback 找版本時更直觀。歷史上 `v0.1.0` 到 `v0.3.2` 是早期 SemVer 階段的 tag，保留作 back-reference 不再延續。切換點：`release-2026-05-04-1701`（與 `v0.3.2` 同一個 commit，明確標記新規則起點）。
 
 ## 打 tag 流程
 
-每次想 release 跟 Claude 喊「打 v0.x.y」就會跑這四步：
+```bash
+TAG="release-$(TZ=Asia/Taipei date +%Y-%m-%d-%H%M)"
+git tag -a "$TAG" -m "$TAG — 一行說明"
+git push origin "$TAG"
+gh release create "$TAG" --title "$TAG" --notes "..."
+```
 
-```
-git tag -a v0.x.y -m "v0.x.y — 一行說明"
-git push origin v0.x.y
-gh release create v0.x.y --title "v0.x.y — 一行說明" --notes "..."
-（package.json version 維持同步，必要時 bump）
-```
+每次想 release 跟 Claude 喊「打 tag」就會跑這四步。
 
 ## 兩種 rollback 路徑
 
@@ -34,10 +32,10 @@ Cloudflare 自動保留所有歷史 deploy。這是「**網站掛了還可以隨
 
 ### B. 把 git 主線拉回某個 release 的程式碼狀態
 
-```
-git checkout v0.x.y                  # 看那個版本長什麼樣
+```bash
+git checkout release-2026-05-04-1701              # 看那個版本長什麼樣
 git push --force-with-lease origin main \
-  --commit=$(git rev-parse v0.x.y)   # 把 main 推回那個 commit
+  --commit=$(git rev-parse release-2026-05-04-1701)   # 把 main 推回那個 commit
 ```
 
 force-push 會觸發 Cloudflare Workers Builds 重新建置該版本並部署。**這個用法會讓中間的 commit 在 main 線上消失**（在 reflog 還在），所以慎用 — 通常 Path A 就夠了。
