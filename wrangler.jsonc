@@ -26,6 +26,13 @@
  *   ORDER_FROM_EMAIL   — defaults to onboarding@resend.dev; switch to
  *                        noreply@jinhuasoap.com once the domain is
  *                        verified in Resend.
+ *
+ * KV bindings:
+ *   ORDER_FALLBACK     — namespace gf-order-fallback. Worker writes
+ *                        every order payload here before calling Resend
+ *                        (30-day TTL). Successful sends delete the entry;
+ *                        failed sends keep it for manual recovery via
+ *                        Cloudflare dashboard. See README §0.7 SOP 3.
  */
 {
   "$schema": "node_modules/wrangler/config-schema.json",
@@ -40,5 +47,11 @@
   },
   "vars": {
     "ECPAY_MERCHANT_ID": "3498678"
-  }
+  },
+  "kv_namespaces": [
+    {
+      "binding": "ORDER_FALLBACK",
+      "id": "6e3ab3998c8e426a967b5fb2b05f6779"
+    }
+  ]
 }
