@@ -161,6 +161,29 @@ async function handleOrder(request, env) {
   const html = renderOrderEmailHtml({ orderId, name, email, note, cart, total, ip, ...shipFields });
   const text = renderOrderEmailText({ orderId, name, email, note, cart, total, ip, ...shipFields });
 
+  // Fallback log：在打 Resend 之前先把訂單寫進 KV（30 天 TTL）。寄信成功
+  // 就刪 KV；寄信失敗就保留，靠 orderId 在 dashboard 撈出人工聯絡客戶。
+  // 沒設 KV binding（local dev / 還沒 wire）也不擋訂單。
+  const fallbackKey = `order/${orderId}/${Date.now()}`;
+  let fallbackSaved = false;
+  if (env.ORDER_FALLBACK) {
+    try {
+      await env.ORDER_FALLBACK.put(
+        fallbackKey,
+        JSON.stringify({
+          orderId,
+          createdAt: new Date().toISOString(),
+          ip,
+          payload,
+        }),
+        { expirationTtl: 30 * 24 * 60 * 60 },
+      );
+      fallbackSaved = true;
+    } catch (err) {
+      console.error('ORDER_FALLBACK put failed', err);
+    }
+  }
+
   try {
     const res = await fetch('https://api.resend.com/emails', {
       method: 'POST',
@@ -181,12 +204,35 @@ async function handleOrder(request, env) {
     if (!res.ok) {
       const detail = await res.text().catch(() => '');
       return jsonResponse(
-        { ok: false, error: `寄件服務回應錯誤（${res.status}）`, detail },
+        {
+          ok: false,
+          error: `寄件服務回應錯誤（${res.status}）`,
+          detail,
+          orderId,
+          recoverable: fallbackSaved,
+        },
         502,
       );
     }
   } catch (err) {
-    return jsonResponse({ ok: false, error: `寄件失敗：${err.message}` }, 502);
+    return jsonResponse(
+      {
+        ok: false,
+        error: `寄件失敗：${err.message}`,
+        orderId,
+        recoverable: fallbackSaved,
+      },
+      502,
+    );
+  }
+
+  // 寄信成功 → 刪 KV fallback（沒刪掉沒關係，30 天會自己過期）
+  if (fallbackSaved) {
+    try {
+      await env.ORDER_FALLBACK.delete(fallbackKey);
+    } catch (_) {
+      /* noop */
+    }
   }
 
   return jsonResponse({ ok: true, orderId });
