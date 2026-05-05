@@ -94,6 +94,26 @@ spoon and a single dried bay leaf rest in front. Foundational,
 ceremonial.
 ```
 
+### 10. how-to-choose-soap — 怎麼挑一塊皂（置頂）
+```
+Subject: an arc of seven hand-pressed soap bars on a long wood
+table, arranged in a graceful semicircle with progressing tones —
+ivory cream, pale jade, soft yellow, golden orange, dusty pink,
+deep brown, charcoal — each on its own small ceramic saucer. A
+single open notebook with hand-written notes peeks at the corner
+of the frame. Curated apothecary mood, inviting selection.
+```
+
+### 11. why-handmade-soap — 為什麼用手工皂
+```
+Subject: three objects laid in a row on aged wood — left a single
+hand-pressed cold-process soap bar with visible chamfered edges,
+centre a smaller round pH-neutral wash bar (slightly different
+texture, pressed not poured), right an open glass bottle of
+commercial body wash with its plastic cap nearby. Side window light
+from the left, contemplative side-by-side comparison mood.
+```
+
 ## 流程
 
 1. 開 [Google AI Studio](https://aistudio.google.com/) 選 Nanobanana / Gemini Image
