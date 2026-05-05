@@ -1,5 +1,22 @@
 // Journal — long-form essays. Static array of posts, no CMS.
-import { useEffect } from 'react';
+//
+// Schema per post:
+//   slug, kicker, title, lead       (既有)
+//   date         YYYY-MM-DD（台灣時區）— JournalIndex 排序用
+//   cover        { src, alt, fallback: { tone, flower } } — img with SVG fallback
+//   description  60–155 字，給 meta description / og:description
+//   keywords     字串陣列，BlogPosting JSON-LD 的 keywords
+//   related      其他 POSTS slug 陣列，文末「延伸閱讀」用
+//   body         陣列：純字串 → <p>；{type:'h2',text} → <h2>；{type:'faq',items} → FAQ block
+//
+// Per-article SEO 由 useArticleMeta() 在 JournalPost mount 時注入到 <head>，
+// 同時插入 BlogPosting + (有 FAQ 時) FAQPage JSON-LD。
+import { useEffect, useState } from 'react';
+import { IllSoap } from './Illustrations.jsx';
+
+const SITE_URL = 'https://jinhuasoap.com';
+const AUTHOR = '趙老闆娘';
+const PUBLISHER = '金花樓';
 
 const POSTS = [
   {
@@ -7,6 +24,16 @@ const POSTS = [
     kicker: '原料之念',
     title: '本舍用什麼油',
     lead: '一塊皂為什麼要混不同油？因為每種油負責不同的事。',
+    date: '2025-05-15',
+    cover: {
+      src: '/images/journal/three-oils.jpg',
+      alt: '工坊木桌上排成一列的橄欖油、椰子油與蓖麻油，金黃色的下午光斜斜照進來',
+      fallback: { tone: 'warm', flower: 'rose' },
+    },
+    description:
+      '一塊冷製手工皂為什麼要混橄欖、椰子、蓖麻三種油？因為它們各自帶來不同的脂肪酸 ── 橄欖給保濕、椰子給清潔、蓖麻給泡沫穩定。理解這個你就懂得看任何配方。',
+    keywords: ['手工皂配方', '橄欖油', '椰子油', '蓖麻油', '脂肪酸', '冷製皂'],
+    related: ['ffa-five-forces', 'saponification'],
     body: [
       '一塊皂從來不是單一油做的。我們每張配方都有三個角色：主體、清潔、功能 ── 它們在皂裡分別給「保濕」、「起泡」、「泡沫穩定」這三件事。',
       '主體油是橄欖油 ── 配方裡比例最高的那支，通常 40–70%。它的油酸（Oleic Acid）佔 65–75%，是手工皂保濕的核心。少了它，皂洗起來會澀。經典的馬賽皂直接拉到 70% 橄欖；敏感肌洗臉皂可以再多一點。',
@@ -21,6 +48,16 @@ const POSTS = [
     kicker: '設計之念',
     title: '脂肪酸與五力',
     lead: '油只是載體，脂肪酸才是本質。五力，是一塊皂的健康檢查表。',
+    date: '2025-11-04',
+    cover: {
+      src: '/images/journal/ffa-five-forces.jpg',
+      alt: '老闆娘鍋邊壓著一張手寫的五力雷達圖，表格上有清潔、泡沫、保濕、硬度、溫潤的數字',
+      fallback: { tone: 'deep', flower: 'mugwort' },
+    },
+    description:
+      '油只是載體，脂肪酸才是手工皂的本質。學會看油酸、月桂酸、棕櫚酸、蓖麻油酸的比例，你就能讀懂任何配方的洗感。「五力」是老闆娘在鍋邊用的健康檢查表。',
+    keywords: ['脂肪酸', '油酸', '月桂酸', '蓖麻油酸', '配方設計', '五力', '冷製皂'],
+    related: ['three-oils', 'ins-value'],
     body: [
       '剛開始做皂的人，會很快發現一個秘密：不同的植物油，進到皂裡之後，「名字」就不重要了 ── 重要的是各自帶了什麼比例的脂肪酸。',
       '橄欖油是「油酸」家族 ── 給的是保濕與滑順。椰子油是「月桂酸」家族 ── 給的是清潔與泡沫。棕櫚油是「棕櫚酸」家族 ── 給的是硬度。蓖麻油是「蓖麻油酸」家族 ── 給的是泡沫細緻度。',
@@ -38,6 +75,16 @@ const POSTS = [
     kicker: '工藝之念',
     title: '油遇到鹼，就成了皂',
     lead: '手工皂為什麼洗後不乾澀？因為甘油是這個反應自然生出來的副產物。',
+    date: '2025-07-08',
+    cover: {
+      src: '/images/journal/saponification.jpg',
+      alt: '冷製鍋裡剛打完 trace 的皂液，淡黃色濃稠表面留下一道攪拌棒滑過的痕跡',
+      fallback: { tone: 'cool', flower: 'chrysanthemum' },
+    },
+    description:
+      '手工皂的化學其實很簡單：油脂遇到鹼，中和之後生成皂跟甘油。為什麼洗手工皂不乾澀？因為這個甘油（Glycerin）是反應自然生出來的副產物 ── 工業洗劑會抽走它，手工皂保留下來。',
+    keywords: ['皂化反應', '甘油', '手工皂保濕', '冷製皂', 'NaOH', '氫氧化鈉'],
+    related: ['three-oils', 'trace', 'cold-vs-hot-process'],
     body: [
       '手工皂背後的化學其實很簡單：油脂遇到鹼，中和之後，生成皂跟甘油。',
       '油是配方裡的脂肪酸；鹼是氫氧化鈉（NaOH，做固體皂）或氫氧化鉀（KOH，做液態皂）；水把鹼溶解，讓反應跑得起來。中和之後，原本的油脂分子變成「脂肪酸鈉鹽」── 這就是皂。同時還生出一份甘油（Glycerin）── 天然的保濕分子。',
@@ -52,6 +99,16 @@ const POSTS = [
     kicker: '工藝之念',
     title: 'Trace 是判斷的時刻',
     lead: '把皂液攪到能在表面留下痕跡 ── 那就是 trace，可以入模了。',
+    date: '2025-09-12',
+    cover: {
+      src: '/images/journal/trace.jpg',
+      alt: '攪拌棒拉起來的瞬間，淡黃色皂液在鍋面落下一道短短的線狀痕跡',
+      fallback: { tone: 'cool', flower: 'pine' },
+    },
+    description:
+      'Trace 是冷製皂判斷可以入模的關鍵時刻。皂液變濃、攪拌棒拉起留痕的那一瞬間，就是。輕、中、重三個 trace 對應不同入模需求，這篇講判斷的眉角。',
+    keywords: ['trace', '冷製皂', '皂化', '入模', '手工皂教學'],
+    related: ['saponification', 'cold-vs-hot-process'],
     body: [
       '冷製皂有一個關鍵時刻叫 trace。',
       '油跟鹼在鍋裡攪拌，一開始是清的、像油湯。攪著攪著，質地慢慢變濃，從油湯變成稀粥，再變成像濃湯的奶醬狀。攪拌棒拉起來的時候，落下去的皂液會在表面留下一道短短的痕跡 ── 那就是 trace。表示皂化反應已經發動，現在可以入模了。',
@@ -67,6 +124,16 @@ const POSTS = [
     kicker: '原料之念',
     title: '為什麼我們也用棕櫚油',
     lead: '棕櫚油的爭議我們知道，但配方需要它的硬度，而它的資源效率反而最高。',
+    date: '2025-12-20',
+    cover: {
+      src: '/images/journal/yes-palm.jpg',
+      alt: '棕櫚樹下盛裝在玻璃瓶裡的金紅色棕櫚油，旁邊是一塊已熟成的方形手工皂',
+      fallback: { tone: 'warm', flower: 'osmanthus' },
+    },
+    description:
+      '棕櫚油在手工皂界有爭議，但禁用棕櫚油不一定是更環保的選擇。同樣土地產油效率：棕櫚是大豆的 8 倍、橄欖的 10 倍。我們選擇用，但把為什麼說清楚 ── 可追溯來源、低比例、長熟成。',
+    keywords: ['棕櫚油', 'No Palm', '永續', '手工皂環保', '硬度油'],
+    related: ['three-oils', 'ffa-five-forces'],
     body: [
       '棕櫚油是一個會被討論的原料。它的爭議很真實：過去半個世紀東南亞的雨林大規模被開墾種棕櫚樹，棲地被破壞、生物多樣性受損 ── 這是它最直接的成本。很多手工皂品牌會直接拒用，貼上「No Palm」當作態度。',
       '我們選擇用，但要把為什麼說清楚。',
@@ -77,9 +144,579 @@ const POSTS = [
       '一塊耐用、不易消耗的皂，本身就是一種環保。',
     ],
   },
+
+  // ============== 新文章 ==============
+
+  {
+    slug: 'skin-ph-acid-mantle',
+    kicker: '皮膚之念',
+    title: '臉、身體、頭髮的清潔密碼',
+    lead: '健康皮膚是 pH 4.5–5.5 的弱酸性，但冷製皂洗起來是鹼性 ── 為什麼還能用？什麼時候不能用？',
+    date: '2026-01-25',
+    cover: {
+      src: '/images/journal/skin-ph-acid-mantle.jpg',
+      alt: '溫水中浸著兩塊皂 ── 一塊琥珀色的冷製皂、一塊奶白色的弱酸皂餅，旁邊放一支 pH 試紙',
+      fallback: { tone: 'warm', flower: 'osmanthus' },
+    },
+    description:
+      '健康皮膚是 pH 4.5–5.5 的弱酸性，冷製手工皂卻是 pH 8–10 的鹼性。為什麼洗身體 OK、洗臉可能緊繃？老闆娘用皮脂膜的概念解釋鹼性皂跟弱酸皂餅的分工，幫你判斷哪個部位適合哪一種。',
+    keywords: ['皮脂膜', 'pH 值', '弱酸性肥皂', '皮膚酸鹼', '洗臉皂', '弱酸皂餅', 'acid mantle'],
+    related: ['saponification', 'three-oils', 'botanical-design-truth'],
+    body: [
+      '健康皮膚的表面是 pH 4.5–5.5 的弱酸性，這層東西叫做「皮脂膜（acid mantle）」── 由皮脂、汗、與最外層的角質細胞混合形成。它的作用是保護表面、降低外刺激、不讓水分跑光。',
+      '冷製手工皂是鹼性的（pH 約 8–10）。意思是你拿它洗澡那一瞬間，皮膚表面的酸鹼會被暫時推上去。「暫時」兩個字很重要 ── 健康皮膚 30–60 分鐘可以自己拉回弱酸。問題在於：不是每個部位、每種皮膚都這麼快回得來。',
+      { type: 'h2', text: '不同部位的故事不一樣' },
+      '身體（軀幹、手腳）皮膚比較厚、皮脂膜恢復力也好，多數人用冷製皂沒問題。這也是為什麼一塊好的冷製沐浴皂可以用很久 ── 它跟你的皮膚有相容空間。',
+      '臉就比較敏感。臉部皮膚薄、皮脂分泌的節律也跟身體不一樣，洗完緊繃感會比較明顯，特別是中性偏乾的肌膚。如果洗完臉之後一定要立刻擦乳液、不擦就乾澀，這個訊號可能是：你的臉不適合鹼性皂，至少不是天天用。',
+      '頭髮跟頭皮對 pH 最敏感。鹼性會讓毛鱗片打開、頭髮澀、纏在一起 ── 很多人試過冷製洗髮皂之後說「澀死了」就是這個原因。要解決得另外配「酸洗」（檸檬水、醋水）來收回毛鱗片，但這層額外動作不是每個人都願意做。',
+      { type: 'h2', text: '弱酸皂餅是另一條路' },
+      '弱酸皂餅（pH 5–6）不靠皂化反應，靠的是溫和界面活性劑的組合 ── SCI、SCS、APG、CAPB-LPB 這幾支配出來。它本質上不是皂，是用「皂的形狀」做的弱酸性洗劑。',
+      '為什麼老闆娘的「五皂五境」要分這麼細？因為臉、身體、頭髮、洗手對 pH 的耐受度不一樣。一塊皂走天下是浪漫，但對皮膚不是最好的。',
+      { type: 'h2', text: '判斷你需要哪一種' },
+      '健康、青壯年、皮膚耐操 → 冷製皂洗全身可以。',
+      '熟齡、敏感肌、異位性皮膚炎傾向 → 身體用冷製、臉用弱酸皂餅。',
+      '頭皮油 / 頭髮容易毛躁 → 至少頭髮用弱酸洗髮餅。',
+      '小孩、嬰兒 → 弱酸皂餅為主，皮脂膜還沒完全成熟。',
+      {
+        type: 'faq',
+        items: [
+          {
+            q: '冷製手工皂的 pH 真的有 8–10 那麼鹼嗎？',
+            a: '是的。完全皂化的冷製皂，pH 試紙測下去通常落在 8–10。這是皂化反應的本質決定的，不是「處理不好」造成的。',
+          },
+          {
+            q: '聽說手工皂是「弱酸性」的？',
+            a: '常見的誤解。手工皂的化學本質就是鹼性。所謂「弱酸皂」、「pH 5.5 皂餅」其實是不靠皂化反應做出來的弱酸性洗劑，跟傳統手工皂是兩件事。',
+          },
+          {
+            q: '我用冷製皂洗臉很多年都沒事，是不是我特別？',
+            a: '不是特別 ── 皮脂膜恢復力強的人多得很。但隨著年齡增加，恢復力會慢慢降，所以年輕時 OK 不代表永遠 OK。觀察自己洗完的感受，緊繃感變強是訊號。',
+          },
+          {
+            q: '弱酸皂餅看起來像皂、洗起來像皂，跟一般沐浴乳的差別在哪？',
+            a: '差別在配方透明度跟添加物。沐浴乳通常含香精、防腐劑、增稠劑；弱酸皂餅是把幾支溫和界面活性劑用粉壓成形，配方乾淨、不需防腐劑（含水率低）。',
+          },
+        ],
+      },
+    ],
+  },
+
+  {
+    slug: 'cold-vs-hot-process',
+    kicker: '工藝之念',
+    title: '冷製、熱製、融化再造 ── 為什麼我們堅持冷壓',
+    lead: '同樣是手工皂，工法不同，洗感差很多。冷製、熱製、融化再造三條路，差在溫度、時間、跟甘油去哪裡。',
+    date: '2026-02-18',
+    cover: {
+      src: '/images/journal/cold-vs-hot-process.jpg',
+      alt: '工坊木桌並列三塊皂 ── 左邊是冷製的米色方塊、中間是熱製的偏黃色塊、右邊是融化再造的透明琥珀皂',
+      fallback: { tone: 'deep', flower: 'pine' },
+    },
+    description:
+      '冷製皂（CP）、熱製皂（HP）、融化再造（MP）是手工皂三種主要工法。冷製在 40°C 慢慢反應、保留甘油與香氣完整；熱製加熱讓皂化更快但顏色偏黃；MP 是用現成皂基塑型。為什麼金花樓堅持冷壓？',
+    keywords: ['冷製皂', '熱製皂', '融化再造', 'CP HP MP', '手工皂工法比較', '冷壓皂'],
+    related: ['saponification', 'trace', 'three-oils'],
+    body: [
+      '台灣市面上常聽到的「手工皂」其實是三條路：冷製（CP, Cold Process）、熱製（HP, Hot Process）、融化再造（MP, Melt and Pour）。三條路做出來的東西都叫「手工皂」，但骨子裡差很多。',
+      '我們做的是冷製，這篇講為什麼。',
+      { type: 'h2', text: '差別一：溫度' },
+      '冷製在約 40°C 進行 ── 油跟鹼液都調到 40–45°C，倒在一起、慢慢攪拌到 trace、入模。整個製作時間反應沒有「強制完成」，靠的是 24 小時保溫 + 4–6 週熟成讓反應自然走完。',
+      '熱製是把油鹼直接加熱到 80–100°C，用火力把皂化反應推到底。優點是當天就完皂、鹼性殘留低；缺點是高溫會讓皂體偏黃、香氣損失大、外觀粗糙（像粥）。',
+      '融化再造（MP）其實不是真的「做」皂 ── 是買現成的皂基塊（已經皂化好的），融化、加色加香、倒模。它做出來的是「客製化造型」而不是「客製化配方」。',
+      { type: 'h2', text: '差別二：甘油去哪裡' },
+      '皂化反應的副產物是甘油（Glycerin）── 它是手工皂保濕的核心。',
+      '冷製：甘油完整保留在皂體裡。',
+      '熱製：高溫過程部分甘油會被蒸散或結構破壞，但仍多數留下。',
+      'MP：皂基本身的甘油保留度看製造商；多數市售透明皂基會額外加入甘油與多元醇來達到透明感。',
+      '工業洗劑：甘油在生產過程通常會被抽走、單獨包裝賣（甘油是高價副產品）。這就是為什麼一般肥皂洗完皮膚會有「乾淨」的緊繃感。',
+      { type: 'h2', text: '差別三：精油與植萃的命運' },
+      '精油怕熱。精油的香氣分子在高溫下揮發，這是物理事實。冷製在 40°C 加入精油（trace 後），香氣完整保留；熱製在 80–100°C 加，香氣會掉一大截，所以熱製皂很多會用合成香精補。',
+      '植萃也類似。咖啡粉、礦泥、薑黃這些粉類添加物，冷製在 trace 後拌進去就好；熱製要看皂液冷下來才能加，操作窗口短。浸泡油在冷製裡完整保留脂溶性活性成分；熱製有部分熱破壞。',
+      { type: 'h2', text: '為什麼我們堅持冷壓' },
+      '對一個小批次、講究每塊皂手感的工坊，冷製的所有「缺點」（慢、要熟成、要等）反而是它的價值：',
+      '— 香氣完整：精油不被熱破壞，每塊皂的氣味都接近你買到時的樣子',
+      '— 甘油保留：洗後不需要急著擦乳液',
+      '— 配方自由：油脂、植萃、添加物的組合彈性最大',
+      '— 外觀細緻：冷製皂可以做出渲染、層次、嵌入式的圖樣，熱製做不到',
+      '4–6 週的等待是工法的代價，也是工法的尊嚴。我們鍋邊那張秒錶從來沒有催過皂化反應 ── 它只記錄我們的手。',
+      {
+        type: 'faq',
+        items: [
+          {
+            q: '冷製皂跟熱製皂哪個比較安全？',
+            a: '兩種都安全 ── 只要鹼用量計算正確，皂化反應完成後都不會殘留鹼。熱製的「優勢」是當天就能用，但冷製靠 4–6 週熟成同樣達到完全皂化。',
+          },
+          {
+            q: 'MP（融化再造）算手工皂嗎？',
+            a: '工法上是「手工製作」，但本質上是用現成皂基的造型工藝。如果你看重的是配方來源透明，建議找冷製或熱製；如果你看重造型彈性、不在乎配方細節，MP 是合理選擇。',
+          },
+          {
+            q: '為什麼有些手工皂網站說自己是「冷製」但顏色偏黃？',
+            a: '原因可能是：橄欖油比例非常高（橄欖原本就帶綠黃）、有用蜂蜜或牛奶（焦糖化）、熟成時間不足。純白色其實在冷製裡反而不容易，要靠特定油脂組合或鈦白粉。',
+          },
+          {
+            q: '冷製皂可以馬上用嗎？',
+            a: '不建議。雖然 24 小時就能脫模切皂，但皂化反應跟水分蒸發要 4–6 週才完成。提早用會偏鹼、洗感差、皂體易軟化變形。',
+          },
+        ],
+      },
+    ],
+  },
+
+  {
+    slug: 'ins-value',
+    kicker: '設計之念',
+    title: 'INS 值 ── 老闆娘看配方第一個看的數字',
+    lead: 'INS 值是看一塊皂硬不硬、平不平衡的速查指標。140–160 是甜蜜帶 ── 太低太軟、太高太脆。',
+    date: '2026-03-12',
+    cover: {
+      src: '/images/journal/ins-value.jpg',
+      alt: '配方表上手寫著各油脂比例與 INS 計算結果，旁邊放著老闆娘的鉛筆與小型秤',
+      fallback: { tone: 'deep', flower: 'mugwort' },
+    },
+    description:
+      'INS 值（International Numeric Standard）是看一塊手工皂整體平衡度的速查指標 ── 由配方中各油脂的 INS 參考值依比例加權得出。140–160 是常見的甜蜜帶。這篇教你看懂 INS、為什麼老闆娘看配方第一個看它。',
+    keywords: ['INS 值', '皂化值', '配方計算', '皂硬度', 'SoapCalc', '手工皂配方'],
+    related: ['three-oils', 'ffa-five-forces'],
+    body: [
+      'INS 值是看一塊皂硬不硬、平不平衡的速查指標。每支油脂都有自己的 INS 參考值，配方整體 INS = 各油比例乘以該油 INS 加權平均。實務上不用手算，丟進 SoapCalc 之類的計算器就好。',
+      '為什麼老闆娘看配方第一個看 INS？因為它是一個「整體平衡」的訊號 ── 在你還沒細看每支油脂的脂肪酸組成之前，INS 已經告訴你這配方大概落在哪一檔。',
+      { type: 'h2', text: '建議範圍 ── 140–160 的甜蜜帶' },
+      'INS 太低（< 130）：皂體會太軟，熟成期長、容易出汗、保存不易。',
+      'INS 太高（> 170）：皂體會太脆，洗起來碎屑多、洗感乾澀。',
+      '甜蜜帶是 140–160：硬度合理、洗感平衡、適合日常使用。',
+      '經典的馬賽皂（橄欖 70 / 椰子 15 / 棕櫚 15）INS 約 140–150，落在甜蜜帶下緣。它的特色是溫潤、保濕高、清潔力溫和 ── 是 INS 數字背後的洗感翻譯。',
+      { type: 'h2', text: 'INS 跟其他指標的關係' },
+      '一張完整的配方表通常會有四個數字：INS、硬度、清潔、保濕。它們互相牽動但不是同一件事：',
+      '硬度（Hardness）30–45 ── 結構穩定，洗到後段不變形',
+      '清潔力（Cleansing）12–20 ── 適中、不刺激；超過 25 會乾澀',
+      '保濕（Conditioning）40 以上 ── 越高越不乾澀，但太高皂太軟',
+      'INS 140–160 ── 整體平衡',
+      'INS 是綜合分數，硬度是骨架、清潔是手感、保濕是洗後感受。看配方時這四個數字一起看，才知道它要往哪個方向走。',
+      { type: 'h2', text: 'INS 不能取代五力' },
+      'INS 是「配方整體偏哪邊」的速查，但它不會告訴你配方裡的每個面向是不是穩。',
+      '舉例：兩個 INS 都是 150 的配方，一個是椰子 30 / 橄欖 40 / 棕櫚 30（清潔偏高、可能會乾），另一個是椰子 15 / 橄欖 60 / 棕櫚 15 / 蓖麻 10（溫潤平衡）。INS 一樣，洗感差很多。',
+      '所以實際在做配方時，順序是：用途 → 五力目標 → 脂肪酸比例 → 選油 → 用 INS / 硬度 / 清潔 / 保濕 數值檢查 → 加精油 / 添加物。INS 是「驗算」，不是「設計」。',
+      { type: 'h2', text: '怎麼學會看 INS' },
+      '最快的方式：找你日常洗的某塊手工皂的配方表，對照它的 INS 跟你的洗感體驗。如果 INS 145、洗起來剛好硬度足、不乾澀，那這個 INS 數字之後就是你的「對照組」。',
+      '老闆娘鍋邊那張表上常看到的是：145 / 32 / 14 / 56 ── 一個典型「適合每天用的沐浴皂」的數字組合。',
+      {
+        type: 'faq',
+        items: [
+          {
+            q: 'INS 值 145 是好還是不好？',
+            a: '145 在甜蜜帶（140–160）裡，是個好的中間值。實際洗感還要看脂肪酸組成 ── INS 同分數的兩支配方，洗感可能差很多。',
+          },
+          {
+            q: '怎麼算 INS？',
+            a: '公式：把配方中每支油的「比例 × 該油的 INS 參考值」加總。實務上用 SoapCalc / Soap Maker / 各家計算器自動跑，不用手算。',
+          },
+          {
+            q: '熟成時間會影響 INS 嗎？',
+            a: '不會。INS 是配方層面的數字，由油脂組成決定，做出來那一刻就確定了。熟成影響的是水分含量跟皂化完整度，但 INS 不變。',
+          },
+          {
+            q: '為什麼有些網站會建議 INS 160 以上？',
+            a: '看用途。160+ 適合做家事皂、鹽皂這類追求超硬皂體；日常沐浴 / 洗臉皂建議 145–160 比較不刺激。',
+          },
+        ],
+      },
+    ],
+  },
+
+  {
+    slug: 'botanical-design-truth',
+    kicker: '設計之念',
+    title: '加了牛奶咖啡就會變好用？植萃設計的真相',
+    lead: '初學者最常想：皂太乾就加牛奶蜂蜜試試。錯。脂肪酸是骨架，植萃是裝飾 ── 順序不能反。',
+    date: '2026-04-22',
+    cover: {
+      src: '/images/journal/botanical-design-truth.jpg',
+      alt: '工坊桌上排成弧線的植萃材料 ── 咖啡粉、薑黃粉、礦泥、紫草根，旁邊有一個冷凍成冰塊的牛奶模具',
+      fallback: { tone: 'warm', flower: 'osmanthus' },
+    },
+    description:
+      '初學者常想：皂太乾就加牛奶或蜂蜜試試。錯。植萃（牛奶、咖啡、礦泥、浸泡油）是讓皂加分的裝飾，不是修補配方的補丁。三種設計法（浸泡油 / 粉類 / 水相替代）何時用、不能犯什麼錯。',
+    keywords: ['植萃設計', '牛奶皂', '咖啡皂', '浸泡油', '礦泥皂', '手工皂添加物', '植物油'],
+    related: ['ffa-five-forces', 'three-oils', 'trace'],
+    body: [
+      '一個常見的問題：「我做的皂太乾，加牛奶或蜂蜜會變好用嗎？」',
+      '答：不會。',
+      '植萃（牛奶、咖啡、蜂蜜、礦泥、浸泡油）能做的事，是讓一塊本來就站得住的皂多一個層次的香氣、顏色、觸感。它不能修補一張不平衡的配方。如果你的皂洗起來乾澀，是脂肪酸比例的問題，不是缺一勺蜂蜜。',
+      { type: 'h2', text: '正確的設計順序' },
+      '老闆娘鍋邊壓的順序是：① 先設計脂肪酸 → ② 再選油脂 → ③ 最後加入植萃。',
+      '這個順序不能反。理由很簡單：脂肪酸決定洗感的骨架（清潔、泡沫、保濕、硬度），這個底層如果歪了，加再多牛奶都壓不住。植萃的價值在「之上」── 提升使用體驗、增加產品特色、建立品牌風格 ── 不在「修補底層」。',
+      { type: 'h2', text: '三種主要的植萃設計法' },
+      '第一種：浸泡油（Infused Oil）。把植物（金盞花、薰衣草、紫草、洋甘菊）泡在植物油裡 2–4 週，過濾後取代配方中部分油脂。它帶出來的是脂溶性的活性成分。加入時機跟其他油脂一起秤、一起加熱。',
+      '第二種：粉類添加。咖啡粉、礦泥、抹茶、薑黃、紫草粉這些。比例抓在油重的 2–5%，加入時機是 trace 後 ── 太早會被打散、沉底。代表配方：咖啡磨砂皂、海泥礦鹽皂。',
+      '第三種：水相替代。把配方裡的水部分或全部換成酒、牛奶、豆漿、米漿、花水。關鍵：必須冷凍成冰塊再溶鹼 ── 不冷凍直接加 NaOH，蛋白質跟糖分會焦化，皂體變深褐色、有臭味。代表配方：蜂蜜牛奶皂、燒酒紅酒皂、豆漿皂。',
+      { type: 'h2', text: '顏色跑掉是常態' },
+      '植萃在鹼性環境裡很多會變色，這個要先預期：',
+      '紅色花青素（紅酒、玫瑰）→ 變褐 / 灰',
+      '綠色葉綠素 → 大部分褪成土黃',
+      '穩定能保色的：咖啡粉（褐）、礦泥（藍灰 / 粉紅）、紫草（紫）、薑黃（黃）',
+      '所以你若想做「玫瑰色的玫瑰皂」── 用玫瑰花瓣會失敗，要用粉紅礦泥或紫草搭配玫瑰精油。植萃設計的功課裡很大一塊是「預測它在皂裡會變什麼顏色」，這要做幾批才知道。',
+      { type: 'h2', text: '初學者最常犯的錯' },
+      '植萃加太多 → trace 速度失控、皂體結構鬆散',
+      '未冷凍的牛奶 / 豆漿 + NaOH → 蛋白質焦化（深褐色 + 臭味）',
+      '粉類加太早（trace 前）→ 被打散 / 沉底，皂面有色塊不均勻',
+      '精油在高溫加 → 香氣完全揮發',
+      '把這幾個錯避開，植萃就會做你想要它做的事。',
+      {
+        type: 'faq',
+        items: [
+          {
+            q: '我配方很基礎（只有橄欖椰子棕櫚），加牛奶蜂蜜會升級嗎？',
+            a: '會增加層次（牛奶帶滑順、蜂蜜帶滋潤），但前提是你的脂肪酸組合本來就平衡。如果你目前洗感已經 OK，加植萃是「錦上添花」；如果洗感本身有問題（乾、不起泡、太軟），先回去改配方。',
+          },
+          {
+            q: '咖啡皂真的能去角質嗎？',
+            a: '可以。咖啡粉是物理性磨砂顆粒，洗時帶輕度去角質效果。比例 3–5% 是體感剛好的，超過 5% 洗起來會太刮。咖啡因經皮吸收的「提神」「消脂」訴求多半是行銷話術，不要當作藥用。',
+          },
+          {
+            q: '為什麼我做的牛奶皂變成深褐色？',
+            a: '幾乎是 100% 因為牛奶沒冷凍直接加 NaOH。蛋白質跟乳糖在高溫下焦化，產生深色 + 異味。下次先把牛奶冷凍成冰塊，溶鹼時用冰塊狀的牛奶代替水，全程低溫操作。',
+          },
+          {
+            q: '浸泡油是不是加越多越好？',
+            a: '不是。浸泡油只取代配方中部分（通常 10–30%）的同類植物油。比例太高會稀釋你原本的脂肪酸設計，浸泡的活性成分也用不到那麼多。',
+          },
+        ],
+      },
+    ],
+  },
 ];
 
-function PageHeader({ kicker, title, subtitle }) {
+// ============== Helpers ==============
+
+// 排序：date desc — JournalIndex 直接吃這個
+const POSTS_BY_DATE = [...POSTS].sort((a, b) => b.date.localeCompare(a.date));
+
+function setMeta(attr, name, content) {
+  let el = document.head.querySelector(`meta[${attr}="${name}"]`);
+  if (!el) {
+    el = document.createElement('meta');
+    el.setAttribute(attr, name);
+    document.head.appendChild(el);
+  }
+  el.setAttribute('content', content);
+}
+
+function setCanonical(url) {
+  let el = document.head.querySelector('link[rel="canonical"]');
+  if (!el) {
+    el = document.createElement('link');
+    el.setAttribute('rel', 'canonical');
+    document.head.appendChild(el);
+  }
+  el.setAttribute('href', url);
+}
+
+function setJsonLd(id, data) {
+  let el = document.head.querySelector(`script[data-jsonld="${id}"]`);
+  if (!el) {
+    el = document.createElement('script');
+    el.setAttribute('type', 'application/ld+json');
+    el.setAttribute('data-jsonld', id);
+    document.head.appendChild(el);
+  }
+  el.textContent = JSON.stringify(data);
+}
+
+function removeJsonLd(id) {
+  document.head.querySelector(`script[data-jsonld="${id}"]`)?.remove();
+}
+
+function buildArticleJsonLd(post, url, imageUrl, description) {
+  const blogPosting = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: post.title,
+    description,
+    image: imageUrl,
+    datePublished: post.date,
+    dateModified: post.date,
+    author: { '@type': 'Person', name: AUTHOR },
+    publisher: {
+      '@type': 'Organization',
+      name: PUBLISHER,
+      logo: { '@type': 'ImageObject', url: `${SITE_URL}/favicon.svg` },
+    },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': url },
+    keywords: post.keywords?.join(', '),
+    inLanguage: 'zh-Hant-TW',
+    articleSection: post.kicker,
+  };
+
+  const breadcrumb = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: '金花樓', item: SITE_URL },
+      { '@type': 'ListItem', position: 2, name: '本舍小記', item: `${SITE_URL}/journal` },
+      { '@type': 'ListItem', position: 3, name: post.title },
+    ],
+  };
+
+  const faqNode = post.body.find((n) => n && typeof n === 'object' && n.type === 'faq');
+  if (faqNode) {
+    return [
+      blogPosting,
+      breadcrumb,
+      {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: faqNode.items.map((qa) => ({
+          '@type': 'Question',
+          name: qa.q,
+          acceptedAnswer: { '@type': 'Answer', text: qa.a },
+        })),
+      },
+    ];
+  }
+
+  return [blogPosting, breadcrumb];
+}
+
+// 注入 per-article meta tags + JSON-LD；卸載時還原 base meta
+function useArticleMeta(post) {
+  useEffect(() => {
+    if (!post) return undefined;
+
+    const url = `${SITE_URL}/journal/${post.slug}`;
+    const description = post.description || post.lead.slice(0, 155);
+    const imageUrl = post.cover?.src
+      ? `${SITE_URL}${post.cover.src}`
+      : `${SITE_URL}/favicon.svg`;
+
+    const baseTitle = '金花樓 · Goldenflower';
+    const baseDescription = document.head
+      .querySelector('meta[name="description"]')
+      ?.getAttribute('content');
+    const originalTitle = document.title;
+
+    document.title = `${post.title} · 本舍小記 · 金花樓`;
+    setMeta('name', 'description', description);
+    setMeta('property', 'og:title', `${post.title} · 本舍小記 · 金花樓`);
+    setMeta('property', 'og:description', description);
+    setMeta('property', 'og:image', imageUrl);
+    setMeta('property', 'og:url', url);
+    setMeta('property', 'og:type', 'article');
+    setMeta('property', 'article:published_time', post.date);
+    setMeta('property', 'article:author', AUTHOR);
+    setMeta('property', 'article:section', post.kicker);
+    if (post.keywords?.length) {
+      setMeta('name', 'keywords', post.keywords.join(', '));
+    }
+    setCanonical(url);
+    setJsonLd('article', buildArticleJsonLd(post, url, imageUrl, description));
+
+    return () => {
+      document.title = originalTitle || baseTitle;
+      if (baseDescription) setMeta('name', 'description', baseDescription);
+      setMeta('property', 'og:type', 'website');
+      removeJsonLd('article');
+      // og:title / og:description / og:image / og:url 不還原 — index.html 的初始值會在
+      // 下次 router 進入時被 home / 其他頁面覆寫；強制復原會搶過 SPA 切頁的邏輯
+    };
+  }, [post]);
+}
+
+// Cover 圖：先試 <img>，找不到 fallback 到 IllSoap
+function Cover({ post, ratio = '4/3' }) {
+  const [errored, setErrored] = useState(false);
+  const fb = post.cover?.fallback || { tone: 'warm', flower: 'rose' };
+
+  if (errored || !post.cover?.src) {
+    return <IllSoap tone={fb.tone} flower={fb.flower} ratio={ratio} label="" />;
+  }
+
+  return (
+    <div
+      style={{
+        aspectRatio: ratio,
+        overflow: 'hidden',
+        background: 'var(--paper-3)',
+        position: 'relative',
+      }}
+    >
+      <img
+        src={post.cover.src}
+        alt={post.cover.alt}
+        loading="lazy"
+        onError={() => setErrored(true)}
+        style={{
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+          display: 'block',
+        }}
+      />
+    </div>
+  );
+}
+
+function FaqBlock({ items }) {
+  return (
+    <section
+      style={{
+        marginTop: 48,
+        marginBottom: 16,
+        background: 'var(--paper-2)',
+        border: '1px solid var(--ink-15)',
+        padding: '32px 28px',
+      }}
+    >
+      <div
+        className="mono"
+        style={{ color: 'var(--gold-3)', marginBottom: 24, letterSpacing: 4 }}
+      >
+        常見問題 · FAQ
+      </div>
+      <dl style={{ margin: 0 }}>
+        {items.map((qa, i) => (
+          <div key={i} style={{ marginBottom: i === items.length - 1 ? 0 : 24 }}>
+            <dt
+              className="tc"
+              style={{
+                fontSize: 16,
+                fontWeight: 500,
+                color: 'var(--sumi)',
+                letterSpacing: 2,
+                marginBottom: 8,
+              }}
+            >
+              Q. {qa.q}
+            </dt>
+            <dd
+              className="tc"
+              style={{
+                fontSize: 15,
+                lineHeight: 1.95,
+                letterSpacing: 1,
+                color: 'var(--ink-60)',
+                margin: 0,
+              }}
+            >
+              {qa.a}
+            </dd>
+          </div>
+        ))}
+      </dl>
+    </section>
+  );
+}
+
+function PostBody({ body }) {
+  return (
+    <>
+      {body.map((node, i) => {
+        if (typeof node === 'string') {
+          return (
+            <p
+              key={i}
+              className="tc"
+              style={{
+                fontSize: 17,
+                lineHeight: 2,
+                letterSpacing: 1.5,
+                color: 'var(--sumi)',
+                margin: '0 0 24px',
+              }}
+            >
+              {node}
+            </p>
+          );
+        }
+        if (node && typeof node === 'object') {
+          if (node.type === 'h2') {
+            return (
+              <h2
+                key={i}
+                className="tc"
+                style={{
+                  fontSize: 26,
+                  fontWeight: 500,
+                  letterSpacing: 5,
+                  color: 'var(--sumi)',
+                  margin: '40px 0 20px',
+                  paddingTop: 8,
+                  borderTop: '1px solid var(--ink-15)',
+                }}
+              >
+                {node.text}
+              </h2>
+            );
+          }
+          if (node.type === 'faq') {
+            return <FaqBlock key={i} items={node.items} />;
+          }
+        }
+        return null;
+      })}
+    </>
+  );
+}
+
+function RelatedLinks({ slugs, navigate }) {
+  if (!slugs?.length) return null;
+  const related = slugs
+    .map((s) => POSTS.find((p) => p.slug === s))
+    .filter(Boolean);
+  if (!related.length) return null;
+
+  return (
+    <section style={{ marginTop: 56, paddingTop: 32, borderTop: '1px solid var(--ink-15)' }}>
+      <div
+        className="mono"
+        style={{ color: 'var(--gold-3)', marginBottom: 18, letterSpacing: 4 }}
+      >
+        延伸閱讀
+      </div>
+      <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'grid', gap: 18 }}>
+        {related.map((p) => (
+          <li key={p.slug}>
+            <a
+              href={`/journal/${p.slug}`}
+              onClick={(e) => {
+                if (e.metaKey || e.ctrlKey || e.shiftKey) return;
+                e.preventDefault();
+                navigate(`/journal/${p.slug}`);
+              }}
+              className="tc"
+              style={{ color: 'var(--sumi)', display: 'block' }}
+            >
+              <div
+                style={{
+                  fontSize: 18,
+                  letterSpacing: 3,
+                  borderBottom: '1px solid var(--gold-3)',
+                  display: 'inline-block',
+                  paddingBottom: 2,
+                  marginBottom: 6,
+                }}
+              >
+                {p.title}
+              </div>
+              <div
+                style={{
+                  fontSize: 14,
+                  color: 'var(--ink-60)',
+                  lineHeight: 1.7,
+                  letterSpacing: 1,
+                }}
+              >
+                {p.lead}
+              </div>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+}
+
+function PageHeader({ kicker, title, subtitle, date }) {
   return (
     <section
       className="gf-pad-md gf-tight-md"
@@ -113,6 +750,21 @@ function PageHeader({ kicker, title, subtitle }) {
           {subtitle}
         </div>
       )}
+      {date && (
+        <time
+          dateTime={date}
+          className="mono"
+          style={{
+            display: 'inline-block',
+            marginTop: 18,
+            color: 'var(--ink-60)',
+            fontSize: 11,
+            letterSpacing: 3,
+          }}
+        >
+          {date}
+        </time>
+      )}
     </section>
   );
 }
@@ -138,6 +790,8 @@ function InkLink({ href, navigate, children, style }) {
     </a>
   );
 }
+
+// ============== Pages ==============
 
 export function JournalIndex({ navigate }) {
   useEffect(() => {
@@ -178,54 +832,82 @@ export function JournalIndex({ navigate }) {
             gap: 40,
           }}
         >
-          {POSTS.map((p) => (
+          {POSTS_BY_DATE.map((p) => (
             <article
               key={p.slug}
               style={{
-                padding: 32,
+                padding: 0,
                 border: '1px solid var(--ink-15)',
                 background: 'var(--paper)',
                 position: 'relative',
                 display: 'flex',
                 flexDirection: 'column',
+                overflow: 'hidden',
               }}
             >
-              <div className="mono" style={{ color: 'var(--red)' }}>
-                {p.kicker}
-              </div>
-              <h2
-                className="tc"
+              <Cover post={p} ratio="4/3" />
+              <div
                 style={{
-                  fontSize: 32,
-                  fontWeight: 500,
-                  letterSpacing: 6,
-                  margin: '14px 0 12px',
-                  color: 'var(--sumi)',
-                  lineHeight: 1.3,
+                  padding: 28,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  flex: 1,
                 }}
               >
-                {p.title}
-              </h2>
-              <p
-                className="tc"
-                style={{
-                  fontSize: 15,
-                  lineHeight: 1.85,
-                  letterSpacing: 1,
-                  color: 'var(--ink-60)',
-                  margin: '0 0 22px',
-                }}
-              >
-                {p.lead}
-              </p>
-              <div style={{ marginTop: 'auto' }}>
-                <InkLink
-                  href={`/journal/${p.slug}`}
-                  navigate={navigate}
-                  style={{ fontSize: 14, letterSpacing: 3 }}
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'baseline',
+                    gap: 12,
+                    flexWrap: 'wrap',
+                  }}
                 >
-                  讀下去 →
-                </InkLink>
+                  <div className="mono" style={{ color: 'var(--red)' }}>
+                    {p.kicker}
+                  </div>
+                  <time
+                    dateTime={p.date}
+                    className="mono"
+                    style={{ color: 'var(--ink-60)', fontSize: 10, letterSpacing: 2 }}
+                  >
+                    {p.date}
+                  </time>
+                </div>
+                <h2
+                  className="tc"
+                  style={{
+                    fontSize: 28,
+                    fontWeight: 500,
+                    letterSpacing: 5,
+                    margin: '14px 0 12px',
+                    color: 'var(--sumi)',
+                    lineHeight: 1.3,
+                  }}
+                >
+                  {p.title}
+                </h2>
+                <p
+                  className="tc"
+                  style={{
+                    fontSize: 15,
+                    lineHeight: 1.85,
+                    letterSpacing: 1,
+                    color: 'var(--ink-60)',
+                    margin: '0 0 22px',
+                  }}
+                >
+                  {p.lead}
+                </p>
+                <div style={{ marginTop: 'auto' }}>
+                  <InkLink
+                    href={`/journal/${p.slug}`}
+                    navigate={navigate}
+                    style={{ fontSize: 14, letterSpacing: 3 }}
+                  >
+                    讀下去 →
+                  </InkLink>
+                </div>
               </div>
             </article>
           ))}
@@ -237,10 +919,7 @@ export function JournalIndex({ navigate }) {
 
 export function JournalPost({ slug, navigate }) {
   const post = POSTS.find((p) => p.slug === slug);
-
-  useEffect(() => {
-    if (post) document.title = `${post.title} · 本舍小記 · 金花樓`;
-  }, [post]);
+  useArticleMeta(post);
 
   if (!post) {
     return (
@@ -272,7 +951,21 @@ export function JournalPost({ slug, navigate }) {
 
   return (
     <div style={{ position: 'relative', zIndex: 1 }}>
-      <PageHeader kicker={post.kicker} title={post.title} subtitle={post.lead} />
+      <PageHeader
+        kicker={post.kicker}
+        title={post.title}
+        subtitle={post.lead}
+        date={post.date}
+      />
+      <div
+        style={{
+          maxWidth: 1000,
+          margin: '0 auto',
+          padding: '0 44px 30px',
+        }}
+      >
+        <Cover post={post} ratio="16/9" />
+      </div>
       <article
         className="gf-pad-md"
         style={{
@@ -281,21 +974,9 @@ export function JournalPost({ slug, navigate }) {
           padding: '20px 44px 80px',
         }}
       >
-        {post.body.map((para, i) => (
-          <p
-            key={i}
-            className="tc"
-            style={{
-              fontSize: 17,
-              lineHeight: 2,
-              letterSpacing: 1.5,
-              color: 'var(--sumi)',
-              margin: '0 0 24px',
-            }}
-          >
-            {para}
-          </p>
-        ))}
+        <PostBody body={post.body} />
+
+        <RelatedLinks slugs={post.related} navigate={navigate} />
 
         <div
           style={{
@@ -311,10 +992,7 @@ export function JournalPost({ slug, navigate }) {
           <InkLink href="/journal" navigate={navigate} style={{ fontSize: 14 }}>
             ← 回日誌
           </InkLink>
-          <span
-            className="mono"
-            style={{ color: 'var(--gold-3)', fontSize: 10 }}
-          >
+          <span className="mono" style={{ color: 'var(--gold-3)', fontSize: 10 }}>
             金花樓 · {post.kicker}
           </span>
         </div>
