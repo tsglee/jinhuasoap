@@ -905,7 +905,7 @@ export function JournalIndex({ navigate }) {
                     navigate={navigate}
                     style={{ fontSize: 14, letterSpacing: 3 }}
                   >
-                    讀下去 →
+                    繼續閱讀 →
                   </InkLink>
                 </div>
               </div>
