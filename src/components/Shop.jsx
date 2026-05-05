@@ -4,6 +4,9 @@ import { useEffect, useState } from 'react';
 import { Divider } from './GoldenFlower.jsx';
 import { useCart } from '../state/CartContext.jsx';
 import { TierNotice } from './TierNotice.jsx';
+import { PRODUCTS } from '../data/products.js';
+import { ProductGallery } from './ProductGallery.jsx';
+import { AddToCartButton } from './BuyButton.jsx';
 
 const ECPAY_SUBTYPE = { seven: 'UNIMARTC2C', family: 'FAMIC2C' };
 const ECPAY_DEFAULT_EMAP_URL = 'https://logistics.ecpay.com.tw/Express/map';
@@ -589,6 +592,133 @@ const inputStyle = {
   outline: 'none',
 };
 
+// Pull a 1-line lead from the product's wash-feel paragraph for the
+// catalogue card. The full paragraphs use mixed punctuation (，；。)
+// and the first phrase is usually the punchiest hook.
+function leadLine(washFeel) {
+  if (!washFeel) return '';
+  const first = washFeel.split(/[，；。]/)[0].trim();
+  return first;
+}
+
+function CatalogCard({ p, onJumpToCart }) {
+  const priceDisplay = p.price > 0 ? `NT$ ${p.price}` : 'NT$ 待定';
+  return (
+    <article
+      style={{
+        background: 'var(--paper)',
+        border: '1px solid var(--ink-15)',
+        padding: 14,
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 12,
+      }}
+    >
+      <ProductGallery photos={p.photos} alt={`${p.zh} · ${p.subtitle}`} ratio="1/1" />
+
+      <div className="mono" style={{ color: 'var(--gold-3)', fontSize: 10, letterSpacing: 2 }}>
+        № {p.num} · {p.series}
+      </div>
+      <div>
+        <div
+          className="tc"
+          style={{ fontSize: 20, letterSpacing: 4, color: 'var(--sumi)', lineHeight: 1.3 }}
+        >
+          {p.zh}
+        </div>
+        <div
+          className="tc"
+          style={{ fontSize: 12, letterSpacing: 3, color: 'var(--gold-3)', marginTop: 4 }}
+        >
+          {p.subtitle}
+        </div>
+      </div>
+      <p
+        className="tc"
+        style={{
+          fontSize: 13,
+          lineHeight: 1.7,
+          letterSpacing: 1,
+          color: 'var(--ink-60)',
+          margin: 0,
+          minHeight: '2.4em',
+        }}
+      >
+        {leadLine(p.washFeel)}
+      </p>
+      <div
+        style={{
+          marginTop: 'auto',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          gap: 10,
+          paddingTop: 6,
+          borderTop: '1px dotted var(--ink-15)',
+        }}
+      >
+        <div>
+          <span
+            className="mono"
+            style={{ color: 'var(--gold-3)', fontSize: 9, letterSpacing: 2 }}
+          >
+            {p.weight}
+          </span>
+          <div
+            className="italic"
+            style={{ fontSize: 18, color: 'var(--red)', letterSpacing: 1 }}
+          >
+            {priceDisplay}
+          </div>
+        </div>
+        <AddToCartButton p={p} size="sm" onAdded={onJumpToCart} />
+      </div>
+    </article>
+  );
+}
+
+function ProductCatalog({ onAdded }) {
+  return (
+    <section
+      className="gf-pad-md"
+      style={{
+        maxWidth: 1280,
+        margin: '0 auto',
+        padding: '20px 44px 50px',
+      }}
+    >
+      <div style={{ textAlign: 'center', marginBottom: 28 }}>
+        <div className="mono" style={{ color: 'var(--red)' }}>
+          選皂 · choose
+        </div>
+        <h2
+          className="tc gf-h2-md"
+          style={{
+            fontSize: 38,
+            fontWeight: 400,
+            letterSpacing: 8,
+            margin: '10px 0 6px',
+            color: 'var(--sumi)',
+          }}
+        >
+          十二款 · 一塊一塊挑
+        </h2>
+        <div
+          className="tc"
+          style={{ fontSize: 14, color: 'var(--gold-3)', letterSpacing: 3 }}
+        >
+          想看完整風土與配方，請至 02 十二花
+        </div>
+      </div>
+      <div className="gf-catalog-grid">
+        {PRODUCTS.map((p) => (
+          <CatalogCard key={p.num} p={p} onJumpToCart={onAdded} />
+        ))}
+      </div>
+    </section>
+  );
+}
+
 export function Shop({ setTab }) {
   const { items: cart, subtotal, discount, discountRate, shipping, total, updateQty, clear } = useCart();
   // After successful submit we replace the whole shop UI with the
@@ -642,13 +772,25 @@ export function Shop({ setTab }) {
         </div>
       </section>
 
+      <ProductCatalog
+        onAdded={() => {
+          const el = document.getElementById('shop-cart');
+          if (!el) return;
+          window.setTimeout(() => {
+            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }, 100);
+        }}
+      />
+
       {/* Cart section — single centred column after Phase H simplification */}
       <section
+        id="shop-cart"
         className="gf-pad-md"
         style={{
           maxWidth: 560,
           margin: '0 auto',
           padding: '30px 44px 60px',
+          scrollMarginTop: 80,
         }}
       >
         <aside

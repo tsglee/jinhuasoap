@@ -4,37 +4,14 @@
 //
 // Product data lives in src/data/products.js (shared with About/Mobile.jsx
 // which renders a compact grid).
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Divider } from './GoldenFlower.jsx';
-import { useCart } from '../state/CartContext.jsx';
 import { TierNotice } from './TierNotice.jsx';
 import { PRODUCTS } from '../data/products.js';
+import { ProductGallery } from './ProductGallery.jsx';
+import { AddToCartButton } from './BuyButton.jsx';
 
 // ── Sub-components ──────────────────────────────────────────────────────
-
-// AVIF → WebP → WebP-fallback chain. Same pattern as About's SoapPhoto
-// and Process's IngredientPhoto (kept inline to avoid a cross-module dance).
-function ProductPhoto({ src, alt, ratio = '4/5' }) {
-  const base = src.replace(/\.(png|jpe?g)$/i, '');
-  return (
-    <picture>
-      <source type="image/avif" srcSet={`${base}.avif`} />
-      <source type="image/webp" srcSet={`${base}.webp`} />
-      <img
-        src={`${base}.webp`}
-        alt={alt}
-        loading="lazy"
-        decoding="async"
-        style={{
-          width: '100%',
-          aspectRatio: ratio,
-          objectFit: 'cover',
-          display: 'block',
-        }}
-      />
-    </picture>
-  );
-}
 
 function DraftBadge() {
   return (
@@ -96,23 +73,7 @@ function DetailRow({ label, value }) {
 }
 
 function BuyBlock({ p }) {
-  const { add } = useCart();
-  const [justAdded, setJustAdded] = useState(false);
   const priceDisplay = p.price > 0 ? `NT$ ${p.price}` : 'NT$ 待定';
-  const cartProduct = {
-    num: p.num,
-    zh: p.zh,
-    lat: p.subtitle,
-    price: p.price,
-    photo: p.photo,
-    tone: 'warm',
-  };
-  const handle = () => {
-    if (p.price <= 0) return;
-    add(cartProduct, 1);
-    setJustAdded(true);
-    window.setTimeout(() => setJustAdded(false), 1400);
-  };
   return (
     <div
       style={{
@@ -136,27 +97,7 @@ function BuyBlock({ p }) {
           {priceDisplay}
         </span>
       </div>
-      <button
-        type="button"
-        onClick={handle}
-        disabled={p.price <= 0}
-        aria-label={`加入購物籃 · ${p.zh}`}
-        className="tc"
-        style={{
-          padding: '10px 18px',
-          fontSize: 13,
-          letterSpacing: 3,
-          cursor: p.price <= 0 ? 'not-allowed' : 'pointer',
-          opacity: p.price <= 0 ? 0.5 : 1,
-          color: justAdded ? 'var(--red)' : 'var(--sumi)',
-          background: justAdded ? 'var(--paper)' : 'transparent',
-          border: `1px solid ${justAdded ? 'var(--red)' : 'var(--sumi)'}`,
-          transition: 'color 200ms, background 200ms, border-color 200ms',
-          fontFamily: 'inherit',
-        }}
-      >
-        {justAdded ? '已加入購物籃 ✓' : p.price > 0 ? '加入購物籃' : '取貨約訂'}
-      </button>
+      <AddToCartButton p={p} />
     </div>
   );
 }
@@ -186,7 +127,7 @@ function ProductDetailCard({ p, flip }) {
             pointerEvents: 'none',
           }}
         />
-        <ProductPhoto src={p.photo} alt={`${p.zh} · ${p.subtitle}`} ratio="4/5" />
+        <ProductGallery photos={p.photos} alt={`${p.zh} · ${p.subtitle}`} ratio="4/5" />
         <div
           style={{
             position: 'absolute',

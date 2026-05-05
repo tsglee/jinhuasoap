@@ -656,7 +656,7 @@ export function AboutDesktop({ setTab }) {
                     }}
                   />
                   <SoapPhoto
-                    src="/images/products/海棠.png"
+                    src="/images/products/海棠/01.png"
                     alt="海棠修復 · 瓊崖海棠 · 碧玉"
                     ratio="5/4"
                   />
@@ -808,7 +808,7 @@ export function AboutDesktop({ setTab }) {
                 note: 'ritual — 走遠路的清晨用一塊，山茶花香能跟著你一整天。',
                 tone: 'warm',
                 flower: 'chrysanthemum',
-                photo: '/images/products/山茶淨髮.png',
+                photo: '/images/products/山茶淨髮/01.png',
               },
               {
                 productNum: '拾',
@@ -830,7 +830,7 @@ export function AboutDesktop({ setTab }) {
                 note: 'ritual — 熱水放好前，先用掌心暖一暖這塊餅。下了水，茉莉就走了出來。',
                 tone: 'cool',
                 flower: 'pine',
-                photo: '/images/products/茉莉沐膚.png',
+                photo: '/images/products/茉莉沐膚/01.png',
               },
               {
                 productNum: '伍',
@@ -852,7 +852,7 @@ export function AboutDesktop({ setTab }) {
                 note: 'ritual — 在最冷的那幾天用一塊。洗完別急著擦；掌心留下來的那點金，是它的工作。',
                 tone: 'deep',
                 flower: 'rose',
-                photo: '/images/products/金盞花.png',
+                photo: '/images/products/金盞花/01.png',
               },
               {
                 productNum: '拾壹',
@@ -874,7 +874,7 @@ export function AboutDesktop({ setTab }) {
                 note: 'ritual — 運動完拆開那塊，泡沫起得比汗還快。回家放在通風處，下次訓練前，它已經乾了。',
                 tone: 'cool',
                 flower: 'mugwort',
-                photo: '/images/products/一皂到底清爽2.png',
+                photo: '/images/products/一皂到底清爽/01.png',
               },
             ].map((s, i) => (
               <div

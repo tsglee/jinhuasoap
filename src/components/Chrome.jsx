@@ -347,7 +347,7 @@ export function Footer({ navigate, setTab }) {
           margin: '0 auto',
           padding: '60px 44px 30px',
           display: 'grid',
-          gridTemplateColumns: '1.3fr repeat(4, 1fr)',
+          gridTemplateColumns: '1.3fr 4fr',
           gap: 40,
         }}
       >
@@ -431,64 +431,73 @@ export function Footer({ navigate, setTab }) {
           </div>
         </div>
 
-        {columns.map(({ title, items }) => (
-          <div key={title}>
-            <div className="mono" style={{ color: 'var(--gold-2)', marginBottom: 18 }}>
-              {title}
-            </div>
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'grid', gap: 10 }}>
-              {items.map((x) => (
-                <li
-                  key={x.label}
-                  className="tc"
-                  style={{ fontSize: 15, letterSpacing: 2, color: 'rgba(248,245,235,0.85)' }}
-                >
-                  {x.tab && setTab ? (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        if (x.anchor) {
-                          try {
-                            sessionStorage.setItem('gf_jump_section', x.anchor);
-                          } catch {
-                            /* sessionStorage may be unavailable */
+        <div
+          className="gf-hide-md"
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(4, 1fr)',
+            gap: 40,
+          }}
+        >
+          {columns.map(({ title, items }) => (
+            <div key={title}>
+              <div className="mono" style={{ color: 'var(--gold-2)', marginBottom: 18 }}>
+                {title}
+              </div>
+              <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'grid', gap: 10 }}>
+                {items.map((x) => (
+                  <li
+                    key={x.label}
+                    className="tc"
+                    style={{ fontSize: 15, letterSpacing: 2, color: 'rgba(248,245,235,0.85)' }}
+                  >
+                    {x.tab && setTab ? (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (x.anchor) {
+                            try {
+                              sessionStorage.setItem('gf_jump_section', x.anchor);
+                            } catch {
+                              /* sessionStorage may be unavailable */
+                            }
                           }
-                        }
-                        setTab(x.tab);
-                      }}
-                      style={{
-                        color: 'inherit',
-                        background: 'transparent',
-                        border: 'none',
-                        padding: 0,
-                        cursor: 'pointer',
-                        font: 'inherit',
-                        letterSpacing: 'inherit',
-                        textAlign: 'left',
-                      }}
-                    >
-                      {x.label}
-                    </button>
-                  ) : x.href && navigate ? (
-                    <a
-                      href={x.href}
-                      onClick={(e) => {
-                        if (e.metaKey || e.ctrlKey || e.shiftKey) return;
-                        e.preventDefault();
-                        navigate(x.href);
-                      }}
-                      style={{ color: 'inherit' }}
-                    >
-                      {x.label}
-                    </a>
-                  ) : (
-                    x.label
-                  )}
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
+                          setTab(x.tab);
+                        }}
+                        style={{
+                          color: 'inherit',
+                          background: 'transparent',
+                          border: 'none',
+                          padding: 0,
+                          cursor: 'pointer',
+                          font: 'inherit',
+                          letterSpacing: 'inherit',
+                          textAlign: 'left',
+                        }}
+                      >
+                        {x.label}
+                      </button>
+                    ) : x.href && navigate ? (
+                      <a
+                        href={x.href}
+                        onClick={(e) => {
+                          if (e.metaKey || e.ctrlKey || e.shiftKey) return;
+                          e.preventDefault();
+                          navigate(x.href);
+                        }}
+                        style={{ color: 'inherit' }}
+                      >
+                        {x.label}
+                      </a>
+                    ) : (
+                      x.label
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
       </div>
       <div
         style={{
@@ -496,6 +505,8 @@ export function Footer({ navigate, setTab }) {
           padding: '18px 44px',
           display: 'flex',
           justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          gap: 8,
           fontFamily: '"DM Mono", monospace',
           fontSize: 10,
           letterSpacing: 2,
@@ -505,7 +516,50 @@ export function Footer({ navigate, setTab }) {
           margin: '0 auto',
         }}
       >
-        <span>© 2026 金花樓 · 版權所有</span>
+        <span>
+          © 2026 金花樓 · 版權所有
+          <span
+            className="gf-mobile-inline"
+            style={{ color: 'rgba(248,245,235,0.4)' }}
+          >
+            {' · '}
+            <a
+              href="/legal/privacy"
+              onClick={(e) => {
+                if (e.metaKey || e.ctrlKey || e.shiftKey) return;
+                e.preventDefault();
+                navigate && navigate('/legal/privacy');
+              }}
+              style={{ color: 'inherit' }}
+            >
+              隱私權
+            </a>
+            {' · '}
+            <a
+              href="/legal/returns"
+              onClick={(e) => {
+                if (e.metaKey || e.ctrlKey || e.shiftKey) return;
+                e.preventDefault();
+                navigate && navigate('/legal/returns');
+              }}
+              style={{ color: 'inherit' }}
+            >
+              退換貨
+            </a>
+            {' · '}
+            <a
+              href="/legal/terms"
+              onClick={(e) => {
+                if (e.metaKey || e.ctrlKey || e.shiftKey) return;
+                e.preventDefault();
+                navigate && navigate('/legal/terms');
+              }}
+              style={{ color: 'inherit' }}
+            >
+              服務條款
+            </a>
+          </span>
+        </span>
         <span>手壓於林口</span>
       </div>
     </footer>

@@ -1,5 +1,10 @@
 // Generate AVIF + WebP next to each PNG/JPG in the configured source dirs.
 // Idempotent: skips outputs that are newer than the source.
+// Recurses into subdirectories — products are organized as
+//   products/<產品名>/01.png 02.png ...
+// and journal posts as
+//   journal/<slug>.png
+// so adding a new product subdir or a new article cover just works.
 // Run with: npm run optimize:images
 
 import { readdir, stat } from 'node:fs/promises';
@@ -21,6 +26,8 @@ const SRC_DIRS = [
   path.join(__dirname, '..', 'public', 'images', 'landingmedia'),
   // ThankYou page illustration
   path.join(__dirname, '..', 'public', 'images', 'thanku'),
+  // 本舍小記 cover images (1200×900, 4:3)
+  path.join(__dirname, '..', 'public', 'images', 'journal'),
 ];
 const MAX_WIDTH = 1200;
 const AVIF_QUALITY = 65;
@@ -33,33 +40,45 @@ async function isStale(src, out) {
 }
 
 async function processDir(dir) {
-  const entries = await readdir(dir);
-  const sources = entries.filter((f) => /\.(png|jpe?g)$/i.test(f));
+  if (!existsSync(dir)) return { touched: 0, skipped: 0, total: 0 };
+  const entries = await readdir(dir, { withFileTypes: true });
   let touched = 0;
   let skipped = 0;
-  for (const file of sources) {
-    const src = path.join(dir, file);
-    const base = path.join(dir, file.replace(/\.(png|jpe?g)$/i, ''));
+  let total = 0;
+
+  for (const entry of entries) {
+    if (entry.name.startsWith('.')) continue;
+    const full = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      const sub = await processDir(full);
+      touched += sub.touched;
+      skipped += sub.skipped;
+      total += sub.total;
+      continue;
+    }
+    if (!/\.(png|jpe?g)$/i.test(entry.name)) continue;
+    total++;
+    const base = path.join(dir, entry.name.replace(/\.(png|jpe?g)$/i, ''));
     const avifOut = `${base}.avif`;
     const webpOut = `${base}.webp`;
 
     const tasks = [];
-    if (await isStale(src, avifOut)) {
+    if (await isStale(full, avifOut)) {
       tasks.push(
-         sharp(src)
+        sharp(full)
           .resize({ width: MAX_WIDTH, withoutEnlargement: true })
           .avif({ quality: AVIF_QUALITY, effort: 6 })
           .toFile(avifOut)
-          .then(() => console.log(`  ✓ ${path.basename(avifOut)}`)),
+          .then(() => console.log(`  ✓ ${path.relative(path.join(__dirname, '..'), avifOut)}`)),
       );
     }
-    if (await isStale(src, webpOut)) {
+    if (await isStale(full, webpOut)) {
       tasks.push(
-        sharp(src)
+        sharp(full)
           .resize({ width: MAX_WIDTH, withoutEnlargement: true })
           .webp({ quality: WEBP_QUALITY })
           .toFile(webpOut)
-          .then(() => console.log(`  ✓ ${path.basename(webpOut)}`)),
+          .then(() => console.log(`  ✓ ${path.relative(path.join(__dirname, '..'), webpOut)}`)),
       );
     }
     if (tasks.length) {
@@ -69,7 +88,7 @@ async function processDir(dir) {
       skipped++;
     }
   }
-  return { touched, skipped, total: sources.length };
+  return { touched, skipped, total };
 }
 
 for (const dir of SRC_DIRS) {

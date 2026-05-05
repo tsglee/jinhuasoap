@@ -379,7 +379,7 @@ export function AboutMobile({ setTab }) {
                 cursor: 'pointer',
               }}
             >
-              <ProductCardPhoto src={p.photo} alt={p.zh} />
+              <ProductCardPhoto src={p.photos[0]} alt={p.zh} />
               <div
                 className="mono"
                 style={{

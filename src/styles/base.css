@@ -109,3 +109,8 @@ button {
 .gf-pillar-photo:hover img {
   transform: scale(1.08);
 }
+
+/* Hide scrollbars on horizontal carousel tracks (ProductGallery). */
+.gf-carousel-track::-webkit-scrollbar {
+  display: none;
+}
