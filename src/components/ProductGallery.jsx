@@ -103,14 +103,17 @@ export function ProductCarousel({ photos, alt, ratio = '1/1', onZoom }) {
     el.scrollTo({ left: i * el.clientWidth, behavior: 'smooth' });
   }, []);
 
+  const wrapNext = () => goto((active + 1) % list.length);
+  const wrapPrev = () => goto((active - 1 + list.length) % list.length);
+
   const onKeyDown = (e) => {
     if (single) return;
     if (e.key === 'ArrowRight') {
       e.preventDefault();
-      goto(Math.min(active + 1, list.length - 1));
+      wrapNext();
     } else if (e.key === 'ArrowLeft') {
       e.preventDefault();
-      goto(Math.max(active - 1, 0));
+      wrapPrev();
     }
   };
 
@@ -167,9 +170,8 @@ export function ProductCarousel({ photos, alt, ratio = '1/1', onZoom }) {
             type="button"
             onClick={(e) => {
               e.stopPropagation();
-              goto(Math.max(active - 1, 0));
+              wrapPrev();
             }}
-            disabled={active === 0}
             aria-label="上一張"
             style={{
               ...arrowBaseStyle,
@@ -177,8 +179,7 @@ export function ProductCarousel({ photos, alt, ratio = '1/1', onZoom }) {
               width: 32,
               height: 32,
               fontSize: 20,
-              opacity: active === 0 ? 0.25 : 1,
-              cursor: active === 0 ? 'not-allowed' : 'pointer',
+              cursor: 'pointer',
               minHeight: 0,
             }}
           >
@@ -188,9 +189,8 @@ export function ProductCarousel({ photos, alt, ratio = '1/1', onZoom }) {
             type="button"
             onClick={(e) => {
               e.stopPropagation();
-              goto(Math.min(active + 1, list.length - 1));
+              wrapNext();
             }}
-            disabled={active === list.length - 1}
             aria-label="下一張"
             style={{
               ...arrowBaseStyle,
@@ -198,8 +198,7 @@ export function ProductCarousel({ photos, alt, ratio = '1/1', onZoom }) {
               width: 32,
               height: 32,
               fontSize: 20,
-              opacity: active === list.length - 1 ? 0.25 : 1,
-              cursor: active === list.length - 1 ? 'not-allowed' : 'pointer',
+              cursor: 'pointer',
               minHeight: 0,
             }}
           >
@@ -280,9 +279,9 @@ export function ProductLightbox({ photos, alt, initialIndex = 0, onClose }) {
       if (e.key === 'Escape') {
         onClose();
       } else if (e.key === 'ArrowRight') {
-        setActive((i) => Math.min(i + 1, list.length - 1));
+        setActive((i) => (i + 1) % list.length);
       } else if (e.key === 'ArrowLeft') {
-        setActive((i) => Math.max(i - 1, 0));
+        setActive((i) => (i - 1 + list.length) % list.length);
       }
     };
     window.addEventListener('keydown', onKey);
@@ -411,8 +410,7 @@ export function ProductLightbox({ photos, alt, initialIndex = 0, onClose }) {
         <>
           <button
             type="button"
-            onClick={() => setActive((i) => Math.max(i - 1, 0))}
-            disabled={active === 0}
+            onClick={() => setActive((i) => (i - 1 + list.length) % list.length)}
             aria-label="上一張"
             style={{
               ...arrowBaseStyle,
@@ -420,8 +418,7 @@ export function ProductLightbox({ photos, alt, initialIndex = 0, onClose }) {
               width: 48,
               height: 48,
               fontSize: 28,
-              opacity: active === 0 ? 0.25 : 1,
-              cursor: active === 0 ? 'not-allowed' : 'pointer',
+              cursor: 'pointer',
               minHeight: 0,
             }}
           >
@@ -429,8 +426,7 @@ export function ProductLightbox({ photos, alt, initialIndex = 0, onClose }) {
           </button>
           <button
             type="button"
-            onClick={() => setActive((i) => Math.min(i + 1, list.length - 1))}
-            disabled={active === list.length - 1}
+            onClick={() => setActive((i) => (i + 1) % list.length)}
             aria-label="下一張"
             style={{
               ...arrowBaseStyle,
@@ -438,8 +434,7 @@ export function ProductLightbox({ photos, alt, initialIndex = 0, onClose }) {
               width: 48,
               height: 48,
               fontSize: 28,
-              opacity: active === list.length - 1 ? 0.25 : 1,
-              cursor: active === list.length - 1 ? 'not-allowed' : 'pointer',
+              cursor: 'pointer',
               minHeight: 0,
             }}
           >

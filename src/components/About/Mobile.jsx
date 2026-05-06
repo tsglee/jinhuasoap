@@ -287,6 +287,39 @@ export function AboutMobile({ setTab }) {
               >
                 {m.roleMono}
               </div>
+              {m.photo && (
+                <div
+                  style={{
+                    margin: '10px -6px 16px',
+                    aspectRatio: '4 / 3',
+                    overflow: 'hidden',
+                    background: 'var(--paper-2)',
+                  }}
+                >
+                  <picture>
+                    <source
+                      type="image/avif"
+                      srcSet={m.photo.replace(/\.(png|jpe?g)$/i, '.avif')}
+                    />
+                    <source
+                      type="image/webp"
+                      srcSet={m.photo.replace(/\.(png|jpe?g)$/i, '.webp')}
+                    />
+                    <img
+                      src={m.photo}
+                      alt={m.photoAlt || m.roleZh}
+                      loading="lazy"
+                      decoding="async"
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                        display: 'block',
+                      }}
+                    />
+                  </picture>
+                </div>
+              )}
               <div
                 className="tc"
                 style={{

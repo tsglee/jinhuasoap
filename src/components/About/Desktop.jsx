@@ -469,6 +469,39 @@ export function AboutDesktop({ setTab }) {
               >
                 {r.roleMono}
               </div>
+              {r.photo && (
+                <div
+                  style={{
+                    margin: '12px -8px 20px',
+                    aspectRatio: '4 / 3',
+                    overflow: 'hidden',
+                    background: 'var(--paper-2)',
+                  }}
+                >
+                  <picture>
+                    <source
+                      type="image/avif"
+                      srcSet={r.photo.replace(/\.(png|jpe?g)$/i, '.avif')}
+                    />
+                    <source
+                      type="image/webp"
+                      srcSet={r.photo.replace(/\.(png|jpe?g)$/i, '.webp')}
+                    />
+                    <img
+                      src={r.photo}
+                      alt={r.photoAlt || r.roleZh}
+                      loading="lazy"
+                      decoding="async"
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                        display: 'block',
+                      }}
+                    />
+                  </picture>
+                </div>
+              )}
               <div
                 className="tc"
                 style={{

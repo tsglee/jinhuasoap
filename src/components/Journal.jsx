@@ -26,7 +26,7 @@ const POSTS = [
     lead: '一塊皂為什麼要混不同油？因為每種油負責不同的事。',
     date: '2025-05-15',
     cover: {
-      src: '/images/journal/three-oils.jpg',
+      src: '/images/journal/three-oils.png',
       alt: '工坊木桌上排成一列的橄欖油、椰子油與蓖麻油，金黃色的下午光斜斜照進來',
       fallback: { tone: 'warm', flower: 'rose' },
     },
@@ -36,6 +36,7 @@ const POSTS = [
     related: ['ffa-five-forces', 'saponification'],
     body: [
       '一塊皂從來不是單一油做的。我們每張配方都有三個角色：主體、清潔、功能 ── 它們在皂裡分別給「保濕」、「起泡」、「泡沫穩定」這三件事。',
+      { type: 'figure', src: '/images/journal/inline/three-oils-1.png', alt: '三瓶油同時注入一只攪拌缽的手繪示意 ── 橄欖、椰子、棕櫚三種油匯流入皂', caption: '橄欖、椰子、棕櫚 ── 三油各司其職，匯成一塊皂' },
       '主體油是橄欖油 ── 配方裡比例最高的那支，通常 40–70%。它的油酸（Oleic Acid）佔 65–75%，是手工皂保濕的核心。少了它，皂洗起來會澀。經典的馬賽皂直接拉到 70% 橄欖；敏感肌洗臉皂可以再多一點。',
       '清潔油是椰子油 ── 給泡沫、給清潔。月桂酸（Lauric Acid）在它身上佔 48%，是最會「洗掉東西」的脂肪酸。但有另一面：超過 25%，洗完皮膚會緊。所以椰子油通常 15–20%，洗髮皂可以拉到 20–30%，鹽皂跟家事皂才會用 70%+。',
       '功能油是蓖麻油 ── 最不起眼但最關鍵。蓖麻油酸（Ricinoleic Acid）在它身上佔 85–95%，在天然植物油裡是獨一份。它的羥基結構讓泡沫變細緻、停留更久。配方裡只放 5–15%，多了會太黏膩。',
@@ -50,7 +51,7 @@ const POSTS = [
     lead: '油只是載體，脂肪酸才是本質。五力，是一塊皂的健康檢查表。',
     date: '2025-11-04',
     cover: {
-      src: '/images/journal/ffa-five-forces.jpg',
+      src: '/images/journal/ffa-five-forces.png',
       alt: '老闆娘鍋邊壓著一張手寫的五力雷達圖，表格上有清潔、泡沫、保濕、硬度、溫潤的數字',
       fallback: { tone: 'deep', flower: 'mugwort' },
     },
@@ -65,6 +66,7 @@ const POSTS = [
       '學會這件事之後，就會有「五力」──',
       '清潔力、泡沫力、溫潤度、保濕、硬度。',
       '這五個維度，對應五組脂肪酸；每一款配方都可以拉出一張五邊形圖，看它偏哪一邊、欠哪一邊。我們在鍋邊壓了一張檢查表，每一款新配方投產前，都要先算過一遍五力 ── 清潔不能太高（太乾），泡沫不能太低（不起泡），保濕不能太低（用完皮膚繃），硬度不能太低（變形），溫潤度則視皂的用途調整。',
+      { type: 'figure', src: '/images/journal/inline/ffa-five-forces-1.png', alt: '五邊形雷達圖手繪示意 ── 五個頂點分別代表清潔、泡沫、溫潤、滑順、硬度', caption: '五力雷達圖 ── 一塊皂的健康檢查表' },
       '五樣都顧到，才算是一塊對得起肌膚的皂。',
       '這也是我們為什麼敢說「花材只是風韻」── 桂花、艾草、玫瑰，它們都是加在底層五力已經站穩的皂上的裝飾。如果五力不穩，花再香也救不回來。',
       '一個配方的尊嚴，是從脂肪酸開始的。',
@@ -77,7 +79,7 @@ const POSTS = [
     lead: '手工皂為什麼洗後不乾澀？因為甘油是這個反應自然生出來的副產物。',
     date: '2025-07-08',
     cover: {
-      src: '/images/journal/saponification.jpg',
+      src: '/images/journal/saponification.png',
       alt: '冷製鍋裡剛打完 trace 的皂液，淡黃色濃稠表面留下一道攪拌棒滑過的痕跡',
       fallback: { tone: 'cool', flower: 'chrysanthemum' },
     },
@@ -87,6 +89,7 @@ const POSTS = [
     related: ['three-oils', 'trace', 'cold-vs-hot-process'],
     body: [
       '手工皂背後的化學其實很簡單：油脂遇到鹼，中和之後，生成皂跟甘油。',
+      { type: 'figure', src: '/images/journal/inline/saponification-1.png', alt: '兩個玻璃量杯倒入第三個燒瓶的手繪示意，箭頭標示化學反應', caption: '油脂 + 鹼 → 皂 + 甘油 ── 百年沒變的化學' },
       '油是配方裡的脂肪酸；鹼是氫氧化鈉（NaOH，做固體皂）或氫氧化鉀（KOH，做液態皂）；水把鹼溶解，讓反應跑得起來。中和之後，原本的油脂分子變成「脂肪酸鈉鹽」── 這就是皂。同時還生出一份甘油（Glycerin）── 天然的保濕分子。',
       '甘油是這個反應的副產物，不需要另外加。它在皂體裡均勻分佈，洗手時會留一層薄薄的水分在皮膚上 ── 這就是為什麼很多人洗完手工皂之後不需要急著擦乳液，那層感覺，是甘油給的。',
       '工業洗劑的做法不一樣。它們從合成的界面活性劑出發，配方設計優先考慮「穩定」── 為了讓商品從工廠到貨架到家裡都不變質，甘油在生產過程中通常會被抽掉、另外賣出去。少了甘油，洗起來才會「乾淨利落」── 那個利落，就是肌膚水分被一起帶走的感覺。',
@@ -101,7 +104,7 @@ const POSTS = [
     lead: '把皂液攪到能在表面留下痕跡 ── 那就是 trace，可以入模了。',
     date: '2025-09-12',
     cover: {
-      src: '/images/journal/trace.jpg',
+      src: '/images/journal/trace.png',
       alt: '攪拌棒拉起來的瞬間，淡黃色皂液在鍋面落下一道短短的線狀痕跡',
       fallback: { tone: 'cool', flower: 'pine' },
     },
@@ -112,7 +115,9 @@ const POSTS = [
     body: [
       '冷製皂有一個關鍵時刻叫 trace。',
       '油跟鹼在鍋裡攪拌，一開始是清的、像油湯。攪著攪著，質地慢慢變濃，從油湯變成稀粥，再變成像濃湯的奶醬狀。攪拌棒拉起來的時候，落下去的皂液會在表面留下一道短短的痕跡 ── 那就是 trace。表示皂化反應已經發動，現在可以入模了。',
+      { type: 'figure', src: '/images/journal/inline/trace-1.png', alt: '攪拌缽中皂液與木勺落下時留下的緞帶痕跡 ── trace 的瞬間', caption: 'Trace 的那一瞬間 ── 木勺拉起，皂液落下留痕' },
       'Trace 有三個層次：輕、中、重。輕 trace 是痕跡剛出現、流動性還高，適合做渲染、分層；中 trace 是痕跡明顯、可順利倒入模，是一般皂的入模時機；重 trace 像美乃滋一樣濃，適合快速入模或塑形。',
+      { type: 'figure', src: '/images/journal/inline/trace-stages-2.png', alt: '三個攪拌缽並排，分別呈現輕中重三個 trace 階段的稠度差異', caption: '輕、中、重 trace ── 同一鍋皂液的三段時間' },
       '判斷哪一階段，要看這支配方做的是什麼。要做漂亮渲染就停在輕 trace；要做緊實的方塊皂就拉到中 trace；要捏出造型就直接打到重。',
       '精油、植萃粉、咖啡渣、礦泥這些添加物，會在 trace 後加。原因有兩個：太早加會被中和過程影響、太晚加皂液已凝固難拌均勻。trace 出現後是一個短暫的窗口，我們會把所有添加物排好順序、一個一個下進去。',
       '會影響 trace 速度的東西很多 ── 蜂蜜跟糖會加速（溫度上升）；酒類（清酒酒粕、米酒）會延緩；椰子油比例高 trace 變快（短鏈反應快）；油酸高的純橄欖配方 trace 慢，要更耐心。',
@@ -126,7 +131,7 @@ const POSTS = [
     lead: '棕櫚油的爭議我們知道，但配方需要它的硬度，而它的資源效率反而最高。',
     date: '2025-12-20',
     cover: {
-      src: '/images/journal/yes-palm.jpg',
+      src: '/images/journal/yes-palm.png',
       alt: '棕櫚樹下盛裝在玻璃瓶裡的金紅色棕櫚油，旁邊是一塊已熟成的方形手工皂',
       fallback: { tone: 'warm', flower: 'osmanthus' },
     },
@@ -140,6 +145,7 @@ const POSTS = [
       '棕櫚油在配方裡的角色是結構油。棕櫚酸（Palmitic Acid）佔它 45%，給的是硬度與穩定性。一塊皂如果沒有結構油，洗到一半就會塌掉、變形、沖一沖就化。在台灣這種潮濕的氣候，這件事特別敏感。',
       '要替代棕櫚？技術上可以 ── 用乳木果脂、可可脂、或拉長熟成時間。我們也試過，但結果是：成品會稍微軟、保存期短一點、運送過程容易變形。對一個手工小批次來說，成本反映在價格與良率上。',
       '值得攤開來看的是這組數字：同樣一公頃的土地，棕櫚一年產的油是大豆的 8 倍、是橄欖的 10 倍。換一個角度想：如果全世界禁用棕櫚改用其他植物油，需要砍掉的雨林面積會是現在的好幾倍。「No Palm」這件事，只在你能保證上游可追溯的前提下才是真的環保選擇；否則只是把問題推到別的作物頭上。',
+      { type: 'figure', src: '/images/journal/inline/yes-palm-1.png', alt: '棕櫚樹與棕櫚油瓶之間的天平秤手繪示意，暗示產量效率', caption: '一公頃的產出比 ── 棕櫚 vs 大豆 vs 橄欖' },
       '我們選擇的方式有幾條：盡量用可追溯來源的棕櫚油；配方裡棕櫚比例壓到 10–20%，不超過；每批配方比例公開（產品頁可以看到）；透過讓皂耐用（陳化時間長、不易消耗）來把總體用量壓低。',
       '一塊耐用、不易消耗的皂，本身就是一種環保。',
     ],
@@ -154,7 +160,7 @@ const POSTS = [
     lead: '健康皮膚是 pH 4.5–5.5 的弱酸性，但冷製皂洗起來是鹼性 ── 為什麼還能用？什麼時候不能用？',
     date: '2026-01-25',
     cover: {
-      src: '/images/journal/skin-ph-acid-mantle.jpg',
+      src: '/images/journal/skin-ph-acid-mantle.png',
       alt: '溫水中浸著兩塊皂 ── 一塊琥珀色的冷製皂、一塊奶白色的弱酸皂餅，旁邊放一支 pH 試紙',
       fallback: { tone: 'warm', flower: 'osmanthus' },
     },
@@ -165,6 +171,7 @@ const POSTS = [
     body: [
       '健康皮膚的表面是 pH 4.5–5.5 的弱酸性，這層東西叫做「皮脂膜（acid mantle）」── 由皮脂、汗、與最外層的角質細胞混合形成。它的作用是保護表面、降低外刺激、不讓水分跑光。',
       '冷製手工皂是鹼性的（pH 約 8–10）。意思是你拿它洗澡那一瞬間，皮膚表面的酸鹼會被暫時推上去。「暫時」兩個字很重要 ── 健康皮膚 30–60 分鐘可以自己拉回弱酸。問題在於：不是每個部位、每種皮膚都這麼快回得來。',
+      { type: 'figure', src: '/images/journal/inline/skin-ph-acid-mantle-1.png', alt: 'pH 標尺手繪示意 ── 從酸到鹼，標出皮膚、冷製皂、皂餅各自的 pH 位置', caption: 'pH 標尺與三個部位 ── 為什麼一塊皂走天下不夠' },
       { type: 'h2', text: '不同部位的故事不一樣' },
       '身體（軀幹、手腳）皮膚比較厚、皮脂膜恢復力也好，多數人用冷製皂沒問題。這也是為什麼一塊好的冷製沐浴皂可以用很久 ── 它跟你的皮膚有相容空間。',
       '臉就比較敏感。臉部皮膚薄、皮脂分泌的節律也跟身體不一樣，洗完緊繃感會比較明顯，特別是中性偏乾的肌膚。如果洗完臉之後一定要立刻擦乳液、不擦就乾澀，這個訊號可能是：你的臉不適合鹼性皂，至少不是天天用。',
@@ -208,7 +215,7 @@ const POSTS = [
     lead: '同樣是手工皂，工法不同，洗感差很多。冷製、熱製、融化再造三條路，差在溫度、時間、跟甘油去哪裡。',
     date: '2026-02-18',
     cover: {
-      src: '/images/journal/cold-vs-hot-process.jpg',
+      src: '/images/journal/cold-vs-hot-process.png',
       alt: '工坊木桌並列三塊皂 ── 左邊是冷製的米色方塊、中間是熱製的偏黃色塊、右邊是融化再造的透明琥珀皂',
       fallback: { tone: 'deep', flower: 'pine' },
     },
@@ -219,6 +226,7 @@ const POSTS = [
     body: [
       '台灣市面上常聽到的「手工皂」其實是三條路：冷製（CP, Cold Process）、熱製（HP, Hot Process）、融化再造（MP, Melt and Pour）。三條路做出來的東西都叫「手工皂」，但骨子裡差很多。',
       '我們做的是冷製，這篇講為什麼。',
+      { type: 'figure', src: '/images/journal/inline/cold-vs-hot-process-1.png', alt: '冷製、熱製、融化再造三種工法的時間軸對照手繪示意，標示溫度與順序', caption: '三條路 ── 冷製、熱製、融化再造的時間軸對照' },
       { type: 'h2', text: '差別一：溫度' },
       '冷製在約 40°C 進行 ── 油跟鹼液都調到 40–45°C，倒在一起、慢慢攪拌到 trace、入模。整個製作時間反應沒有「強制完成」，靠的是 24 小時保溫 + 4–6 週熟成讓反應自然走完。',
       '熱製是把油鹼直接加熱到 80–100°C，用火力把皂化反應推到底。優點是當天就完皂、鹼性殘留低；缺點是高溫會讓皂體偏黃、香氣損失大、外觀粗糙（像粥）。',
@@ -270,7 +278,7 @@ const POSTS = [
     lead: 'INS 值是看一塊皂硬不硬、平不平衡的速查指標。140–160 是甜蜜帶 ── 太低太軟、太高太脆。',
     date: '2026-03-12',
     cover: {
-      src: '/images/journal/ins-value.jpg',
+      src: '/images/journal/ins-value.png',
       alt: '配方表上手寫著各油脂比例與 INS 計算結果，旁邊放著老闆娘的鉛筆與小型秤',
       fallback: { tone: 'deep', flower: 'mugwort' },
     },
@@ -280,6 +288,7 @@ const POSTS = [
     related: ['three-oils', 'ffa-five-forces'],
     body: [
       'INS 值是看一塊皂硬不硬、平不平衡的速查指標。每支油脂都有自己的 INS 參考值，配方整體 INS = 各油比例乘以該油 INS 加權平均。實務上不用手算，丟進 SoapCalc 之類的計算器就好。',
+      { type: 'figure', src: '/images/journal/inline/ins-value-1.png', alt: '手繪配方計算紙 ── 四支油的名稱與對應數值，加總到底部的 INS 結果', caption: 'INS 計算 ── 油的加權平均，配方平衡的速查' },
       '為什麼老闆娘看配方第一個看 INS？因為它是一個「整體平衡」的訊號 ── 在你還沒細看每支油脂的脂肪酸組成之前，INS 已經告訴你這配方大概落在哪一檔。',
       { type: 'h2', text: '建議範圍 ── 140–160 的甜蜜帶' },
       'INS 太低（< 130）：皂體會太軟，熟成期長、容易出汗、保存不易。',
@@ -331,7 +340,7 @@ const POSTS = [
     lead: '初學者最常想：皂太乾就加牛奶蜂蜜試試。錯。脂肪酸是骨架，植萃是裝飾 ── 順序不能反。',
     date: '2026-04-22',
     cover: {
-      src: '/images/journal/botanical-design-truth.jpg',
+      src: '/images/journal/botanical-design-truth.png',
       alt: '工坊桌上排成弧線的植萃材料 ── 咖啡粉、薑黃粉、礦泥、紫草根，旁邊有一個冷凍成冰塊的牛奶模具',
       fallback: { tone: 'warm', flower: 'osmanthus' },
     },
@@ -342,6 +351,7 @@ const POSTS = [
     body: [
       '一個常見的問題：「我做的皂太乾，加牛奶或蜂蜜會變好用嗎？」',
       '答：不會。',
+      { type: 'figure', src: '/images/journal/inline/botanical-design-truth-1.png', alt: '一塊樸素皂與一塊堆滿植萃的皂並排對照手繪示意', caption: '光禿 vs 過度裝飾 ── 順序不能反' },
       '植萃（牛奶、咖啡、蜂蜜、礦泥、浸泡油）能做的事，是讓一塊本來就站得住的皂多一個層次的香氣、顏色、觸感。它不能修補一張不平衡的配方。如果你的皂洗起來乾澀，是脂肪酸比例的問題，不是缺一勺蜂蜜。',
       { type: 'h2', text: '正確的設計順序' },
       '老闆娘鍋邊壓的順序是：① 先設計脂肪酸 → ② 再選油脂 → ③ 最後加入植萃。',
@@ -396,7 +406,7 @@ const POSTS = [
     date: '2026-05-05',
     pinned: true,
     cover: {
-      src: '/images/journal/how-to-choose-soap.jpg',
+      src: '/images/journal/how-to-choose-soap.png',
       alt: '工坊木桌上排成一個半圓 ── 不同顏色的皂塊，從米白、淡綠、橘黃到深褐，旁邊一張手寫的選皂筆記',
       fallback: { tone: 'warm', flower: 'osmanthus' },
     },
@@ -506,7 +516,7 @@ const POSTS = [
     lead: '市售肥皂洗完緊、沐浴乳一瓶接一瓶。手工皂跟弱酸皂餅各自解一塊問題 ── 你不一定要二選一。',
     date: '2026-05-04',
     cover: {
-      src: '/images/journal/why-handmade-soap.jpg',
+      src: '/images/journal/why-handmade-soap.png',
       alt: '工坊桌面三件並排 ── 一塊冷製皂、一塊弱酸皂餅、一瓶開蓋的市售沐浴乳，光線從左斜入',
       fallback: { tone: 'cool', flower: 'pine' },
     },
@@ -538,6 +548,7 @@ const POSTS = [
       '冷製手工皂的本質是「皂化反應」── 油脂跟強鹼中和生成脂肪酸鹽。pH 8–10，鹼性。',
       '弱酸皂餅的本質是「界面活性劑混合」── 把幾支溫和的天然來源界面活性劑（SCI、SCS、APG、CAPB-LPB 這幾支）跟結構粉混合、壓成型。pH 5–6，弱酸性。它不靠皂化反應，所以嚴格說它不是皂。',
       '為什麼還叫「皂餅」？因為形狀像、使用方式像 ── 一塊固體放在皂盤上、用水搓出泡沫洗。但骨子裡是「弱酸性洗劑壓成形」。這也是它跟冷製皂最大的差異 ── 不是工法不同，是化學完全不同。',
+      { type: 'figure', src: '/images/journal/inline/why-handmade-soap-1.png', alt: '冷製皂、皂餅、沐浴乳三種清潔劑並排手繪示意，下方標示各自 pH', caption: '三種清潔劑 ── 同形狀、不同化學、不同 pH' },
       { type: 'h2', text: '什麼人適合用皂餅' },
       '皂餅最大的優勢是 pH 跟肌膚相近 ── 不會打亂表面酸鹼。所以下面這幾種狀況，皂餅是更好的選擇：',
       '頭髮 / 頭皮：鹼性會讓毛鱗片打開、頭髮澀、糾結。弱酸髮餅（山茶淨髮）這條路比較友善 ── 洗完不需要再做酸洗收尾。',
@@ -971,6 +982,54 @@ function PostBody({ body }) {
           }
           if (node.type === 'illustration' && node.kind === 'skin-types') {
             return <SkinTypeIcons key={i} />;
+          }
+          if (node.type === 'figure') {
+            return (
+              <figure
+                key={i}
+                style={{
+                  margin: '36px auto',
+                  maxWidth: 600,
+                  textAlign: 'center',
+                }}
+              >
+                <picture>
+                  <source
+                    type="image/avif"
+                    srcSet={node.src.replace(/\.(png|jpe?g|webp)$/i, '.avif')}
+                  />
+                  <source
+                    type="image/webp"
+                    srcSet={node.src.replace(/\.(png|jpe?g)$/i, '.webp')}
+                  />
+                  <img
+                    src={node.src}
+                    alt={node.alt || ''}
+                    loading="lazy"
+                    decoding="async"
+                    style={{
+                      width: '100%',
+                      height: 'auto',
+                      display: 'block',
+                    }}
+                  />
+                </picture>
+                {node.caption && (
+                  <figcaption
+                    className="tc"
+                    style={{
+                      fontSize: 13,
+                      color: 'var(--gold-3)',
+                      marginTop: 12,
+                      letterSpacing: 2,
+                      lineHeight: 1.6,
+                    }}
+                  >
+                    {node.caption}
+                  </figcaption>
+                )}
+              </figure>
+            );
           }
         }
         return null;
