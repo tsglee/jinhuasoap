@@ -290,10 +290,9 @@ export function AboutMobile({ setTab }) {
               {m.photo && (
                 <div
                   style={{
-                    margin: '10px -6px 16px',
-                    aspectRatio: '4 / 3',
-                    overflow: 'hidden',
-                    background: 'var(--paper-2)',
+                    margin: '12px auto 14px',
+                    width: 160,
+                    aspectRatio: '1 / 1',
                   }}
                 >
                   <picture>
@@ -313,7 +312,7 @@ export function AboutMobile({ setTab }) {
                       style={{
                         width: '100%',
                         height: '100%',
-                        objectFit: 'cover',
+                        objectFit: 'contain',
                         display: 'block',
                       }}
                     />

@@ -472,10 +472,9 @@ export function AboutDesktop({ setTab }) {
               {r.photo && (
                 <div
                   style={{
-                    margin: '12px -8px 20px',
-                    aspectRatio: '4 / 3',
-                    overflow: 'hidden',
-                    background: 'var(--paper-2)',
+                    margin: '14px auto 18px',
+                    width: 200,
+                    aspectRatio: '1 / 1',
                   }}
                 >
                   <picture>
@@ -495,7 +494,7 @@ export function AboutDesktop({ setTab }) {
                       style={{
                         width: '100%',
                         height: '100%',
-                        objectFit: 'cover',
+                        objectFit: 'contain',
                         display: 'block',
                       }}
                     />
