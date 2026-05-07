@@ -33,7 +33,7 @@ function HamburgerIcon({ open }) {
   );
 }
 
-export function Header({ tab, setTab, tabs }) {
+export function Header({ tab, setTab, tabs, navigate }) {
   const isMobile = useIsMobile();
   const [menuOpen, setMenuOpen] = useState(false);
   const { itemCount } = useCart();
@@ -148,7 +148,7 @@ export function Header({ tab, setTab, tabs }) {
           }}
         >
           <button
-            onClick={() => setTab('shop')}
+            onClick={() => navigate && navigate('/cart')}
             aria-label={`購物籃，${itemCount} 件`}
             style={{
               color: 'var(--red)',

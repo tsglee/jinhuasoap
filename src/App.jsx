@@ -18,6 +18,9 @@ const Process = lazy(() =>
 const Shop = lazy(() =>
   import('./components/Shop.jsx').then((m) => ({ default: m.Shop })),
 );
+const Cart = lazy(() =>
+  import('./components/Cart.jsx').then((m) => ({ default: m.Cart })),
+);
 const JournalIndex = lazy(() =>
   import('./components/Journal.jsx').then((m) => ({ default: m.JournalIndex })),
 );
@@ -45,6 +48,7 @@ function parseRoute() {
   const path = window.location.pathname;
   const legal = path.match(/^\/legal\/(privacy|returns|terms)\/?$/);
   if (legal) return { type: 'legal', page: legal[1] };
+  if (path === '/cart' || path === '/cart/') return { type: 'cart' };
   if (path === '/journal' || path === '/journal/') return { type: 'journal' };
   if (path.startsWith('/journal/')) {
     const slug = path.slice('/journal/'.length).replace(/\/+$/, '');
@@ -103,7 +107,9 @@ export default function App() {
   );
 
   let body;
-  if (route.type === 'journal' && route.slug) {
+  if (route.type === 'cart') {
+    body = <Cart navigate={navigate} />;
+  } else if (route.type === 'journal' && route.slug) {
     body = <JournalPost slug={route.slug} navigate={navigate} />;
   } else if (route.type === 'journal') {
     body = <JournalIndex navigate={navigate} />;
@@ -116,10 +122,12 @@ export default function App() {
   } else if (tab === 'process') {
     body = <Process />;
   } else if (tab === 'shop') {
-    body = <Shop setTab={selectTab} />;
+    body = <Shop navigate={navigate} />;
   }
 
-  const screenLabel = route.type === 'journal'
+  const screenLabel = route.type === 'cart'
+    ? 'cart'
+    : route.type === 'journal'
     ? (route.slug ? `journal/${route.slug}` : 'journal')
     : route.type === 'legal'
     ? `legal/${route.page}`
@@ -130,7 +138,7 @@ export default function App() {
   return (
     <CartProvider>
       <div data-screen-label={`Goldenflower · ${screenLabel}`}>
-        <Header tab={activeTabId} setTab={selectTab} tabs={TABS} />
+        <Header tab={activeTabId} setTab={selectTab} tabs={TABS} navigate={navigate} />
         <main>
           <Suspense fallback={<TabFallback />}>{body}</Suspense>
         </main>

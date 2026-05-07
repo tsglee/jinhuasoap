@@ -13,26 +13,6 @@ import { AddToCartButton } from './BuyButton.jsx';
 
 // ── Sub-components ──────────────────────────────────────────────────────
 
-function DraftBadge() {
-  return (
-    <span
-      className="mono"
-      style={{
-        display: 'inline-block',
-        marginTop: 12,
-        padding: '3px 10px',
-        fontSize: 10,
-        letterSpacing: 3,
-        color: 'var(--gold-3)',
-        border: '1px solid var(--gold-3)',
-        textTransform: 'uppercase',
-      }}
-    >
-      文案草稿 · DRAFT
-    </span>
-  );
-}
-
 function DetailRow({ label, value }) {
   return (
     <div
@@ -172,7 +152,6 @@ function ProductDetailCard({ p, flip }) {
         >
           {p.subtitle}
         </div>
-        {p.draft && <DraftBadge />}
         <Divider />
         <dl style={{ margin: '14px 0 0', display: 'grid', gap: 0 }}>
           <DetailRow label="適合膚質" value={p.skinType} />
@@ -186,57 +165,9 @@ function ProductDetailCard({ p, flip }) {
   );
 }
 
-function SeriesSection({ name, note, products }) {
-  return (
-    <section
-      className="gf-pad-md"
-      style={{
-        maxWidth: 1180,
-        margin: '0 auto',
-        padding: '60px 44px 20px',
-      }}
-    >
-      <div style={{ textAlign: 'center', marginBottom: 10 }}>
-        <div className="mono" style={{ color: 'var(--red)', fontSize: 11, letterSpacing: 4 }}>
-          {note}
-        </div>
-        <h2
-          className="tc"
-          style={{
-            fontSize: 48,
-            fontWeight: 400,
-            letterSpacing: 14,
-            margin: '14px 0 6px',
-            color: 'var(--sumi)',
-          }}
-        >
-          {name}
-        </h2>
-      </div>
-      {products.map((p, i) => (
-        <ProductDetailCard key={p.num} p={p} flip={i % 2 === 1} />
-      ))}
-    </section>
-  );
-}
-
 // ── Page ────────────────────────────────────────────────────────────────
 
 export function Products() {
-  // Group products by series, preserving PDF order
-  const seriesOrder = ['花神守護', '花韻時節', '花露淨髮餅', '全能日常'];
-  const seriesNote = {
-    花神守護: '修復與潤澤',
-    花韻時節: '風土與暖心',
-    花露淨髮餅: '髮沐',
-    全能日常: '一皂到底',
-  };
-  const grouped = seriesOrder.map((name) => ({
-    name,
-    note: seriesNote[name],
-    products: PRODUCTS.filter((p) => p.series === name),
-  }));
-
   // Deep-link from About: when an About card sets gf_jump_product in
   // sessionStorage and switches to this tab, scroll to that product.
   useEffect(() => {
@@ -310,10 +241,19 @@ export function Products() {
 
       <TierNotice variant="static" />
 
-      {/* Series sections */}
-      {grouped.map((s) => (
-        <SeriesSection key={s.name} {...s} />
-      ))}
+      {/* 12 件連續陳列 — flip 全局交替（左右輪流） */}
+      <section
+        className="gf-pad-md"
+        style={{
+          maxWidth: 1180,
+          margin: '0 auto',
+          padding: '40px 44px 20px',
+        }}
+      >
+        {PRODUCTS.map((p, i) => (
+          <ProductDetailCard key={p.num} p={p} flip={i % 2 === 1} />
+        ))}
+      </section>
     </div>
   );
 }

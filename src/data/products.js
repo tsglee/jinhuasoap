@@ -3,9 +3,6 @@
 //   add-to-cart, etc.) from this list.
 // - About/Mobile.jsx renders a compact 2-col grid of all 12 at the bottom
 //   of the mobile About page.
-// `price` placeholders pending owner confirmation; the buy button shows
-// 「待定」 when price is 0 to avoid a misleading checkout. Items where the
-// wiki/draft inferences fill the gaps are marked `draft: true`.
 export const PRODUCTS = [
   // 【一、花神守護系列 — 修復與潤澤】
   {
@@ -31,7 +28,6 @@ export const PRODUCTS = [
       '瓊崖海棠油提供強大修復力，乳油木果脂則如厚實護盾鎖住水分。',
     washFeel:
       '帶有深沉的木質堅果香，泡泡細緻如凝脂，沖水後皮膚呈現溫潤的玉石光澤。',
-    draft: false,
   },
   {
     num: '貳',
@@ -56,7 +52,6 @@ export const PRODUCTS = [
       '取霧峰百花蜜之精萃，蜂蜜中的天然保濕因子能深度抓水。',
     washFeel:
       '泡沫綿密如奶，洗時釋出淡淡蜜香；沖水後肌膚飽滿溫潤、不留澀感。',
-    draft: true,
   },
   {
     num: '參',
@@ -81,7 +76,6 @@ export const PRODUCTS = [
       '研磨綠豆粉細微如塵，輕拭即代謝表皮；本草萃取粉舒緩深層粉刺。',
     washFeel:
       '泡沫綿密帶涼，沖水後肌膚透出本來的明亮，毛孔感覺被收束。',
-    draft: true,
   },
   {
     num: '肆',
@@ -106,7 +100,6 @@ export const PRODUCTS = [
       '蝶豆花富含花青素，具備極佳的抗氧化與防禦能力，能提亮肌膚並延緩老化。',
     washFeel:
       '泡泡輕盈細膩，洗臉時如同沐浴在清晨的藍色星光下，洗後肌膚感覺清透、充滿彈性與光澤。',
-    draft: false,
   },
 
   // 【二、花韻時節系列 — 風土與暖心】
@@ -133,7 +126,6 @@ export const PRODUCTS = [
       '長濱金盞花於橄欖油中浸泡四週，金盞花烯與類黃酮慢慢釋進油裡；乳油木果脂接在後面把修護鎖住。',
     washFeel:
       '泡沫溫潤敦厚，洗時帶一抹金，洗完肌膚柔軟、不緊繃。',
-    draft: true,
   },
   {
     num: '陸',
@@ -158,7 +150,6 @@ export const PRODUCTS = [
       '三星米漿入皂時為水相替換；米糠油富含 γ-穀維素與生育三烯酚 ── 給肌膚溫潤的米光。',
     washFeel:
       '泡沫綿密如奶，洗後留一層淡淡米香，肌膚像剛收的新米般柔潤。',
-    draft: true,
   },
   {
     num: '柒',
@@ -183,7 +174,6 @@ export const PRODUCTS = [
       '酒粕含氨基酸與酵素，能溫和代謝表皮；米糠油與橄欖油底層厚實滋潤。',
     washFeel:
       '泡沫細緻如絹，洗時有微微酒香，洗後肌膚透出絲絨般的光澤。',
-    draft: true,
   },
   {
     num: '捌',
@@ -208,7 +198,6 @@ export const PRODUCTS = [
       '桂花浸泡橄欖油四週，金秋桂花的甜香釋進油裡；甜杏仁油與米糠油給薄皮肌的親膚滋潤。',
     washFeel:
       '泡沫輕盈，洗時是一抹清淡的桂花蜜香，洗後肌膚柔軟、香氣留半日。',
-    draft: true,
   },
 
   // 【三、花露淨髮餅系列 — 髮沐】
@@ -234,7 +223,6 @@ export const PRODUCTS = [
       'pH 5–6 弱酸貼近頭皮原生酸鹼；蠶絲蛋白多胜肽順毛鱗片、洗後不澀不打結；玉米澱粉扛起成型。',
     washFeel:
       '起泡細密，山茶花淡香；洗後髮絲滑順、頭皮清爽。',
-    draft: true,
   },
   {
     num: '拾',
@@ -258,7 +246,6 @@ export const PRODUCTS = [
       '弱酸表活組合 (pH 5–6) 為骨架；茉莉花萃取粉是真實花瓣磨成粉。遇水釋出香氣。',
     washFeel:
       '泡沫綿密細緻，洗時香氣慢慢開出來；洗後全身微微涼意，茉莉香留一夜。',
-    draft: true,
   },
 
   // 【四、全能日常系列 — 一皂到底】
@@ -284,7 +271,6 @@ export const PRODUCTS = [
       '荷荷芭脂肪酸結構與肌膚皮脂幾乎同源，運動後油脂分泌變多時反而能起平衡；薰衣草粉走粉類植萃路線，量壓低位。',
     washFeel:
       '起泡輕盈快速，徹底洗去汗與油；沖完全身有微涼的草本氣息。',
-    draft: true,
   },
   {
     num: '拾貳',
@@ -306,6 +292,5 @@ export const PRODUCTS = [
     coreIngredients: '成分待補。',
     oilProfile: '原料特性待補。',
     washFeel: '洗感感受待補。',
-    draft: true,
   },
 ];
