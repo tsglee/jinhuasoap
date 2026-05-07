@@ -732,6 +732,11 @@ function Cover({ post, ratio = '4/3' }) {
     return <IllSoap tone={fb.tone} flower={fb.flower} ratio={ratio} label="" />;
   }
 
+  // build/strip-redundant-pngs.js drops PNGs from dist when AVIF/WebP siblings
+  // exist, so a bare <img src=".png"> would 404 in production. Use picture
+  // with AVIF → WebP → PNG-fallback so the browser resolves a real file.
+  const base = post.cover.src.replace(/\.(png|jpe?g|webp|avif)$/i, '');
+
   return (
     <div
       style={{
@@ -741,18 +746,23 @@ function Cover({ post, ratio = '4/3' }) {
         position: 'relative',
       }}
     >
-      <img
-        src={post.cover.src}
-        alt={post.cover.alt}
-        loading="lazy"
-        onError={() => setErrored(true)}
-        style={{
-          width: '100%',
-          height: '100%',
-          objectFit: 'cover',
-          display: 'block',
-        }}
-      />
+      <picture>
+        <source type="image/avif" srcSet={`${base}.avif`} />
+        <source type="image/webp" srcSet={`${base}.webp`} />
+        <img
+          src={`${base}.webp`}
+          alt={post.cover.alt}
+          loading="lazy"
+          decoding="async"
+          onError={() => setErrored(true)}
+          style={{
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            display: 'block',
+          }}
+        />
+      </picture>
     </div>
   );
 }
@@ -1003,7 +1013,7 @@ function PostBody({ body }) {
                     srcSet={node.src.replace(/\.(png|jpe?g)$/i, '.webp')}
                   />
                   <img
-                    src={node.src}
+                    src={node.src.replace(/\.(png|jpe?g)$/i, '.webp')}
                     alt={node.alt || ''}
                     loading="lazy"
                     decoding="async"
