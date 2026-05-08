@@ -194,7 +194,7 @@ export function Shop({ navigate }) {
           }}
         >
           <div className="mono" style={{ color: 'var(--gold-2)' }}>
-            批發合作
+            客製合作
           </div>
           <h2
             className="tc"
@@ -206,7 +206,7 @@ export function Shop({ navigate }) {
               color: 'var(--paper)',
             }}
           >
-            開店合作
+            節禮 · 婚禮
           </h2>
           <div
             className="tc"
@@ -219,7 +219,7 @@ export function Shop({ navigate }) {
               letterSpacing: 1,
             }}
           >
-            本舍與少數獨立店家合作。若您的店面與我們的皂氣質相投，請加我們 Line 一敘 — 最低訂量十二塊。
+            若您有婚禮小物、節日禮品或其他客製需求，歡迎加我們 Line 一敘 ── 一同為您構思一份合宜的皂禮。
           </div>
           <a
             href="https://lin.ee/7m167md"
@@ -237,7 +237,7 @@ export function Shop({ navigate }) {
           >
             <img
               src="https://qr-official.line.me/gs/M_867ryfzn_GW.png?oat__id=6629290&oat_content=qr"
-              alt="掃 QR · 加入金花樓官方 Line 洽詢批發"
+              alt="掃 QR · 加入金花樓官方 Line 洽詢客製"
               width="180"
               height="180"
               style={{ display: 'block' }}

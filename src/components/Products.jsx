@@ -82,7 +82,7 @@ function BuyBlock({ p }) {
   );
 }
 
-function ProductDetailCard({ p, flip }) {
+function ProductDetailCard({ p, flip, first }) {
   return (
     <div
       id={`product-${p.num}`}
@@ -93,7 +93,7 @@ function ProductDetailCard({ p, flip }) {
         gap: 60,
         alignItems: 'flex-start',
         padding: '60px 0',
-        borderTop: '1px dashed var(--ink-15)',
+        borderTop: first ? 'none' : '1px dashed var(--ink-15)',
         scrollMarginTop: 100,
       }}
     >
@@ -251,7 +251,7 @@ export function Products() {
         }}
       >
         {PRODUCTS.map((p, i) => (
-          <ProductDetailCard key={p.num} p={p} flip={i % 2 === 1} />
+          <ProductDetailCard key={p.num} p={p} flip={i % 2 === 1} first={i === 0} />
         ))}
       </section>
     </div>
