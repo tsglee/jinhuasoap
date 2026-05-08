@@ -446,22 +446,36 @@ function renderOrderEmailHtml({
       ${recipientName && recipientName !== name ? shipRow('收件人', recipientName) : ''}
     </table>`;
 
-  // ECPay 物流建單成功 → 顯示列印按鈕；失敗 → 顯示警示。沒走 store-to-store
-  // 寄送的訂單兩個都不顯示。
+  // ECPay 物流建單成功 → 寄件編號為主、A4 列印為輔；失敗 → 顯示警示。
+  // 沒走 store-to-store 寄送的訂單兩個都不顯示。
   let logisticsBlock = '';
   if (labelUrl && logistics) {
-    const cvsLabel = logistics.subType === 'UNIMARTC2C' ? '7-11' : '全家';
+    const isUni = logistics.subType === 'UNIMARTC2C';
+    const cvsLabel = isUni ? '7-11' : '全家';
+    const machineName = isUni ? 'ibon' : 'FamiPort';
     logisticsBlock = `
-    <div style="margin:24px 0;padding:18px;background:#fbf7e8;border:1px solid #c8a24a;text-align:center;">
-      <a href="${escapeHtml(labelUrl)}"
-         style="display:inline-block;padding:14px 30px;background:#8a2a22;color:#f8f5eb;text-decoration:none;letter-spacing:4px;font-size:15px;">
-        🖨 列印寄件單
-      </a>
-      <div style="margin-top:12px;font-family:'DM Mono',monospace;font-size:13px;color:#8a8275;letter-spacing:2px;">
-        寄件編號：${escapeHtml(logistics.cvsPaymentNo)}（${cvsLabel}）
+    <div style="margin:24px 0;padding:24px 20px;background:#fbf7e8;border:1px solid #c8a24a;text-align:center;">
+      <div style="font-size:11px;color:#8a8275;letter-spacing:3px;margin-bottom:10px;">
+        ${cvsLabel} 賣貨便寄件編號
       </div>
-      <div style="margin-top:6px;font-size:11px;color:#8a8275;letter-spacing:1px;">
-        點按鈕直接跳 ECPay 列印頁，A4 列印貼包裹即可交寄
+      <div style="font-family:'DM Mono','Courier New',monospace;font-size:32px;letter-spacing:6px;color:#8a2a22;font-weight:500;padding:10px 0;user-select:all;">
+        ${escapeHtml(logistics.cvsPaymentNo)}
+      </div>
+      ${
+        !isUni && logistics.cvsValidationNo
+          ? `<div style="font-family:'DM Mono','Courier New',monospace;font-size:14px;color:#8a8275;letter-spacing:3px;margin-top:6px;">驗證碼：${escapeHtml(logistics.cvsValidationNo)}</div>`
+          : ''
+      }
+      <div style="margin-top:18px;padding:12px 14px;background:#fff;border:1px dashed #c8a24a;text-align:left;font-size:13px;line-height:1.85;color:#1a1512;">
+        <div style="font-weight:500;letter-spacing:2px;color:#8a2a22;margin-bottom:6px;">寄件流程</div>
+        <div>1. 至 <strong>${cvsLabel}</strong> 找 <strong>${machineName}</strong> 機台</div>
+        <div>2. 點「<strong>${isUni ? '我要寄件 / 取件' : '便利生活 / 寄件'}</strong>」→「<strong>賣貨便</strong>」→「<strong>寄件</strong>」</div>
+        <div>3. 輸入上方寄件編號${!isUni && logistics.cvsValidationNo ? '與驗證碼' : ''}，機台會印出寄件貼紙</div>
+        <div>4. 貼紙貼包裹、交店員，完成交寄</div>
+      </div>
+      <div style="margin-top:12px;font-size:11px;color:#8a8275;letter-spacing:1px;">
+        如有 A4 印表機、想自印寄件單貼包裹 →
+        <a href="${escapeHtml(labelUrl)}" style="color:#8a2a22;">列印 A4 寄件單</a>
       </div>
     </div>`;
   } else if (logisticsError) {
@@ -546,11 +560,26 @@ function renderOrderEmailText({
   if (shipKind === 'home' && address) lines.push(`地址：${address}`);
   if (recipientName && recipientName !== name) lines.push(`收件人：${recipientName}`);
   if (labelUrl && logistics) {
-    const cvsLabel = logistics.subType === 'UNIMARTC2C' ? '7-11' : '全家';
+    const isUni = logistics.subType === 'UNIMARTC2C';
+    const cvsLabel = isUni ? '7-11' : '全家';
+    const machineName = isUni ? 'ibon' : 'FamiPort';
     lines.push(
       ``,
-      `寄件編號：${logistics.cvsPaymentNo}（${cvsLabel}）`,
-      `列印寄件單：${labelUrl}`,
+      `===== ${cvsLabel} 賣貨便寄件編號 =====`,
+      logistics.cvsPaymentNo,
+    );
+    if (!isUni && logistics.cvsValidationNo) {
+      lines.push(`驗證碼：${logistics.cvsValidationNo}`);
+    }
+    lines.push(
+      ``,
+      `寄件流程：`,
+      `1. 至 ${cvsLabel} 找 ${machineName} 機台`,
+      `2. 點「${isUni ? '我要寄件 / 取件' : '便利生活 / 寄件'}」→「賣貨便」→「寄件」`,
+      `3. 輸入寄件編號${!isUni && logistics.cvsValidationNo ? '與驗證碼' : ''}，列印寄件貼紙`,
+      `4. 貼包裹、交店員、完成`,
+      ``,
+      `若有 A4 印表機想自印寄件單：${labelUrl}`,
     );
   } else if (logisticsError) {
     lines.push(
