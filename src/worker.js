@@ -13,7 +13,13 @@
  *   env.ORDER_TO_EMAIL         — destination email (default: tsghsunlee@gmail.com)
  *   env.ORDER_FROM_EMAIL       — Resend sender (default: onboarding@resend.dev
  *                                until jinhuasoap.com is verified in Resend)
+ *   env.ECPAY_LOGISTICS_HASH_KEY  — secret (ECPay 物流 C2C HashKey)
+ *   env.ECPAY_LOGISTICS_HASH_IV   — secret
+ *   env.ECPAY_LOGISTICS_BASE_URL  — var, default https://logistics.ecpay.com.tw
+ *   env.SENDER_NAME / SENDER_PHONE / SENDER_CELL_PHONE — var, 寄件人資料
+ *   env.PUBLIC_BASE_URL        — var, 組列印 URL 用，例 https://jinhuasoap.com
  */
+import { createHash } from 'node:crypto';
 
 export default {
   async fetch(request, env) {
@@ -30,6 +36,11 @@ export default {
 
     if (url.pathname === '/api/store-callback') {
       return handleStoreCallback(request);
+    }
+
+    if (url.pathname.startsWith('/api/label/')) {
+      const orderId = url.pathname.slice('/api/label/'.length);
+      return handleLabel(orderId, env);
     }
 
     if (url.pathname === '/api/config') {
@@ -158,12 +169,62 @@ async function handleOrder(request, env) {
   const orderId = generateOrderId();
   const shipFields = { phone, shipMethod, shipKind, storeId, storeName, recipientName, address };
   const subject = `[金花樓] ${orderId} · ${name} · NT$${total}`;
-  const html = renderOrderEmailHtml({ orderId, name, email, note, cart, total, ip, ...shipFields });
-  const text = renderOrderEmailText({ orderId, name, email, note, cart, total, ip, ...shipFields });
 
-  // Fallback log：在打 Resend 之前先把訂單寫進 KV（30 天 TTL）。寄信成功
-  // 就刪 KV；寄信失敗就保留，靠 orderId 在 dashboard 撈出人工聯絡客戶。
-  // 沒設 KV binding（local dev / 還沒 wire）也不擋訂單。
+  // ECPay 物流 C2C：if 店到店付款 + 有 HashKey/HashIV，自動建單。回傳的
+  // CVSPaymentNo 是寄件編號，列印寄件單時用。subType 從 payload 直送
+  // （UNIMARTC2C / FAMIC2C）— 比從中文 shipMethod 推回穩。
+  let logistics = null;
+  let logisticsError = null;
+  if (
+    payload.shipKind === 'store' &&
+    payload.subType &&
+    env.ECPAY_LOGISTICS_HASH_KEY &&
+    env.ECPAY_LOGISTICS_HASH_IV
+  ) {
+    try {
+      const result = await createShippingOrder(
+        {
+          orderId,
+          subType: payload.subType,
+          total,
+          storeId,
+          recipientName: recipientName || name,
+          recipientPhone: phone,
+          recipientEmail: email,
+        },
+        env,
+      );
+      if (result.ok) {
+        logistics = {
+          allPayLogisticsId: result.allPayLogisticsId,
+          cvsPaymentNo: result.cvsPaymentNo,
+          cvsValidationNo: result.cvsValidationNo,
+          subType: payload.subType,
+          createdAt: new Date().toISOString(),
+        };
+      } else {
+        logisticsError = result.error || 'ECPay 回傳未知錯誤';
+        console.error('ECPay createShippingOrder failed:', logisticsError);
+      }
+    } catch (err) {
+      logisticsError = err.message || String(err);
+      console.error('ECPay createShippingOrder threw:', err);
+    }
+  }
+
+  const labelUrl = logistics ? `${publicBaseUrl(env)}/api/label/${orderId}` : null;
+  const html = renderOrderEmailHtml({
+    orderId, name, email, note, cart, total, ip, ...shipFields,
+    labelUrl, logistics, logisticsError,
+  });
+  const text = renderOrderEmailText({
+    orderId, name, email, note, cart, total, ip, ...shipFields,
+    labelUrl, logistics, logisticsError,
+  });
+
+  // Fallback log：把訂單 + ECPay logistics info 一起寫進 KV（30 天 TTL）。
+  // 列印寄件單 endpoint 從 KV 讀 logistics info，所以寄信成功後**不刪 KV**
+  // （TTL 自動過期即可）。沒設 KV binding（local dev / 還沒 wire）也不擋訂單。
   const fallbackKey = `order/${orderId}/${Date.now()}`;
   let fallbackSaved = false;
   if (env.ORDER_FALLBACK) {
@@ -175,6 +236,8 @@ async function handleOrder(request, env) {
           createdAt: new Date().toISOString(),
           ip,
           payload,
+          logistics,
+          logisticsError,
         }),
         { expirationTtl: 30 * 24 * 60 * 60 },
       );
@@ -226,14 +289,8 @@ async function handleOrder(request, env) {
     );
   }
 
-  // 寄信成功 → 刪 KV fallback（沒刪掉沒關係，30 天會自己過期）
-  if (fallbackSaved) {
-    try {
-      await env.ORDER_FALLBACK.delete(fallbackKey);
-    } catch (_) {
-      /* noop */
-    }
-  }
+  // KV 不刪 — 列印寄件單 endpoint (/api/label/:orderId) 仰賴 KV 讀 logistics
+  // info。30 天 TTL 自動失效，影響不大。
 
   return jsonResponse({ ok: true, orderId });
 }
@@ -346,6 +403,9 @@ function renderOrderEmailHtml({
   cart,
   total,
   ip,
+  labelUrl,
+  logistics,
+  logisticsError,
 }) {
   const rows = cart
     .map(
@@ -386,6 +446,33 @@ function renderOrderEmailHtml({
       ${recipientName && recipientName !== name ? shipRow('收件人', recipientName) : ''}
     </table>`;
 
+  // ECPay 物流建單成功 → 顯示列印按鈕；失敗 → 顯示警示。沒走 store-to-store
+  // 寄送的訂單兩個都不顯示。
+  let logisticsBlock = '';
+  if (labelUrl && logistics) {
+    const cvsLabel = logistics.subType === 'UNIMARTC2C' ? '7-11' : '全家';
+    logisticsBlock = `
+    <div style="margin:24px 0;padding:18px;background:#fbf7e8;border:1px solid #c8a24a;text-align:center;">
+      <a href="${escapeHtml(labelUrl)}"
+         style="display:inline-block;padding:14px 30px;background:#8a2a22;color:#f8f5eb;text-decoration:none;letter-spacing:4px;font-size:15px;">
+        🖨 列印寄件單
+      </a>
+      <div style="margin-top:12px;font-family:'DM Mono',monospace;font-size:13px;color:#8a8275;letter-spacing:2px;">
+        寄件編號：${escapeHtml(logistics.cvsPaymentNo)}（${cvsLabel}）
+      </div>
+      <div style="margin-top:6px;font-size:11px;color:#8a8275;letter-spacing:1px;">
+        點按鈕直接跳 ECPay 列印頁，A4 列印貼包裹即可交寄
+      </div>
+    </div>`;
+  } else if (logisticsError) {
+    logisticsBlock = `
+    <div style="margin:24px 0;padding:14px 18px;background:#fce4e0;border:1px solid #8a2a22;color:#8a2a22;">
+      <strong>⚠ ECPay 物流自動建單失敗</strong><br>
+      <span style="font-size:13px;color:#666;">${escapeHtml(logisticsError)}</span><br>
+      <span style="font-size:13px;color:#666;">請至 ECPay 後台手動建單。訂單資料已備齊在下方。</span>
+    </div>`;
+  }
+
   return `<!doctype html>
 <html lang="zh-Hant"><body style="font-family:'Noto Serif TC',Georgia,serif;color:#1a1512;background:#f8f5eb;padding:24px;">
   <div style="max-width:560px;margin:0 auto;background:#fff;padding:28px;border:1px solid #ddd;">
@@ -397,6 +484,7 @@ function renderOrderEmailHtml({
     <p style="margin:0 0 6px;"><a href="mailto:${escapeHtml(email)}">${escapeHtml(email)}</a></p>
 
     ${shipBlock}
+    ${logisticsBlock}
 
     <table style="width:100%;border-collapse:collapse;margin-top:8px;">
       <thead>
@@ -440,6 +528,9 @@ function renderOrderEmailText({
   cart,
   total,
   ip,
+  labelUrl,
+  logistics,
+  logisticsError,
 }) {
   const lines = [
     `新訂購請求 — 金花樓 · 手壓天然皂`,
@@ -454,6 +545,20 @@ function renderOrderEmailText({
   if (shipKind === 'store' && storeName) lines.push(`門市：${storeName}`);
   if (shipKind === 'home' && address) lines.push(`地址：${address}`);
   if (recipientName && recipientName !== name) lines.push(`收件人：${recipientName}`);
+  if (labelUrl && logistics) {
+    const cvsLabel = logistics.subType === 'UNIMARTC2C' ? '7-11' : '全家';
+    lines.push(
+      ``,
+      `寄件編號：${logistics.cvsPaymentNo}（${cvsLabel}）`,
+      `列印寄件單：${labelUrl}`,
+    );
+  } else if (logisticsError) {
+    lines.push(
+      ``,
+      `⚠ ECPay 物流自動建單失敗：${logisticsError}`,
+      `請至 ECPay 後台手動建單。`,
+    );
+  }
   lines.push(
     ``,
     `購物籃：`,
@@ -475,6 +580,216 @@ function jsonResponse(body, status = 200, extraHeaders = {}) {
       'Content-Type': 'application/json; charset=utf-8',
       'Cache-Control': 'no-store',
       ...extraHeaders,
+    },
+  });
+}
+
+// ── ECPay 物流 C2C ────────────────────────────────────────────────────────
+
+function publicBaseUrl(env) {
+  return env.PUBLIC_BASE_URL || 'https://jinhuasoap.com';
+}
+
+function logisticsBaseUrl(env) {
+  return env.ECPAY_LOGISTICS_BASE_URL || 'https://logistics.ecpay.com.tw';
+}
+
+function ecpayMerchantId(env) {
+  return env.ECPAY_MERCHANT_ID || env.VITE_ECPAY_MERCHANT_ID || '';
+}
+
+// ECPay 限 MerchantTradeNo 4–20 英數，不可有 dash。我們的 orderId 是
+// JH-YYMMDD-XXXX（13 字含 dash）→ dash 拿掉變 JHYYMMDDXXXX（11 字），
+// 安全範圍內。orderId 對外仍用原格式（給人看的）。
+export function orderIdToTradeNo(orderId) {
+  return orderId.replace(/-/g, '');
+}
+
+// ECPay CheckMacValue 算法（物流 MD5 版）：
+// 1. 把所有 query params 依 key 字母排序（不分大小寫一起 ASCII 排序），
+//    組成 k=v&k=v 字串
+// 2. 前後夾上 HashKey + HashIV：HashKey=...&...&HashIV=...
+// 3. URL-encode 整段（用 .NET URL-encode 規格 — small-letter encoded 字元
+//    要轉成大寫，例 %20 → %20、%2F → %2f → 需要轉回大寫... 等等。
+//    ECPay 要求是 .NET 預設 URL-encode 的小寫格式，跟 RFC 3986 大寫不同）
+// 4. 全部小寫
+// 5. MD5 hash → 大寫 hex
+//
+// 文件參照 ECPay 物流 C2C SDK，行為跟金流 SHA256 不同（MD5 + lowercase 後
+// uppercase MD5 result）。
+function ecpayUrlEncode(str) {
+  // .NET 風格：encodeURIComponent 後改寫部分字元
+  // ECPay 文件規定這幾個 char 要替換回原字元（不 encode）
+  return encodeURIComponent(str)
+    .replace(/%20/g, '+')
+    .replace(/%21/g, '!')
+    .replace(/%2A/g, '*')
+    .replace(/%28/g, '(')
+    .replace(/%29/g, ')')
+    .replace(/%27/g, "'");
+}
+
+export function checkMacValue(params, hashKey, hashIV) {
+  const keys = Object.keys(params)
+    .filter((k) => k !== 'CheckMacValue' && params[k] !== undefined && params[k] !== null)
+    .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
+  const joined = keys.map((k) => `${k}=${params[k]}`).join('&');
+  const wrapped = `HashKey=${hashKey}&${joined}&HashIV=${hashIV}`;
+  const encoded = ecpayUrlEncode(wrapped).toLowerCase();
+  return createHash('md5').update(encoded, 'utf8').digest('hex').toUpperCase();
+}
+
+function fmtDate(date = new Date()) {
+  // ECPay 要 yyyy/MM/dd HH:mm:ss（GMT+8）
+  const tz = new Date(date.getTime() + 8 * 60 * 60 * 1000);
+  const pad = (n) => String(n).padStart(2, '0');
+  return (
+    tz.getUTCFullYear() +
+    '/' + pad(tz.getUTCMonth() + 1) +
+    '/' + pad(tz.getUTCDate()) +
+    ' ' + pad(tz.getUTCHours()) +
+    ':' + pad(tz.getUTCMinutes()) +
+    ':' + pad(tz.getUTCSeconds())
+  );
+}
+
+async function createShippingOrder(input, env) {
+  const { orderId, subType, total, storeId, recipientName, recipientPhone, recipientEmail } = input;
+  const tradeNo = orderIdToTradeNo(orderId);
+  const merchantId = ecpayMerchantId(env);
+  if (!merchantId) {
+    return { ok: false, error: '未設定 ECPAY_MERCHANT_ID' };
+  }
+
+  const params = {
+    MerchantID: merchantId,
+    MerchantTradeNo: tradeNo,
+    MerchantTradeDate: fmtDate(),
+    LogisticsType: 'CVS',
+    LogisticsSubType: subType, // UNIMARTC2C | FAMIC2C
+    GoodsAmount: String(Math.round(total)),
+    CollectionAmount: String(Math.round(total)),
+    IsCollection: 'Y',
+    GoodsName: `金花樓手工皂訂單 ${orderId}`.slice(0, 50),
+    SenderName: env.SENDER_NAME || '金花樓',
+    SenderPhone: env.SENDER_PHONE || '',
+    SenderCellPhone: env.SENDER_CELL_PHONE || env.SENDER_PHONE || '',
+    ReceiverName: recipientName,
+    ReceiverPhone: recipientPhone,
+    ReceiverCellPhone: recipientPhone,
+    ReceiverEmail: recipientEmail,
+    ReceiverStoreID: storeId,
+    ReturnStoreID: storeId,
+    ServerReplyURL: `${publicBaseUrl(env)}/api/logistics-callback`,
+    LogisticsC2CReplyURL: `${publicBaseUrl(env)}/api/logistics-callback`,
+    Remark: '',
+    PlatformID: '',
+  };
+  params.CheckMacValue = checkMacValue(params, env.ECPAY_LOGISTICS_HASH_KEY, env.ECPAY_LOGISTICS_HASH_IV);
+
+  const body = new URLSearchParams(params).toString();
+  let res;
+  try {
+    res = await fetch(`${logisticsBaseUrl(env)}/Express/Create`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body,
+      signal: AbortSignal.timeout(10000),
+    });
+  } catch (err) {
+    return { ok: false, error: `連線錯誤：${err.message}` };
+  }
+
+  const text = await res.text();
+  // ECPay 回 1|key=val&key=val 或 0|錯誤訊息
+  const sep = text.indexOf('|');
+  const head = sep >= 0 ? text.slice(0, sep) : text;
+  const body2 = sep >= 0 ? text.slice(sep + 1) : '';
+  if (head !== '1') {
+    return { ok: false, error: `ECPay 回應 ${head}: ${body2 || text}` };
+  }
+  const fields = Object.fromEntries(new URLSearchParams(body2));
+  const rtnCode = fields.RtnCode;
+  // RtnCode 300 (UNIMARTC2C) / 2001 (FAMIC2C) 是建單成功的回傳代碼
+  if (rtnCode !== '300' && rtnCode !== '2001') {
+    return { ok: false, error: `RtnCode ${rtnCode}: ${fields.RtnMsg || ''}` };
+  }
+  return {
+    ok: true,
+    allPayLogisticsId: fields.AllPayLogisticsID,
+    cvsPaymentNo: fields.CVSPaymentNo,
+    cvsValidationNo: fields.CVSValidationNo,
+  };
+}
+
+function buildPrintFormHtml(logistics, env) {
+  const merchantId = ecpayMerchantId(env);
+  const isUni = logistics.subType === 'UNIMARTC2C';
+  const action =
+    `${logisticsBaseUrl(env)}/Helper/` +
+    (isUni ? 'PrintUniMartC2COrderInfo' : 'PrintFAMIC2COrderInfo');
+
+  const params = {
+    MerchantID: merchantId,
+    AllPayLogisticsID: logistics.allPayLogisticsId,
+    CVSPaymentNo: logistics.cvsPaymentNo,
+  };
+  // 7-11 用 CVSPaymentNo 即可；全家還要 CVSValidationNo
+  if (!isUni && logistics.cvsValidationNo) {
+    params.CVSValidationNo = logistics.cvsValidationNo;
+  }
+  params.CheckMacValue = checkMacValue(params, env.ECPAY_LOGISTICS_HASH_KEY, env.ECPAY_LOGISTICS_HASH_IV);
+
+  const inputs = Object.entries(params)
+    .map(([k, v]) => `<input type="hidden" name="${escapeHtml(k)}" value="${escapeHtml(v)}">`)
+    .join('\n    ');
+
+  return `<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<title>列印寄件單 · 金花樓</title>
+</head>
+<body style="font-family:'Noto Serif TC',serif;text-align:center;padding:60px;color:#1a1512;">
+  <p style="letter-spacing:3px;">正在跳轉至 ECPay 列印頁…</p>
+  <form id="ecpayLabel" method="POST" action="${escapeHtml(action)}">
+    ${inputs}
+  </form>
+  <script>document.getElementById('ecpayLabel').submit();</script>
+</body>
+</html>`;
+}
+
+async function handleLabel(orderId, env) {
+  if (!orderId || !/^JH-\d{6}-[A-Z0-9]{4}$/.test(orderId)) {
+    return new Response('Invalid order id', { status: 400 });
+  }
+  if (!env.ORDER_FALLBACK) {
+    return new Response('KV not configured', { status: 500 });
+  }
+  // KV key 是 order/{orderId}/{ts}，ts 不知道 → list with prefix
+  const list = await env.ORDER_FALLBACK.list({ prefix: `order/${orderId}/` });
+  if (!list.keys.length) {
+    return new Response('找不到這筆訂單（可能已超過 30 天）', { status: 404 });
+  }
+  const raw = await env.ORDER_FALLBACK.get(list.keys[0].name);
+  if (!raw) {
+    return new Response('Order data missing', { status: 404 });
+  }
+  const stored = JSON.parse(raw);
+  if (!stored.logistics) {
+    return new Response(
+      '這筆訂單沒有 ECPay 物流資料（可能自動建單失敗）。請至 ECPay 後台手動列印。',
+      { status: 404 },
+    );
+  }
+  if (!env.ECPAY_LOGISTICS_HASH_KEY || !env.ECPAY_LOGISTICS_HASH_IV) {
+    return new Response('ECPay HashKey/HashIV not configured', { status: 500 });
+  }
+  return new Response(buildPrintFormHtml(stored.logistics, env), {
+    headers: {
+      'Content-Type': 'text/html; charset=utf-8',
+      'Cache-Control': 'no-store',
     },
   });
 }

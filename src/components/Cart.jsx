@@ -340,6 +340,10 @@ function OrderRequestForm({ cart, total, onSent }) {
           phone: phone.replace(/[\s-]/g, ''),
           shipMethod: selected?.label || shipMethod,
           shipKind: kind,
+          // 直送 ECPay LogisticsSubType（UNIMARTC2C / FAMIC2C），worker 用
+          // 這個自動 call CreateShippingOrder API。比從中文 shipMethod
+          // 反推 subType 穩。
+          subType: kind === 'store' ? ECPAY_SUBTYPE[shipMethod] : undefined,
           storeId: kind === 'store' ? storeId.trim() : '',
           storeName: kind === 'store' ? storeName.trim() : '',
           recipientName: (recipientName.trim() || name.trim()),

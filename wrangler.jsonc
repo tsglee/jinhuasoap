@@ -19,7 +19,14 @@
  *     deploys. Use these for credentials / API keys.
  *
  * Secrets to keep in dashboard (encrypted, do NOT add here):
- *   RESEND_API_KEY     — required for /api/order to work
+ *   RESEND_API_KEY              — required for /api/order to work
+ *   ECPAY_LOGISTICS_HASH_KEY    — ECPay 物流 C2C HashKey
+ *   ECPAY_LOGISTICS_HASH_IV     — ECPay 物流 C2C HashIV
+ *
+ * ⚠️ 切勿把上述 secret 名稱也加到下方 `vars` block — wrangler deploy
+ *    會把 dashboard 的 vars 跟這個檔案 sync，重名的 plaintext var 會
+ *    覆蓋掉 encrypted secret，導致 secret 失效（曾經踩過這個雷）。
+ *    這個檔案應只放非敏感資料；敏感資料走 `wrangler secret put`。
  *
  * Optional plaintext overrides (defaults are baked into worker.js):
  *   ORDER_TO_EMAIL     — defaults to tsghsunlee@gmail.com
@@ -29,16 +36,19 @@
  *
  * KV bindings:
  *   ORDER_FALLBACK     — namespace gf-order-fallback. Worker writes
- *                        every order payload here before calling Resend
- *                        (30-day TTL). Successful sends delete the entry;
- *                        failed sends keep it for manual recovery via
- *                        Cloudflare dashboard. See README §0.7 SOP 3.
+ *                        every order payload + ECPay logistics info here
+ *                        (30-day TTL). KV 不刪 — /api/label/:orderId 仰賴
+ *                        KV 讀 logistics 資料列印寄件單，TTL 自然過期。
+ *
+ * compatibility_flags:
+ *   nodejs_compat — 為了用 node:crypto MD5（ECPay 物流 CheckMacValue）。
  */
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "jinhuasoap",
   "main": "src/worker.js",
   "compatibility_date": "2025-04-01",
+  "compatibility_flags": ["nodejs_compat"],
   "assets": {
     "directory": "./dist",
     "binding": "ASSETS",
@@ -46,7 +56,12 @@
     "run_worker_first": ["/api/*"]
   },
   "vars": {
-    "ECPAY_MERCHANT_ID": "3498678"
+    "ECPAY_MERCHANT_ID": "3498678",
+    "ECPAY_LOGISTICS_BASE_URL": "https://logistics.ecpay.com.tw",
+    "PUBLIC_BASE_URL": "https://jinhuasoap.com",
+    "SENDER_NAME": "金花樓",
+    "SENDER_PHONE": "886979522515",
+    "SENDER_CELL_PHONE": "886979522515"
   },
   "kv_namespaces": [
     {
