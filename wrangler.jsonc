@@ -60,8 +60,8 @@
     "ECPAY_LOGISTICS_BASE_URL": "https://logistics.ecpay.com.tw",
     "PUBLIC_BASE_URL": "https://jinhuasoap.com",
     "SENDER_NAME": "金花樓",
-    "SENDER_PHONE": "886979522515",
-    "SENDER_CELL_PHONE": "886979522515"
+    "SENDER_PHONE": "0979522515",
+    "SENDER_CELL_PHONE": "0979522515"
   },
   "kv_namespaces": [
     {
