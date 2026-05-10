@@ -21,7 +21,7 @@ const PUBLISHER = '金花樓';
 const POSTS = [
   {
     slug: 'three-oils',
-    kicker: '原料之念',
+    kicker: '原料手記',
     title: '本舍用什麼油',
     lead: '一塊皂為什麼要混不同油？因為每種油負責不同的事。',
     date: '2025-05-15',
@@ -46,7 +46,7 @@ const POSTS = [
   },
   {
     slug: 'ffa-five-forces',
-    kicker: '設計之念',
+    kicker: '設計方針',
     title: '脂肪酸與五力',
     lead: '油只是載體，脂肪酸才是本質。五力，是一塊皂的健康檢查表。',
     date: '2025-11-04',
@@ -74,7 +74,7 @@ const POSTS = [
   },
   {
     slug: 'saponification',
-    kicker: '工藝之念',
+    kicker: '工藝技術',
     title: '油遇到鹼，就成了皂',
     lead: '手工皂為什麼洗後不乾澀？因為甘油是這個反應自然生出來的副產物。',
     date: '2025-07-08',
@@ -99,7 +99,7 @@ const POSTS = [
   },
   {
     slug: 'trace',
-    kicker: '工藝之念',
+    kicker: '工藝技術',
     title: 'Trace 是判斷的時刻',
     lead: '把皂液攪到能在表面留下痕跡 ── 那就是 trace，可以入模了。',
     date: '2025-09-12',
@@ -126,7 +126,7 @@ const POSTS = [
   },
   {
     slug: 'yes-palm',
-    kicker: '原料之念',
+    kicker: '原料手記',
     title: '為什麼我們也用棕櫚油',
     lead: '棕櫚油的爭議我們知道，但配方需要它的硬度，而它的資源效率反而最高。',
     date: '2025-12-20',
@@ -155,7 +155,7 @@ const POSTS = [
 
   {
     slug: 'skin-ph-acid-mantle',
-    kicker: '皮膚之念',
+    kicker: '皮膚紀錄',
     title: '臉、身體、頭髮的清潔密碼',
     lead: '健康皮膚是 pH 4.5–5.5 的弱酸性，但冷製皂洗起來是鹼性 ── 為什麼還能用？什麼時候不能用？',
     date: '2026-01-25',
@@ -210,7 +210,7 @@ const POSTS = [
 
   {
     slug: 'cold-vs-hot-process',
-    kicker: '工藝之念',
+    kicker: '工藝技術',
     title: '冷製、熱製、融化再造 ── 為什麼我們堅持冷壓',
     lead: '同樣是手工皂，工法不同，洗感差很多。冷製、熱製、融化再造三條路，差在溫度、時間、跟甘油去哪裡。',
     date: '2026-02-18',
@@ -273,7 +273,7 @@ const POSTS = [
 
   {
     slug: 'ins-value',
-    kicker: '設計之念',
+    kicker: '設計方針',
     title: 'INS 值 ── 老闆娘看配方第一個看的數字',
     lead: 'INS 值是看一塊皂硬不硬、平不平衡的速查指標。140–160 是甜蜜帶 ── 太低太軟、太高太脆。',
     date: '2026-03-12',
@@ -335,7 +335,7 @@ const POSTS = [
 
   {
     slug: 'botanical-design-truth',
-    kicker: '設計之念',
+    kicker: '設計方針',
     title: '加了牛奶咖啡就會變好用？植萃設計的真相',
     lead: '初學者最常想：皂太乾就加牛奶蜂蜜試試。錯。脂肪酸是骨架，植萃是裝飾 ── 順序不能反。',
     date: '2026-04-22',
@@ -400,7 +400,7 @@ const POSTS = [
 
   {
     slug: 'how-to-choose-soap',
-    kicker: '皮膚之念',
+    kicker: '皮膚紀錄',
     title: '怎麼挑一塊皂 ── 從你身上開始',
     lead: '從肌膚、季節、用途三個角度走 ── 老闆娘的選皂三問。挑對了，每塊皂用到底都會記得。',
     date: '2026-05-05',
@@ -511,7 +511,7 @@ const POSTS = [
 
   {
     slug: 'why-handmade-soap',
-    kicker: '設計之念',
+    kicker: '設計方針',
     title: '為什麼用手工皂 ── 跟皂餅的差別在哪',
     lead: '市售肥皂洗完緊、沐浴乳一瓶接一瓶。手工皂跟弱酸皂餅各自解一塊問題 ── 你不一定要二選一。',
     date: '2026-05-04',
@@ -584,11 +584,11 @@ const POSTS = [
     ],
   },
 
-  // ============== 生活之念 ==============
+  // ============== 生活運用 ==============
 
   {
     slug: 'taiwan-water',
-    kicker: '生活之念',
+    kicker: '生活運用',
     title: '這座島的水與皂',
     lead: '從台北搬到高雄，皂洗起來突然不對勁了 ── 不是皂的問題，是水變了。',
     date: '2026-05-11',
@@ -660,7 +660,7 @@ const POSTS = [
 
   {
     slug: 'after-sweat',
-    kicker: '生活之念',
+    kicker: '生活運用',
     title: '流汗之後',
     lead: '運動完、騎車回家、戶外曬一天 ── 流汗後 30 分鐘是洗澡的黃金窗。',
     date: '2026-05-08',
@@ -724,7 +724,7 @@ const POSTS = [
 
   {
     slug: 'travel-soap',
-    kicker: '生活之念',
+    kicker: '生活運用',
     title: '出門那塊皂',
     lead: '出差三天、健身房一週、家庭旅行十天 ── 一塊皂能取代三瓶塑膠瓶。',
     date: '2026-05-09',
@@ -787,7 +787,7 @@ const POSTS = [
 
   {
     slug: 'soap-storage',
-    kicker: '生活之念',
+    kicker: '生活運用',
     title: '一塊皂的家',
     lead: '浴室潮濕、皂盤瀝水、保存延壽 ── 一塊皂能用多久，多半看你怎麼放它。',
     date: '2026-05-12',
@@ -859,11 +859,11 @@ const POSTS = [
     ],
   },
 
-  // ============== 皮膚之念（人生階段 + 皮膚事件深化） ==============
+  // ============== 皮膚紀錄（人生階段 + 皮膚事件深化） ==============
 
   {
     slug: 'humid-island-feet',
-    kicker: '皮膚之念',
+    kicker: '皮膚紀錄',
     title: '濕熱島嶼的腳',
     lead: '台灣夏天的濕熱讓鞋子裡像個小溫室 ── 香港腳、足汗、腳臭，多半是「悶」這件事的後果。',
     date: '2026-05-01',
@@ -930,7 +930,7 @@ const POSTS = [
 
   {
     slug: 'allergy-flare',
-    kicker: '皮膚之念',
+    kicker: '皮膚紀錄',
     title: '過敏發作的那幾天',
     lead: '紅、癢、腫的時候要不要洗、用什麼洗 ── 過敏期皮膚經不起折騰，加法跟減法的取捨變得很關鍵。',
     date: '2026-05-02',
@@ -998,7 +998,7 @@ const POSTS = [
 
   {
     slug: 'menstrual-skin',
-    kicker: '皮膚之念',
+    kicker: '皮膚紀錄',
     title: '經期前後的肌膚',
     lead: '月經來前一週爆痘、來時皮膚特別敏感、來完皮膚突然變好 ── 不是錯覺，是荷爾蒙的循環。',
     date: '2026-05-03',
@@ -1060,7 +1060,7 @@ const POSTS = [
 
   {
     slug: 'housewife-eczema',
-    kicker: '皮膚之念',
+    kicker: '皮膚紀錄',
     title: '反覆洗手的那雙手',
     lead: '一天洗手二十次、家事勞動、酒精消毒 ── 一雙手洗到龜裂的時候，需要的不是更強的皂。',
     date: '2026-05-04',
@@ -1123,7 +1123,7 @@ const POSTS = [
 
   {
     slug: 'elderly-winter-itch',
-    kicker: '皮膚之念',
+    kicker: '皮膚紀錄',
     title: '冬天的癢',
     lead: '七十歲的長輩冬天會抱怨小腿癢、手肘乾 ── 不是冷氣不夠暖，是皮膚的油脂跟著年紀少了。',
     date: '2026-05-05',
@@ -1191,7 +1191,7 @@ const POSTS = [
 
   {
     slug: 'teen-acne',
-    kicker: '皮膚之念',
+    kicker: '皮膚紀錄',
     title: '青春期的痘',
     lead: '國高中生洗臉的兩難：洗太多會反油，洗太少又長痘 ── 中間那條線怎麼抓？',
     date: '2026-05-06',
@@ -1257,7 +1257,7 @@ const POSTS = [
 
   {
     slug: 'menopause-skin',
-    kicker: '皮膚之念',
+    kicker: '皮膚紀錄',
     title: '更年期的皮膚',
     lead: '以前用得好的那塊皂，突然開始洗完緊、洗完癢 ── 不是皂變了，是身體換了一個季節。',
     date: '2026-05-07',
@@ -1322,7 +1322,7 @@ const POSTS = [
 
   {
     slug: 'baby-soap',
-    kicker: '皮膚之念',
+    kicker: '皮膚紀錄',
     title: '寶寶與冷製皂',
     lead: '嬰兒皮脂膜還沒成熟、媽媽的手洗到龜裂 ── 一塊皂能不能進這個家，要分階段看。',
     date: '2026-05-13',
@@ -1390,11 +1390,11 @@ const POSTS = [
     ],
   },
 
-  // ============== 儀式之念 ==============
+  // ============== 儀式感受 ==============
 
   {
     slug: 'scent-and-memory',
-    kicker: '儀式之念',
+    kicker: '儀式感受',
     title: '香味與記憶',
     lead: '為什麼某些精油讓你想起一個人、一個地方、一段你以為早就忘了的下午 ── 香氣是記憶最快的一條路。',
     date: '2026-04-29',
@@ -1469,7 +1469,7 @@ const POSTS = [
 
   {
     slug: 'last-sliver',
-    kicker: '儀式之念',
+    kicker: '儀式感受',
     title: '一塊皂的告別',
     lead: '用到剩一小角的皂，捨不得丟也不好用 ── 那一小段時間，是一塊皂跟你的最後對話。',
     date: '2026-04-30',
@@ -1530,7 +1530,7 @@ const POSTS = [
 
   {
     slug: 'slow-bath',
-    kicker: '儀式之念',
+    kicker: '儀式感受',
     title: '洗澡可以慢一點',
     lead: '一塊皂、一支蠟燭、一杯茶、一本書 ── 浴間是私人時間中最私人的。把它還給自己。',
     date: '2026-05-14',
@@ -1602,7 +1602,7 @@ const POSTS = [
 
   {
     slug: 'gift-soap',
-    kicker: '儀式之念',
+    kicker: '儀式感受',
     title: '送一塊皂',
     lead: '婚禮、節期、新居、生日 ── 一塊皂能不能當禮，端看你看到對方的什麼。',
     date: '2026-05-15',
@@ -2283,12 +2283,12 @@ function InkLink({ href, navigate, children, style }) {
 // kicker 顯示順序 — 不依文章數量、依概念脈絡排列：
 // 原料 → 設計 → 工藝（皂的本身）→ 皮膚 → 生活 → 儀式（皂在生活裡）
 const KICKER_ORDER = [
-  '原料之念',
-  '設計之念',
-  '工藝之念',
-  '皮膚之念',
-  '生活之念',
-  '儀式之念',
+  '原料手記',
+  '設計方針',
+  '工藝技術',
+  '皮膚紀錄',
+  '生活運用',
+  '儀式感受',
 ];
 
 function CategoryChip({ label, count, active, onClick }) {
