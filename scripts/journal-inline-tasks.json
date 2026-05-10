@@ -1,0 +1,82 @@
+[
+  {
+    "label": "soap-storage-1",
+    "outputPath": "public/images/journal/inline/soap-storage-1.png",
+    "prompt": "Hand-drawn sketch illustration in ink line art on aged off-white paper, working-notebook aesthetic, low saturation muted gold and ink palette, simple loose confident strokes, slight grain, 4:3 aspect ratio, no readable text, no brand logos, looks like a soap-maker's working notes.\n\nSubject: a side-view cross-section of a slatted wooden soap dish, with a soap bar resting on top, three or four water droplets caught between the slats falling through into a small drainage tray below. A tiny curved arrow on the side showing airflow under the soap. Educational diagram, calm. No text labels."
+  },
+  {
+    "label": "travel-soap-1",
+    "outputPath": "public/images/journal/inline/travel-soap-1.png",
+    "prompt": "Hand-drawn sketch illustration in ink line art on aged off-white paper, working-notebook aesthetic, low saturation muted gold and ink palette, simple loose confident strokes, slight grain, 4:3 aspect ratio, no readable text, no brand logos, looks like a soap-maker's working notes.\n\nSubject: a side-by-side comparison sketch — left side three plastic toiletry bottles drawn in outline, taking up vertical column space; right side one compact soap bar wrapped in cloth fabric, taking up minimal flat space. A small horizontal arrow between them suggesting substitution. Loose confident ink lines."
+  },
+  {
+    "label": "after-sweat-1",
+    "outputPath": "public/images/journal/inline/after-sweat-1.png",
+    "prompt": "Hand-drawn sketch illustration in ink line art on aged off-white paper, working-notebook aesthetic, low saturation muted gold and ink palette, simple loose confident strokes, slight grain, 4:3 aspect ratio, no readable text, no brand logos, looks like a soap-maker's working notes.\n\nSubject: a horizontal timeline drawn as a winding path with three milestones from left to right — first a running figure outline with motion lines (no face details), middle a small clock face suggesting thirty minutes, right side a soap bar at the destination. Time-window concept. No labels."
+  },
+  {
+    "label": "taiwan-water-1",
+    "outputPath": "public/images/journal/inline/taiwan-water-1.png",
+    "prompt": "Hand-drawn sketch illustration in ink line art on aged off-white paper, working-notebook aesthetic, low saturation muted gold and ink palette, simple loose confident strokes, slight grain, 4:3 aspect ratio, no readable text, no brand logos, looks like a soap-maker's working notes.\n\nSubject: a simplified outline shape of Taiwan island, with two water-drop symbols — north drop slightly smaller suggesting softer water, south drop slightly larger suggesting harder water. A few wavy mountain ridge lines across the middle suggesting the central watershed. Educational geography sketch. No text labels."
+  },
+  {
+    "label": "baby-soap-1",
+    "outputPath": "public/images/journal/inline/baby-soap-1.png",
+    "prompt": "Hand-drawn sketch illustration in ink line art on aged off-white paper, working-notebook aesthetic, low saturation muted gold and ink palette, simple loose confident strokes, slight grain, 4:3 aspect ratio, no readable text, no brand logos, looks like a soap-maker's working notes.\n\nSubject: two skin cross-section diagrams side by side — left adult skin with thick visible stratum corneum drawn as densely hatched layered lines; right baby skin with thinner sparser hatching showing immature barrier. Tiny indicator arrows but no readable text. Anatomy diagram style."
+  },
+  {
+    "label": "menopause-skin-1",
+    "outputPath": "public/images/journal/inline/menopause-skin-1.png",
+    "prompt": "Hand-drawn sketch illustration in ink line art on aged off-white paper, working-notebook aesthetic, low saturation muted gold and ink palette, simple loose confident strokes, slight grain, 4:3 aspect ratio, no readable text, no brand logos, looks like a soap-maker's working notes.\n\nSubject: a timeline of three skin cross-sections in a row — left at age 30 with thick layers and visible sebaceous glands; middle at age 50 with thinning layers; right at age 70 with thinnest layers and reduced glands. Progressive change visible through line density. Educational diagram. No text."
+  },
+  {
+    "label": "teen-acne-1",
+    "outputPath": "public/images/journal/inline/teen-acne-1.png",
+    "prompt": "Hand-drawn sketch illustration in ink line art on aged off-white paper, working-notebook aesthetic, low saturation muted gold and ink palette, simple loose confident strokes, slight grain, 4:3 aspect ratio, no readable text, no brand logos, looks like a soap-maker's working notes.\n\nSubject: a magnified cross-section of a single hair follicle in three states left to right — clear, oil-blocked at the pore opening, then inflamed with surrounding redness shown via crosshatching. Three small indicator arrows. Anatomical diagram. No text labels."
+  },
+  {
+    "label": "elderly-winter-itch-1",
+    "outputPath": "public/images/journal/inline/elderly-winter-itch-1.png",
+    "prompt": "Hand-drawn sketch illustration in ink line art on aged off-white paper, working-notebook aesthetic, low saturation muted gold and ink palette, simple loose confident strokes, slight grain, 4:3 aspect ratio, no readable text, no brand logos, looks like a soap-maker's working notes.\n\nSubject: a simple winter scene — bare deciduous tree on the left with snow-flake suggestions, a magnified skin patch on the right showing dry cracking pattern via crosshatched lines, and a soap bar in between as the bridge between problem and care. Loose narrative sketch."
+  },
+  {
+    "label": "housewife-eczema-1",
+    "outputPath": "public/images/journal/inline/housewife-eczema-1.png",
+    "prompt": "Hand-drawn sketch illustration in ink line art on aged off-white paper, working-notebook aesthetic, low saturation muted gold and ink palette, simple loose confident strokes, slight grain, 4:3 aspect ratio, no readable text, no brand logos, looks like a soap-maker's working notes.\n\nSubject: a descending curve line graph showing skin moisture level decreasing with each successive handwash event marked along the x-axis. A small soap bar drawn at the lowest point of the curve representing rescue. Hand-drawn graph, ink lines on graph paper texture. No readable axis labels."
+  },
+  {
+    "label": "menstrual-skin-1",
+    "outputPath": "public/images/journal/inline/menstrual-skin-1.png",
+    "prompt": "Hand-drawn sketch illustration in ink line art on aged off-white paper, working-notebook aesthetic, low saturation muted gold and ink palette, simple loose confident strokes, slight grain, 4:3 aspect ratio, no readable text, no brand logos, looks like a soap-maker's working notes.\n\nSubject: a 28-day cycle drawn as a circular calendar arc, with four small skin condition indicator icons placed at each quadrant — clear, slightly oily, sensitive (small dot pattern), and calm again. Cyclical hand-drawn diagram with loose curves. No readable date numbers."
+  },
+  {
+    "label": "allergy-flare-1",
+    "outputPath": "public/images/journal/inline/allergy-flare-1.png",
+    "prompt": "Hand-drawn sketch illustration in ink line art on aged off-white paper, working-notebook aesthetic, low saturation muted gold and ink palette, simple loose confident strokes, slight grain, 4:3 aspect ratio, no readable text, no brand logos, looks like a soap-maker's working notes.\n\nSubject: three small panels in a row labeled visually as time progression — Day 1 panel shows a skin patch with red rash dots; Day 3 panel shows the same patch calmer with a small soap bar nearby; Day 7 panel shows clear skin. Educational recovery sequence. No readable text labels."
+  },
+  {
+    "label": "humid-island-feet-1",
+    "outputPath": "public/images/journal/inline/humid-island-feet-1.png",
+    "prompt": "Hand-drawn sketch illustration in ink line art on aged off-white paper, working-notebook aesthetic, low saturation muted gold and ink palette, simple loose confident strokes, slight grain, 4:3 aspect ratio, no readable text, no brand logos, looks like a soap-maker's working notes.\n\nSubject: a foot silhouette in side view drawn as a clean outline (no detailed anatomy or skin texture), with curved airflow arrows circulating around it suggesting ventilation. A small magnified circle to the side showing tea-tree leaves and a pumice stone. Practical diagram. No text."
+  },
+  {
+    "label": "last-sliver-1",
+    "outputPath": "public/images/journal/inline/last-sliver-1.png",
+    "prompt": "Hand-drawn sketch illustration in ink line art on aged off-white paper, working-notebook aesthetic, low saturation muted gold and ink palette, simple loose confident strokes, slight grain, 4:3 aspect ratio, no readable text, no brand logos, looks like a soap-maker's working notes.\n\nSubject: four soap bar illustrations in a horizontal row showing progressive use — full bar, half bar with rounded edges, quarter bar with very rounded edges, then a small sliver wrapped inside a mesh drawstring bag drawn with diagonal cross-hatching. Use-life cycle. No labels."
+  },
+  {
+    "label": "gift-soap-1",
+    "outputPath": "public/images/journal/inline/gift-soap-1.png",
+    "prompt": "Hand-drawn sketch illustration in ink line art on aged off-white paper, working-notebook aesthetic, low saturation muted gold and ink palette, simple loose confident strokes, slight grain, 4:3 aspect ratio, no readable text, no brand logos, looks like a soap-maker's working notes.\n\nSubject: three wrapped soap parcels in a row, each tied with raw twine and tagged with a small kraft card (illegible scribble lines, no readable text). Each parcel slightly different in shape and ribbon style suggesting different recipients. Heartfelt gift study. Hand-drawn ink lines."
+  },
+  {
+    "label": "slow-bath-1",
+    "outputPath": "public/images/journal/inline/slow-bath-1.png",
+    "prompt": "Hand-drawn sketch illustration in ink line art on aged off-white paper, working-notebook aesthetic, low saturation muted gold and ink palette, simple loose confident strokes, slight grain, 4:3 aspect ratio, no readable text, no brand logos, looks like a soap-maker's working notes.\n\nSubject: a horizontal time axis with two bath durations compared — top shows 5 minutes as a single short tick mark with a single soap bar; bottom shows 30 minutes as a stretched curve with small icons of an open book, a candle with flame, a tea cup, and a soap bar distributed along it. Time perception sketch. No readable numbers."
+  },
+  {
+    "label": "scent-and-memory-1",
+    "outputPath": "public/images/journal/inline/scent-and-memory-1.png",
+    "prompt": "Hand-drawn sketch illustration in ink line art on aged off-white paper, working-notebook aesthetic, low saturation muted gold and ink palette, simple loose confident strokes, slight grain, 4:3 aspect ratio, no readable text, no brand logos, looks like a soap-maker's working notes.\n\nSubject: a simple anatomical pathway diagram from a nose silhouette in profile on the left, a curved dotted line tracing upward into a small brain outline on the right with a glowing dot indicating the hippocampus area where memory is formed. Scent-memory connection. Educational sketch. No text labels."
+  }
+]
