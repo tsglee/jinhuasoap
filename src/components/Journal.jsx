@@ -2280,10 +2280,67 @@ function InkLink({ href, navigate, children, style }) {
 
 // ============== Pages ==============
 
+// kicker 顯示順序 — 不依文章數量、依概念脈絡排列：
+// 原料 → 設計 → 工藝（皂的本身）→ 皮膚 → 生活 → 儀式（皂在生活裡）
+const KICKER_ORDER = [
+  '原料之念',
+  '設計之念',
+  '工藝之念',
+  '皮膚之念',
+  '生活之念',
+  '儀式之念',
+];
+
+function CategoryChip({ label, count, active, onClick }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="mono"
+      style={{
+        padding: '8px 16px',
+        background: active ? 'var(--red)' : 'transparent',
+        color: active ? 'var(--gold-2)' : 'var(--ink-60)',
+        border: `1px solid ${active ? 'var(--red)' : 'var(--ink-15)'}`,
+        fontSize: 11,
+        letterSpacing: 3,
+        cursor: 'pointer',
+        transition: 'background 150ms ease, color 150ms ease, border-color 150ms ease',
+        fontFamily: 'inherit',
+      }}
+      aria-pressed={active}
+    >
+      {label}
+      <span
+        style={{
+          marginLeft: 8,
+          opacity: 0.65,
+          fontSize: 10,
+          letterSpacing: 1,
+        }}
+      >
+        {count}
+      </span>
+    </button>
+  );
+}
+
 export function JournalIndex({ navigate }) {
+  const [activeFilter, setActiveFilter] = useState('');
+
   useEffect(() => {
     document.title = '本舍小記 · 金花樓';
   }, []);
+
+  // 每個 kicker 的篇數 — 用來顯示在 chip 上
+  const counts = POSTS_BY_DATE.reduce((acc, p) => {
+    acc[p.kicker] = (acc[p.kicker] || 0) + 1;
+    return acc;
+  }, {});
+
+  const filtered = activeFilter
+    ? POSTS_BY_DATE.filter((p) => p.kicker === activeFilter)
+    : POSTS_BY_DATE;
 
   return (
     <div style={{ position: 'relative', zIndex: 1 }}>
@@ -2300,7 +2357,7 @@ export function JournalIndex({ navigate }) {
           className="tc"
           style={{
             maxWidth: 620,
-            margin: '0 auto 56px',
+            margin: '0 auto 36px',
             fontSize: 16,
             lineHeight: 1.85,
             color: 'var(--ink-60)',
@@ -2312,6 +2369,33 @@ export function JournalIndex({ navigate }) {
           為自己寫，把手邊的想法慢慢留下來。
         </div>
         <div
+          role="group"
+          aria-label="按類別篩選文章"
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            flexWrap: 'wrap',
+            gap: 10,
+            margin: '0 auto 48px',
+          }}
+        >
+          <CategoryChip
+            label="全部"
+            count={POSTS_BY_DATE.length}
+            active={!activeFilter}
+            onClick={() => setActiveFilter('')}
+          />
+          {KICKER_ORDER.filter((k) => counts[k]).map((k) => (
+            <CategoryChip
+              key={k}
+              label={k}
+              count={counts[k]}
+              active={activeFilter === k}
+              onClick={() => setActiveFilter(k)}
+            />
+          ))}
+        </div>
+        <div
           className="gf-stack-md"
           style={{
             display: 'grid',
@@ -2319,7 +2403,7 @@ export function JournalIndex({ navigate }) {
             gap: 40,
           }}
         >
-          {POSTS_BY_DATE.map((p) => (
+          {filtered.map((p) => (
             <article
               key={p.slug}
               style={{
