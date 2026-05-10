@@ -9,9 +9,9 @@ const STORAGE_KEY = 'gf_cart';
 const FREE_SHIPPING_THRESHOLD = 500; // NTD
 const FLAT_SHIPPING = 60; // NTD, island
 // Tiers ordered high → low so .find returns the best applicable tier.
+// 2026-05 老闆娘決定拿掉 NT$500 的 95 折（毛利吃不消），只留 NT$1000 的 9 折。
 const DISCOUNT_TIERS = [
   { threshold: 1000, rate: 0.10 },
-  { threshold: 500, rate: 0.05 },
 ];
 
 const CartContext = createContext(null);

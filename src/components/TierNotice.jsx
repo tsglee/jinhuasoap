@@ -1,26 +1,24 @@
-// TierNotice — surfaces the cart-tier rules (95折/9折/免運門檻).
+// TierNotice — surfaces the cart-tier rules (9折/免運門檻).
 // Two variants: 'static' for the Products page banner, 'cart' for the cart
 // sidebar (rules + dynamic progress hint). Thresholds are duplicated here
 // (rather than imported from CartContext) to keep this presentational and
 // avoid a Fast-Refresh boundary crossing.
 
 const FREE_SHIPPING_THRESHOLD = 500;
-const TIER_1 = 500;
 const TIER_2 = 1000;
 
 const RULES = [
-  '滿 NT$500 享 95 折',
   '滿 NT$1,000 享 9 折',
   '本島滿 NT$500 免運',
 ];
 
 function progressFor(subtotal) {
   if (subtotal <= 0) return null;
-  if (subtotal < TIER_1) {
-    return `再買 NT$${TIER_1 - subtotal} 即享 95 折 + 免運`;
+  if (subtotal < FREE_SHIPPING_THRESHOLD) {
+    return `再買 NT$${FREE_SHIPPING_THRESHOLD - subtotal} 即享免運　·　再買 NT$${TIER_2 - subtotal} 即享 9 折`;
   }
   if (subtotal < TIER_2) {
-    return `已享 95 折 + 免運　·　再買 NT$${TIER_2 - subtotal} 即享 9 折`;
+    return `已享免運　·　再買 NT$${TIER_2 - subtotal} 即享 9 折`;
   }
   return '已享 9 折 + 免運';
 }

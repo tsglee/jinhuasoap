@@ -630,7 +630,7 @@ function OrderRequestForm({ cart, total, onSent }) {
 }
 
 export function Cart({ navigate }) {
-  const { items: cart, subtotal, discount, discountRate, shipping, total, updateQty, clear } = useCart();
+  const { items: cart, subtotal, discount, shipping, total, updateQty, clear } = useCart();
   const [thanks, setThanks] = useState(null);
 
   if (thanks) {
@@ -835,7 +835,7 @@ export function Cart({ navigate }) {
                 {discount > 0 && (
                   <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                     <span className="tc" style={{ color: 'var(--red)' }}>
-                      {discountRate === 0.10 ? '9 折優惠' : '95 折優惠'}
+                      9 折優惠
                     </span>
                     <span className="mono" style={{ color: 'var(--red)' }}>− NT${discount}</span>
                   </div>
