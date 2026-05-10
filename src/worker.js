@@ -733,15 +733,15 @@ function buildPrintFormHtml(logistics, env) {
     `${logisticsBaseUrl(env)}/Express/` +
     (isUni ? 'PrintUniMartC2COrderInfo' : 'PrintFAMIC2COrderInfo');
 
+  // 7-11 跟全家 C2C 兩個列印 endpoint 都要 CVSValidationNo ── ECPay 文件
+  // 容易誤讀成「7-11 只要 CVSPaymentNo」，實測會回 "CVSValidationNo is null."。
+  // CreateShippingOrder 成功時兩個 subType 都會回 CVSValidationNo，所以直接帶。
   const params = {
     MerchantID: merchantId,
     AllPayLogisticsID: logistics.allPayLogisticsId,
     CVSPaymentNo: logistics.cvsPaymentNo,
+    CVSValidationNo: logistics.cvsValidationNo || '',
   };
-  // 7-11 用 CVSPaymentNo 即可；全家還要 CVSValidationNo
-  if (!isUni && logistics.cvsValidationNo) {
-    params.CVSValidationNo = logistics.cvsValidationNo;
-  }
   params.CheckMacValue = checkMacValue(params, env.ECPAY_LOGISTICS_HASH_KEY, env.ECPAY_LOGISTICS_HASH_IV);
 
   const inputs = Object.entries(params)
