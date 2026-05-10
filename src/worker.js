@@ -20,6 +20,7 @@
  *   env.PUBLIC_BASE_URL        — var, 組列印 URL 用，例 https://jinhuasoap.com
  */
 import { createHash } from 'node:crypto';
+import { normalizeTwMobile } from './utils/phone.js';
 
 export default {
   async fetch(request, env) {
@@ -651,18 +652,6 @@ function fmtDate(date = new Date()) {
     ':' + pad(tz.getUTCMinutes()) +
     ':' + pad(tz.getUTCSeconds())
   );
-}
-
-// Normalize Taiwan mobile to ECPay 物流可接受格式：09 開頭、共 10 碼純數字。
-// 容忍 dashes / spaces / 國際碼 +886 / 886 prefix — 全部去掉再驗。
-// 失敗（不是台灣手機）回空字串，讓 ECPay 噴明確錯誤而不是吃下去。
-function normalizeTwMobile(input) {
-  if (!input) return '';
-  const digits = String(input).replace(/[^\d]/g, '');
-  let local = digits;
-  if (local.startsWith('886')) local = local.slice(3);
-  if (!local.startsWith('0')) local = '0' + local;
-  return /^09\d{8}$/.test(local) ? local : '';
 }
 
 async function createShippingOrder(input, env) {

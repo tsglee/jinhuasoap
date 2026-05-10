@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { Divider } from './GoldenFlower.jsx';
 import { useCart } from '../state/CartContext.jsx';
 import { TierNotice } from './TierNotice.jsx';
+import { normalizeTwMobile, isValidTwMobile } from '../utils/phone.js';
 
 const ECPAY_SUBTYPE = { seven: 'UNIMARTC2C', family: 'FAMIC2C' };
 const ECPAY_DEFAULT_EMAP_URL = 'https://logistics.ecpay.com.tw/Express/map';
@@ -219,6 +220,7 @@ function OrderRequestForm({ cart, total, onSent }) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
+  const [phoneError, setPhoneError] = useState('');
   const [shipMethod, setShipMethod] = useState('');
   const [storeId, setStoreId] = useState('');
   const [storeName, setStoreName] = useState('');
@@ -312,10 +314,29 @@ function OrderRequestForm({ cart, total, onSent }) {
   const validate = () => {
     if (!name.trim()) return '請留下您的姓名，我們才知道這批皂要寄給誰。';
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) return '請留下正確的電子郵件 —— 訂單回信要用。';
-    if (!/^09\d{8}$/.test(phone.replace(/[\s-]/g, ''))) return '請留下台灣手機號碼（09 開頭、共十碼）。';
+    if (!isValidTwMobile(phone)) return '請留下台灣手機號碼（09 開頭、共十碼）。';
     if (!shipMethod) return '請選一個寄送方式。';
     if (kind === 'store' && !storeId.trim()) return '請留下超商店號（可於 7-11 或全家 App 查到）。';
     return null;
+  };
+
+  // 手機 onBlur：normalize 成 10 碼正規格（去 dashes/spaces/+886）。
+  // 失敗就 inline 報錯；空白不報（第一次 focus 進來不要嚇人）。
+  // 讀 e.target.value 而非 state，避免 stale closure（onChange 跟 onBlur
+  // 同步 dispatch 時 React 尚未 commit re-render 的情境）。
+  const handlePhoneBlur = (e) => {
+    const raw = e.target.value;
+    if (!raw.trim()) {
+      setPhoneError('');
+      return;
+    }
+    const normalized = normalizeTwMobile(raw);
+    if (normalized) {
+      setPhone(normalized);
+      setPhoneError('');
+    } else {
+      setPhoneError('看起來不像台灣手機 — 應為 09 開頭、共十碼。');
+    }
   };
 
   const submit = async (e) => {
@@ -337,7 +358,7 @@ function OrderRequestForm({ cart, total, onSent }) {
         body: JSON.stringify({
           name: name.trim(),
           email: email.trim(),
-          phone: phone.replace(/[\s-]/g, ''),
+          phone: normalizeTwMobile(phone) || phone,
           shipMethod: selected?.label || shipMethod,
           shipKind: kind,
           // 直送 ECPay LogisticsSubType（UNIMARTC2C / FAMIC2C），worker 用
@@ -427,15 +448,42 @@ function OrderRequestForm({ cart, total, onSent }) {
         autoComplete="email"
         style={inputStyle}
       />
-      <input
-        type="tel"
-        value={phone}
-        onChange={(e) => setPhone(e.target.value)}
-        placeholder="手機號碼（09XX-XXX-XXX）"
-        required
-        autoComplete="tel"
-        style={inputStyle}
-      />
+      <div style={{ display: 'grid', gap: 4 }}>
+        <input
+          type="tel"
+          value={phone}
+          onChange={(e) => {
+            setPhone(e.target.value);
+            if (phoneError) setPhoneError('');
+          }}
+          onBlur={handlePhoneBlur}
+          placeholder="手機號碼（09XX-XXX-XXX）"
+          required
+          autoComplete="tel"
+          inputMode="tel"
+          style={{
+            ...inputStyle,
+            border: phoneError
+              ? '1px solid var(--red)'
+              : inputStyle.border,
+          }}
+          aria-invalid={phoneError ? 'true' : 'false'}
+          aria-describedby={phoneError ? 'phone-error' : undefined}
+        />
+        {phoneError && (
+          <div
+            id="phone-error"
+            style={{
+              fontSize: 12,
+              color: 'var(--red)',
+              letterSpacing: 1,
+              padding: '0 4px',
+            }}
+          >
+            {phoneError}
+          </div>
+        )}
+      </div>
       <select
         value={shipMethod}
         onChange={(e) => {
