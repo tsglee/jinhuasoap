@@ -90,10 +90,25 @@ public/images/
 
 ## Pending（未做、等資料）
 
-- 12 產品 × 8 張產品圖（Google AI Studio Nanobanana，使用者自產）
-- 11 篇本舍小記 cover 圖（同上）
-- 圖到位後：`npm run optimize:images` + 補 [products.js](src/data/products.js) `photos: [...]` 陣列 + 改 [Journal.jsx](src/components/Journal.jsx) 各篇 `cover.src`（移除 fallback）
-- 「一皂到底·保濕款」subtitle 待命名（products.js 註記中）
+- **12 產品 × 8 張產品圖**（Google AI Studio Nanobanana，使用者自產）── 還沒做
+- **「一皂到底·保濕款」subtitle 待命名**（products.js 註記中）── 還沒做
+
+本舍小記 cover + inline 圖 在 2026-05 session 全自動產完（用 scripts/generate-images.js
+透過 Gemini API），27 篇都有 cover、16 篇新題加 inline 手繪圖。下次要再產圖直接套
+這個 pipeline：寫 tasks JSON → 跑 generate-images.js → 跑 optimize:images。
+
+## 上次 session 尾聲（2026-05-10）
+
+| 已上線 main | Commit |
+|---|---|
+| 16 篇新題本舍小記文章（生活運用 / 皮膚紀錄 / 儀式感受 三類擴充） | `e7dab9a` ~ `dfd9c26` |
+| 16 張 cover 圖 + 16 張 inline 手繪圖 + PROMPTS.md 更新 | `0ec409b` `25f7b15` |
+| Journal kicker 改名（之念 → 手記/方針/技術/紀錄/運用/感受）+ category filter chips | `970e295` `5199b3d` |
+| ECPay 物流 bug 連環修：寄件人手機 886 → 0、列印 path /Helper/ → /Express/、CVSValidationNo 必帶 | `0f2d7c4` `298a064` `154d217` `c086762` |
+| 購物車表單手機欄位 inline 驗證（red border + normalize on blur）+ 抽 src/utils/phone.js 共用 | `298a064` |
+| 拿掉 NT$500 95 折，只留 NT$1000 9 折 + NT$500 免運 | `4577a92` |
+
+main HEAD = `4577a92`（2026-05-10）。所有 feature branch commits 都已 ff merge 到 main 並 push。
 
 ## 旅行 / 跨機器同步
 
