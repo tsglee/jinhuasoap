@@ -653,6 +653,18 @@ function fmtDate(date = new Date()) {
   );
 }
 
+// Normalize Taiwan mobile to ECPay 物流可接受格式：09 開頭、共 10 碼純數字。
+// 容忍 dashes / spaces / 國際碼 +886 / 886 prefix — 全部去掉再驗。
+// 失敗（不是台灣手機）回空字串，讓 ECPay 噴明確錯誤而不是吃下去。
+function normalizeTwMobile(input) {
+  if (!input) return '';
+  const digits = String(input).replace(/[^\d]/g, '');
+  let local = digits;
+  if (local.startsWith('886')) local = local.slice(3);
+  if (!local.startsWith('0')) local = '0' + local;
+  return /^09\d{8}$/.test(local) ? local : '';
+}
+
 async function createShippingOrder(input, env) {
   const { orderId, subType, total, storeId, recipientName, recipientPhone, recipientEmail } = input;
   const tradeNo = orderIdToTradeNo(orderId);
@@ -672,11 +684,12 @@ async function createShippingOrder(input, env) {
     IsCollection: 'Y',
     GoodsName: `金花樓手工皂訂單 ${orderId}`.slice(0, 50),
     SenderName: env.SENDER_NAME || '金花樓',
-    SenderPhone: env.SENDER_PHONE || '',
-    SenderCellPhone: env.SENDER_CELL_PHONE || env.SENDER_PHONE || '',
+    SenderPhone: normalizeTwMobile(env.SENDER_PHONE) || env.SENDER_PHONE || '',
+    SenderCellPhone:
+      normalizeTwMobile(env.SENDER_CELL_PHONE || env.SENDER_PHONE) || '',
     ReceiverName: recipientName,
-    ReceiverPhone: recipientPhone,
-    ReceiverCellPhone: recipientPhone,
+    ReceiverPhone: normalizeTwMobile(recipientPhone) || recipientPhone,
+    ReceiverCellPhone: normalizeTwMobile(recipientPhone) || recipientPhone,
     ReceiverEmail: recipientEmail,
     ReceiverStoreID: storeId,
     ReturnStoreID: storeId,
