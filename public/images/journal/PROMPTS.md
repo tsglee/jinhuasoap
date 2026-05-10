@@ -1,6 +1,6 @@
 # Nanobanana prompts — 本舍小記 cover images
 
-9 篇文章各 1 張 cover。共用前綴控制風格一致，主視覺指令各自不同。
+27 篇文章各 1 張 cover（11 既有 + 16 新題）。共用前綴控制風格一致，主視覺指令各自不同。
 
 ## 共用前綴（每張都帶）
 
@@ -112,6 +112,185 @@ centre a smaller round pH-neutral wash bar (slightly different
 texture, pressed not poured), right an open glass bottle of
 commercial body wash with its plastic cap nearby. Side window light
 from the left, contemplative side-by-side comparison mood.
+```
+
+---
+
+## 新題 16 篇（A 場景日常 / B 人生階段 / C 皮膚事件 / D 儀式情感）
+
+下列為 prompt-master 優化版（已實際 gen 過 — 16/16 成功）。raw subject 接共用前綴使用。
+
+### 12. soap-storage — 一塊皂的家（A1）
+```
+Subject: foreground centre — a single hand-pressed soap bar (cream
+with chamfered edges) resting on a slatted blonde-wood soap dish,
+two or three tiny water droplets caught on the slats. Midground left
+— folded raw linen square. Midground right — a small empty
+hand-thrown ceramic dish. Aged dark wood tabletop. Domestic,
+lived-in. Single soap bar only. No additional bath products.
+```
+
+### 13. travel-soap — 出門那塊皂（A2）
+```
+Subject: foreground centre — a small hand-pressed soap bar nestled
+inside a partially folded square of beeswax-coated cotton wrap with
+visible amber translucency. Midground right — a slim vintage wooden
+travel case with tarnished brass hinge, lid slightly ajar. Midground
+left — folded white cotton handkerchief and a pair of round-frame
+brass-rim glasses with thin leather strap. Ready-to-go mood. No
+modern luggage, no zippers, no plastic.
+```
+
+### 14. after-sweat — 流汗之後（A3）
+```
+Subject: foreground left — a single hand-pressed soap bar on a folded
+white cotton hand towel showing soft wash creases. Foreground right
+— a clear glass tumbler of cool water with light condensation.
+Midground centre — a small clay bowl of dried mint leaves. Background
+right — a pocket watch laid face-up showing late afternoon hour.
+Side-light from a window. Cool refreshment, post-exertion calm. No
+gym equipment, no athletic apparel.
+```
+
+### 15. taiwan-water — 這座島的水與皂（A4）
+```
+Subject: two matching hand-thrown ceramic bowls side by side at
+centre on aged wood. Left bowl — clear soft water with a soap bar
+floating, surface covered in airy translucent bubbles. Right bowl —
+same soap struggling against milky-tinted harder water, foam smaller
+and denser. Between them — folded raw linen cloth and a worn wood
+spoon. Tactile science still life. Educational comparison. No maps,
+no national symbols, no text.
+```
+
+### 16. baby-soap — 寶寶與冷製皂（B1）
+```
+Subject: foreground centre — a tiny pale-cream hand-pressed soap bar
+(smaller than typical, infant-portion size) on a folded soft muslin
+cloth. Midground left — a smooth wooden teething ring (clean, no
+soap residue). Midground right — a single dried chamomile flower.
+Background — a small clear glass bottle of slightly cloudy fresh
+full-fat goat milk. Tender, motherly. NO infant, NO baby, NO toys
+with faces.
+```
+
+### 17. menopause-skin — 更年期的皮膚（B2）
+```
+Subject: foreground centre — a hand-pressed soap bar on a folded raw
+silk cloth with subtle lustre. Midground left — a small antique
+brass hand mirror laid face down on the wood. Midground right — a
+sprig of dried sage with greyish-green leaves. Background centre —
+a half-burned beeswax pillar candle with steady flame and visible
+drip patterns. Reflective, dignified, warm late-afternoon light.
+```
+
+### 18. teen-acne — 青春期的痘（B3）
+```
+Subject: foreground centre — a hand-pressed soap bar in pale tea-tree
+green resting at the rim of a marble-effect ceramic basin still
+beaded with water. Midground left — folded clean white face cloth
+slightly damp. Midground right — a small wood bowl of fresh tea-tree
+leaves. Background — corner of a paperback notebook with a glimpse
+of a handwritten timetable. Earnest, daily-routine mood. No acne
+products, no medical labels.
+```
+
+### 19. elderly-winter-itch — 冬天的癢（B4）
+```
+Subject: foreground centre — a hand-pressed soap bar on a folded
+warm-toned wool blanket showing cosy texture. Midground left — a
+small clay teapot with visible steam rising. Midground right — a
+small saucer of dried calendula petals. Background right — a pair
+of well-worn wool slippers placed neatly side by side. Cozy, tender,
+soft winter interior light from the side. No fireplace, no Christmas
+decoration.
+```
+
+### 20. housewife-eczema — 反覆洗手的那雙手（C1）
+```
+Subject: foreground centre — a hand-pressed soap bar on a small
+folded cotton hand towel slightly damp. Midground right — a folded
+slightly-worn linen kitchen apron with subtle stains. Midground left
+— a clay jar of natural beeswax hand balm with the wooden lid sitting
+askew beside it. Background centre — a small bunch of fresh lemon
+balm sprigs. Honest domestic still life, quiet care. No rubber
+gloves.
+```
+
+### 21. menstrual-skin — 經期前後的肌膚（C2）
+```
+Subject: foreground centre — a hand-pressed soap bar on a folded raw
+linen napkin in a warm earth tone. Midground left — a small ceramic
+cup of steeping rose hip tea with steam rising visibly. Midground
+right — a single dried rose petal in deep oxblood. Background centre
+— a smooth dark-grey river stone. Cyclic, warm, gentle, contemplative.
+NO medical products, NO sanitary items, NO blood.
+```
+
+### 22. allergy-flare — 過敏發作的那幾天（C3）
+```
+Subject: foreground centre — a single very pale unfragranced
+hand-pressed soap bar (almost ivory, no visible inclusions) resting
+on a folded white muslin square. Surrounded by deliberate negative
+space. Midground right — a small empty hand-thrown ceramic bowl.
+Midground left — a single fresh aloe vera leaf segment. Minimal,
+calming, almost monastic. NO medication bottles, NO prescription
+labels, NO redness imagery.
+```
+
+### 23. humid-island-feet — 濕熱島嶼的腳（C4）
+```
+Subject: foreground centre — a hand-pressed soap bar on a slatted
+bamboo mat at the edge of a cool grey stone bathroom floor. Midground
+left — folded thin natural-cotton foot towel. Midground right — a
+small wood bowl of dried tea-tree and lemongrass leaves. Background
+— a smooth pale wood pumice stone. Practical, breathable,
+tropical-discreet. NO feet, NO flip-flops with logos.
+```
+
+### 24. last-sliver — 一塊皂的告別（D1）
+```
+Subject: foreground centre — a small soap sliver, the very end of a
+much-used hand-pressed bar with rounded worn edges, resting on a
+folded square of muslin. Midground right — a hand-stitched mesh
+drawstring soap-saver bag in unbleached cotton. Midground left — a
+single dried lavender stem. Background centre — a tiny ceramic dish
+holding a tablespoon of fragrant homemade soap-paste. Tender, frugal,
+end-of-life ritual.
+```
+
+### 25. gift-soap — 送一塊皂（D2，連 04 客製洽詢）
+```
+Subject: foreground centre — three hand-pressed soap bars wrapped
+individually in unbleached craft paper tied with raw natural twine,
+arranged in a loose row on aged wood. Each parcel tagged with a small
+handwritten kraft card (text illegible, pressed cursive). Midground
+right — a small bunch of dried wild flowers. Midground left — a stick
+of deep oxblood sealing wax. Heartfelt, quietly ceremonial gift mood.
+No ribbons in saturated colors, no commercial gift packaging.
+```
+
+### 26. slow-bath — 洗澡可以慢一點（D3）
+```
+Subject: foreground centre — a single hand-pressed soap bar resting
+on a wooden bath caddy that bridges the rim of a deep stone tub (only
+the dark stone edge visible at the bottom of frame, water surface
+NOT shown). Midground right — a folded thick cotton bath towel.
+Midground left — an open clothbound hardcover book with a softly
+bent page corner. Background centre-right — a small ceramic cup of
+barley tea. Background centre-left — a single beeswax pillar candle,
+flame steady. Long-evening contemplative mood. No bathing figure.
+```
+
+### 27. scent-and-memory — 香味與記憶（D4）
+```
+Subject: foreground centre — a hand-pressed soap bar resting open
+between the pages of a small leather-bound journal, suggesting
+pressed memory. Midground left — three small clear-glass essential
+oil vials in a tight cluster, with handwritten paper labels (script
+illegible, fragmentary). Midground right — a single faded sepia
+photograph laid face down on the wood, only its blank back visible.
+Memory, scent, time-layered still life. No visible faces.
 ```
 
 ## 流程
