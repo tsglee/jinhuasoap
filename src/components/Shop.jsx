@@ -96,7 +96,7 @@ function ProductCatalog({ onAdded }) {
         padding: '20px 44px 50px',
       }}
     >
-      <div style={{ textAlign: 'center', marginBottom: 28 }}>
+      <div className="gf-hide-md" style={{ textAlign: 'center', marginBottom: 28 }}>
         <div className="mono" style={{ color: 'var(--red)' }}>
           選皂 · choose
         </div>
