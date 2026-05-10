@@ -727,8 +727,10 @@ async function createShippingOrder(input, env) {
 function buildPrintFormHtml(logistics, env) {
   const merchantId = ecpayMerchantId(env);
   const isUni = logistics.subType === 'UNIMARTC2C';
+  // ECPay 物流列印寄件單 endpoint 跟 /Express/Create 同 namespace。
+  // 過去寫成 /Helper/ 是錯 path（ECPay 回 404 的原因）。
   const action =
-    `${logisticsBaseUrl(env)}/Helper/` +
+    `${logisticsBaseUrl(env)}/Express/` +
     (isUni ? 'PrintUniMartC2COrderInfo' : 'PrintFAMIC2COrderInfo');
 
   const params = {
