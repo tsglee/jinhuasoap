@@ -212,7 +212,7 @@ export function Products() {
             color: 'var(--sumi)',
           }}
         >
-          12 款純手工皂
+          本舍手工皂
         </h1>
         <div
           className="tc"
