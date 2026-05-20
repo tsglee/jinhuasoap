@@ -141,8 +141,8 @@ export function Process() {
       n: '捌', zh: '包裝',
       video: '/images/process/08包裝.mp4',
       poster: '/images/process/png/8pack.avif',
-      body: '每塊以楮紙包裹、麻繩繫縛，押上金花朱印。',
-      eduZh: '楮紙透氣，讓皂繼續呼吸；麻繩繫得穩、朱印壓得實 ── 一塊皂像一封寫好的信，到了手上才拆。',
+      body: '每塊以楮紙包裹、麻繩繫縛。',
+      eduZh: '楮紙透氣，讓皂繼續呼吸；麻繩繫得穩 ── 一塊皂像一封寫好的信，到了手上才拆。',
     },
   ];
 
