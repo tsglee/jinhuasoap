@@ -35,6 +35,20 @@ export const PRODUCTS = [
       '瓊崖海棠油提供強大修復力，乳油木果脂則如厚實護盾鎖住水分。',
     washFeel:
       '帶深沉的木質堅果香，泡泡細緻，沖完肌膚柔軟、不緊不澀。',
+    translations: {
+      en: {
+        series: 'Flower Guardians',
+        seriesNote: 'Restore & soften',
+        zh: 'Calophyllum Repair · Jade',
+        subtitle: 'Calophyllum tamanu repair bar',
+        skinType: 'Sensitive, blemish-prone, or recovering skin.',
+        coreIngredients:
+          'Organic cold-pressed tamanu (calophyllum) oil, Italian extra-virgin olive oil, refined shea butter, sweet almond, castor, coconut, palm.',
+        oilProfile:
+          'Tamanu oil offers deep repair; shea butter locks the moisture in like a soft shield.',
+        washFeel: 'A deep, woody-nutty scent. Fine lather. After rinsing, skin feels soft, never tight.',
+      },
+    },
   },
   {
     num: '貳',
@@ -59,6 +73,20 @@ export const PRODUCTS = [
       '取霧峰百花蜜之精萃，蜂蜜中的天然保濕因子能深度抓水。',
     washFeel:
       '泡沫綿密如奶，洗時釋出淡淡蜜香；沖水後肌膚飽滿溫潤、不留澀感。',
+    translations: {
+      en: {
+        series: 'Flower Guardians',
+        seriesNote: 'Restore & soften',
+        zh: 'Honey Soothe · Mist',
+        subtitle: 'Wufeng honey · soft jade bar',
+        skinType: 'Very dry or mature skin.',
+        coreIngredients:
+          'Pure Wufeng honey, Italian olive oil, shea butter, sweet almond, castor, coconut, palm.',
+        oilProfile:
+          'The natural humectants in honey draw water deep into the skin barrier.',
+        washFeel: 'Creamy milk-like lather with a soft honey scent. After rinsing, skin feels plump and never tight.',
+      },
+    },
   },
   {
     num: '參',
@@ -85,6 +113,20 @@ export const PRODUCTS = [
       '研磨綠豆粉細微如塵，輕拭即代謝表皮；本草萃取粉舒緩深層粉刺。',
     washFeel:
       '泡沫綿密帶涼，沖完肌膚清爽明亮、毛孔有收束感。',
+    translations: {
+      en: {
+        series: 'Flower Guardians',
+        seriesNote: 'Restore & soften',
+        zh: 'Mung Bean Fresh · Bath Bean',
+        subtitle: 'Mung bean cleansing bar',
+        skinType: 'Thick keratin, dull skin, congested pores.',
+        coreIngredients:
+          'Ground mung bean powder, herbal extract powder, Italian olive oil, shea butter, coconut, palm.',
+        oilProfile:
+          'Fine mung bean powder gently sloughs surface keratin; herbal extract calms deeper congestion.',
+        washFeel: 'Cool, creamy lather. After rinsing, skin feels bright and pores look refined.',
+      },
+    },
   },
   {
     num: '肆',
@@ -109,6 +151,20 @@ export const PRODUCTS = [
       '蝶豆花富含花青素，具備極佳的抗氧化與防禦能力，能提亮肌膚並延緩老化。',
     washFeel:
       '泡泡輕盈細膩，洗完肌膚清透、有彈性與光澤。',
+    translations: {
+      en: {
+        series: 'Flower Guardians',
+        seriesNote: 'Restore & soften',
+        zh: 'Butterfly Pea Brighten · Indigo',
+        subtitle: 'Butterfly pea brightening bar',
+        skinType: 'Tired, dull, or early-maturing skin in need of renewal.',
+        coreIngredients:
+          'Butterfly pea infused olive oil, sweet almond, rice bran, shea butter, coconut, palm.',
+        oilProfile:
+          'Butterfly pea is rich in anthocyanins — strong antioxidant defense that brightens and slows visible aging.',
+        washFeel: 'Light, refined lather. After rinsing, skin feels clear, supple, and luminous.',
+      },
+    },
   },
 
   // 【二、花韻時節系列 — 風土與暖心】
@@ -137,6 +193,20 @@ export const PRODUCTS = [
       '長濱金盞花於橄欖油中浸泡四週，金盞花烯與類黃酮慢慢釋進油裡；乳油木果脂接在後面把修護鎖住。',
     washFeel:
       '泡沫溫潤敦厚，洗時帶一抹金，洗完肌膚柔軟、不緊繃。',
+    translations: {
+      en: {
+        series: 'Seasonal Blooms',
+        seriesNote: 'Earth & warmth',
+        zh: 'Calendula Calm · Changbin Gold',
+        subtitle: 'Changbin calendula soothing bar',
+        skinType: 'Sensitive skin, winter-dry, or skin recovering from irritation.',
+        coreIngredients:
+          'Changbin calendula infused olive oil, Italian olive oil, shea butter, sweet almond, coconut, palm.',
+        oilProfile:
+          'Changbin calendula steeped in olive oil for four weeks releases calendulene and flavonoids; shea butter follows behind to lock the repair in.',
+        washFeel: 'Warm, full-bodied lather with a hint of gold. After rinsing, skin feels soft and never tight.',
+      },
+    },
   },
   {
     num: '陸',
@@ -161,6 +231,20 @@ export const PRODUCTS = [
       '三星米漿入皂時為水相替換；米糠油富含 γ-穀維素與生育三烯酚 ── 給肌膚溫潤的養護。',
     washFeel:
       '泡沫綿密如奶，洗後留一層淡淡米香，肌膚柔潤、不緊繃。',
+    translations: {
+      en: {
+        series: 'Seasonal Blooms',
+        seriesNote: 'Earth & warmth',
+        zh: 'Rice Warmth · Sanxing',
+        subtitle: 'Sanxing rice warming bar',
+        skinType: 'Slightly dry skin, seasonally sensitive, needing gentle nourishment.',
+        coreIngredients:
+          'Yilan Sanxing rice milk, rice bran oil, Italian olive oil, shea butter, coconut, palm.',
+        oilProfile:
+          'Sanxing rice milk replaces the water phase; rice bran oil is rich in γ-oryzanol and tocotrienols — gentle, deep nourishment.',
+        washFeel: 'Milky creamy lather. After rinsing, skin keeps a soft hint of rice scent and feels soft, never tight.',
+      },
+    },
   },
   {
     num: '柒',
@@ -185,6 +269,20 @@ export const PRODUCTS = [
       '酒粕含氨基酸與酵素，能溫和代謝表皮；米糠油與橄欖油底層厚實滋潤。',
     washFeel:
       '泡沫細緻，洗時有微微酒香，洗後肌膚柔軟、有光澤。',
+    translations: {
+      en: {
+        series: 'Seasonal Blooms',
+        seriesNote: 'Earth & warmth',
+        zh: 'Sake Lees Glow · Moonlight',
+        subtitle: 'Moonlight sake lees bar',
+        skinType: 'Dull or mature skin, fine lines, in need of luminosity.',
+        coreIngredients:
+          'Sake lees essence, rice bran oil, Italian olive oil, shea butter, coconut, palm.',
+        oilProfile:
+          'Sake lees contain amino acids and enzymes that gently turn over surface keratin; rice bran and olive oils build a rich nourishing base.',
+        washFeel: 'Fine lather with a soft sake scent. After rinsing, skin feels soft and luminous.',
+      },
+    },
   },
   {
     num: '捌',
@@ -209,6 +307,20 @@ export const PRODUCTS = [
       '桂花浸泡橄欖油四週，金秋桂花的甜香釋進油裡；甜杏仁油與米糠油給薄皮肌的親膚滋潤。',
     washFeel:
       '泡沫輕盈，洗時是一抹清淡的桂花蜜香，洗後肌膚柔軟、香氣留半日。',
+    translations: {
+      en: {
+        series: 'Seasonal Blooms',
+        seriesNote: 'Earth & warmth',
+        zh: 'Osmanthus Autumn · Gold',
+        subtitle: 'Osmanthus moisturizing bar',
+        skinType: 'Normal skin, thin or delicate skin, those who love a soft fragrance.',
+        coreIngredients:
+          'Osmanthus infused olive oil, sweet almond, rice bran, shea butter, coconut.',
+        oilProfile:
+          'Osmanthus blossoms steeped in olive oil for four weeks release autumn sweetness; sweet almond and rice bran oils nourish thin or delicate skin.',
+        washFeel: 'Light lather with a soft osmanthus-honey scent. After rinsing, skin feels soft and the scent lingers for hours.',
+      },
+    },
   },
 
   // 【三、花露淨髮餅系列 — 髮沐】
@@ -234,6 +346,19 @@ export const PRODUCTS = [
       'pH 5–6 弱酸貼近頭皮原生酸鹼；蠶絲蛋白多胜肽順毛鱗片、洗後不澀不打結；玉米澱粉扛起成型。',
     washFeel:
       '起泡細密，山茶花淡香；洗後髮絲滑順、頭皮清爽。',
+    translations: {
+      en: {
+        series: 'Botanical Hair Bars',
+        seriesNote: 'Hair & shower',
+        zh: 'Camellia Hair Bar',
+        subtitle: 'Botanical hair-cleansing bar',
+        skinType: 'All hair types, sensitive scalps, those seeking mild-acid hair care.',
+        coreIngredients: 'Camellia oil, silk protein extract, corn starch, glycerin.',
+        oilProfile:
+          'pH 5–6 close to scalp\'s natural acidity; silk protein peptides smooth the cuticle for tangle-free hair; corn starch holds the bar shape.',
+        washFeel: 'Fine lather with a soft camellia scent. After rinsing, hair feels smooth and scalp clean.',
+      },
+    },
   },
   {
     num: '拾',
@@ -257,6 +382,19 @@ export const PRODUCTS = [
       '弱酸表活組合 (pH 5–6) 為骨架；茉莉花萃取粉是真實花瓣磨成粉。遇水釋出香氣。',
     washFeel:
       '泡沫綿密細緻，洗時香氣慢慢開出來；洗後全身微微涼意，茉莉香留一夜。',
+    translations: {
+      en: {
+        series: 'Botanical Hair Bars',
+        seriesNote: 'Hair & shower',
+        zh: 'Jasmine Body Bar',
+        subtitle: 'Fragrant body-cleansing bar',
+        skinType: 'Whole-body skin, especially for summer fragrance lovers.',
+        coreIngredients: 'Jasmine extract powder, corn starch, glycerin.',
+        oilProfile:
+          'Mild-acid surfactant blend (pH 5–6) as backbone; jasmine extract is real petals milled into powder, releasing scent on contact with water.',
+        washFeel: 'Fine creamy lather. The scent unfolds slowly during the wash, leaving a cool, jasmine-lingering finish overnight.',
+      },
+    },
   },
 
   // 【四、全能日常系列 — 一皂到底】
@@ -282,6 +420,19 @@ export const PRODUCTS = [
       '荷荷芭脂肪酸結構與肌膚皮脂幾乎同源，運動後油脂分泌變多時反而能起平衡；薰衣草粉走粉類植萃路線，量壓低位。',
     washFeel:
       '起泡輕盈快速，徹底洗去汗與油；沖完全身有微涼的草本氣息。',
+    translations: {
+      en: {
+        series: 'All-Day Essentials',
+        seriesNote: 'One bar, head to toe',
+        zh: 'All-Day · Cool',
+        subtitle: 'Narcissus crisp',
+        skinType: 'Active skin, oily skin, anyone seeking a refreshing summer wash.',
+        coreIngredients: 'Jojoba oil, lavender powder, vegetable glycerin.',
+        oilProfile:
+          'Jojoba mirrors human sebum almost exactly — balances oil production after exercise rather than overwhelming it. Lavender powder is dosed gently.',
+        washFeel: 'Quick light lather that cuts through sweat and oil. After rinsing, a cool herbal note lingers on skin.',
+      },
+    },
   },
   {
     num: '拾貳',
@@ -303,5 +454,17 @@ export const PRODUCTS = [
     coreIngredients: '成分待補。',
     oilProfile: '原料特性待補。',
     washFeel: '洗感感受待補。',
+    translations: {
+      en: {
+        series: 'All-Day Essentials',
+        seriesNote: 'One bar, head to toe',
+        zh: 'All-Day · Hydrate',
+        subtitle: 'To be named',
+        skinType: 'Dry skin, seasonally sensitive, seeking a one-bar hydrating wash.',
+        coreIngredients: 'Ingredients pending.',
+        oilProfile: 'Oil profile pending.',
+        washFeel: 'Wash feel pending.',
+      },
+    },
   },
 ];

@@ -10,6 +10,7 @@ import { TierNotice } from './TierNotice.jsx';
 import { PRODUCTS } from '../data/products.js';
 import { ProductGallery } from './ProductGallery.jsx';
 import { AddToCartButton } from './BuyButton.jsx';
+import { useT, useLocaleVariant } from '../i18n/index.jsx';
 
 // ── Sub-components ──────────────────────────────────────────────────────
 
@@ -83,6 +84,8 @@ function BuyBlock({ p }) {
 }
 
 function ProductDetailCard({ p, flip, first }) {
+  const t = useT();
+  const product = useLocaleVariant(p);
   return (
     <div
       id={`product-${p.num}`}
@@ -107,7 +110,7 @@ function ProductDetailCard({ p, flip, first }) {
             pointerEvents: 'none',
           }}
         />
-        <ProductGallery photos={p.photos} alt={`${p.zh} · ${p.subtitle}`} ratio="4/5" />
+        <ProductGallery photos={p.photos} alt={`${product.zh} · ${product.subtitle}`} ratio="4/5" />
         <div
           style={{
             position: 'absolute',
@@ -132,7 +135,7 @@ function ProductDetailCard({ p, flip, first }) {
       </div>
       <div style={{ order: flip ? 1 : 2 }}>
         <div className="mono" style={{ color: 'var(--red)', fontSize: 11, letterSpacing: 3 }}>
-          {p.series}系列 · {p.seriesNote}
+          {product.series} · {product.seriesNote}
         </div>
         <h3
           className="tc"
@@ -144,21 +147,21 @@ function ProductDetailCard({ p, flip, first }) {
             color: 'var(--sumi)',
           }}
         >
-          {p.zh}
+          {product.zh}
         </h3>
         <div
           className="tc"
           style={{ fontSize: 17, color: 'var(--gold-3)', letterSpacing: 4 }}
         >
-          {p.subtitle}
+          {product.subtitle}
         </div>
         <Divider />
         <dl style={{ margin: '14px 0 0', display: 'grid', gap: 0 }}>
-          <DetailRow label="適合膚質" value={p.skinType} />
-          <DetailRow label="核心成分" value={p.coreIngredients} />
-          <DetailRow label="原料特性" value={p.oilProfile} />
-          <DetailRow label="洗感感受" value={p.washFeel} />
-          {p.batchDate && <DetailRow label="本批熟成" value={p.batchDate} />}
+          <DetailRow label={t('pages.products.detailLabels.skinType')} value={product.skinType} />
+          <DetailRow label={t('pages.products.detailLabels.coreIngredients')} value={product.coreIngredients} />
+          <DetailRow label={t('pages.products.detailLabels.oilProfile')} value={product.oilProfile} />
+          <DetailRow label={t('pages.products.detailLabels.washFeel')} value={product.washFeel} />
+          {p.batchDate && <DetailRow label={t('pages.products.detailLabels.batchDate')} value={p.batchDate} />}
         </dl>
         <BuyBlock p={p} />
       </div>
@@ -169,6 +172,7 @@ function ProductDetailCard({ p, flip, first }) {
 // ── Page ────────────────────────────────────────────────────────────────
 
 export function Products() {
+  const t = useT();
   // Deep-link from About: when an About card sets gf_jump_product in
   // sessionStorage and switches to this tab, scroll to that product.
   useEffect(() => {
@@ -201,7 +205,7 @@ export function Products() {
         }}
       >
         <div className="mono" style={{ color: 'var(--red)' }}>
-          十二花 · 全系列
+          {t('pages.products.kicker')}
         </div>
         <h1
           className="tc gf-h1-md"
@@ -213,7 +217,7 @@ export function Products() {
             color: 'var(--sumi)',
           }}
         >
-          本舍手工皂
+          {t('pages.products.title')}
         </h1>
         <div
           className="tc"
@@ -223,7 +227,7 @@ export function Products() {
             letterSpacing: 6,
           }}
         >
-          一月一方 · 一皂一花
+          {t('pages.products.subtitle')}
         </div>
         <div
           className="tc"
@@ -235,8 +239,7 @@ export function Products() {
             color: 'var(--sumi)',
           }}
         >
-          12 款配方分作四個系列 ── 花神守護、花韻時節、花露淨髮餅、全能日常。
-          每一塊皆冷製手壓、熟成四十二日，以未漂紙包裹。
+          {t('pages.products.description')}
         </div>
       </section>
 
