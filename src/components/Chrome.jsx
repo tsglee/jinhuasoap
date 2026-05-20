@@ -427,6 +427,17 @@ export function Footer({ navigate, setTab }) {
                   tsghsunlee@gmail.com
                 </a>
               </div>
+              <div>
+                Instagram ·{' '}
+                <a
+                  href="https://www.instagram.com/jinhuasoap/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ color: 'inherit' }}
+                >
+                  @jinhuasoap
+                </a>
+              </div>
             </div>
           </div>
         </div>
