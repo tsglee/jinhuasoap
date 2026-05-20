@@ -46,6 +46,7 @@ const TABS = [
 function parseRoute() {
   if (typeof window === 'undefined') return { type: 'tab' };
   const path = window.location.pathname;
+  if (path === '/' || path === '') return { type: 'tab' };
   const legal = path.match(/^\/legal\/(privacy|returns|terms)\/?$/);
   if (legal) return { type: 'legal', page: legal[1] };
   if (path === '/cart' || path === '/cart/') return { type: 'cart' };
@@ -54,7 +55,108 @@ function parseRoute() {
     const slug = path.slice('/journal/'.length).replace(/\/+$/, '');
     if (slug) return { type: 'journal', slug };
   }
-  return { type: 'tab' };
+  return { type: 'notfound' };
+}
+
+function NotFound({ navigate }) {
+  useEffect(() => {
+    document.title = '找不到頁面 · 金花樓';
+    // SEO: ask crawlers not to index this URL since it's a soft 404
+    let meta = document.head.querySelector('meta[name="robots"]');
+    if (!meta) {
+      meta = document.createElement('meta');
+      meta.setAttribute('name', 'robots');
+      document.head.appendChild(meta);
+    }
+    meta.setAttribute('content', 'noindex, follow');
+    return () => {
+      // Restore default indexing on unmount
+      meta.setAttribute('content', 'index, follow');
+    };
+  }, []);
+
+  return (
+    <section
+      className="gf-pad-md"
+      style={{
+        maxWidth: 720,
+        margin: '0 auto',
+        padding: '120px 44px',
+        textAlign: 'center',
+      }}
+    >
+      <div className="mono" style={{ color: 'var(--red)', marginBottom: 24 }}>
+        404 · 走錯了
+      </div>
+      <h1
+        className="tc"
+        style={{
+          fontSize: 56,
+          fontWeight: 500,
+          letterSpacing: 10,
+          margin: '0 0 24px',
+          color: 'var(--sumi)',
+        }}
+      >
+        找不到頁面
+      </h1>
+      <p
+        className="tc"
+        style={{
+          fontSize: 16,
+          lineHeight: 1.85,
+          letterSpacing: 1,
+          color: 'var(--ink-60)',
+          margin: '0 0 40px',
+        }}
+      >
+        這條路徑可能已經搬家、或者你輸入的網址不對。
+        <br />
+        從下面任一個地方重新開始 ──
+      </p>
+      <div
+        style={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: 16,
+          justifyContent: 'center',
+        }}
+      >
+        <button
+          type="button"
+          onClick={() => navigate('/')}
+          className="mono"
+          style={{
+            padding: '12px 24px',
+            background: 'var(--red)',
+            color: 'var(--gold-2)',
+            border: '1px solid var(--gold-1)',
+            fontSize: 13,
+            letterSpacing: 2,
+            cursor: 'pointer',
+          }}
+        >
+          回首頁 · 本舍
+        </button>
+        <button
+          type="button"
+          onClick={() => navigate('/journal')}
+          className="mono"
+          style={{
+            padding: '12px 24px',
+            background: 'transparent',
+            color: 'var(--sumi)',
+            border: '1px solid var(--ink-15)',
+            fontSize: 13,
+            letterSpacing: 2,
+            cursor: 'pointer',
+          }}
+        >
+          本舍小記
+        </button>
+      </div>
+    </section>
+  );
 }
 
 export default function App() {
@@ -107,7 +209,9 @@ export default function App() {
   );
 
   let body;
-  if (route.type === 'cart') {
+  if (route.type === 'notfound') {
+    body = <NotFound navigate={navigate} />;
+  } else if (route.type === 'cart') {
     body = <Cart navigate={navigate} />;
   } else if (route.type === 'journal' && route.slug) {
     body = <JournalPost slug={route.slug} navigate={navigate} />;
