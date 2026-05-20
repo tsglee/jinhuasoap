@@ -13,6 +13,17 @@
 // 同時插入 BlogPosting + (有 FAQ 時) FAQPage JSON-LD。
 import { useEffect, useState } from 'react';
 import { IllSoap } from './Illustrations.jsx';
+import { useLocale, useT } from '../i18n/index.jsx';
+import { POSTS_EN } from '../data/posts.en.js';
+
+// Helper: returns the post with English fields merged in if locale='en'
+// and that slug has a translation. Otherwise returns the post unchanged.
+function localizedPost(post, locale) {
+  if (locale !== 'en') return post;
+  const en = POSTS_EN[post.slug];
+  if (!en) return post;
+  return { ...post, ...en };
+}
 
 const SITE_URL = 'https://jinhuasoap.com';
 const AUTHOR = '趙老闆娘';
@@ -2328,20 +2339,27 @@ function CategoryChip({ label, count, active, onClick }) {
 export function JournalIndex({ navigate }) {
   const [activeFilter, setActiveFilter] = useState('');
   const [query, setQuery] = useState('');
+  const { locale } = useLocale();
+  const t = useT();
+
+  // Localize posts (English titles/leads/kickers if locale=en + translated)
+  const localized = POSTS_BY_DATE.map((p) => localizedPost(p, locale));
 
   useEffect(() => {
-    document.title = '本舍小記 · 金花樓';
-  }, []);
+    document.title = locale === 'en'
+      ? 'Journal · Goldenflower'
+      : '本舍小記 · 金花樓';
+  }, [locale]);
 
-  // 每個 kicker 的篇數 — 用來顯示在 chip 上
-  const counts = POSTS_BY_DATE.reduce((acc, p) => {
+  // 每個 kicker 的篇數 — 用來顯示在 chip 上（用 localized 確保中英 kicker 都對）
+  const counts = localized.reduce((acc, p) => {
     acc[p.kicker] = (acc[p.kicker] || 0) + 1;
     return acc;
   }, {});
 
   // 篩選：先 kicker、再 query（title / lead / kicker / keywords 逐欄 includes）
   const q = query.trim().toLowerCase();
-  const filtered = POSTS_BY_DATE.filter((p) => {
+  const filtered = localized.filter((p) => {
     if (activeFilter && p.kicker !== activeFilter) return false;
     if (!q) return true;
     const hay = [
@@ -2358,7 +2376,7 @@ export function JournalIndex({ navigate }) {
 
   return (
     <div style={{ position: 'relative', zIndex: 1 }}>
-      <PageHeader kicker="金花樓 · 本舍" title="本舍小記" subtitle="慢慢寫 · 慢慢讀" />
+      <PageHeader kicker={t('pages.journal.kicker')} title={t('pages.journal.title')} subtitle={t('pages.journal.subtitle')} />
       <section
         className="gf-pad-md"
         style={{
@@ -2379,8 +2397,7 @@ export function JournalIndex({ navigate }) {
             textAlign: 'center',
           }}
         >
-          一週寫一兩篇，關於油、關於鹼、關於水、也關於我們自己的這些慢工。
-          為自己寫，把手邊的想法慢慢留下來。
+          {t('pages.journal.intro')}
         </div>
         <div
           style={{
@@ -2393,8 +2410,8 @@ export function JournalIndex({ navigate }) {
             type="search"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="搜尋文章 ── 標題 / 關鍵字"
-            aria-label="搜尋本舍小記文章"
+            placeholder={t('pages.journal.searchPlaceholder')}
+            aria-label={t('pages.journal.searchPlaceholder')}
             className="tc"
             style={{
               width: '100%',
@@ -2412,7 +2429,7 @@ export function JournalIndex({ navigate }) {
         </div>
         <div
           role="group"
-          aria-label="按類別篩選文章"
+          aria-label={t('pages.journal.filterAriaLabel')}
           style={{
             display: 'flex',
             justifyContent: 'center',
@@ -2422,8 +2439,8 @@ export function JournalIndex({ navigate }) {
           }}
         >
           <CategoryChip
-            label="全部"
-            count={POSTS_BY_DATE.length}
+            label={t('pages.journal.categoryAll')}
+            count={localized.length}
             active={!activeFilter}
             onClick={() => setActiveFilter('')}
           />
@@ -2449,7 +2466,7 @@ export function JournalIndex({ navigate }) {
               letterSpacing: 1,
             }}
           >
-            找不到符合「{query}」的文章 ── 試試其他關鍵字、或拿掉類別篩選。
+            {t('pages.journal.emptyResult').replace('{query}', query)}
           </div>
         )}
         <div
@@ -2489,7 +2506,7 @@ export function JournalIndex({ navigate }) {
                     border: '1px solid var(--gold-1)',
                   }}
                 >
-                  編輯精選
+                  {t('pages.journal.pinnedLabel')}
                 </span>
               )}
               <Cover post={p} ratio="4/3" />
@@ -2552,7 +2569,7 @@ export function JournalIndex({ navigate }) {
                     navigate={navigate}
                     style={{ fontSize: 14, letterSpacing: 3 }}
                   >
-                    繼續閱讀 →
+                    {t('buttons.readMore')}
                   </InkLink>
                 </div>
               </div>
@@ -2565,7 +2582,12 @@ export function JournalIndex({ navigate }) {
 }
 
 export function JournalPost({ slug, navigate }) {
-  const post = POSTS.find((p) => p.slug === slug);
+  const rawPost = POSTS.find((p) => p.slug === slug);
+  const { locale, setLocale } = useLocale();
+  // 英文 metadata 替換（title/lead/kicker/description/keywords），
+  // body 翻譯尚未完成的話會留中文 + 顯示提示。
+  const post = rawPost ? localizedPost(rawPost, locale) : null;
+  const hasEnBody = locale === 'en' && rawPost && POSTS_EN[rawPost.slug]?.body;
   useArticleMeta(post);
 
   if (!post) {
@@ -2621,7 +2643,37 @@ export function JournalPost({ slug, navigate }) {
           padding: '20px 44px 80px',
         }}
       >
-        <PostBody body={post.body} />
+        {locale === 'en' && !hasEnBody && (
+          <div
+            style={{
+              padding: '14px 18px',
+              background: 'rgba(244,236,215,0.5)',
+              border: '1px solid var(--ink-15)',
+              marginBottom: 28,
+              fontSize: 13,
+              lineHeight: 1.7,
+              letterSpacing: 0.5,
+              color: 'var(--ink-60)',
+            }}
+          >
+            Full English translation of this article is in progress.
+            The text below is in the original Chinese ──{' '}
+            <button
+              type="button"
+              onClick={() => setLocale('zh')}
+              style={{
+                color: 'var(--red)',
+                textDecoration: 'underline',
+                cursor: 'pointer',
+                padding: 0,
+              }}
+            >
+              switch the whole site to Chinese
+            </button>
+            , or scroll on.
+          </div>
+        )}
+        <PostBody body={rawPost.body} />
 
         <RelatedLinks slugs={post.related} navigate={navigate} />
 
