@@ -7,7 +7,7 @@ export const HERO = {
   videoSrc: '/images/landingmedia/Animated_Ink_Wash_Banner_Scene_Generation.mp4',
   poster: '/images/landingmedia/hero-poster.webp',
   // Desktop renders these stacked with a <br> between; Mobile inlines them.
-  titleLines: ['山中', '一盞', '金花。'],
+  titleLines: ['山中', '一盞', '金花'],
   titleAccentIndex: 2, // index of the line painted in --red
   tagline: '一方小皂 · 洗塵心 · 照夜夢。',
   intro:
