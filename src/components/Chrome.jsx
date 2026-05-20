@@ -319,6 +319,7 @@ export function Footer({ navigate, setTab }) {
         { label: '離島' },
         { label: '7-11 店到店' },
         { label: '全家 店到店' },
+        { label: '查詢訂單', href: '/order' },
       ],
     },
     {

@@ -166,15 +166,33 @@ function ThankYou({ orderId, navigate }) {
             flexWrap: 'wrap',
           }}
         >
+          {orderId && (
+            <button
+              type="button"
+              onClick={() => navigate && navigate(`/order/${orderId}`)}
+              className="tc"
+              style={{
+                padding: '14px 26px',
+                background: 'var(--red)',
+                color: 'var(--gold-2)',
+                border: '1px solid var(--gold-1)',
+                fontSize: 14,
+                letterSpacing: 3,
+                cursor: 'pointer',
+              }}
+            >
+              查詢訂單狀態  ▸
+            </button>
+          )}
           <button
             type="button"
             onClick={() => navigate && navigate('/?tab=shop')}
             className="tc"
             style={{
               padding: '14px 26px',
-              background: 'var(--red)',
-              color: 'var(--gold-2)',
-              border: '1px solid var(--gold-1)',
+              background: 'transparent',
+              color: 'var(--sumi)',
+              border: '1px solid var(--ink-15)',
               fontSize: 14,
               letterSpacing: 3,
               cursor: 'pointer',

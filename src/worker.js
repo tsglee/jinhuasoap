@@ -44,6 +44,11 @@ export default {
       return handleLabel(orderId, env);
     }
 
+    if (url.pathname.startsWith('/api/order/')) {
+      const orderId = url.pathname.slice('/api/order/'.length);
+      return handleOrderQuery(orderId, env);
+    }
+
     if (url.pathname === '/api/config') {
       // Public client config (MerchantID is non-sensitive — appears in
       // the form payload anyway). Read at runtime so dashboard env
@@ -762,6 +767,46 @@ function buildPrintFormHtml(logistics, env) {
   <script>document.getElementById('ecpayLabel').submit();</script>
 </body>
 </html>`;
+}
+
+// 公開查單 endpoint — 買家用訂單編號自助查狀態。
+// 安全考量：訂單編號 JH-YYMMDD-XXXX 後 4 碼隨機（36^4 = 1.6M 組合）、
+// 不易暴力猜中；且回傳資料**過濾掉 email / 電話 / IP 等敏感欄位**，
+// 只回客戶自己已知的訂單資訊（名字、品項、總額、寄送方式、狀態）。
+async function handleOrderQuery(orderId, env) {
+  if (!orderId || !/^JH-\d{6}-[A-Z0-9]{4}$/.test(orderId)) {
+    return jsonResponse({ ok: false, error: '訂單編號格式錯誤' }, 400);
+  }
+  if (!env.ORDER_FALLBACK) {
+    return jsonResponse({ ok: false, error: 'KV not configured' }, 500);
+  }
+  const list = await env.ORDER_FALLBACK.list({ prefix: `order/${orderId}/` });
+  if (!list.keys.length) {
+    return jsonResponse({ ok: false, error: '找不到這筆訂單（可能已超過 30 天保存期）' }, 404);
+  }
+  const raw = await env.ORDER_FALLBACK.get(list.keys[0].name);
+  if (!raw) return jsonResponse({ ok: false, error: '訂單資料缺失' }, 404);
+
+  const stored = JSON.parse(raw);
+  const payload = stored.payload || {};
+  return jsonResponse({
+    ok: true,
+    orderId,
+    createdAt: stored.createdAt,
+    name: payload.name,
+    recipientName: payload.recipientName || payload.name,
+    items: payload.cart || [],
+    total: payload.total,
+    shipMethod: payload.shipMethod,
+    storeName: payload.storeName,
+    note: payload.note,
+    // 物流狀態：pending = 訂單已收尚未自動建單成功（老闆娘會手動處理）；
+    //         processing = ECPay 自動建單成功，等老闆娘出貨；
+    //         （實際出貨/取件狀態需 webhook 同步 ECPay，本版未做）
+    status: stored.logistics ? 'processing' : 'pending',
+    logisticsId: stored.logistics?.allPayLogisticsId,
+    logisticsError: stored.logisticsError,
+  });
 }
 
 async function handleLabel(orderId, env) {

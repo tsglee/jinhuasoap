@@ -30,6 +30,9 @@ const JournalPost = lazy(() =>
 const Legal = lazy(() =>
   import('./components/Legal.jsx').then((m) => ({ default: m.Legal })),
 );
+const OrderTracking = lazy(() =>
+  import('./components/OrderTracking.jsx').then((m) => ({ default: m.OrderTracking })),
+);
 
 // Empty placeholder while a lazy chunk loads. Sized to roughly match the
 // first viewport so the page doesn't snap shorter during the brief load.
@@ -55,6 +58,9 @@ function parseRoute() {
     const slug = path.slice('/journal/'.length).replace(/\/+$/, '');
     if (slug) return { type: 'journal', slug };
   }
+  const orderMatch = path.match(/^\/order\/(JH-\d{6}-[A-Z0-9]{4})\/?$/);
+  if (orderMatch) return { type: 'order', orderId: orderMatch[1] };
+  if (path === '/order' || path === '/order/') return { type: 'order' };
   return { type: 'notfound' };
 }
 
@@ -219,6 +225,8 @@ export default function App() {
     body = <JournalIndex navigate={navigate} />;
   } else if (route.type === 'legal') {
     body = <Legal page={route.page} navigate={navigate} />;
+  } else if (route.type === 'order') {
+    body = <OrderTracking orderId={route.orderId} navigate={navigate} />;
   } else if (tab === 'about') {
     body = <About setTab={selectTab} />;
   } else if (tab === 'products') {
