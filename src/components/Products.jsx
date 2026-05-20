@@ -200,7 +200,7 @@ export function Products() {
         }}
       >
         <div className="mono" style={{ color: 'var(--red)' }}>
-          十二花 · 本舍之皂
+          十二花 · 全系列
         </div>
         <h1
           className="tc gf-h1-md"
@@ -212,7 +212,7 @@ export function Products() {
             color: 'var(--sumi)',
           }}
         >
-          本舍之皂
+          12 款純手工皂
         </h1>
         <div
           className="tc"
@@ -234,8 +234,8 @@ export function Products() {
             color: 'var(--sumi)',
           }}
         >
-          十二款配方分作四個系列 ── 花神守護、花韻時節、花露淨髮餅、全能日常。
-          每一塊皆冷製手壓、熟成四十二日，以未漂紙包裹，押上金花朱印。
+          12 款配方分作四個系列 ── 花神守護、花韻時節、花露淨髮餅、全能日常。
+          每一塊皆冷製手壓、熟成四十二日，以未漂紙包裹。
         </div>
       </section>
 
