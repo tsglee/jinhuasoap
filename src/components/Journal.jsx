@@ -2327,6 +2327,7 @@ function CategoryChip({ label, count, active, onClick }) {
 
 export function JournalIndex({ navigate }) {
   const [activeFilter, setActiveFilter] = useState('');
+  const [query, setQuery] = useState('');
 
   useEffect(() => {
     document.title = '本舍小記 · 金花樓';
@@ -2338,9 +2339,22 @@ export function JournalIndex({ navigate }) {
     return acc;
   }, {});
 
-  const filtered = activeFilter
-    ? POSTS_BY_DATE.filter((p) => p.kicker === activeFilter)
-    : POSTS_BY_DATE;
+  // 篩選：先 kicker、再 query（title / lead / kicker / keywords 逐欄 includes）
+  const q = query.trim().toLowerCase();
+  const filtered = POSTS_BY_DATE.filter((p) => {
+    if (activeFilter && p.kicker !== activeFilter) return false;
+    if (!q) return true;
+    const hay = [
+      p.title,
+      p.lead,
+      p.kicker,
+      ...(p.keywords || []),
+    ]
+      .filter(Boolean)
+      .join(' ')
+      .toLowerCase();
+    return hay.includes(q);
+  });
 
   return (
     <div style={{ position: 'relative', zIndex: 1 }}>
@@ -2357,7 +2371,7 @@ export function JournalIndex({ navigate }) {
           className="tc"
           style={{
             maxWidth: 620,
-            margin: '0 auto 36px',
+            margin: '0 auto 28px',
             fontSize: 16,
             lineHeight: 1.85,
             color: 'var(--ink-60)',
@@ -2367,6 +2381,34 @@ export function JournalIndex({ navigate }) {
         >
           一週寫一兩篇，關於油、關於鹼、關於水、也關於我們自己的這些慢工。
           為自己寫，把手邊的想法慢慢留下來。
+        </div>
+        <div
+          style={{
+            maxWidth: 480,
+            margin: '0 auto 24px',
+            position: 'relative',
+          }}
+        >
+          <input
+            type="search"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="搜尋文章 ── 標題 / 關鍵字"
+            aria-label="搜尋本舍小記文章"
+            className="tc"
+            style={{
+              width: '100%',
+              padding: '12px 16px',
+              fontSize: 14,
+              letterSpacing: 1,
+              background: 'var(--paper)',
+              border: '1px solid var(--ink-15)',
+              color: 'var(--sumi)',
+              fontFamily: 'inherit',
+              outline: 'none',
+              borderRadius: 0,
+            }}
+          />
         </div>
         <div
           role="group"
@@ -2395,10 +2437,25 @@ export function JournalIndex({ navigate }) {
             />
           ))}
         </div>
+        {filtered.length === 0 && (
+          <div
+            className="tc"
+            style={{
+              textAlign: 'center',
+              padding: '60px 20px',
+              fontSize: 16,
+              lineHeight: 1.85,
+              color: 'var(--ink-60)',
+              letterSpacing: 1,
+            }}
+          >
+            找不到符合「{query}」的文章 ── 試試其他關鍵字、或拿掉類別篩選。
+          </div>
+        )}
         <div
           className="gf-stack-md"
           style={{
-            display: 'grid',
+            display: filtered.length === 0 ? 'none' : 'grid',
             gridTemplateColumns: 'repeat(2, 1fr)',
             gap: 40,
           }}
