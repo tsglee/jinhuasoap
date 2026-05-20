@@ -48,51 +48,51 @@
     "prompt": "Editorial product photo, East Asian artisanal home life mood, soft natural daylight from window, low saturation warm neutral palette, shallow depth of field, 1:1 aspect ratio, 1200x1200, no people, no text, no logos beyond the soap's own stamp, no modern packaging, slight film grain.\n\nThe soap bar in the reference is the exact product — preserve its cream/ivory color, edges, and brand stamp precisely.\n\nComposition: a quiet bathroom shelf corner. The soap bar resting on a small antique brass dish with subtle patina. Beside it a folded soft cotton hand towel in natural undyed linen color, a small ceramic cup. Soft window light from the right illuminates the scene. A few small water droplets on the brass dish edge. Aged stone shelf. Lived-in editorial home moment."
   },
   {
-    "label": "藻豆-01-hero",
-    "outputPath": "public/images/products/藻豆/01.png",
-    "referenceImagePath": "/Users/tsglee/Desktop/realProducts/藻豆1.JPG",
+    "label": "綠豆-01-hero",
+    "outputPath": "public/images/products/綠豆/01.png",
+    "referenceImagePath": "/Users/tsglee/Desktop/realProducts/綠豆1.JPG",
     "prompt": "Editorial product photo, East Asian artisanal soap atelier mood, soft natural daylight from upper-left, low saturation warm neutral palette, shallow depth of field, 1:1 aspect ratio, 1200x1200, no people, no text overlay, no logos beyond the soap's own stamp, no modern packaging, slight film grain.\n\nThe soap bar in the reference is the EXACT product — preserve its pale beige cream color, hand-pressed irregular edges, and the 'JIN HUA LOU' brand stamp exactly as photographed.\n\nComposition: front-on hero shot, the bar centered on a folded raw unbleached linen cloth, brand-stamp facing up clearly readable. Aged dark hardwood tabletop with visible grain. Soft directional daylight catches the stamp letters' relief. Single bar only, generous negative space."
   },
   {
-    "label": "藻豆-02-threequarter",
-    "outputPath": "public/images/products/藻豆/02.png",
-    "referenceImagePath": "/Users/tsglee/Desktop/realProducts/藻豆1.JPG",
+    "label": "綠豆-02-threequarter",
+    "outputPath": "public/images/products/綠豆/02.png",
+    "referenceImagePath": "/Users/tsglee/Desktop/realProducts/綠豆1.JPG",
     "prompt": "Editorial product photo, East Asian artisanal soap atelier mood, soft natural daylight, low saturation warm neutral palette, shallow depth of field, 1:1 aspect ratio, 1200x1200, no people, no text, no logos beyond the soap's own stamp, no modern packaging, slight film grain.\n\nThe soap bar in the reference is the exact product — preserve its pale beige cream color, edges, and 'JIN HUA LOU' brand stamp precisely.\n\nComposition: 45-degree three-quarter angle showing both top stamp surface and one side edge. Resting on a small hand-thrown ceramic saucer with subtle natural glaze. Side rim light from a window catches the edge. Aged wood tabletop fills the background softly out of focus."
   },
   {
-    "label": "藻豆-03-macro",
-    "outputPath": "public/images/products/藻豆/03.png",
-    "referenceImagePath": "/Users/tsglee/Desktop/realProducts/藻豆1.JPG",
+    "label": "綠豆-03-macro",
+    "outputPath": "public/images/products/綠豆/03.png",
+    "referenceImagePath": "/Users/tsglee/Desktop/realProducts/綠豆1.JPG",
     "prompt": "Editorial product photo, soft natural daylight, low saturation warm neutral palette, very shallow depth of field, 1:1 aspect ratio, 1200x1200, no people, no text overlay, no logos beyond the soap's own stamp, no modern packaging, slight film grain.\n\nThe soap bar in the reference is the exact product — preserve its pale beige cream color, micro-texture, and brand stamp exactly.\n\nComposition: extreme macro close-up of the soap's top surface, the 'JIN HUA LOU' brand stamp filling most of the frame. Stamp letters and embossed border in sharp focus. Tiny mung bean powder grains visible if present on surface. Edges falling into bokeh. Contemplative texture study."
   },
   {
-    "label": "藻豆-04-flatlay",
-    "outputPath": "public/images/products/藻豆/04.png",
-    "referenceImagePath": "/Users/tsglee/Desktop/realProducts/藻豆1.JPG",
+    "label": "綠豆-04-flatlay",
+    "outputPath": "public/images/products/綠豆/04.png",
+    "referenceImagePath": "/Users/tsglee/Desktop/realProducts/綠豆1.JPG",
     "prompt": "Editorial product photo, soft overhead natural daylight, low saturation warm neutral palette, shallow depth of field, 1:1 aspect ratio, 1200x1200, no people, no text, no logos beyond the soap's own stamp, no modern packaging, slight film grain.\n\nThe soap bar in the reference is the exact product — preserve its pale beige cream color and brand stamp exactly.\n\nComposition: top-down flat lay on aged wood. Centre: the soap bar (stamp facing camera). Surrounding: a small clear glass bottle of pale golden olive oil with cork stopper, a small wooden bowl of whole dried green mung beans, a fine dusting of mung bean powder loosely scattered, a folded raw linen napkin in opposite corner. Editorial ingredient story, natural composition."
   },
   {
-    "label": "藻豆-05-sideprofile",
-    "outputPath": "public/images/products/藻豆/05.png",
-    "referenceImagePath": "/Users/tsglee/Desktop/realProducts/藻豆2.JPG",
+    "label": "綠豆-05-sideprofile",
+    "outputPath": "public/images/products/綠豆/05.png",
+    "referenceImagePath": "/Users/tsglee/Desktop/realProducts/綠豆2.JPG",
     "prompt": "Editorial product photo, soft directional daylight, low saturation warm neutral palette, shallow depth of field, 1:1 aspect ratio, 1200x1200, no people, no text, no logos, no modern packaging, slight film grain.\n\nThe soap bar in the reference shows the side profile — preserve its pale beige cream color and rectangular hand-pressed proportions exactly as photographed.\n\nComposition: the bar lying on its long edge to show the side profile, the smooth side surface clearly visible. Resting on a small piece of aged wood block. Side-lit from the right to emphasize the bar's thickness and clean edges. Aged wood tabletop softly out of focus. Contemplative side-profile study."
   },
   {
-    "label": "藻豆-06-bubble",
-    "outputPath": "public/images/products/藻豆/06.png",
-    "referenceImagePath": "/Users/tsglee/Desktop/realProducts/藻豆1.JPG",
+    "label": "綠豆-06-bubble",
+    "outputPath": "public/images/products/綠豆/06.png",
+    "referenceImagePath": "/Users/tsglee/Desktop/realProducts/綠豆1.JPG",
     "prompt": "Editorial product photo, atmospheric and slightly moody, low saturation, 1:1 aspect ratio, 1200x1200, no people, no text, no logos beyond the soap's own stamp, no modern packaging, slight film grain.\n\nThe soap bar in the reference is the exact product — preserve its pale beige cream color, edges, and brand stamp precisely.\n\nComposition: the soap bar lightly damp with subtle water sheen. A single iridescent soap bubble forming on the top-left corner. Set against a dark slate-grey textured background. Dramatic side light from the right. Single hero focus, contemplative damp moment."
   },
   {
-    "label": "藻豆-07-wrapped",
-    "outputPath": "public/images/products/藻豆/07.png",
-    "referenceImagePath": "/Users/tsglee/Desktop/realProducts/藻豆1.JPG",
+    "label": "綠豆-07-wrapped",
+    "outputPath": "public/images/products/綠豆/07.png",
+    "referenceImagePath": "/Users/tsglee/Desktop/realProducts/綠豆1.JPG",
     "prompt": "Editorial product photo, soft natural daylight, low saturation warm neutral palette, shallow depth of field, 1:1 aspect ratio, 1200x1200, no people, no text, no logos, no modern packaging, slight film grain.\n\nThe soap bar in the reference is the exact product — preserve its pale beige cream color and brand stamp exactly.\n\nComposition: the soap bar wrapped in unbleached natural kraft paper tied with raw natural jute twine, sealed with a small deep-oxblood red wax stamp (no logo — just the wax impression). An identical unwrapped bar sits beside it slightly behind for context. On aged wood with folded raw linen napkin in one corner. Quietly ceremonial gift composition."
   },
   {
-    "label": "藻豆-08-lifestyle",
-    "outputPath": "public/images/products/藻豆/08.png",
-    "referenceImagePath": "/Users/tsglee/Desktop/realProducts/藻豆1.JPG",
+    "label": "綠豆-08-lifestyle",
+    "outputPath": "public/images/products/綠豆/08.png",
+    "referenceImagePath": "/Users/tsglee/Desktop/realProducts/綠豆1.JPG",
     "prompt": "Editorial product photo, East Asian artisanal home life mood, soft natural daylight from window, low saturation warm neutral palette, shallow depth of field, 1:1 aspect ratio, 1200x1200, no people, no text, no logos beyond the soap's own stamp, no modern packaging, slight film grain.\n\nThe soap bar in the reference is the exact product — preserve its pale beige cream color and brand stamp precisely.\n\nComposition: a quiet bathroom shelf corner. The soap bar resting on a small antique brass dish with subtle patina. Beside it a folded soft cotton hand towel in natural undyed linen color, a small ceramic cup, a few dried mung beans scattered on the shelf. Soft window light from the right illuminates the scene. Aged stone shelf. Lived-in editorial home moment."
   },
   {
