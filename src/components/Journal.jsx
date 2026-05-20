@@ -2302,8 +2302,8 @@ function CategoryChip({ label, count, active, onClick }) {
         background: active ? 'var(--red)' : 'transparent',
         color: active ? 'var(--gold-2)' : 'var(--ink-60)',
         border: `1px solid ${active ? 'var(--red)' : 'var(--ink-15)'}`,
-        fontSize: 11,
-        letterSpacing: 3,
+        fontSize: 13,
+        letterSpacing: 2,
         cursor: 'pointer',
         transition: 'background 150ms ease, color 150ms ease, border-color 150ms ease',
         fontFamily: 'inherit',
@@ -2315,7 +2315,7 @@ function CategoryChip({ label, count, active, onClick }) {
         style={{
           marginLeft: 8,
           opacity: 0.65,
-          fontSize: 10,
+          fontSize: 12,
           letterSpacing: 1,
         }}
       >
@@ -2427,8 +2427,8 @@ export function JournalIndex({ navigate }) {
                     background: 'var(--red)',
                     color: 'var(--gold-2)',
                     padding: '5px 10px',
-                    fontSize: 9,
-                    letterSpacing: 3,
+                    fontSize: 11,
+                    letterSpacing: 2,
                     border: '1px solid var(--gold-1)',
                   }}
                 >
@@ -2459,7 +2459,7 @@ export function JournalIndex({ navigate }) {
                   <time
                     dateTime={p.date}
                     className="mono"
-                    style={{ color: 'var(--ink-60)', fontSize: 10, letterSpacing: 2 }}
+                    style={{ color: 'var(--ink-60)', fontSize: 12, letterSpacing: 1.5 }}
                   >
                     {p.date}
                   </time>

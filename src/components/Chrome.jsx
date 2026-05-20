@@ -77,8 +77,8 @@ export function Header({ tab, setTab, tabs, navigate }) {
           textAlign: 'center',
           padding: '6px 20px',
           fontFamily: '"DM Mono", monospace',
-          fontSize: 10,
-          letterSpacing: 3,
+          fontSize: 12,
+          letterSpacing: 2,
           textTransform: 'uppercase',
         }}
       >

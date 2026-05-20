@@ -123,8 +123,8 @@ function ThankYou({ orderId, navigate }) {
               className="mono"
               style={{
                 color: 'var(--gold-3)',
-                fontSize: 10,
-                letterSpacing: 2,
+                fontSize: 12,
+                letterSpacing: 1.5,
                 marginBottom: 6,
               }}
             >
@@ -561,7 +561,7 @@ function OrderRequestForm({ cart, total, onSent }) {
         <label
           htmlFor="gf-order-note"
           className="mono"
-          style={{ color: 'var(--gold-3)', fontSize: 10, letterSpacing: 2 }}
+          style={{ color: 'var(--gold-3)', fontSize: 12, letterSpacing: 1.5 }}
         >
           想給我們留一句話？（選填）
         </label>

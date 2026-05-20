@@ -25,7 +25,7 @@ function CatalogCard({ p, onJumpToCart }) {
     >
       <ProductGallery photos={p.photos} alt={`${p.zh} · ${p.subtitle}`} ratio="1/1" />
 
-      <div className="mono" style={{ color: 'var(--gold-3)', fontSize: 10, letterSpacing: 2 }}>
+      <div className="mono" style={{ color: 'var(--gold-3)', fontSize: 12, letterSpacing: 1.5 }}>
         № {p.num} · {p.series}
       </div>
       <div>
@@ -45,7 +45,7 @@ function CatalogCard({ p, onJumpToCart }) {
       <p
         className="tc"
         style={{
-          fontSize: 13,
+          fontSize: 14,
           lineHeight: 1.7,
           letterSpacing: 1,
           color: 'var(--ink-60)',
@@ -69,7 +69,7 @@ function CatalogCard({ p, onJumpToCart }) {
         <div>
           <span
             className="mono"
-            style={{ color: 'var(--gold-3)', fontSize: 9, letterSpacing: 2 }}
+            style={{ color: 'var(--gold-3)', fontSize: 11, letterSpacing: 1.5 }}
           >
             {p.weight}
           </span>

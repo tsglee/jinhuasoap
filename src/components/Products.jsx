@@ -29,8 +29,8 @@ function DetailRow({ label, value }) {
         className="mono"
         style={{
           color: 'var(--gold-3)',
-          fontSize: 10,
-          letterSpacing: 3,
+          fontSize: 12,
+          letterSpacing: 2,
           minWidth: 70,
         }}
       >
@@ -40,7 +40,7 @@ function DetailRow({ label, value }) {
         className="tc"
         style={{
           margin: 0,
-          fontSize: 14,
+          fontSize: 15,
           lineHeight: 1.85,
           letterSpacing: 1,
           color: 'var(--sumi)',

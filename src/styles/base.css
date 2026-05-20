@@ -49,9 +49,9 @@ button {
 
 .mono {
   font-family: 'DM Mono', monospace;
-  letter-spacing: 2px;
+  letter-spacing: 1.5px;
   text-transform: uppercase;
-  font-size: 11px;
+  font-size: 12px;
 }
 
 .italic {
