@@ -4,6 +4,7 @@ import { PRODUCTS } from '../data/products.js';
 import { TESTIMONIALS } from '../data/testimonials.js';
 import { ProductGallery } from './ProductGallery.jsx';
 import { AddToCartButton } from './BuyButton.jsx';
+import { useT, useLocaleVariant } from '../i18n/index.jsx';
 
 function leadLine(washFeel) {
   if (!washFeel) return '';
@@ -12,7 +13,8 @@ function leadLine(washFeel) {
 }
 
 function CatalogCard({ p, onJumpToCart }) {
-  const priceDisplay = p.price > 0 ? `NT$ ${p.price}` : 'NT$ 待定';
+  const product = useLocaleVariant(p);
+  const priceDisplay = p.price > 0 ? `NT$ ${p.price}` : 'NT$ —';
   return (
     <article
       style={{
@@ -24,23 +26,23 @@ function CatalogCard({ p, onJumpToCart }) {
         gap: 12,
       }}
     >
-      <ProductGallery photos={p.photos} alt={`${p.zh} · ${p.subtitle}`} ratio="1/1" />
+      <ProductGallery photos={p.photos} alt={`${product.zh} · ${product.subtitle}`} ratio="1/1" />
 
       <div className="mono" style={{ color: 'var(--gold-3)', fontSize: 12, letterSpacing: 1.5 }}>
-        № {p.num} · {p.series}
+        № {p.num} · {product.series}
       </div>
       <div>
         <div
           className="tc"
           style={{ fontSize: 20, letterSpacing: 4, color: 'var(--sumi)', lineHeight: 1.3 }}
         >
-          {p.zh}
+          {product.zh}
         </div>
         <div
           className="tc"
           style={{ fontSize: 12, letterSpacing: 3, color: 'var(--gold-3)', marginTop: 4 }}
         >
-          {p.subtitle}
+          {product.subtitle}
         </div>
       </div>
       <p
@@ -54,7 +56,7 @@ function CatalogCard({ p, onJumpToCart }) {
           minHeight: '2.4em',
         }}
       >
-        {leadLine(p.washFeel)}
+        {leadLine(product.washFeel)}
       </p>
       <div
         style={{
@@ -88,6 +90,7 @@ function CatalogCard({ p, onJumpToCart }) {
 }
 
 function ProductCatalog({ onAdded }) {
+  const t = useT();
   return (
     <section
       className="gf-pad-md"
@@ -99,7 +102,7 @@ function ProductCatalog({ onAdded }) {
     >
       <div className="gf-hide-md" style={{ textAlign: 'center', marginBottom: 28 }}>
         <div className="mono" style={{ color: 'var(--red)' }}>
-          選皂 · choose
+          {t('pages.shop.catalog.kicker')}
         </div>
         <h2
           className="tc gf-h2-md"
@@ -111,13 +114,13 @@ function ProductCatalog({ onAdded }) {
             color: 'var(--sumi)',
           }}
         >
-          十二款 · 一塊一塊挑
+          {t('pages.shop.catalog.title')}
         </h2>
         <div
           className="tc"
           style={{ fontSize: 14, color: 'var(--gold-3)', letterSpacing: 3 }}
         >
-          想看完整風土與配方，請至 02 十二花
+          {t('pages.shop.catalog.subtitle')}
         </div>
       </div>
       <div className="gf-catalog-grid">
@@ -130,6 +133,7 @@ function ProductCatalog({ onAdded }) {
 }
 
 export function Shop({ navigate }) {
+  const t = useT();
   return (
     <div style={{ position: 'relative', zIndex: 1 }}>
       {/* Header */}
@@ -143,7 +147,7 @@ export function Shop({ navigate }) {
         }}
       >
         <div className="mono" style={{ color: 'var(--red)' }}>
-          線上購皂
+          {t('pages.shop.kicker')}
         </div>
         <h1
           className="tc gf-h1-md"
@@ -155,7 +159,7 @@ export function Shop({ navigate }) {
             color: 'var(--sumi)',
           }}
         >
-          購皂
+          {t('pages.shop.title')}
         </h1>
         <div
           className="tc"
@@ -168,7 +172,7 @@ export function Shop({ navigate }) {
             letterSpacing: 3,
           }}
         >
-          收到訂單後三個工作天內寄出 · 支援 7-11 與全家店到店付款
+          {t('pages.shop.description')}
         </div>
       </section>
 
@@ -189,7 +193,7 @@ export function Shop({ navigate }) {
       >
         <div style={{ textAlign: 'center', marginBottom: 40 }}>
           <div className="mono" style={{ color: 'var(--red)' }}>
-            客人怎麼說
+            {t('pages.shop.testimonials.kicker')}
           </div>
           <h2
             className="tc gf-h2-md"
@@ -201,7 +205,7 @@ export function Shop({ navigate }) {
               color: 'var(--sumi)',
             }}
           >
-            真實心得
+            {t('pages.shop.testimonials.title')}
           </h2>
         </div>
         <div
@@ -212,9 +216,9 @@ export function Shop({ navigate }) {
             gap: 24,
           }}
         >
-          {TESTIMONIALS.map((t) => (
+          {TESTIMONIALS.map((review) => (
             <figure
-              key={t.id}
+              key={review.id}
               style={{
                 margin: 0,
                 background: 'var(--paper)',
@@ -249,7 +253,7 @@ export function Shop({ navigate }) {
                   flex: 1,
                 }}
               >
-                {t.quote}
+                {review.quote}
               </blockquote>
               <figcaption
                 style={{
@@ -268,7 +272,7 @@ export function Shop({ navigate }) {
                     color: 'var(--sumi)',
                   }}
                 >
-                  ── {t.name}
+                  ── {review.name}
                 </span>
                 <span
                   className="mono"
@@ -278,7 +282,7 @@ export function Shop({ navigate }) {
                     letterSpacing: 1.5,
                   }}
                 >
-                  {t.tag}
+                  {review.tag}
                 </span>
               </figcaption>
             </figure>
@@ -303,7 +307,7 @@ export function Shop({ navigate }) {
           }}
         >
           <div className="mono" style={{ color: 'var(--gold-2)' }}>
-            客製合作
+            {t('pages.shop.custom.kicker')}
           </div>
           <h2
             className="tc"
@@ -315,7 +319,7 @@ export function Shop({ navigate }) {
               color: 'var(--paper)',
             }}
           >
-            節禮 · 婚禮
+            {t('pages.shop.custom.title')}
           </h2>
           <div
             className="tc"
@@ -328,7 +332,7 @@ export function Shop({ navigate }) {
               letterSpacing: 1,
             }}
           >
-            若您有婚禮小物、節日禮品或其他客製需求，歡迎加我們 Line 一敘 ── 一同為您構思一份合宜的皂禮。
+            {t('pages.shop.custom.body')}
           </div>
           <a
             href="https://lin.ee/7m167md"

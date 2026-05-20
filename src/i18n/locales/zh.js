@@ -46,6 +46,7 @@ export default {
       title: '購皂',
       description: '收到訂單後三個工作天內寄出 · 支援 7-11 與全家店到店付款',
       catalog: {
+        kicker: '選皂 · choose',
         title: '十二款 · 一塊一塊挑',
         subtitle: '想看完整風土與配方，請至 02 十二花',
       },

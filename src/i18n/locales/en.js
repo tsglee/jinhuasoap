@@ -47,6 +47,7 @@ export default {
       title: 'Shop',
       description: 'Ships within three working days · 7-11 and FamilyMart pickup supported',
       catalog: {
+        kicker: 'Choose · 選皂',
         title: 'Twelve bars · Pick one at a time',
         subtitle: 'For full origin notes and formulas, see 02 The Twelve',
       },
