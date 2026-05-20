@@ -206,7 +206,7 @@ export function Header({ tab, setTab, tabs, navigate }) {
                   <span
                     className="mono"
                     style={{
-                      fontSize: 10,
+                      fontSize: 12,
                       color: active ? 'var(--red)' : 'var(--gold-3)',
                       opacity: 0.9,
                     }}
@@ -280,7 +280,7 @@ export function Header({ tab, setTab, tabs, navigate }) {
                 <span
                   className="mono"
                   style={{
-                    fontSize: 10,
+                    fontSize: 12,
                     color: active ? 'var(--red)' : 'var(--gold-3)',
                   }}
                 >
@@ -519,7 +519,7 @@ export function Footer({ navigate, setTab }) {
           flexWrap: 'wrap',
           gap: 8,
           fontFamily: '"DM Mono", monospace',
-          fontSize: 10,
+          fontSize: 12,
           letterSpacing: 2,
           textTransform: 'uppercase',
           color: 'rgba(248,245,235,0.55)',

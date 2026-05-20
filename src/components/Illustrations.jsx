@@ -88,7 +88,7 @@ const Caption = ({ children, style = {} }) => (
       bottom: 12,
       left: 12,
       fontFamily: '"DM Mono", monospace',
-      fontSize: 9,
+      fontSize: 11,
       letterSpacing: 2,
       textTransform: 'uppercase',
       color: 'rgba(138,100,32,0.85)',
@@ -1042,7 +1042,7 @@ export function IllIngredient({ kind = 'olive', zh, en, benefit, ratio = '1/1' }
         <div
           style={{
             fontFamily: '"DM Mono", monospace',
-            fontSize: 10,
+            fontSize: 12,
             letterSpacing: 3,
             textTransform: 'uppercase',
             color: '#e8cd78',

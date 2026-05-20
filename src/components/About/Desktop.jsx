@@ -155,7 +155,7 @@ export function AboutDesktop({ setTab }) {
             color: 'var(--gold-3)',
             padding: '10px 14px',
             border: '1px solid var(--ink-15)',
-            fontSize: 10,
+            fontSize: 12,
             letterSpacing: 2,
           }}
         >
@@ -301,7 +301,7 @@ export function AboutDesktop({ setTab }) {
               color: 'var(--gold-3)',
               padding: '8px 12px',
               border: '1px solid var(--ink-15)',
-              fontSize: 10,
+              fontSize: 12,
               letterSpacing: 2,
             }}
           >
@@ -463,7 +463,7 @@ export function AboutDesktop({ setTab }) {
                   color: 'var(--gold-2)',
                   padding: '6px 12px',
                   fontFamily: '"DM Mono", monospace',
-                  fontSize: 10,
+                  fontSize: 12,
                   letterSpacing: 2,
                 }}
               >
@@ -572,7 +572,7 @@ export function AboutDesktop({ setTab }) {
             color: 'var(--gold-3)',
             padding: '10px 14px',
             border: '1px solid var(--ink-15)',
-            fontSize: 10,
+            fontSize: 12,
             letterSpacing: 2,
           }}
         >
@@ -701,7 +701,7 @@ export function AboutDesktop({ setTab }) {
                       background: 'var(--sumi)',
                       color: 'var(--gold-2)',
                       padding: '10px 14px',
-                      fontSize: 10,
+                      fontSize: 12,
                       letterSpacing: 2,
                     }}
                   >
@@ -776,7 +776,7 @@ export function AboutDesktop({ setTab }) {
                           border: '1px solid var(--gold-3)',
                           color: 'var(--gold-3)',
                           padding: '4px 10px',
-                          fontSize: 9,
+                          fontSize: 11,
                           letterSpacing: 2,
                         }}
                       >
@@ -941,7 +941,7 @@ export function AboutDesktop({ setTab }) {
                   )}
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column' }}>
-                  <div className="mono" style={{ color: 'var(--red)', fontSize: 10 }}>
+                  <div className="mono" style={{ color: 'var(--red)', fontSize: 12 }}>
                     {s.kicker}
                   </div>
                   <div
@@ -1009,7 +1009,7 @@ export function AboutDesktop({ setTab }) {
                           border: '1px solid var(--ink-15)',
                           color: 'var(--gold-3)',
                           padding: '3px 8px',
-                          fontSize: 9,
+                          fontSize: 11,
                           letterSpacing: 1.5,
                         }}
                       >

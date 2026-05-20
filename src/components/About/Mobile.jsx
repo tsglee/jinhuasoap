@@ -281,7 +281,7 @@ export function AboutMobile({ setTab }) {
                   color: 'var(--gold-2)',
                   padding: '5px 10px',
                   fontFamily: '"DM Mono", monospace',
-                  fontSize: 9,
+                  fontSize: 11,
                   letterSpacing: 2,
                 }}
               >
@@ -417,7 +417,7 @@ export function AboutMobile({ setTab }) {
                 style={{
                   marginTop: 8,
                   color: 'var(--gold-3)',
-                  fontSize: 9,
+                  fontSize: 11,
                   letterSpacing: 2,
                 }}
               >

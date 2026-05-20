@@ -2582,7 +2582,7 @@ export function JournalPost({ slug, navigate }) {
           <InkLink href="/journal" navigate={navigate} style={{ fontSize: 14 }}>
             ← 回日誌
           </InkLink>
-          <span className="mono" style={{ color: 'var(--gold-3)', fontSize: 10 }}>
+          <span className="mono" style={{ color: 'var(--gold-3)', fontSize: 12 }}>
             金花樓 · {post.kicker}
           </span>
         </div>

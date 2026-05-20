@@ -210,7 +210,7 @@ export function PhotoPlaceholder({ ratio = '4/5', label = 'soap photo', tone = '
           alignItems: 'center',
           justifyContent: 'center',
           fontFamily: '"DM Mono", monospace',
-          fontSize: 10,
+          fontSize: 12,
           letterSpacing: 3,
           textTransform: 'uppercase',
           color: 'rgba(255,255,255,0.85)',

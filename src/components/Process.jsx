@@ -213,7 +213,7 @@ export function Process() {
             color: 'var(--gold-3)',
             padding: '10px 14px',
             border: '1px solid var(--ink-15)',
-            fontSize: 10,
+            fontSize: 12,
             letterSpacing: 2,
           }}
         >
