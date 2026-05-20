@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { GoldFlower } from './GoldenFlower.jsx';
 import { useIsMobile } from '../hooks/useIsMobile.js';
 import { useCart } from '../state/CartContext.jsx';
-import { useLocale, useT } from '../i18n/index.js';
+import { useLocale, useT } from '../i18n/index.jsx';
 
 function HamburgerIcon({ open }) {
   // 3 horizontal bars; rotates to an X when open
