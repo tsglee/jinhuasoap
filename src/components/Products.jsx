@@ -158,6 +158,7 @@ function ProductDetailCard({ p, flip, first }) {
           <DetailRow label="核心成分" value={p.coreIngredients} />
           <DetailRow label="原料特性" value={p.oilProfile} />
           <DetailRow label="洗感感受" value={p.washFeel} />
+          {p.batchDate && <DetailRow label="本批熟成" value={p.batchDate} />}
         </dl>
         <BuyBlock p={p} />
       </div>

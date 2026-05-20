@@ -3,6 +3,11 @@
 //   add-to-cart, etc.) from this list.
 // - About/Mobile.jsx renders a compact 2-col grid of all 12 at the bottom
 //   of the mobile About page.
+//
+// Optional fields:
+//   batchDate — 本批熟成日（YYYY-MM-DD 或自由文字）。設了會在 02 十二花顯示
+//   「本批熟成」一行；不設則 row 自動隱藏。透明度品牌信任、買家清楚知道
+//   皂的新鮮度。
 export const PRODUCTS = [
   // 【一、花神守護系列 — 修復與潤澤】
   {
