@@ -84,7 +84,7 @@ export function Header({ tab, setTab, tabs, navigate }) {
       >
         {isMobile
           ? '本島滿 NT$500 免運'
-          : '春日新品 · 第 VII 批慢製中 · 本島滿 NT$500 免運'}
+          : '滿 NT$1,000 享 9 折 · 本島滿 NT$500 免運'}
       </div>
 
       <div

@@ -217,7 +217,7 @@ export function Process() {
             letterSpacing: 2,
           }}
         >
-          八步慢皂 · 林口 · MMXXII
+          八步慢皂 · 林口
         </div>
       </section>
 

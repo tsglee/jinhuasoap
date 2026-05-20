@@ -305,7 +305,7 @@ export function AboutDesktop({ setTab }) {
               letterSpacing: 2,
             }}
           >
-            金花樓 · MMXXII
+            金花樓
           </div>
         </div>
       </section>
