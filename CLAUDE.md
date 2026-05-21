@@ -90,25 +90,74 @@ public/images/
 
 ## Pending（未做、等資料）
 
-- **12 產品 × 8 張產品圖**（Google AI Studio Nanobanana，使用者自產）── 還沒做
-- **「一皂到底·保濕款」subtitle 待命名**（products.js 註記中）── 還沒做
+- **9 產品 × 8 張產品圖** ── 海棠 / 綠豆 / 金盞花 已用真實照 + Nanobanana
+  跑完（每款 8 視角），剩 9 款（霧蜜 / 蝶豆花 / 大米 / 酒粕 / 桂花 / 山茶
+  淨髮 / 茉莉沐膚 / 一皂到底×2）等老闆娘提供實拍照後同 pipeline 跑
+- **「一皂到底·保濕款」subtitle 待命名**（products.js 註記中）
+- **22 篇 Journal article body 英譯**（基建有、metadata 27 篇全英譯、
+  body 還沒翻；Top 5 排序：D2 gift-soap / A1 soap-storage / D3 slow-bath /
+  B1 baby-soap / A4 taiwan-water）── 英文版目前暫停、focus 中文版
 
-本舍小記 cover + inline 圖 在 2026-05 session 全自動產完（用 scripts/generate-images.js
+本舍小記 cover + inline 圖 在 2026-05-10 session 全自動產完（用 scripts/generate-images.js
 透過 Gemini API），27 篇都有 cover、16 篇新題加 inline 手繪圖。下次要再產圖直接套
 這個 pipeline：寫 tasks JSON → 跑 generate-images.js → 跑 optimize:images。
+產品實拍照走同 pipeline + referenceImagePath 參數（看 scripts/product-real-tasks.json）。
 
-## 上次 session 尾聲（2026-05-10）
+## 上次 session 尾聲（2026-05-21）
 
-| 已上線 main | Commit |
-|---|---|
-| 16 篇新題本舍小記文章（生活運用 / 皮膚紀錄 / 儀式感受 三類擴充） | `e7dab9a` ~ `dfd9c26` |
-| 16 張 cover 圖 + 16 張 inline 手繪圖 + PROMPTS.md 更新 | `0ec409b` `25f7b15` |
-| Journal kicker 改名（之念 → 手記/方針/技術/紀錄/運用/感受）+ category filter chips | `970e295` `5199b3d` |
-| ECPay 物流 bug 連環修：寄件人手機 886 → 0、列印 path /Helper/ → /Express/、CVSValidationNo 必帶 | `0f2d7c4` `298a064` `154d217` `c086762` |
-| 購物車表單手機欄位 inline 驗證（red border + normalize on blur）+ 抽 src/utils/phone.js 共用 | `298a064` |
-| 拿掉 NT$500 95 折，只留 NT$1000 9 折 + NT$500 免運 | `4577a92` |
+main HEAD = `7c4c47c`（2026-05-21）。全部已 ff merge + push origin/main、
+Cloudflare Pages auto-deploy。
 
-main HEAD = `4577a92`（2026-05-10）。所有 feature branch commits 都已 ff merge 到 main 並 push。
+### 本輪上線重點
+
+| 區塊 | 內容 | 關鍵 commit |
+|---|---|---|
+| **真實產品照** | 海棠 / 綠豆 / 金盞花 各 8 視角換新（用 ~/Desktop/realProducts 實拍照當 Nanobanana referenceImagePath、保留皂體只換背景）。products.js photos 陣列 6→8。剩 9 款待補。 | `3cec516` `cb26c60` |
+| **客戶心得** | 04 購皂頁底加 8 條 testimonials。維護於 src/data/testimonials.js、push 進陣列即可。 | `f9466d1` |
+| **訂單追蹤頁** | `/order/:orderId` 無會員自助查詢、worker GET endpoint 過濾敏感欄位。Cart success 跟 Footer 都接入口。 | `f37ae85` |
+| **GA4 完整追蹤** | measurement ID `G-F42BGX4JHT` inline 在 index.html。追蹤：page_view / add_to_cart / view_cart / begin_checkout / remove_from_cart / purchase / click_line_contact / journal_filter。 | `fa8b011` `7c4c47c` |
+| **SEO 基礎** | sitemap 11→31 URL（27 文章+3 法律頁+home+journal）、og:image 換成 hero-poster.jpg、404 頁面（noindex）、HTML lang sync。 | `28a1b78` |
+| **設計刷新** | 字體加大、letter-spacing 收緊。`.mono` 11→12px、`gf-mono-md` 9→11px、Products DetailRow 10→12px、Journal date 10→12px、Journal CategoryChip 11→13px 等共 25+ 處對齊清潔保養品產業共識。 | `5b32f89` `354075e` |
+| **內容調整** | 02 十二花 h1：本舍之皂→「本舍手工皂」、過度嬌情詞改具體洗感、Banner 拿掉「春日新品 · 第 VII 批慢製中」改規則 banner、全站 MMXXII（2022 建立年）清掉、「山中一盞金花。」拿句點 | `0a3e9d5` `3fc6add` `1a6c4ad` `939228b` |
+| **04 購皂底部** | 「開店合作」改寫為「節禮 · 婚禮」客製洽詢段（連 D2 gift-soap 文章） | （舊 session） |
+| **Footer** | 加 IG 連結 @jinhuasoap、寄送區加「查詢訂單」連結 | `1f9be10` |
+| **i18n 基建（已暫停）** | LocaleProvider + useT() hook 已建。12 產品全英譯 + 27 篇 metadata 英譯 + Products / Shop / Journal 已 wire。**EN 切換按鈕暫時隱藏**（Chrome.jsx 用 `{false && ...}` 包住、要恢復改 true 即可）。導航 navigator.language 自動偵測也拿掉。 | `19367dc` `690caaf` `b167a14` |
+
+### 重要技術細節
+
+- **GA4 ID**：`G-F42BGX4JHT`（曾短暫換成 `G-8LNEB3PK4J`、發現 Google CDN 沒這個 ID、回 404、改回來）
+- **新增的 i18n 檔**：`src/i18n/index.jsx` + `src/i18n/locales/{zh,en}.js` + `src/data/posts.en.js`
+- **新增的元件**：`src/components/OrderTracking.jsx`、`src/data/testimonials.js`、`src/utils/phone.js`
+- **新增的 scripts/tasks JSON**：`journal-cover-tasks.json`、`journal-inline-tasks.json`、`product-real-tasks.json`
+
+## 下一個 session：廣告創作
+
+### 預定工作（依 ROI）
+
+1. **廣告文案 5-10 組**（Meta 短版 30 字 + 長版 50 字 / Google search 廣告 30+90 字）
+2. **Ad creatives 5-10 張**（Nanobanana 產動態圖、靜態圖、carousel）
+3. **專屬 landing page** /campaign/<utm_source>（避免廣告流量被丟到首頁不知道下一步）
+4. **Pixel 串接**：等老闆娘給 Meta Pixel ID + 已串好的 GA4 Pixel 自動同步
+
+### 老闆娘準備清單（開始之前要給我的）
+
+- [ ] Meta Business Manager 開好、綁定 IG @jinhuasoap
+- [ ] Meta Pixel ID（格式像 `1234567890123456`）
+- [ ] Google Ads 帳戶開好、綁信用卡
+- [ ] Google Ads conversion ID（如果要追轉換）
+- [ ] 廣告預算規劃（建議 NT$200-500/天 × 2 週試水溫）
+- [ ] 目標受眾：本島 / 海外華人 / 男 vs 女 / 25-65 / 興趣標籤
+- [ ] 想推哪個產品或 campaign（送禮季 / 春季新品 / 一皂到底等）
+
+### 我能做、不能做
+
+- ✅ 廣告文案、ad creative 圖、landing page、Pixel 串接、轉換事件設定
+- ❌ 不能登入老闆娘 Meta / Google 帳戶操作（也不應該給我）
+- ❌ 不能持卡付廣告費
+
+### 開始方式
+
+下個 session 開 prompt：「接續廣告創作 ── 我已準備好 Meta Pixel ID = XXXXX / Google Ads ID = XXXXX / 預算 = NT$X/日」── 我直接動工。或先給 Meta Pixel 一項、後面陸續補也行。
 
 ## 旅行 / 跨機器同步
 
