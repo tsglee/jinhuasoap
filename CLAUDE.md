@@ -115,7 +115,7 @@ Cloudflare Pages auto-deploy。
 | **真實產品照** | 海棠 / 綠豆 / 金盞花 各 8 視角換新（用 ~/Desktop/realProducts 實拍照當 Nanobanana referenceImagePath、保留皂體只換背景）。products.js photos 陣列 6→8。剩 9 款待補。 | `3cec516` `cb26c60` |
 | **客戶心得** | 04 購皂頁底加 8 條 testimonials。維護於 src/data/testimonials.js、push 進陣列即可。 | `f9466d1` |
 | **訂單追蹤頁** | `/order/:orderId` 無會員自助查詢、worker GET endpoint 過濾敏感欄位。Cart success 跟 Footer 都接入口。 | `f37ae85` |
-| **GA4 完整追蹤** | measurement ID `G-F42BGX4JHT` inline 在 index.html。追蹤：page_view / add_to_cart / view_cart / begin_checkout / remove_from_cart / purchase / click_line_contact / journal_filter。 | `fa8b011` `7c4c47c` |
+| **GA4 完整追蹤** | measurement ID `G-8LNEB3PK4J` inline 在 index.html。追蹤：page_view / add_to_cart / view_cart / begin_checkout / remove_from_cart / purchase / click_line_contact / journal_filter。 | `fa8b011` `7c4c47c` |
 | **SEO 基礎** | sitemap 11→31 URL（27 文章+3 法律頁+home+journal）、og:image 換成 hero-poster.jpg、404 頁面（noindex）、HTML lang sync。 | `28a1b78` |
 | **設計刷新** | 字體加大、letter-spacing 收緊。`.mono` 11→12px、`gf-mono-md` 9→11px、Products DetailRow 10→12px、Journal date 10→12px、Journal CategoryChip 11→13px 等共 25+ 處對齊清潔保養品產業共識。 | `5b32f89` `354075e` |
 | **內容調整** | 02 十二花 h1：本舍之皂→「本舍手工皂」、過度嬌情詞改具體洗感、Banner 拿掉「春日新品 · 第 VII 批慢製中」改規則 banner、全站 MMXXII（2022 建立年）清掉、「山中一盞金花。」拿句點 | `0a3e9d5` `3fc6add` `1a6c4ad` `939228b` |
@@ -125,7 +125,8 @@ Cloudflare Pages auto-deploy。
 
 ### 重要技術細節
 
-- **GA4 ID**：`G-F42BGX4JHT`（曾短暫換成 `G-8LNEB3PK4J`、發現 Google CDN 沒這個 ID、回 404、改回來）
+- **GA4 ID**：`G-8LNEB3PK4J`（2026-05-21 老闆娘把舊的 `G-F42BGX4JHT` stream 刪掉、改用新 stream。之前一度誤判 8LNEB 不存在、又改回 F42BGX；後來確認 8LNEB 才是現役。舊 stream link 還掛在 Google Ads 後台、需手動 unlink + relink 新 stream）
+- **Google Ads ID**：`AW-18123111692`（Tag ID alias `GT-5DDBF3MK`）── inline 在 index.html 跟 GA4 共用同一個 gtag loader。conversion 追蹤走 GA4 import 路線（不需要 conversion label、不用改 Cart.jsx），詳見「廣告創作 session」段。
 - **新增的 i18n 檔**：`src/i18n/index.jsx` + `src/i18n/locales/{zh,en}.js` + `src/data/posts.en.js`
 - **新增的元件**：`src/components/OrderTracking.jsx`、`src/data/testimonials.js`、`src/utils/phone.js`
 - **新增的 scripts/tasks JSON**：`journal-cover-tasks.json`、`journal-inline-tasks.json`、`product-real-tasks.json`
