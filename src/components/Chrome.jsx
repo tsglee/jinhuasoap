@@ -148,23 +148,29 @@ export function Header({ tab, setTab, tabs, navigate }) {
             color: 'var(--sumi)',
           }}
         >
-          <button
-            type="button"
-            onClick={() => setLocale(locale === 'zh' ? 'en' : 'zh')}
-            aria-label={locale === 'zh' ? 'Switch to English' : '切換為中文'}
-            style={{
-              marginRight: 12,
-              color: 'var(--gold-3)',
-              padding: '4px 10px',
-              border: '1px solid var(--ink-15)',
-              fontSize: 11,
-              letterSpacing: 1,
-              minWidth: 36,
-              minHeight: isMobile ? 36 : undefined,
-            }}
-          >
-            {tr('nav.languageToggle')}
-          </button>
+          {/* 語言切換按鈕暫時隱藏 ── 2026-05 老闆娘 focus 中文版。
+              i18n 基建（LocaleProvider / 12 產品英譯 / 27 篇 metadata 英譯）
+              留著、未來補完 Cart/Footer/About/Process i18n + Top 5 文章 body
+              翻譯後再打開這段就好。 */}
+          {false && (
+            <button
+              type="button"
+              onClick={() => setLocale(locale === 'zh' ? 'en' : 'zh')}
+              aria-label={locale === 'zh' ? 'Switch to English' : '切換為中文'}
+              style={{
+                marginRight: 12,
+                color: 'var(--gold-3)',
+                padding: '4px 10px',
+                border: '1px solid var(--ink-15)',
+                fontSize: 11,
+                letterSpacing: 1,
+                minWidth: 36,
+                minHeight: isMobile ? 36 : undefined,
+              }}
+            >
+              {tr('nav.languageToggle')}
+            </button>
+          )}
           <button
             onClick={() => navigate && navigate('/cart')}
             aria-label={`${tr('nav.cart')}，${itemCount}`}

@@ -30,9 +30,8 @@ export function LocaleProvider({ children }) {
     } catch {
       // localStorage may be unavailable
     }
-    // Fall back to browser language detection on first visit
-    const nav = (typeof navigator !== 'undefined' && navigator.language) || '';
-    if (nav.toLowerCase().startsWith('en')) return 'en';
+    // 2026-05 老闆娘決定 focus 中文版 ── 拿掉 navigator.language 自動偵測
+    // 避免外國訪客被丟到半成品英文版。基建保留、未來完整補完再打開切換。
     return DEFAULT_LOCALE;
   });
 
