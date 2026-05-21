@@ -5,14 +5,15 @@
 > + 回你具體調整指令。文件本身就是 single source of truth。
 
 > 開始於：2026-05-21 · 目標部署日 Day 1
-> Conversion action: `AW-18123111692/1Yp6CMzp47AcEIz64sFD`（金花樓下單）
+> 帳號：**燦果文化**（金花樓母公司、MCC manager）
+> Conversion action: `AW-18179582977/VZRdCPbji7EcEIHY2dxD`（Jinhuasoap Order）
 
 ---
 
 ## 📍 目前狀態
 
 - ✅ Conversion tracking pipeline 完整串通（preview 驗到 6 個 Google Ads beacon）
-- ✅ Production live：`AW-18123111692` gtag library + Cart.jsx purchase event
+- ✅ Production live：`AW-18179582977` gtag library + Cart.jsx purchase event
 - ⏳ **下一步：你照 Day 1 Spec 建 campaign（status: paused）→ 我 review → 你按 enable**
 
 ---
@@ -449,7 +450,7 @@ Top search terms:
 **可能原因**：
 - 預算太低、流量不夠 → 預期、NT$500 本來就可能 0 轉換、看 search terms 質量
 - Conversion fire 機制壞 → F12 開 jinhuasoap.com → Network filter doubleclick → 下單測試
-- Tag 沒裝對 → 看 [index.html](index.html) 是否有 AW-18123111692 那段 `<script>`
+- Tag 沒裝對 → 看 [index.html](index.html) 是否有 AW-18179582977 那段 `<script>`
 
 ### 「CPC 暴衝超過 NT$15」
 

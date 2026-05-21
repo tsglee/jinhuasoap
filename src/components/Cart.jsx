@@ -406,7 +406,7 @@ function OrderRequestForm({ cart, total, onSent }) {
       // 帶 orderId 讓 Google Ads dedupe（避免 user 重整 success 頁重複計算）。
       if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
         window.gtag('event', 'conversion', {
-          send_to: 'AW-18123111692/1Yp6CMzp47AcEIz64sFD',
+          send_to: 'AW-18179582977/VZRdCPbji7EcEIHY2dxD',
           value: total,
           currency: 'TWD',
           transaction_id: data.orderId || '',
