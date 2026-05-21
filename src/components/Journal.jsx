@@ -1749,7 +1749,7 @@ function buildArticleJsonLd(post, url, imageUrl, description) {
     publisher: {
       '@type': 'Organization',
       name: PUBLISHER,
-      logo: { '@type': 'ImageObject', url: `${SITE_URL}/favicon.svg` },
+      logo: { '@type': 'ImageObject', url: `${SITE_URL}/logo.png` },
     },
     mainEntityOfPage: { '@type': 'WebPage', '@id': url },
     keywords: post.keywords?.join(', '),
@@ -1796,7 +1796,7 @@ function useArticleMeta(post) {
     const description = post.description || post.lead.slice(0, 155);
     const imageUrl = post.cover?.src
       ? `${SITE_URL}${post.cover.src}`
-      : `${SITE_URL}/favicon.svg`;
+      : `${SITE_URL}/logo.png`;
 
     const baseTitle = '金花樓 · Goldenflower';
     const baseDescription = document.head
