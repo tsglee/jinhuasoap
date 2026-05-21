@@ -65,6 +65,20 @@
       fetchpriority="high"
     />
 
+    <!-- Google Analytics 4 (gtag.js). ID is public and intentionally inlined.
+         SPA route-change page_view events fire from App.jsx; this script
+         loads gtag and sends the initial page_view. send_page_view: false
+         in config() lets us manually send page_view so we don't double-count
+         the initial load + the SPA route effect. -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-F42BGX4JHT"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      window.gtag = gtag;
+      gtag('js', new Date());
+      gtag('config', 'G-F42BGX4JHT', { send_page_view: false });
+    </script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <!-- Non-blocking font load: preload as style, swap to stylesheet onload.

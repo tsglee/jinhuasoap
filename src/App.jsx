@@ -244,9 +244,23 @@ export default function App() {
     ? (route.slug ? `journal/${route.slug}` : 'journal')
     : route.type === 'legal'
     ? `legal/${route.page}`
+    : route.type === 'order'
+    ? (route.orderId ? `order/${route.orderId}` : 'order')
+    : route.type === 'notfound'
+    ? '404'
     : tab;
 
   const activeTabId = route.type === 'journal' ? 'journal' : tab;
+
+  // GA4 ── 每次 route / tab 切換送一筆 page_view（SPA 沒原生 navigation event）
+  useEffect(() => {
+    if (typeof window === 'undefined' || typeof window.gtag !== 'function') return;
+    window.gtag('event', 'page_view', {
+      page_path: window.location.pathname + window.location.search,
+      page_title: screenLabel,
+      page_location: window.location.href,
+    });
+  }, [screenLabel]);
 
   return (
     <LocaleProvider>

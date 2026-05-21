@@ -402,6 +402,20 @@ function OrderRequestForm({ cart, total, onSent }) {
       if (!res.ok || !data.ok) {
         throw new Error(data.error || `伺服器回應 ${res.status}`);
       }
+      // GA4 purchase conversion event ── 訂單成功 server 回 ok 才送
+      if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
+        window.gtag('event', 'purchase', {
+          transaction_id: data.orderId || '',
+          value: total,
+          currency: 'TWD',
+          items: cart.map((i) => ({
+            item_id: i.num,
+            item_name: i.zh,
+            price: i.price,
+            quantity: i.qty,
+          })),
+        });
+      }
       onSent && onSent(data.orderId || '');
     } catch (err) {
       setStatus('error');
