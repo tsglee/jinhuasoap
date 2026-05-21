@@ -66,6 +66,18 @@
       fetchpriority="high"
     />
 
+    <!-- Google Ads gtag (manual conversion event tracking only).
+         No GA4 ── ingestion 過去踩雷、不再用。Cart.jsx 在 purchase 成功
+         時手動 fire 'conversion' event with send_to: AW-XXX/YYY。 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18123111692"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      window.gtag = gtag;
+      gtag('js', new Date());
+      gtag('config', 'AW-18123111692');
+    </script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <!-- Non-blocking font load: preload as style, swap to stylesheet onload.
