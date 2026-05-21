@@ -55,9 +55,9 @@ export function CartIcon({ size = 18 }) {
   );
 }
 
-// Heroicons-style archive box — softer than Lucide's package (single path,
-// rounded corners). Conceptually a "lift the lid to look inside" cue, which
-// matches 查詢訂單 better than wireframe-style courier boxes.
+// Receipt / document — represents the order itself rather than the box it
+// ships in. Pairs better with the shopping bag (container vs. content).
+// Three short text lines, last one shortened to suggest a signature.
 export function PackageIcon({ size = 18 }) {
   return (
     <svg
@@ -71,7 +71,10 @@ export function PackageIcon({ size = 18 }) {
       strokeLinejoin="round"
       aria-hidden="true"
     >
-      <path d="M20.25 7.5l-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
+      <rect x="5" y="3" width="14" height="18" rx="1" ry="1" />
+      <line x1="8" y1="8" x2="16" y2="8" />
+      <line x1="8" y1="12" x2="16" y2="12" />
+      <line x1="8" y1="16" x2="13" y2="16" />
     </svg>
   );
 }
