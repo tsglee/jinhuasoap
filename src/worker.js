@@ -670,6 +670,7 @@ function renderBuyerEmailHtml({
 <body style="font-family:'Noto Serif TC',Georgia,serif;color:#1a1512;background:#f8f5eb;padding:24px;margin:0;">
   <div style="max-width:560px;margin:0 auto;background:#fff;padding:32px 28px;border:1px solid #e4dcc4;">
     <div style="text-align:center;border-bottom:1px solid #e4dcc4;padding-bottom:20px;margin-bottom:24px;">
+      <img src="https://jinhuasoap.com/logo.png" alt="金花樓" width="72" height="auto" style="display:inline-block;max-width:72px;height:auto;margin-bottom:14px;border:0;" />
       <div style="font-size:11px;letter-spacing:4px;color:#8a6420;text-transform:uppercase;font-family:'DM Mono',monospace;">
         Goldenflower · Jin Hua Lou
       </div>
