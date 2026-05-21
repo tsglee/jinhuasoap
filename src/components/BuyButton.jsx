@@ -20,22 +20,6 @@ export function AddToCartButton({ p, fullWidth = false, size = 'md', onAdded }) 
       tone: 'warm',
     };
     add(cartProduct, 1);
-    // GA4 add_to_cart event ── 用 GA4 標準 ecommerce schema
-    if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
-      window.gtag('event', 'add_to_cart', {
-        currency: 'TWD',
-        value: p.price,
-        items: [
-          {
-            item_id: p.num,
-            item_name: p.zh,
-            item_category: p.series,
-            price: p.price,
-            quantity: 1,
-          },
-        ],
-      });
-    }
     setJustAdded(true);
     window.setTimeout(() => setJustAdded(false), 1400);
     if (onAdded) onAdded(p);

@@ -252,16 +252,6 @@ export default function App() {
 
   const activeTabId = route.type === 'journal' ? 'journal' : tab;
 
-  // GA4 ── 每次 route / tab 切換送一筆 page_view（SPA 沒原生 navigation event）
-  useEffect(() => {
-    if (typeof window === 'undefined' || typeof window.gtag !== 'function') return;
-    window.gtag('event', 'page_view', {
-      page_path: window.location.pathname + window.location.search,
-      page_title: screenLabel,
-      page_location: window.location.href,
-    });
-  }, [screenLabel]);
-
   return (
     <LocaleProvider>
       <CartProvider>

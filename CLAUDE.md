@@ -115,7 +115,7 @@ Cloudflare Pages auto-deploy。
 | **真實產品照** | 海棠 / 綠豆 / 金盞花 各 8 視角換新（用 ~/Desktop/realProducts 實拍照當 Nanobanana referenceImagePath、保留皂體只換背景）。products.js photos 陣列 6→8。剩 9 款待補。 | `3cec516` `cb26c60` |
 | **客戶心得** | 04 購皂頁底加 8 條 testimonials。維護於 src/data/testimonials.js、push 進陣列即可。 | `f9466d1` |
 | **訂單追蹤頁** | `/order/:orderId` 無會員自助查詢、worker GET endpoint 過濾敏感欄位。Cart success 跟 Footer 都接入口。 | `f37ae85` |
-| **GA4 完整追蹤** | measurement ID `G-8LNEB3PK4J` inline 在 index.html。追蹤：page_view / add_to_cart / view_cart / begin_checkout / remove_from_cart / purchase / click_line_contact / journal_filter。 | `fa8b011` `7c4c47c` |
+| ~~GA4 完整追蹤~~ | **2026-05-21 整個刪除** ── GA4 ingestion 持續不穩定（手動 fire 的 page_view / purchase 永遠不進報表、但 GA4 內建 session_start / user_engagement 進得去）debug 一整天定位不出 root cause。老闆娘決定清掉所有 Google stuff（前端 gtag library、所有 event fire、GA4 帳號、Google Ads 帳號）整個重來。未來考慮 Cloudflare Web Analytics（免費、無 tag、Cloudflare dashboard 一鍵開）或 Plausible（付費、隱私友善）。**不再用 GA4。** | `7554dbd` `f890545` |
 | **SEO 基礎** | sitemap 11→31 URL（27 文章+3 法律頁+home+journal）、og:image 換成 hero-poster.jpg、404 頁面（noindex）、HTML lang sync。 | `28a1b78` |
 | **設計刷新** | 字體加大、letter-spacing 收緊。`.mono` 11→12px、`gf-mono-md` 9→11px、Products DetailRow 10→12px、Journal date 10→12px、Journal CategoryChip 11→13px 等共 25+ 處對齊清潔保養品產業共識。 | `5b32f89` `354075e` |
 | **內容調整** | 02 十二花 h1：本舍之皂→「本舍手工皂」、過度嬌情詞改具體洗感、Banner 拿掉「春日新品 · 第 VII 批慢製中」改規則 banner、全站 MMXXII（2022 建立年）清掉、「山中一盞金花。」拿句點 | `0a3e9d5` `3fc6add` `1a6c4ad` `939228b` |
@@ -125,40 +125,19 @@ Cloudflare Pages auto-deploy。
 
 ### 重要技術細節
 
-- **GA4 ID**：`G-8LNEB3PK4J`（2026-05-21 老闆娘把舊的 `G-F42BGX4JHT` stream 刪掉、改用新 stream。之前一度誤判 8LNEB 不存在、又改回 F42BGX；後來確認 8LNEB 才是現役。舊 stream link 還掛在 Google Ads 後台、需手動 unlink + relink 新 stream）
-- **Google Ads ID**：`AW-18123111692`（Tag ID alias `GT-5DDBF3MK`）── inline 在 index.html 跟 GA4 共用同一個 gtag loader。conversion 追蹤走 GA4 import 路線（不需要 conversion label、不用改 Cart.jsx），詳見「廣告創作 session」段。
 - **新增的 i18n 檔**：`src/i18n/index.jsx` + `src/i18n/locales/{zh,en}.js` + `src/data/posts.en.js`
 - **新增的元件**：`src/components/OrderTracking.jsx`、`src/data/testimonials.js`、`src/utils/phone.js`
 - **新增的 scripts/tasks JSON**：`journal-cover-tasks.json`、`journal-inline-tasks.json`、`product-real-tasks.json`
 
-## 下一個 session：廣告創作
+## 下一個 session：未定
 
-### 預定工作（依 ROI）
+GA / Google Ads 路線整個刪除重來（2026-05-21）。老闆娘還沒決定下一步要先處理 IG / Cloudflare Analytics / Plausible / Email Newsletter / 還是先做廣告。新 session 開頭問她。
 
-1. **廣告文案 5-10 組**（Meta 短版 30 字 + 長版 50 字 / Google search 廣告 30+90 字）
-2. **Ad creatives 5-10 張**（Nanobanana 產動態圖、靜態圖、carousel）
-3. **專屬 landing page** /campaign/<utm_source>（避免廣告流量被丟到首頁不知道下一步）
-4. **Pixel 串接**：等老闆娘給 Meta Pixel ID + 已串好的 GA4 Pixel 自動同步
-
-### 老闆娘準備清單（開始之前要給我的）
-
-- [ ] Meta Business Manager 開好、綁定 IG @jinhuasoap
-- [ ] Meta Pixel ID（格式像 `1234567890123456`）
-- [ ] Google Ads 帳戶開好、綁信用卡
-- [ ] Google Ads conversion ID（如果要追轉換）
-- [ ] 廣告預算規劃（建議 NT$200-500/天 × 2 週試水溫）
-- [ ] 目標受眾：本島 / 海外華人 / 男 vs 女 / 25-65 / 興趣標籤
-- [ ] 想推哪個產品或 campaign（送禮季 / 春季新品 / 一皂到底等）
-
-### 我能做、不能做
-
-- ✅ 廣告文案、ad creative 圖、landing page、Pixel 串接、轉換事件設定
-- ❌ 不能登入老闆娘 Meta / Google 帳戶操作（也不應該給我）
-- ❌ 不能持卡付廣告費
-
-### 開始方式
-
-下個 session 開 prompt：「接續廣告創作 ── 我已準備好 Meta Pixel ID = XXXXX / Google Ads ID = XXXXX / 預算 = NT$X/日」── 我直接動工。或先給 Meta Pixel 一項、後面陸續補也行。
+**過往教訓（避免下次再踩）**：
+- GA4「即時報表」是出名的不可靠 indicator ── 不要靠它來 debug 前端有沒 fire 事件。看 Network panel 的 collect 請求才是真相。
+- Google Tag (gtag.js) 理論上「inline 後就 work」，實務上**新建 GA4 屬性的 ingestion 第一天常常顯示異常**（session_start 進去、但 page_view 沒進）── 沒有公開 SLA、沒有可靠 debug 方法。
+- 接 Google Ads conversion 別走「GA4 import」黑盒路線、走「manual event snippet」直接路線比較 robust。
+- 任何「dashboard 上手動設的 var」會被 `wrangler deploy` wipe 掉 ── 所有 plaintext config 必須寫進 [wrangler.jsonc](wrangler.jsonc) `vars` block。
 
 ## 旅行 / 跨機器同步
 

@@ -2442,12 +2442,7 @@ export function JournalIndex({ navigate }) {
             label={t('pages.journal.categoryAll')}
             count={localized.length}
             active={!activeFilter}
-            onClick={() => {
-              setActiveFilter('');
-              if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
-                window.gtag('event', 'journal_filter', { filter_value: 'all' });
-              }
-            }}
+            onClick={() => setActiveFilter('')}
           />
           {KICKER_ORDER.filter((k) => counts[k]).map((k) => (
             <CategoryChip
@@ -2455,12 +2450,7 @@ export function JournalIndex({ navigate }) {
               label={k}
               count={counts[k]}
               active={activeFilter === k}
-              onClick={() => {
-                setActiveFilter(k);
-                if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
-                  window.gtag('event', 'journal_filter', { filter_value: k });
-                }
-              }}
+              onClick={() => setActiveFilter(k)}
             />
           ))}
         </div>

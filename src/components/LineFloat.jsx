@@ -2,20 +2,11 @@
 // Replaces all in-page LineCTA blocks with one persistent CTA. Same Line
 // official 加入好友 button image, with subtle elevation shadow.
 export function LineFloat() {
-  const handleClick = () => {
-    if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
-      window.gtag('event', 'click_line_contact', {
-        link_url: 'https://lin.ee/7m167md',
-        location: 'floating_button',
-      });
-    }
-  };
   return (
     <a
       href="https://lin.ee/7m167md"
       target="_blank"
       rel="noopener noreferrer"
-      onClick={handleClick}
       aria-label="加入好友 · 聯絡金花樓"
       style={{
         position: 'fixed',
