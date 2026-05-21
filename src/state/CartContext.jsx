@@ -62,15 +62,46 @@ export function CartProvider({ children }) {
 
   /** Change qty by delta; removes the row if it goes to zero. */
   const updateQty = useCallback((num, delta) => {
-    setItems((current) =>
-      current
+    setItems((current) => {
+      const next = current
         .map((i) => (i.num === num ? { ...i, qty: Math.max(0, i.qty + delta) } : i))
-        .filter((i) => i.qty > 0),
-    );
+        .filter((i) => i.qty > 0);
+      // GA4 remove_from_cart ── 偵測哪些 num 從 current 消失了（qty 變 0）
+      if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
+        const removed = current.filter((c) => !next.some((n) => n.num === c.num));
+        for (const it of removed) {
+          window.gtag('event', 'remove_from_cart', {
+            currency: 'TWD',
+            value: it.price * it.qty,
+            items: [
+              { item_id: it.num, item_name: it.zh, price: it.price, quantity: it.qty },
+            ],
+          });
+        }
+      }
+      return next;
+    });
   }, []);
 
   const remove = useCallback((num) => {
-    setItems((current) => current.filter((i) => i.num !== num));
+    setItems((current) => {
+      const removedItem = current.find((i) => i.num === num);
+      if (removedItem && typeof window !== 'undefined' && typeof window.gtag === 'function') {
+        window.gtag('event', 'remove_from_cart', {
+          currency: 'TWD',
+          value: removedItem.price * removedItem.qty,
+          items: [
+            {
+              item_id: removedItem.num,
+              item_name: removedItem.zh,
+              price: removedItem.price,
+              quantity: removedItem.qty,
+            },
+          ],
+        });
+      }
+      return current.filter((i) => i.num !== num);
+    });
   }, []);
 
   const clear = useCallback(() => setItems([]), []);

@@ -426,7 +426,22 @@ function OrderRequestForm({ cart, total, onSent }) {
   if (!open) {
     return (
       <button
-        onClick={() => setOpen(true)}
+        onClick={() => {
+          setOpen(true);
+          // GA4 begin_checkout ── 使用者展開訂購表單 = 開始結帳意願
+          if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
+            window.gtag('event', 'begin_checkout', {
+              currency: 'TWD',
+              value: total,
+              items: cart.map((i) => ({
+                item_id: i.num,
+                item_name: i.zh,
+                price: i.price,
+                quantity: i.qty,
+              })),
+            });
+          }
+        }}
         className="tc"
         style={{
           marginTop: 24,
@@ -664,6 +679,23 @@ function OrderRequestForm({ cart, total, onSent }) {
 export function Cart({ navigate }) {
   const { items: cart, subtotal, discount, shipping, total, updateQty, clear } = useCart();
   const [thanks, setThanks] = useState(null);
+
+  // GA4 view_cart ── 進入 /cart 頁面、有東西在購物車時送一筆
+  useEffect(() => {
+    if (cart.length === 0) return;
+    if (typeof window === 'undefined' || typeof window.gtag !== 'function') return;
+    window.gtag('event', 'view_cart', {
+      currency: 'TWD',
+      value: total,
+      items: cart.map((i) => ({
+        item_id: i.num,
+        item_name: i.zh,
+        price: i.price,
+        quantity: i.qty,
+      })),
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // 只在 mount 觸發一次、不隨 cart 變動重觸發
 
   if (thanks) {
     return <ThankYou orderId={thanks.orderId} navigate={navigate} />;
