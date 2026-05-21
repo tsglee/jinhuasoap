@@ -11,6 +11,7 @@ export default {
       journal: 'Journal',
     },
     cart: 'Cart',
+    orderLookup: 'Order',
     languageToggle: '中',
   },
   banner: {

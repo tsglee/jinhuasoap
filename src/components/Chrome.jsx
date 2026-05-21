@@ -34,6 +34,49 @@ function HamburgerIcon({ open }) {
   );
 }
 
+// Lucide-style shopping bag — pairs visually with HamburgerIcon's stroke style.
+export function CartIcon({ size = 18 }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.6"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+      <line x1="3" y1="6" x2="21" y2="6" />
+      <path d="M16 10a4 4 0 0 1-8 0" />
+    </svg>
+  );
+}
+
+// Lucide-style package box — used for "查詢訂單" entry point + page header.
+export function PackageIcon({ size = 18 }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.6"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <line x1="16.5" y1="9.4" x2="7.5" y2="4.21" />
+      <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+      <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+      <line x1="12" y1="22.08" x2="12" y2="12" />
+    </svg>
+  );
+}
+
 export function Header({ tab, setTab, tabs, navigate }) {
   const isMobile = useIsMobile();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -135,15 +178,16 @@ export function Header({ tab, setTab, tabs, navigate }) {
           <GoldFlower size={isMobile ? 100 : 144} />
         </button>
 
-        {/* Right: cart only */}
+        {/* Right: order lookup + cart */}
         <div
           style={{
             display: 'flex',
             justifyContent: 'flex-end',
-            gap: 0,
+            alignItems: 'center',
+            gap: isMobile ? 4 : 8,
             fontFamily: '"DM Mono", monospace',
-            fontSize: 11,
-            letterSpacing: 2,
+            fontSize: 12,
+            letterSpacing: 1.5,
             textTransform: 'uppercase',
             color: 'var(--sumi)',
           }}
@@ -172,15 +216,67 @@ export function Header({ tab, setTab, tabs, navigate }) {
             </button>
           )}
           <button
+            onClick={() => navigate && navigate('/order')}
+            aria-label={tr('nav.orderLookup')}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: 6,
+              padding: isMobile ? 0 : '6px 10px',
+              color: 'var(--sumi)',
+              minWidth: isMobile ? 44 : undefined,
+              minHeight: isMobile ? 44 : undefined,
+            }}
+          >
+            <PackageIcon size={isMobile ? 22 : 18} />
+            {!isMobile && <span>{tr('nav.orderLookup')}</span>}
+          </button>
+          <button
             onClick={() => navigate && navigate('/cart')}
             aria-label={`${tr('nav.cart')}，${itemCount}`}
             style={{
+              position: 'relative',
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: 6,
+              padding: isMobile ? 0 : '6px 10px',
               color: 'var(--red)',
               minWidth: isMobile ? 44 : undefined,
               minHeight: isMobile ? 44 : undefined,
             }}
           >
-            {tr('nav.cart')} · {itemCount}
+            <CartIcon size={isMobile ? 22 : 18} />
+            {!isMobile && (
+              <span>
+                {tr('nav.cart')} · {itemCount}
+              </span>
+            )}
+            {isMobile && itemCount > 0 && (
+              <span
+                aria-hidden="true"
+                style={{
+                  position: 'absolute',
+                  top: 4,
+                  right: 2,
+                  minWidth: 16,
+                  height: 16,
+                  padding: '0 4px',
+                  borderRadius: 8,
+                  background: 'var(--red)',
+                  color: 'var(--paper)',
+                  fontSize: 10,
+                  fontWeight: 600,
+                  lineHeight: '16px',
+                  textAlign: 'center',
+                  letterSpacing: 0,
+                  fontFamily: '"DM Mono", monospace',
+                }}
+              >
+                {itemCount}
+              </span>
+            )}
           </button>
         </div>
       </div>

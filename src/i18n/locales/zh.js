@@ -10,6 +10,7 @@ export default {
       journal: '本舍小記',
     },
     cart: '購物籃',
+    orderLookup: '查詢訂單',
     languageToggle: 'EN',
   },
   banner: {

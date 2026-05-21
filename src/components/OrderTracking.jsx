@@ -8,6 +8,7 @@
 // - 路由帶 orderId → 直接查詢
 // - 路由不帶 → 顯示輸入欄、按查詢 navigate 到 /order/:id
 import { useEffect, useState } from 'react';
+import { PackageIcon } from './Chrome.jsx';
 
 const STATUS_LABELS = {
   pending: { label: '訂單收到、處理中', color: 'var(--gold-3)' },
@@ -89,6 +90,17 @@ export function OrderTracking({ orderId, navigate }) {
           textAlign: 'center',
         }}
       >
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            color: 'var(--gold-3)',
+            marginBottom: 4,
+          }}
+          aria-hidden="true"
+        >
+          <PackageIcon size={36} />
+        </div>
         <div className="mono" style={{ color: 'var(--red)' }}>
           訂單查詢 · Order Status
         </div>
