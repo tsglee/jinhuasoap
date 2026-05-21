@@ -298,6 +298,42 @@ async function handleOrder(request, env) {
   // KV 不刪 — 列印寄件單 endpoint (/api/label/:orderId) 仰賴 KV 讀 logistics
   // info。30 天 TTL 自動失效，影響不大。
 
+  // 寄買家確認信 ── nice-to-have。失敗時只 log、不擋訂單成立（老闆娘信已
+  // 寄出 + KV fallback 已寫）。買家信 reply_to 設為老闆娘信箱，買家直接回
+  // 信會到 ORDER_TO_EMAIL。
+  try {
+    const orderUrl = `${publicBaseUrl(env)}/order/${orderId}`;
+    const buyerHtml = renderBuyerEmailHtml({
+      orderId, orderUrl, name, phone, shipMethod, shipKind, storeName, address, recipientName,
+      cart, total,
+    });
+    const buyerText = renderBuyerEmailText({
+      orderId, orderUrl, name, phone, shipMethod, shipKind, storeName, address, recipientName,
+      cart, total,
+    });
+    const buyerRes = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${env.RESEND_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        from: `金花樓 <${fromEmail}>`,
+        to: [email],
+        reply_to: toEmail,
+        subject: `謝謝您的訂購 · 金花樓 #${orderId}`,
+        html: buyerHtml,
+        text: buyerText,
+      }),
+    });
+    if (!buyerRes.ok) {
+      const detail = await buyerRes.text().catch(() => '');
+      console.error(`Buyer email failed (non-fatal): ${buyerRes.status} ${detail}`);
+    }
+  } catch (err) {
+    console.error('Buyer email send error (non-fatal)', err);
+  }
+
   return jsonResponse({ ok: true, orderId });
 }
 
@@ -576,6 +612,169 @@ function renderOrderEmailText({
     lines.push('', '備註：', note);
   }
   lines.push('', `來自 ${ip} · jinhuasoap.com`);
+  return lines.join('\n');
+}
+
+// 寄給買家的訂單確認信。Voice 比 renderOrderEmailHtml 溫和 —— 是「謝謝
+// 您的訂購、接下來流程」，不是「新訂購請求」。不洩漏 IP / 列印寄件單連結
+// 等老闆娘專屬資訊。失敗時只 log、不擋訂單成立（已有 KV fallback）。
+function renderBuyerEmailHtml({
+  orderId,
+  orderUrl,
+  name,
+  phone,
+  shipMethod,
+  shipKind,
+  storeName,
+  address,
+  recipientName,
+  cart,
+  total,
+}) {
+  const rows = cart
+    .map(
+      (i) => `
+        <tr>
+          <td style="padding:8px 10px;border-bottom:1px solid #eee;font-family:'DM Mono',monospace;font-size:12px;color:#8a6420;letter-spacing:1px;">
+            №&nbsp;${escapeHtml(i.num)}
+          </td>
+          <td style="padding:8px 10px;border-bottom:1px solid #eee;">
+            <strong>${escapeHtml(i.zh)}</strong>
+          </td>
+          <td style="padding:8px 10px;border-bottom:1px solid #eee;text-align:center;color:#666;font-size:13px;">
+            × ${i.qty}
+          </td>
+          <td style="padding:8px 10px;border-bottom:1px solid #eee;text-align:right;font-family:'DM Mono',monospace;font-size:13px;">
+            NT$${i.qty * i.price}
+          </td>
+        </tr>`,
+    )
+    .join('');
+
+  const shipRow = (label, value) =>
+    value
+      ? `<tr><td style="padding:4px 10px;color:#8a6420;width:90px;letter-spacing:2px;font-size:12px;font-family:'DM Mono',monospace;">${escapeHtml(label)}</td><td style="padding:4px 10px;font-size:14px;">${escapeHtml(value)}</td></tr>`
+      : '';
+
+  const shipBlock = `
+    <table style="width:100%;border-collapse:collapse;margin:16px 0 0;background:#fcfaf2;border:1px solid #e4dcc4;">
+      ${shipRow('寄送方式', shipMethod)}
+      ${shipKind === 'store' && storeName ? shipRow('取件門市', storeName) : ''}
+      ${shipKind === 'home' && address ? shipRow('地址', address) : ''}
+      ${recipientName && recipientName !== name ? shipRow('收件人', recipientName) : ''}
+      ${phone ? shipRow('聯絡電話', phone) : ''}
+    </table>`;
+
+  return `<!doctype html>
+<html lang="zh-Hant"><head><meta charset="utf-8"></head>
+<body style="font-family:'Noto Serif TC',Georgia,serif;color:#1a1512;background:#f8f5eb;padding:24px;margin:0;">
+  <div style="max-width:560px;margin:0 auto;background:#fff;padding:32px 28px;border:1px solid #e4dcc4;">
+    <div style="text-align:center;border-bottom:1px solid #e4dcc4;padding-bottom:20px;margin-bottom:24px;">
+      <div style="font-size:11px;letter-spacing:4px;color:#8a6420;text-transform:uppercase;font-family:'DM Mono',monospace;">
+        Goldenflower · Jin Hua Lou
+      </div>
+      <h1 style="margin:8px 0 0;font-size:26px;font-weight:500;letter-spacing:8px;color:#1a1512;">金花樓</h1>
+      <div style="font-size:12px;letter-spacing:3px;color:#8a6420;margin-top:4px;">手壓天然皂</div>
+    </div>
+
+    <p style="margin:0 0 16px;font-size:15px;line-height:1.85;">${escapeHtml(name)} 您好 ──</p>
+    <p style="margin:0 0 14px;font-size:15px;line-height:1.85;">
+      我們已經收到您的訂單。本舍每週手壓一批，每張單都由老闆娘親自整理。接下來的流程：
+    </p>
+
+    <ol style="margin:0 0 8px;padding-left:20px;font-size:14px;line-height:2;color:#1a1512;">
+      <li>24 小時內，我們會用 <strong>Line</strong> 與您聯繫確認付款與寄送方式</li>
+      <li>確認付款後 <strong>2-3 個工作天</strong>內出貨</li>
+      <li>出貨後您會再收到一封通知信</li>
+    </ol>
+
+    <div style="text-align:center;background:#fcfaf2;border:1px solid #c8a24a;padding:18px;margin:24px 0;">
+      <div style="font-size:11px;letter-spacing:3px;color:#8a6420;font-family:'DM Mono',monospace;">訂單編號</div>
+      <div style="margin:6px 0 0;font-size:20px;letter-spacing:3px;color:#8a2a22;font-family:'DM Mono',monospace;">${escapeHtml(orderId)}</div>
+      <a href="${escapeHtml(orderUrl)}" style="display:inline-block;margin-top:14px;padding:10px 24px;background:#8a2a22;color:#f8f5eb;text-decoration:none;font-size:13px;letter-spacing:2px;">
+        查詢訂單狀態 ▸
+      </a>
+    </div>
+
+    <h3 style="margin:24px 0 8px;font-size:12px;letter-spacing:3px;color:#8a6420;font-weight:400;font-family:'DM Mono',monospace;text-transform:uppercase;">品項</h3>
+    <table style="width:100%;border-collapse:collapse;">
+      <tbody>${rows}</tbody>
+      <tfoot>
+        <tr>
+          <td colspan="3" style="padding:14px 10px 4px;text-align:right;letter-spacing:3px;font-size:14px;">合計</td>
+          <td style="padding:14px 10px 4px;text-align:right;color:#8a2a22;font-size:20px;font-family:'DM Mono',monospace;">NT$${total}</td>
+        </tr>
+      </tfoot>
+    </table>
+
+    ${shipBlock}
+
+    <div style="margin-top:32px;padding-top:20px;border-top:1px dotted #c8a24a;font-size:12px;color:#666;line-height:1.85;">
+      有任何問題請聯絡我們 ──<br>
+      Line · <a href="https://lin.ee/7m167md" style="color:#8a2a22;">lin.ee/7m167md</a><br>
+      Email · <a href="mailto:tsghsunlee@gmail.com" style="color:#8a2a22;">tsghsunlee@gmail.com</a>
+    </div>
+
+    <p style="margin:24px 0 0;padding-top:16px;border-top:1px solid #eee;color:#999;font-size:11px;letter-spacing:1px;text-align:center;line-height:1.7;">
+      金花樓 · 一間位於林口的小小皂舍<br>
+      <a href="https://jinhuasoap.com" style="color:#999;">jinhuasoap.com</a>
+    </p>
+  </div>
+</body></html>`;
+}
+
+function renderBuyerEmailText({
+  orderId,
+  orderUrl,
+  name,
+  phone,
+  shipMethod,
+  shipKind,
+  storeName,
+  address,
+  recipientName,
+  cart,
+  total,
+}) {
+  const lines = [
+    `金花樓 · 手壓天然皂`,
+    `──`,
+    ``,
+    `${name} 您好，`,
+    ``,
+    `我們已經收到您的訂單。本舍每週手壓一批，`,
+    `每張單都由老闆娘親自整理。`,
+    ``,
+    `接下來的流程：`,
+    `  1. 24 小時內，我們會用 Line 與您聯繫`,
+    `     確認付款與寄送方式`,
+    `  2. 確認付款後 2-3 個工作天內出貨`,
+    `  3. 出貨後您會再收到一封通知信`,
+    ``,
+    `訂單編號：${orderId}`,
+    `查詢狀態：${orderUrl}`,
+    ``,
+    `品項：`,
+    ...cart.map((i) => `  № ${i.num}  ${i.zh}  × ${i.qty}  =  NT$${i.qty * i.price}`),
+    ``,
+    `合計：NT$${total}`,
+    ``,
+  ];
+  if (shipMethod) lines.push(`寄送方式：${shipMethod}`);
+  if (shipKind === 'store' && storeName) lines.push(`取件門市：${storeName}`);
+  if (shipKind === 'home' && address) lines.push(`地址：${address}`);
+  if (recipientName && recipientName !== name) lines.push(`收件人：${recipientName}`);
+  if (phone) lines.push(`聯絡電話：${phone}`);
+  lines.push(
+    ``,
+    `有任何問題請聯絡我們：`,
+    `Line · https://lin.ee/7m167md`,
+    `Email · tsghsunlee@gmail.com`,
+    ``,
+    `──`,
+    `金花樓 · 一間位於林口的小小皂舍`,
+    `jinhuasoap.com`,
+  );
   return lines.join('\n');
 }
 
