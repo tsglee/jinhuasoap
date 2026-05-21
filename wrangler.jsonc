@@ -61,7 +61,8 @@
     "PUBLIC_BASE_URL": "https://jinhuasoap.com",
     "SENDER_NAME": "金花樓",
     "SENDER_PHONE": "0979522515",
-    "SENDER_CELL_PHONE": "0979522515"
+    "SENDER_CELL_PHONE": "0979522515",
+    "ORDER_FROM_EMAIL": "orders@jinhuasoap.com"
   },
   "kv_namespaces": [
     {
