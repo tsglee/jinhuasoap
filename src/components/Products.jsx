@@ -85,9 +85,20 @@ function BuyBlock({ p }) {
 
 // Exported so ProductDetail.jsx (single product page) and CategoryListing.jsx
 // (concern-filtered listing) can render the same spec sheet card.
-export function ProductDetailCard({ p, flip, first }) {
+export function ProductDetailCard({ p, flip, first, navigate }) {
   const t = useT();
   const product = useLocaleVariant(p);
+  const href = `/products/${p.slug}`;
+  // Linkable only when called from list page (navigate is passed). On the
+  // single-product page itself, ProductDetail doesn't pass navigate → title
+  // stays as plain h3 (no point linking to yourself).
+  const handleNav = navigate
+    ? (e) => {
+        if (e.metaKey || e.ctrlKey || e.shiftKey) return; // open-in-new-tab
+        e.preventDefault();
+        navigate(href);
+      }
+    : undefined;
   return (
     <div
       id={`product-${p.num}`}
@@ -149,7 +160,30 @@ export function ProductDetailCard({ p, flip, first }) {
             color: 'var(--sumi)',
           }}
         >
-          {product.zh}
+          {navigate ? (
+            <a
+              href={href}
+              onClick={handleNav}
+              style={{
+                color: 'inherit',
+                textDecoration: 'none',
+                borderBottom: '1px solid transparent',
+                transition: 'border-color 200ms ease, color 200ms ease',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.color = 'var(--red)';
+                e.currentTarget.style.borderBottomColor = 'var(--red)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.color = 'inherit';
+                e.currentTarget.style.borderBottomColor = 'transparent';
+              }}
+            >
+              {product.zh}
+            </a>
+          ) : (
+            product.zh
+          )}
         </h3>
         <div
           className="tc"
@@ -318,7 +352,13 @@ export function Products({ navigate }) {
         }}
       >
         {PRODUCTS.map((p, i) => (
-          <ProductDetailCard key={p.num} p={p} flip={i % 2 === 1} first={i === 0} />
+          <ProductDetailCard
+            key={p.num}
+            p={p}
+            flip={i % 2 === 1}
+            first={i === 0}
+            navigate={navigate}
+          />
         ))}
       </section>
     </div>
