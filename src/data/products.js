@@ -18,18 +18,23 @@
 //   「本批熟成」一行；不設則 row 自動隱藏。透明度品牌信任、買家清楚知道
 //   皂的新鮮度。
 
-// TA cluster definitions. Each product carries one or more `concerns`
-// matching the slugs below; ad campaigns and category filter chips both
-// key off this list. Series (花神守護 / 花韻時節 / 花露淨髮餅 / 全能日常)
-// remains the brand narrative inside the product detail card.
+// 品牌正式系列（5 個）。每個產品 carries `concerns` 對到下面 slug；
+// 廣告 campaign + 02 十二花的 ClusterChips + CategoryListing 都 key
+// off this list。原舊敘事 series（花神守護 / 花韻時節 / 花露淨髮餅 /
+// 全能日常）保留在 product detail card 內、品牌調性敘事用。
+//
+// 系列 ↔ 產品對應（老闆娘 2026-05-22 定案）：
+//   repair  保濕修護：海棠 / 霧蜜 / 蝶豆 / 大米
+//   fresh   清爽淨膚：金盞 / 綠豆
+//   cleanse 全效潔淨：酒粕 / 桂花
+//   sport   運動全身：一皂到底 清爽 / 保濕（一塊洗到底）
+//   bar     皂餅：山茶淨髮 / 茉莉沐膚（非冷製、surfactant + 玉米澱粉）
 export const CONCERNS = [
-  { slug: 'sensitive', zh: '修護專科', desc: '敏弱肌、痘痘、走過皮膚科的人' },
-  { slug: 'mature', zh: '抗老提亮', desc: '熟齡、暗沉、撫紋、追求光澤' },
-  { slug: 'oily', zh: '控油角質', desc: '粉刺、油性肌、角質肥厚' },
-  { slug: 'fragrance', zh: '香氛日常', desc: '一般肌、薄皮、香氛禮品' },
-  { slug: 'hair', zh: '髮 × 頭皮', desc: '洗髮餅、敏感頭皮、無矽靈' },
-  { slug: 'daily', zh: '一塊到底', desc: '運動、全身、家庭日常' },
-  { slug: 'baby', zh: '寶寶月子', desc: '新生兒、產後敏感、月子禮' },
+  { slug: 'repair', zh: '保濕修護', desc: '極致保濕、敏弱、修復、熟齡' },
+  { slug: 'fresh', zh: '清爽淨膚', desc: '夏日、控油、舒緩、提亮' },
+  { slug: 'cleanse', zh: '全效潔淨', desc: '日常潔淨、男士刮鬍、香氛' },
+  { slug: 'sport', zh: '運動全身', desc: '一塊到底、運動後、家庭日常' },
+  { slug: 'bar', zh: '皂餅', desc: '非冷製、surfactant + 玉米澱粉 製' },
 ];
 
 export const PRODUCTS = [
@@ -37,7 +42,7 @@ export const PRODUCTS = [
   {
     num: '壹',
     slug: 'haitang-xiufu',
-    concerns: ['sensitive'],
+    concerns: ['repair'],
     series: '花神守護',
     seriesNote: '修復與潤澤',
     zh: '海棠修復 · 碧玉',
@@ -79,7 +84,7 @@ export const PRODUCTS = [
   {
     num: '貳',
     slug: 'wumeng-runyu',
-    concerns: ['mature'],
+    concerns: ['repair'],
     series: '花神守護',
     seriesNote: '修復與潤澤',
     zh: '槐花蜜潤 · 霧蜜',
@@ -119,7 +124,7 @@ export const PRODUCTS = [
   {
     num: '參',
     slug: 'lvdou-zaodou',
-    concerns: ['oily'],
+    concerns: ['fresh'],
     series: '花神守護',
     seriesNote: '修復與潤澤',
     zh: '綠豆清芳 · 澡豆',
@@ -161,7 +166,7 @@ export const PRODUCTS = [
   {
     num: '肆',
     slug: 'diedou-meiyan',
-    concerns: ['mature'],
+    concerns: ['repair'],
     series: '花神守護',
     seriesNote: '修復與潤澤',
     zh: '藍蝶清瑩 · 蝶豆',
@@ -203,7 +208,7 @@ export const PRODUCTS = [
   {
     num: '伍',
     slug: 'jinzhan-shufu',
-    concerns: ['sensitive', 'baby'],
+    concerns: ['fresh'],
     series: '花韻時節',
     seriesNote: '風土與暖心',
     zh: '金盞舒緩 · 長金',
@@ -245,7 +250,7 @@ export const PRODUCTS = [
   {
     num: '陸',
     slug: 'dami-nuanxin',
-    concerns: ['baby'],
+    concerns: ['repair'],
     series: '花韻時節',
     seriesNote: '風土與暖心',
     zh: '稻花暖心 · 星米',
@@ -285,7 +290,7 @@ export const PRODUCTS = [
   {
     num: '柒',
     slug: 'jiupo-zuiyue',
-    concerns: ['mature'],
+    concerns: ['cleanse'],
     series: '花韻時節',
     seriesNote: '風土與暖心',
     zh: '杜康醉月 · 酒粕',
@@ -325,7 +330,7 @@ export const PRODUCTS = [
   {
     num: '捌',
     slug: 'guihua-runfu',
-    concerns: ['fragrance'],
+    concerns: ['cleanse'],
     series: '花韻時節',
     seriesNote: '風土與暖心',
     zh: '桂月流金 · 桂花',
@@ -367,7 +372,7 @@ export const PRODUCTS = [
   {
     num: '玖',
     slug: 'shancha-fa',
-    concerns: ['hair'],
+    concerns: ['bar'],
     series: '花露淨髮餅',
     seriesNote: '髮沐',
     zh: '山茶淨髮',
@@ -405,7 +410,7 @@ export const PRODUCTS = [
   {
     num: '拾',
     slug: 'moli-mufu',
-    concerns: ['fragrance'],
+    concerns: ['bar'],
     series: '花露淨髮餅',
     seriesNote: '髮沐',
     zh: '茉莉沐膚',
@@ -445,7 +450,7 @@ export const PRODUCTS = [
   {
     num: '拾壹',
     slug: 'yizao-qingshuang',
-    concerns: ['daily'],
+    concerns: ['sport'],
     series: '全能日常',
     seriesNote: '一皂到底',
     zh: '一皂到底 · 清爽款',
@@ -483,7 +488,7 @@ export const PRODUCTS = [
   {
     num: '拾貳',
     slug: 'yizao-baoshi',
-    concerns: ['daily'],
+    concerns: ['sport'],
     series: '全能日常',
     seriesNote: '一皂到底',
     zh: '一皂到底 · 保濕款',

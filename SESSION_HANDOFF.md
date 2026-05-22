@@ -73,7 +73,7 @@ Sidebar 左側順序：
 | Daily budget | NT$100/日 × 5 天 = NT$500 |
 | CPC cap | NT$15 |
 | Target locations | 台北、新北、桃園、新竹市、新竹縣（people IN locations） |
-| Final URLs by ad group | A: `/products/concern/sensitive` / B: `/products/concern/mature` / C: `/products/concern/baby` |
+| Final URLs by ad group | A: `/products/concern/repair` / B: `/products/concern/repair` / C: `/products/concern/fresh` |
 | Google Ads account | tsghsunlee@gmail.com（金花樓手工皂、Visa 7604）|
 | Production AW tag | 已 inline 在 index.html ([commit 3e04f80](https://github.com/tsglee/jinhuasoap/commit/3e04f80)) |
 
@@ -132,7 +132,7 @@ draft `10195927475` 仍 server-side 保存。Claude 從「關鍵字和廣告」s
 | 歐盟政治廣告 | 「否，這個廣告活動沒有歐盟政治廣告」✓（預設） |
 | 廣告時段 | 每天 **11:00 至 23:00** ✓（但 review step 有警告⚠ — 見下方） |
 | AI Max | **關閉** ✓ |
-| Ad Group A · 敏感肌主打 | Final URL `/products/concern/sensitive` + **12 headlines** + **2 descriptions** + 12 phrase-match keywords ✓ |
+| Ad Group A · 敏感肌主打 | Final URL `/products/concern/repair` + **12 headlines** + **2 descriptions** + 12 phrase-match keywords ✓ |
 | 預算 | **自訂 NT$100/日** ✓ |
 
 ### ❌ 還沒完成的（block 在 Google Ads 後端問題）

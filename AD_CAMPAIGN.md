@@ -57,7 +57,7 @@
 
 ## 2️⃣ Ad Group A · 敏感肌主打
 
-**Final URL**: `https://jinhuasoap.com/products/concern/sensitive`
+**Final URL**: `https://jinhuasoap.com/products/concern/repair`
 
 ### 15 Headlines（每條 ≤ 30 字）
 
@@ -109,7 +109,7 @@
 
 ## 3️⃣ Ad Group B · 產品識貨族
 
-**Final URL**: `https://jinhuasoap.com/products/concern/mature`
+**Final URL**: `https://jinhuasoap.com/products/concern/repair`
 
 ### 15 Headlines
 
@@ -161,7 +161,7 @@
 
 ## 4️⃣ Ad Group C · 換季 / 乾癢場景
 
-**Final URL**: `https://jinhuasoap.com/products/concern/baby`
+**Final URL**: `https://jinhuasoap.com/products/concern/fresh`
 
 ### 15 Headlines
 
