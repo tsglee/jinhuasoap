@@ -1,0 +1,962 @@
+/* 金花樓 Redesign Prototype — 日本工藝品牌方向
+   isolated stylesheet for /redesign.html entry only. Does NOT inherit
+   anything from src/styles/{tokens,base,responsive}.css. */
+
+:root {
+  --paper: #ffffff;
+  --paper-2: #fafbfc;
+  --paper-3: #f1f4f7;
+  --sumi: #1a1f26;
+  --sumi-2: #2a3540;
+  --ink-80: rgba(26, 31, 38, 0.78);
+  --ink-60: rgba(26, 31, 38, 0.55);
+  --ink-40: rgba(26, 31, 38, 0.35);
+  --ink-15: rgba(26, 31, 38, 0.12);
+  --ink-08: rgba(26, 31, 38, 0.07);
+  --sky: #6ab3d9;
+  --sky-2: #5092b8;
+  --sky-soft: #eaf2f9;
+  --sky-fill: rgba(106, 179, 217, 0.14);
+
+  --font-serif: 'Shippori Mincho', 'Noto Serif TC', 'Songti TC', serif;
+  --font-sans: 'Klee One', 'Noto Sans TC', 'PingFang TC', 'Hiragino Sans', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', monospace;
+
+  --bp-md: 900px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--paper);
+  color: var(--sumi);
+  font-family: var(--font-sans);
+  font-weight: 400;
+  line-height: 1.85;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  min-height: 100vh;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  padding: 0;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/* ─── Primitives ─────────────────────────────────────────────── */
+
+.r-kicker {
+  font-family: var(--font-mono);
+  font-weight: 400;
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--ink-40);
+  display: inline-block;
+}
+
+.r-mono {
+  font-family: var(--font-mono);
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  color: var(--ink-60);
+}
+
+.r-serif {
+  font-family: var(--font-serif);
+}
+
+.r-sans {
+  font-family: var(--font-sans);
+}
+
+.r-section {
+  width: 100%;
+  padding: 120px 48px;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+@media (max-width: 900px) {
+  .r-section {
+    padding: 80px 24px;
+  }
+}
+
+/* ─── Section 1 ─ 序章 (Hero) ──────────────────────────────────── */
+
+.r-hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  padding: 60px 48px;
+  background: var(--paper);
+}
+
+.r-hero__kicker-tl {
+  position: absolute;
+  top: 32px;
+  left: 32px;
+}
+
+.r-hero__kicker-br {
+  position: absolute;
+  bottom: 32px;
+  right: 32px;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  letter-spacing: 0.4em;
+  color: var(--ink-60);
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+}
+
+.r-hero__title {
+  font-family: var(--font-serif);
+  font-weight: 300;
+  font-size: clamp(100px, min(14vw, 18vh), 200px);
+  line-height: 1.05;
+  letter-spacing: 0.04em;
+  color: var(--sumi);
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+  margin: 0;
+  user-select: none;
+}
+
+.r-hero__est {
+  position: absolute;
+  bottom: 32px;
+  left: 32px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  color: var(--ink-40);
+}
+
+@media (max-width: 900px) {
+  .r-hero {
+    min-height: 90vh;
+    padding: 80px 20px 80px;
+  }
+  .r-hero__title {
+    writing-mode: horizontal-tb;
+    font-size: clamp(80px, 22vw, 140px);
+    letter-spacing: 0.18em;
+  }
+  .r-hero__kicker-tl {
+    top: 20px;
+    left: 20px;
+  }
+  .r-hero__kicker-br {
+    bottom: 20px;
+    right: 20px;
+    writing-mode: horizontal-tb;
+    font-size: 12px;
+  }
+  .r-hero__est {
+    bottom: 20px;
+    left: 20px;
+  }
+}
+
+/* ─── Section 2 ─ 銘 (Manifesto) ───────────────────────────────── */
+
+.r-manifesto {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  gap: 80px;
+  padding-top: 80px;
+  padding-bottom: 160px;
+}
+
+.r-manifesto__left {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.r-manifesto__glyph {
+  font-family: var(--font-serif);
+  font-weight: 300;
+  font-size: 96px;
+  line-height: 1;
+  color: var(--sumi);
+}
+
+.r-manifesto__body {
+  max-width: 56ch;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.r-manifesto__body p {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 19px;
+  line-height: 1.95;
+  color: var(--ink-80);
+}
+
+@media (max-width: 900px) {
+  .r-manifesto {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    padding-bottom: 100px;
+  }
+  .r-manifesto__glyph {
+    display: none;
+  }
+  .r-manifesto__body p {
+    font-size: 17px;
+  }
+}
+
+/* ─── Section 3 ─ 拾貳花譜 (Twelve Index) ──────────────────────── */
+
+.r-twelve {
+  padding-top: 60px;
+  padding-bottom: 120px;
+}
+
+.r-twelve__heading {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 64px;
+  align-items: center;
+  text-align: center;
+}
+
+.r-twelve__title {
+  font-family: var(--font-serif);
+  font-weight: 300;
+  font-size: 56px;
+  letter-spacing: 0.3em;
+  margin: 0;
+  color: var(--sumi);
+}
+
+.r-twelve__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border-top: 1px solid var(--ink-08);
+}
+
+.r-twelve__row {
+  display: grid;
+  grid-template-columns: 80px 1fr 2fr 100px 40px;
+  align-items: center;
+  gap: 24px;
+  min-height: 88px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--ink-08);
+  cursor: default;
+  transition: background 220ms ease, padding 220ms ease;
+}
+
+.r-twelve__row--link {
+  cursor: pointer;
+}
+
+.r-twelve__row--link:hover {
+  background: var(--paper-2);
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+.r-twelve__row--link:hover .r-twelve__arrow {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.r-twelve__num {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: 32px;
+  color: var(--sumi-2);
+  text-align: center;
+}
+
+.r-twelve__name {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: 28px;
+  letter-spacing: 0.08em;
+  color: var(--sumi);
+}
+
+.r-twelve__sub {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: var(--ink-60);
+}
+
+.r-twelve__price {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--ink-60);
+  text-align: right;
+  letter-spacing: 0.1em;
+}
+
+.r-twelve__arrow {
+  font-family: var(--font-mono);
+  font-size: 16px;
+  color: var(--sky-2);
+  opacity: 0;
+  transform: translateX(-8px);
+  transition: opacity 220ms ease, transform 220ms ease;
+  text-align: right;
+}
+
+@media (max-width: 900px) {
+  .r-twelve__title {
+    font-size: 36px;
+    letter-spacing: 0.25em;
+  }
+  .r-twelve__row {
+    grid-template-columns: 48px 1fr 80px;
+    grid-template-rows: auto auto;
+    grid-template-areas:
+      'num name price'
+      'num sub  sub';
+    gap: 4px 16px;
+    min-height: 78px;
+    padding: 14px 0;
+  }
+  .r-twelve__row--link:hover {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+  .r-twelve__num {
+    grid-area: num;
+    font-size: 26px;
+  }
+  .r-twelve__name {
+    grid-area: name;
+    font-size: 21px;
+  }
+  .r-twelve__sub {
+    grid-area: sub;
+    font-size: 12px;
+  }
+  .r-twelve__price {
+    grid-area: price;
+    font-size: 12px;
+  }
+  .r-twelve__arrow {
+    display: none;
+  }
+}
+
+/* ─── Section 4 ─ 主役 · 海棠 (Featured Product) ──────────────── */
+
+.r-featured {
+  display: grid;
+  grid-template-columns: 6fr 4fr;
+  gap: 64px;
+  align-items: center;
+  padding-top: 80px;
+  padding-bottom: 120px;
+}
+
+.r-featured__photo {
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: var(--paper-3);
+}
+
+.r-featured__photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.r-featured__text {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.r-featured__title {
+  font-family: var(--font-serif);
+  font-weight: 300;
+  font-size: 56px;
+  letter-spacing: 0.12em;
+  margin: 0;
+  color: var(--sumi);
+}
+
+.r-featured__quote {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-style: italic;
+  font-size: 22px;
+  line-height: 1.8;
+  color: var(--ink-80);
+  margin: 16px 0 0;
+  max-width: 32ch;
+}
+
+.r-featured__byline {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  color: var(--ink-40);
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+.r-featured__cta {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  color: var(--sumi);
+  border-bottom: 1px solid var(--sumi);
+  align-self: flex-start;
+  padding-bottom: 4px;
+  margin-top: 16px;
+  transition: color 200ms ease, border-color 200ms ease;
+  cursor: pointer;
+}
+
+.r-featured__cta:hover {
+  color: var(--sky-2);
+  border-bottom-color: var(--sky-2);
+}
+
+@media (max-width: 900px) {
+  .r-featured {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  .r-featured__title {
+    font-size: 40px;
+  }
+  .r-featured__quote {
+    font-size: 18px;
+  }
+}
+
+/* ─── Section 5 ─ 跋 (Footer) ──────────────────────────────────── */
+
+.r-coda {
+  padding: 100px 48px 80px;
+  text-align: center;
+  background: var(--paper);
+}
+
+.r-coda__rule {
+  width: 40px;
+  height: 1px;
+  background: var(--ink-15);
+  margin: 0 auto 40px;
+}
+
+.r-coda__glyph {
+  font-family: var(--font-serif);
+  font-weight: 300;
+  font-size: 56px;
+  line-height: 1;
+  color: var(--sumi);
+  margin-bottom: 32px;
+}
+
+.r-coda__links {
+  display: flex;
+  justify-content: center;
+  gap: 36px;
+  margin-bottom: 32px;
+  font-family: var(--font-sans);
+  font-size: 15px;
+}
+
+.r-coda__links a {
+  color: var(--ink-80);
+  border-bottom: 1px solid transparent;
+  padding-bottom: 2px;
+  transition: color 200ms ease, border-color 200ms ease;
+}
+
+.r-coda__links a:hover {
+  color: var(--sky-2);
+  border-bottom-color: var(--sky-2);
+}
+
+.r-coda__sig {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.4em;
+  color: var(--ink-40);
+  text-transform: uppercase;
+}
+
+@media (max-width: 900px) {
+  .r-coda {
+    padding: 60px 24px 60px;
+  }
+  .r-coda__links {
+    flex-direction: column;
+    gap: 18px;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Soap deep-dive (海棠)
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ─── Soap §1 ─ 章首 (Chapter Opener) ──────────────────────────── */
+
+.s-opener {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 80px 24px;
+  gap: 24px;
+}
+
+.s-opener__title {
+  font-family: var(--font-serif);
+  font-weight: 300;
+  font-size: clamp(64px, 9vw, 120px);
+  letter-spacing: 0.12em;
+  margin: 0;
+  color: var(--sumi);
+}
+
+.s-opener__sub {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 19px;
+  letter-spacing: 0.2em;
+  color: var(--ink-60);
+}
+
+.s-opener__photo {
+  max-width: 480px;
+  width: 100%;
+  margin: 32px 0;
+}
+
+.s-opener__meta {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.3em;
+  color: var(--ink-40);
+}
+
+@media (max-width: 900px) {
+  .s-opener__photo {
+    max-width: 320px;
+  }
+  .s-opener__sub {
+    font-size: 16px;
+  }
+}
+
+/* ─── Soap §2 ─ 影 (Gallery) ───────────────────────────────────── */
+
+.s-gallery {
+  padding: 80px 0 120px;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+.s-gallery__heading {
+  padding: 0 48px;
+  margin-bottom: 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.s-gallery__title {
+  font-family: var(--font-serif);
+  font-weight: 300;
+  font-size: 40px;
+  letter-spacing: 0.3em;
+  margin: 0;
+  color: var(--sumi);
+}
+
+.s-gallery__track {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  gap: 32px;
+  padding: 0 48px 24px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--ink-15) transparent;
+}
+
+.s-gallery__track::-webkit-scrollbar {
+  height: 4px;
+}
+.s-gallery__track::-webkit-scrollbar-track {
+  background: transparent;
+}
+.s-gallery__track::-webkit-scrollbar-thumb {
+  background: var(--ink-15);
+  border-radius: 2px;
+}
+
+.s-gallery__slide {
+  flex: 0 0 auto;
+  width: auto;
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.s-gallery__num {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.4em;
+  color: var(--ink-40);
+}
+
+.s-gallery__slide img {
+  height: 70vh;
+  width: auto;
+  object-fit: cover;
+  background: var(--paper-3);
+}
+
+@media (max-width: 900px) {
+  .s-gallery__heading {
+    padding: 0 24px;
+  }
+  .s-gallery__title {
+    font-size: 28px;
+  }
+  .s-gallery__track {
+    padding: 0 0 16px;
+    gap: 0;
+  }
+  .s-gallery__slide {
+    flex: 0 0 100vw;
+    width: 100vw;
+    position: relative;
+  }
+  .s-gallery__slide img {
+    height: 100vw;
+    width: 100vw;
+  }
+  .s-gallery__num {
+    position: absolute;
+    bottom: 16px;
+    left: 16px;
+    color: rgba(255, 255, 255, 0.85);
+    background: rgba(26, 31, 38, 0.5);
+    padding: 4px 10px;
+  }
+}
+
+/* ─── Soap §3 ─ 配方 (Ingredients hierarchy) ──────────────────── */
+
+.s-formula {
+  padding: 120px 48px;
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+.s-formula__heading {
+  margin-bottom: 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.s-formula__title {
+  font-family: var(--font-serif);
+  font-weight: 300;
+  font-size: 56px;
+  letter-spacing: 0.3em;
+  margin: 0;
+  color: var(--sumi);
+}
+
+.s-formula__tier {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 48px;
+  padding: 32px 0;
+  border-top: 1px solid var(--ink-08);
+}
+
+.s-formula__tier:last-of-type {
+  border-bottom: 1px solid var(--ink-08);
+}
+
+.s-formula__tier-kicker {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.s-formula__tier-zh {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: 20px;
+  color: var(--sumi);
+}
+
+.s-formula__tier-en {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  color: var(--ink-40);
+  text-transform: uppercase;
+}
+
+.s-formula__tier-items {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.s-formula__item--lead {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: 28px;
+  letter-spacing: 0.04em;
+  color: var(--sumi);
+}
+
+.s-formula__item--support {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: 20px;
+  color: var(--ink-80);
+}
+
+.s-formula__item--base {
+  font-family: var(--font-sans);
+  font-size: 15px;
+  color: var(--ink-60);
+}
+
+.s-formula__profile {
+  margin-top: 56px;
+  font-family: var(--font-sans);
+  font-size: 17px;
+  line-height: 1.9;
+  color: var(--ink-80);
+  max-width: 56ch;
+}
+
+@media (max-width: 900px) {
+  .s-formula {
+    padding: 80px 24px;
+  }
+  .s-formula__title {
+    font-size: 36px;
+  }
+  .s-formula__tier {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 24px 0;
+  }
+  .s-formula__item--lead {
+    font-size: 24px;
+  }
+  .s-formula__item--support {
+    font-size: 18px;
+  }
+}
+
+/* ─── Soap §4 ─ 五力 (Radar + quote) ──────────────────────────── */
+
+.s-radar {
+  padding: 80px 48px 120px;
+  max-width: 1080px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 64px;
+  align-items: center;
+}
+
+.s-radar__chart {
+  flex-shrink: 0;
+}
+
+.s-radar__text {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.s-radar__quote {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-style: italic;
+  font-size: 22px;
+  line-height: 1.8;
+  color: var(--ink-80);
+  margin: 0;
+  max-width: 36ch;
+}
+
+.s-radar__note {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--ink-40);
+}
+
+@media (max-width: 900px) {
+  .s-radar {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    padding: 60px 24px 80px;
+    text-align: center;
+  }
+  .s-radar__text {
+    align-items: center;
+  }
+  .s-radar__quote {
+    font-size: 19px;
+  }
+}
+
+/* ─── Soap §5 ─ 適膚 (Skin Type) ──────────────────────────────── */
+
+.s-skin {
+  padding: 100px 48px;
+  max-width: 1080px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.s-skin__heading {
+  margin-bottom: 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+}
+
+.s-skin__chips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: baseline;
+  gap: 20px 32px;
+  margin: 0 0 32px;
+}
+
+.s-skin__chip {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: 32px;
+  letter-spacing: 0.12em;
+  color: var(--sumi);
+}
+
+.s-skin__sep {
+  font-family: var(--font-mono);
+  font-size: 16px;
+  color: var(--ink-40);
+}
+
+.s-skin__ritual {
+  font-family: var(--font-sans);
+  font-size: 17px;
+  color: var(--ink-60);
+  margin: 0;
+}
+
+@media (max-width: 900px) {
+  .s-skin {
+    padding: 80px 24px;
+  }
+  .s-skin__chip {
+    font-size: 26px;
+  }
+}
+
+/* ─── Soap §6 ─ 結 (CTA) ──────────────────────────────────────── */
+
+.s-cta {
+  padding: 80px 48px 120px;
+  text-align: center;
+}
+
+.s-cta__heading {
+  margin-bottom: 32px;
+}
+
+.s-cta__links {
+  display: flex;
+  justify-content: center;
+  gap: 48px;
+  margin: 32px 0;
+  font-family: var(--font-sans);
+  font-size: 18px;
+}
+
+.s-cta__links a {
+  color: var(--sumi);
+  border-bottom: 1px solid var(--sumi);
+  padding-bottom: 4px;
+  transition: color 200ms ease, border-color 200ms ease;
+}
+
+.s-cta__links a:hover {
+  color: var(--sky-2);
+  border-bottom-color: var(--sky-2);
+}
+
+.s-cta__meta {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  color: var(--ink-40);
+  margin-top: 24px;
+}
+
+@media (max-width: 900px) {
+  .s-cta__links {
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+  }
+}
