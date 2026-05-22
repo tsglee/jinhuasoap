@@ -95,6 +95,20 @@
   .gf-hero-video-md {
     height: min(40vh, 340px) !important;
   }
+
+  /* Testimonial carousel slide — stack image above quote on mobile,
+     shrink headshot to a comfortable thumb size. */
+  .gf-testimonial-slide {
+    flex-direction: column !important;
+    gap: 20px !important;
+    text-align: center;
+  }
+  .gf-testimonial-slide > div:first-child {
+    flex: 0 0 140px !important;
+    width: 140px !important;
+    height: 140px !important;
+    margin: 0 auto;
+  }
 }
 
 /* ─── Show only on mobile (inverse of gf-hide-md). ─────────────────────── */

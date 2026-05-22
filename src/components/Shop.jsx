@@ -3,6 +3,7 @@
 import { PRODUCTS } from '../data/products.js';
 import { TESTIMONIALS } from '../data/testimonials.js';
 import { ProductGallery } from './ProductGallery.jsx';
+import { TestimonialCarousel } from './TestimonialCarousel.jsx';
 import { AddToCartButton } from './BuyButton.jsx';
 import { useT, useLocaleVariant } from '../i18n/index.jsx';
 
@@ -208,86 +209,7 @@ export function Shop({ navigate }) {
             {t('pages.shop.testimonials.title')}
           </h2>
         </div>
-        <div
-          className="gf-stack-md"
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-            gap: 24,
-          }}
-        >
-          {TESTIMONIALS.map((review) => (
-            <figure
-              key={review.id}
-              style={{
-                margin: 0,
-                background: 'var(--paper)',
-                border: '1px solid var(--ink-15)',
-                padding: '28px 24px',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 16,
-              }}
-            >
-              <div
-                aria-hidden="true"
-                className="italic"
-                style={{
-                  fontSize: 48,
-                  lineHeight: 0.6,
-                  color: 'var(--gold-3)',
-                  opacity: 0.5,
-                  height: 18,
-                }}
-              >
-                “
-              </div>
-              <blockquote
-                className="tc"
-                style={{
-                  margin: 0,
-                  fontSize: 15,
-                  lineHeight: 1.85,
-                  letterSpacing: 1,
-                  color: 'var(--sumi)',
-                  flex: 1,
-                }}
-              >
-                {review.quote}
-              </blockquote>
-              <figcaption
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: 4,
-                  paddingTop: 8,
-                  borderTop: '1px dotted var(--ink-15)',
-                }}
-              >
-                <span
-                  className="tc"
-                  style={{
-                    fontSize: 14,
-                    letterSpacing: 2,
-                    color: 'var(--sumi)',
-                  }}
-                >
-                  ── {review.name}
-                </span>
-                <span
-                  className="mono"
-                  style={{
-                    fontSize: 11,
-                    color: 'var(--gold-3)',
-                    letterSpacing: 1.5,
-                  }}
-                >
-                  {review.tag}
-                </span>
-              </figcaption>
-            </figure>
-          ))}
-        </div>
+        <TestimonialCarousel testimonials={TESTIMONIALS} />
       </section>
 
       {/* Wholesale */}
