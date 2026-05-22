@@ -191,33 +191,6 @@ export function ProductDetailCard({ p, flip, first, navigate }) {
         >
           {product.subtitle}
         </div>
-        {navigate && (
-          <a
-            href={href}
-            onClick={handleNav}
-            className="mono"
-            style={{
-              display: 'inline-block',
-              marginTop: 12,
-              color: 'var(--gold-3)',
-              fontSize: 11,
-              letterSpacing: 3,
-              borderBottom: '1px solid var(--gold-3)',
-              paddingBottom: 2,
-              transition: 'color 200ms ease, border-color 200ms ease',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.color = 'var(--red)';
-              e.currentTarget.style.borderBottomColor = 'var(--red)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.color = 'var(--gold-3)';
-              e.currentTarget.style.borderBottomColor = 'var(--gold-3)';
-            }}
-          >
-            查看詳細 · 五力 / 適膚 →
-          </a>
-        )}
         <Divider />
         <dl style={{ margin: '14px 0 0', display: 'grid', gap: 0 }}>
           <DetailRow label={t('pages.products.detailLabels.skinType')} value={product.skinType} />
