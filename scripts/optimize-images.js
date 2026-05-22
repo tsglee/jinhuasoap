@@ -28,6 +28,8 @@ const SRC_DIRS = [
   path.join(__dirname, '..', 'public', 'images', 'thanku'),
   // 本舍小記 cover images (1200×900, 4:3)
   path.join(__dirname, '..', 'public', 'images', 'journal'),
+  // 客戶心得 headshots (1024×1024, 1:1)
+  path.join(__dirname, '..', 'public', 'images', 'testimonials'),
 ];
 const MAX_WIDTH = 1200;
 const AVIF_QUALITY = 65;
