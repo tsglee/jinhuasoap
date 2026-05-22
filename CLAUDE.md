@@ -101,7 +101,7 @@ public/images/
 本舍小記 cover + inline 圖 在 2026-05-10 session 全自動產完（用 scripts/generate-images.js
 透過 Gemini API），27 篇都有 cover、16 篇新題加 inline 手繪圖。下次要再產圖直接套
 這個 pipeline：寫 tasks JSON → 跑 generate-images.js → 跑 optimize:images。
-產品實拍照走同 pipeline + referenceImagePath 參數（看 scripts/product-real-tasks.json）。
+產品實拍照走同 pipeline + referenceImagePath 參數（看 scripts/tasks/product-real-tasks.json）。
 
 ## 上次 session 尾聲（2026-05-21）
 
@@ -127,7 +127,7 @@ Cloudflare Pages auto-deploy。
 
 - **新增的 i18n 檔**：`src/i18n/index.jsx` + `src/i18n/locales/{zh,en}.js` + `src/data/posts.en.js`
 - **新增的元件**：`src/components/OrderTracking.jsx`、`src/data/testimonials.js`、`src/utils/phone.js`
-- **新增的 scripts/tasks JSON**：`journal-cover-tasks.json`、`journal-inline-tasks.json`、`product-real-tasks.json`
+- **新增的 scripts/tasks/ JSON**：`journal-cover-tasks.json`、`journal-inline-tasks.json`、`product-real-tasks.json`
 
 ## 下一個 session：未定
 

@@ -4,7 +4,7 @@
 // hints, and emits one task per (product × shot type 02-04, 06).
 // Plus 11 article cover tasks + 12 inline-illustration tasks.
 //
-// Output: scripts/full-tasks.json (consumed by scripts/generate-images.js)
+// Output: scripts/tasks/full-tasks.json (consumed by scripts/generate-images.js)
 //
 // Run:
 //   node scripts/build-tasks.mjs
@@ -250,7 +250,7 @@ const productTaskList = Object.entries(PRODUCT_HINTS).flatMap(([folder, hints]) 
 
 const allTasks = [...articleCoverTasks, ...inlineTasks, ...productTaskList];
 
-const outPath = path.join(__dirname, 'full-tasks.json');
+const outPath = path.join(__dirname, 'tasks', 'full-tasks.json');
 await writeFile(outPath, JSON.stringify(allTasks, null, 2));
 
 console.log(`→ wrote ${allTasks.length} tasks to ${path.relative(REPO_ROOT, outPath)}`);
