@@ -7,7 +7,7 @@
 import { useEffect } from 'react';
 import { Divider } from './GoldenFlower.jsx';
 import { TierNotice } from './TierNotice.jsx';
-import { PRODUCTS } from '../data/products.js';
+import { PRODUCTS, CONCERNS } from '../data/products.js';
 import { ProductGallery } from './ProductGallery.jsx';
 import { AddToCartButton } from './BuyButton.jsx';
 import { useT, useLocaleVariant } from '../i18n/index.jsx';
@@ -83,7 +83,9 @@ function BuyBlock({ p }) {
   );
 }
 
-function ProductDetailCard({ p, flip, first }) {
+// Exported so ProductDetail.jsx (single product page) and CategoryListing.jsx
+// (concern-filtered listing) can render the same spec sheet card.
+export function ProductDetailCard({ p, flip, first }) {
   const t = useT();
   const product = useLocaleVariant(p);
   return (
@@ -171,7 +173,66 @@ function ProductDetailCard({ p, flip, first }) {
 
 // ── Page ────────────────────────────────────────────────────────────────
 
-export function Products() {
+// TA cluster filter chips — rendered above the full product list, lets
+// users (and ad-landing visitors) jump to a concern-filtered subset like
+// /products/concern/sensitive.
+function ClusterChips({ navigate }) {
+  return (
+    <section
+      className="gf-pad-md"
+      style={{
+        maxWidth: 1180,
+        margin: '0 auto',
+        padding: '24px 44px 0',
+      }}
+    >
+      <div
+        className="mono tc"
+        style={{
+          textAlign: 'center',
+          color: 'var(--gold-3)',
+          fontSize: 11,
+          letterSpacing: 3,
+          marginBottom: 14,
+        }}
+      >
+        按膚況挑
+      </div>
+      <div
+        style={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: 10,
+          justifyContent: 'center',
+        }}
+      >
+        {CONCERNS.map((c) => (
+          <button
+            key={c.slug}
+            type="button"
+            onClick={() => navigate && navigate(`/products/concern/${c.slug}`)}
+            className="tc"
+            style={{
+              padding: '8px 16px',
+              background: 'transparent',
+              color: 'var(--sumi)',
+              border: '1px solid var(--ink-15)',
+              fontSize: 13,
+              letterSpacing: 2,
+              cursor: 'pointer',
+              fontFamily: '"Noto Serif TC", serif',
+            }}
+            title={c.desc}
+          >
+            {c.zh}
+          </button>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+export function Products({ navigate }) {
   const t = useT();
   // Deep-link from About: when an About card sets gf_jump_product in
   // sessionStorage and switches to this tab, scroll to that product.
@@ -244,6 +305,8 @@ export function Products() {
       </section>
 
       <TierNotice variant="static" />
+
+      <ClusterChips navigate={navigate} />
 
       {/* 12 件連續陳列 — flip 全局交替（左右輪流） */}
       <section

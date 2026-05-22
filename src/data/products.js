@@ -3,15 +3,41 @@
 //   add-to-cart, etc.) from this list.
 // - About/Mobile.jsx renders a compact 2-col grid of all 12 at the bottom
 //   of the mobile About page.
+// - ProductDetail.jsx renders a single product by `slug` (URL like
+//   /products/haitang-xiufu).
+// - CategoryListing.jsx filters by `concerns` (URL like
+//   /products/concern/sensitive).
+//
+// Required fields:
+//   slug      — lowercase latin pinyin, used as the URL path segment
+//   concerns  — array of cluster slugs from CONCERNS below (TA grouping
+//               for ad campaigns; a product can belong to multiple)
 //
 // Optional fields:
 //   batchDate — 本批熟成日（YYYY-MM-DD 或自由文字）。設了會在 02 十二花顯示
 //   「本批熟成」一行；不設則 row 自動隱藏。透明度品牌信任、買家清楚知道
 //   皂的新鮮度。
+
+// TA cluster definitions. Each product carries one or more `concerns`
+// matching the slugs below; ad campaigns and category filter chips both
+// key off this list. Series (花神守護 / 花韻時節 / 花露淨髮餅 / 全能日常)
+// remains the brand narrative inside the product detail card.
+export const CONCERNS = [
+  { slug: 'sensitive', zh: '修護專科', desc: '敏弱肌、痘痘、走過皮膚科的人' },
+  { slug: 'mature', zh: '抗老提亮', desc: '熟齡、暗沉、撫紋、追求光澤' },
+  { slug: 'oily', zh: '控油角質', desc: '粉刺、油性肌、角質肥厚' },
+  { slug: 'fragrance', zh: '香氛日常', desc: '一般肌、薄皮、香氛禮品' },
+  { slug: 'hair', zh: '髮 × 頭皮', desc: '洗髮餅、敏感頭皮、無矽靈' },
+  { slug: 'daily', zh: '一塊到底', desc: '運動、全身、家庭日常' },
+  { slug: 'baby', zh: '寶寶月子', desc: '新生兒、產後敏感、月子禮' },
+];
+
 export const PRODUCTS = [
   // 【一、花神守護系列 — 修復與潤澤】
   {
     num: '壹',
+    slug: 'haitang-xiufu',
+    concerns: ['sensitive'],
     series: '花神守護',
     seriesNote: '修復與潤澤',
     zh: '海棠修復 · 碧玉',
@@ -52,6 +78,8 @@ export const PRODUCTS = [
   },
   {
     num: '貳',
+    slug: 'wumeng-runyu',
+    concerns: ['mature'],
     series: '花神守護',
     seriesNote: '修復與潤澤',
     zh: '槐花蜜潤 · 霧蜜',
@@ -90,6 +118,8 @@ export const PRODUCTS = [
   },
   {
     num: '參',
+    slug: 'lvdou-zaodou',
+    concerns: ['oily'],
     series: '花神守護',
     seriesNote: '修復與潤澤',
     zh: '綠豆清芳 · 澡豆',
@@ -130,6 +160,8 @@ export const PRODUCTS = [
   },
   {
     num: '肆',
+    slug: 'diedou-meiyan',
+    concerns: ['mature'],
     series: '花神守護',
     seriesNote: '修復與潤澤',
     zh: '藍蝶清瑩 · 蝶豆',
@@ -170,6 +202,8 @@ export const PRODUCTS = [
   // 【二、花韻時節系列 — 風土與暖心】
   {
     num: '伍',
+    slug: 'jinzhan-shufu',
+    concerns: ['sensitive', 'baby'],
     series: '花韻時節',
     seriesNote: '風土與暖心',
     zh: '金盞舒緩 · 長金',
@@ -210,6 +244,8 @@ export const PRODUCTS = [
   },
   {
     num: '陸',
+    slug: 'dami-nuanxin',
+    concerns: ['baby'],
     series: '花韻時節',
     seriesNote: '風土與暖心',
     zh: '稻花暖心 · 星米',
@@ -248,6 +284,8 @@ export const PRODUCTS = [
   },
   {
     num: '柒',
+    slug: 'jiupo-zuiyue',
+    concerns: ['mature'],
     series: '花韻時節',
     seriesNote: '風土與暖心',
     zh: '杜康醉月 · 酒粕',
@@ -286,6 +324,8 @@ export const PRODUCTS = [
   },
   {
     num: '捌',
+    slug: 'guihua-runfu',
+    concerns: ['fragrance'],
     series: '花韻時節',
     seriesNote: '風土與暖心',
     zh: '桂月流金 · 桂花',
@@ -326,6 +366,8 @@ export const PRODUCTS = [
   // 【三、花露淨髮餅系列 — 髮沐】
   {
     num: '玖',
+    slug: 'shancha-fa',
+    concerns: ['hair'],
     series: '花露淨髮餅',
     seriesNote: '髮沐',
     zh: '山茶淨髮',
@@ -362,6 +404,8 @@ export const PRODUCTS = [
   },
   {
     num: '拾',
+    slug: 'moli-mufu',
+    concerns: ['fragrance'],
     series: '花露淨髮餅',
     seriesNote: '髮沐',
     zh: '茉莉沐膚',
@@ -400,6 +444,8 @@ export const PRODUCTS = [
   // 【四、全能日常系列 — 一皂到底】
   {
     num: '拾壹',
+    slug: 'yizao-qingshuang',
+    concerns: ['daily'],
     series: '全能日常',
     seriesNote: '一皂到底',
     zh: '一皂到底 · 清爽款',
@@ -436,6 +482,8 @@ export const PRODUCTS = [
   },
   {
     num: '拾貳',
+    slug: 'yizao-baoshi',
+    concerns: ['daily'],
     series: '全能日常',
     seriesNote: '一皂到底',
     zh: '一皂到底 · 保濕款',

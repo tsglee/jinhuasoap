@@ -13,6 +13,12 @@ import { LocaleProvider } from './i18n/index.jsx';
 const Products = lazy(() =>
   import('./components/Products.jsx').then((m) => ({ default: m.Products })),
 );
+const ProductDetail = lazy(() =>
+  import('./components/ProductDetail.jsx').then((m) => ({ default: m.ProductDetail })),
+);
+const CategoryListing = lazy(() =>
+  import('./components/CategoryListing.jsx').then((m) => ({ default: m.CategoryListing })),
+);
 const Process = lazy(() =>
   import('./components/Process.jsx').then((m) => ({ default: m.Process })),
 );
@@ -47,10 +53,24 @@ const TABS = [
   { id: 'journal', zh: '本舍小記', path: '/journal' },
 ];
 
+// Valid tab ids that can be passed via `?tab=` query param on the root path
+// (e.g. `/?tab=shop` from Google Ads landing URLs). Journal has its own
+// `/journal` path so it's excluded here.
+const TAB_QUERY_IDS = new Set(['about', 'products', 'process', 'shop']);
+
 function parseRoute() {
   if (typeof window === 'undefined') return { type: 'tab' };
   const path = window.location.pathname;
-  if (path === '/' || path === '') return { type: 'tab' };
+  if (path === '/' || path === '') {
+    // Read `?tab=` query param so ad landing URLs like `/?tab=shop` and
+    // shareable deeplinks like `/?tab=products` actually switch tabs.
+    const qs = new URLSearchParams(window.location.search);
+    const queryTab = qs.get('tab');
+    if (queryTab && TAB_QUERY_IDS.has(queryTab)) {
+      return { type: 'tab', tab: queryTab };
+    }
+    return { type: 'tab' };
+  }
   const legal = path.match(/^\/legal\/(privacy|returns|terms)\/?$/);
   if (legal) return { type: 'legal', page: legal[1] };
   if (path === '/cart' || path === '/cart/') return { type: 'cart' };
@@ -59,6 +79,12 @@ function parseRoute() {
     const slug = path.slice('/journal/'.length).replace(/\/+$/, '');
     if (slug) return { type: 'journal', slug };
   }
+  // `/products/concern/<slug>` — TA cluster listing (e.g. /products/concern/sensitive)
+  const concernMatch = path.match(/^\/products\/concern\/([a-z0-9-]+)\/?$/);
+  if (concernMatch) return { type: 'category', slug: concernMatch[1] };
+  // `/products/<slug>` — single product detail (e.g. /products/haitang-xiufu)
+  const productMatch = path.match(/^\/products\/([a-z0-9-]+)\/?$/);
+  if (productMatch) return { type: 'product', slug: productMatch[1] };
   const orderMatch = path.match(/^\/order\/(JH-\d{6}-[A-Z0-9]{4})\/?$/);
   if (orderMatch) return { type: 'order', orderId: orderMatch[1] };
   if (path === '/order' || path === '/order/') return { type: 'order' };
@@ -167,7 +193,13 @@ function NotFound({ navigate }) {
 }
 
 export default function App() {
+  const [route, setRoute] = useState(parseRoute);
+
   const [tab, setTab] = useState(() => {
+    // If the URL carries `?tab=<id>`, honour that on first paint (e.g.
+    // someone landed from an ad). Otherwise fall back to the last tab the
+    // user was on (localStorage), then default to about.
+    if (route?.type === 'tab' && route.tab) return route.tab;
     try {
       return localStorage.getItem('gf_tab') || 'about';
     } catch {
@@ -175,7 +207,14 @@ export default function App() {
     }
   });
 
-  const [route, setRoute] = useState(parseRoute);
+  // When parseRoute decides on a query-driven tab (e.g. `?tab=shop`), sync
+  // local tab state so the tab nav highlights correctly.
+  useEffect(() => {
+    if (route?.type === 'tab' && route.tab && route.tab !== tab) {
+      setTab(route.tab);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [route]);
 
   useEffect(() => {
     const onPop = () => setRoute(parseRoute());
@@ -228,10 +267,14 @@ export default function App() {
     body = <Legal page={route.page} navigate={navigate} />;
   } else if (route.type === 'order') {
     body = <OrderTracking orderId={route.orderId} navigate={navigate} />;
+  } else if (route.type === 'product' && route.slug) {
+    body = <ProductDetail slug={route.slug} navigate={navigate} />;
+  } else if (route.type === 'category' && route.slug) {
+    body = <CategoryListing slug={route.slug} navigate={navigate} />;
   } else if (tab === 'about') {
     body = <About setTab={selectTab} />;
   } else if (tab === 'products') {
-    body = <Products />;
+    body = <Products navigate={navigate} />;
   } else if (tab === 'process') {
     body = <Process />;
   } else if (tab === 'shop') {
@@ -246,11 +289,20 @@ export default function App() {
     ? `legal/${route.page}`
     : route.type === 'order'
     ? (route.orderId ? `order/${route.orderId}` : 'order')
+    : route.type === 'product'
+    ? `product/${route.slug}`
+    : route.type === 'category'
+    ? `category/${route.slug}`
     : route.type === 'notfound'
     ? '404'
     : tab;
 
-  const activeTabId = route.type === 'journal' ? 'journal' : tab;
+  const activeTabId =
+    route.type === 'journal'
+      ? 'journal'
+      : route.type === 'product' || route.type === 'category'
+      ? 'products'
+      : tab;
 
   return (
     <LocaleProvider>

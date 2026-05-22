@@ -57,7 +57,7 @@
 
 ## 2️⃣ Ad Group A · 敏感肌主打
 
-**Final URL**: `https://jinhuasoap.com/?tab=shop`
+**Final URL**: `https://jinhuasoap.com/products/concern/sensitive`
 
 ### 15 Headlines（每條 ≤ 30 字）
 
@@ -109,7 +109,7 @@
 
 ## 3️⃣ Ad Group B · 產品識貨族
 
-**Final URL**: `https://jinhuasoap.com/?tab=products`
+**Final URL**: `https://jinhuasoap.com/products/concern/mature`
 
 ### 15 Headlines
 
@@ -161,7 +161,7 @@
 
 ## 4️⃣ Ad Group C · 換季 / 乾癢場景
 
-**Final URL**: `https://jinhuasoap.com/?tab=shop`
+**Final URL**: `https://jinhuasoap.com/products/concern/baby`
 
 ### 15 Headlines
 
@@ -465,7 +465,7 @@ Top search terms:
 ### 「Click 很多但 conversion 0」
 
 - 流量品質差 → 看 search terms、加否定字
-- Landing page 不對 → Final URL 可能跑到首頁、改去 /?tab=shop
+- Landing page 不對 → Final URL 可能跑到首頁、改去 cluster URL（如 /products/concern/sensitive）
 - 結帳流程卡 → 自己測一次下單流程、看哪步卡
 
 ---
