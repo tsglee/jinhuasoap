@@ -2376,7 +2376,7 @@ export function JournalIndex({ navigate }) {
 
   return (
     <div style={{ position: 'relative', zIndex: 1 }}>
-      <PageHeader kicker={t('pages.journal.kicker')} title={t('pages.journal.title')} subtitle={t('pages.journal.subtitle')} />
+      <PageHeader kicker={t('pages.journal.kicker')} title={t('pages.journal.title')} />
       <section
         className="gf-pad-md"
         style={{
@@ -2385,20 +2385,6 @@ export function JournalIndex({ navigate }) {
           padding: '20px 44px 80px',
         }}
       >
-        <div
-          className="tc"
-          style={{
-            maxWidth: 620,
-            margin: '0 auto 28px',
-            fontSize: 16,
-            lineHeight: 1.85,
-            color: 'var(--ink-60)',
-            letterSpacing: 1,
-            textAlign: 'center',
-          }}
-        >
-          {t('pages.journal.intro')}
-        </div>
         <div
           style={{
             maxWidth: 480,

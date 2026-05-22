@@ -65,9 +65,6 @@ export default {
     journal: {
       kicker: '金花樓 · 本舍',
       title: '本舍小記',
-      subtitle: '慢慢寫 · 慢慢讀',
-      intro:
-        '一週寫一兩篇，關於油、關於鹼、關於水、也關於我們自己的這些慢工。為自己寫，把手邊的想法慢慢留下來。',
       searchPlaceholder: '搜尋文章 ── 標題 / 關鍵字',
       filterAriaLabel: '按類別篩選文章',
       categoryAll: '全部',

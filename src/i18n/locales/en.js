@@ -66,9 +66,6 @@ export default {
     journal: {
       kicker: 'Goldenflower · Atelier',
       title: 'Journal',
-      subtitle: 'Written slowly · Read slowly',
-      intro:
-        'A note or two each week ── about oils, alkali, water, and ourselves. Written for ourselves first, then kept here.',
       searchPlaceholder: 'Search articles ── title / keywords',
       filterAriaLabel: 'Filter articles by category',
       categoryAll: 'All',
