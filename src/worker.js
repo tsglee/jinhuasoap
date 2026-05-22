@@ -39,6 +39,10 @@ export default {
       return handleStoreCallback(request);
     }
 
+    if (url.pathname === '/api/logistics-callback') {
+      return handleLogisticsCallback(request, env);
+    }
+
     if (url.pathname.startsWith('/api/label/')) {
       const orderId = url.pathname.slice('/api/label/'.length);
       return handleLabel(orderId, env);
@@ -811,6 +815,170 @@ export function orderIdToTradeNo(orderId) {
   return orderId.replace(/-/g, '');
 }
 
+// Reverse of orderIdToTradeNo. Used by /api/logistics-callback to look up
+// the order in KV from the MerchantTradeNo ECPay sends back.
+//   "JH260510MZ9M" → "JH-260510-MZ9M"
+export function tradeNoToOrderId(tradeNo) {
+  const m = String(tradeNo || '').match(/^(JH)(\d{6})([A-Z0-9]{4})$/);
+  return m ? `${m[1]}-${m[2]}-${m[3]}` : null;
+}
+
+// ECPay 物流 C2C RtnCode → 對買家有意義的粗略狀態 bucket。
+// 文件編碼太多、實際 fire 的 code 視超商而異；我們：
+//   1. 永遠存 RtnCode + RtnMsg 原始字串到 history（buyer 還是看得到中文描述）
+//   2. 同時 map 成 phase 提供時間軸視覺進度
+// 未知 code 一律 → 'updated'（顯示為「狀態更新」）。
+// References (ECPay 物流 C2C SDK):
+//   3xx series — 7-11 (UNIMARTC2C)
+//   2xxx series — 全家 (FAMIC2C)
+//   5xxx series — 共用節點
+export function rtnCodeToPhase(rtnCode) {
+  const code = String(rtnCode || '');
+  if (code === '300' || code === '2001') return 'created';
+  // 寄件人交寄到便利商店、超商收件
+  if (code === '5002' || code === '2030') return 'lodged';
+  // 物流取貨 / 配送中
+  if (code === '5003' || code === '2005') return 'in_transit';
+  // 已送達門市
+  if (code === '310' || code === '2002' || code === '2006') return 'arrived';
+  // 消費者取件完成
+  if (code === '311' || code === '2003' || code === '2007') return 'picked_up';
+  // 退貨相關
+  if (code === '312' || code === '313' || code === '5004' || code === '2031' || code === '2032') return 'returning';
+  return 'updated';
+}
+
+// ECPay 物流狀態更新 webhook。建單時我們已經把 ServerReplyURL 設成
+//   `${publicBaseUrl(env)}/api/logistics-callback`
+// ECPay 在每次狀態變更時會 POST form-urlencoded 到這、要求我們回 `1|OK`。
+//
+// 流程：
+//   1. parse form body
+//   2. 驗 CheckMacValue（用同一個物流 HashKey/HashIV）
+//   3. MerchantTradeNo → orderId
+//   4. KV 讀現有 stored、append 新事件到 stored.statusHistory
+//   5. 更新 stored.latestStatus = event
+//   6. KV 寫回（reset TTL 30 天）
+//   7. 回 text/plain `1|OK`
+//
+// 即使找不到對應訂單，仍回 `1|OK` 避免 ECPay 無限重試。
+async function handleLogisticsCallback(request, env) {
+  if (request.method !== 'POST') {
+    return new Response('0|Method not allowed', {
+      status: 405,
+      headers: { 'Content-Type': 'text/plain' },
+    });
+  }
+
+  let params;
+  try {
+    const fd = await request.formData();
+    params = Object.fromEntries(fd);
+  } catch (err) {
+    console.error('Logistics callback parse failed', err);
+    return new Response('0|Bad request', {
+      status: 400,
+      headers: { 'Content-Type': 'text/plain' },
+    });
+  }
+
+  const receivedMac = params.CheckMacValue;
+  if (!receivedMac) {
+    return new Response('0|Missing CheckMacValue', {
+      status: 400,
+      headers: { 'Content-Type': 'text/plain' },
+    });
+  }
+  if (!env.ECPAY_LOGISTICS_HASH_KEY || !env.ECPAY_LOGISTICS_HASH_IV) {
+    console.error('Logistics callback: HashKey/IV not configured');
+    return new Response('0|Server not configured', {
+      status: 500,
+      headers: { 'Content-Type': 'text/plain' },
+    });
+  }
+  const expectedMac = checkMacValue(
+    params,
+    env.ECPAY_LOGISTICS_HASH_KEY,
+    env.ECPAY_LOGISTICS_HASH_IV,
+  );
+  if (receivedMac !== expectedMac) {
+    console.error('Logistics callback CheckMacValue mismatch', {
+      received: receivedMac,
+      expected: expectedMac,
+      tradeNo: params.MerchantTradeNo,
+    });
+    return new Response('0|CheckMacValue mismatch', {
+      status: 400,
+      headers: { 'Content-Type': 'text/plain' },
+    });
+  }
+
+  const orderId = tradeNoToOrderId(params.MerchantTradeNo);
+  if (!orderId) {
+    console.error('Logistics callback bad tradeNo', params.MerchantTradeNo);
+    // 仍 ack — 不要 ECPay 持續重發
+    return new Response('1|OK', { headers: { 'Content-Type': 'text/plain' } });
+  }
+
+  if (!env.ORDER_FALLBACK) {
+    console.error('Logistics callback: ORDER_FALLBACK KV not bound');
+    return new Response('0|KV not configured', {
+      status: 500,
+      headers: { 'Content-Type': 'text/plain' },
+    });
+  }
+
+  const list = await env.ORDER_FALLBACK.list({ prefix: `order/${orderId}/` });
+  if (!list.keys.length) {
+    console.error('Logistics callback for unknown order', { orderId });
+    return new Response('1|OK', { headers: { 'Content-Type': 'text/plain' } });
+  }
+  const key = list.keys[0].name;
+  const raw = await env.ORDER_FALLBACK.get(key);
+  if (!raw) {
+    console.error('Logistics callback: order data missing', { key });
+    return new Response('1|OK', { headers: { 'Content-Type': 'text/plain' } });
+  }
+
+  let stored;
+  try {
+    stored = JSON.parse(raw);
+  } catch (err) {
+    console.error('Logistics callback: stored JSON parse failed', err);
+    return new Response('1|OK', { headers: { 'Content-Type': 'text/plain' } });
+  }
+
+  const event = {
+    rtnCode: String(params.RtnCode || ''),
+    rtnMsg: String(params.RtnMsg || ''),
+    phase: rtnCodeToPhase(params.RtnCode),
+    updateStatusDate: String(params.UpdateStatusDate || ''),
+    receivedAt: new Date().toISOString(),
+  };
+  stored.statusHistory = Array.isArray(stored.statusHistory) ? stored.statusHistory : [];
+
+  // Dedup：ECPay 偶爾會重發同一事件、用 (rtnCode + updateStatusDate) 當 idempotency key
+  const dupKey = `${event.rtnCode}|${event.updateStatusDate}`;
+  const alreadySeen = stored.statusHistory.some(
+    (e) => `${e.rtnCode}|${e.updateStatusDate}` === dupKey,
+  );
+  if (!alreadySeen) {
+    stored.statusHistory.push(event);
+    stored.latestStatus = event;
+
+    try {
+      await env.ORDER_FALLBACK.put(key, JSON.stringify(stored), {
+        expirationTtl: 30 * 24 * 60 * 60,
+      });
+    } catch (err) {
+      console.error('Logistics callback: KV put failed', err);
+      // 仍 ack — KV write 失敗不該讓 ECPay 重發（手動排查比較好）
+    }
+  }
+
+  return new Response('1|OK', { headers: { 'Content-Type': 'text/plain' } });
+}
+
 // ECPay CheckMacValue 算法（物流 MD5 版）：
 // 1. 把所有 query params 依 key 字母排序（不分大小寫一起 ASCII 排序），
 //    組成 k=v&k=v 字串
@@ -989,6 +1157,15 @@ async function handleOrderQuery(orderId, env) {
 
   const stored = JSON.parse(raw);
   const payload = stored.payload || {};
+
+  // Status — pending = 訂單已收、ECPay 建單尚未成功；processing = ECPay
+  // 建單已成功、等老闆娘交寄；之後物流變更由 /api/logistics-callback
+  // 寫進 stored.latestStatus.phase，覆寫 status 顯示給買家。
+  let status = stored.logistics ? 'processing' : 'pending';
+  if (stored.latestStatus?.phase && stored.latestStatus.phase !== 'created') {
+    status = stored.latestStatus.phase;
+  }
+
   return jsonResponse({
     ok: true,
     orderId,
@@ -1000,12 +1177,16 @@ async function handleOrderQuery(orderId, env) {
     shipMethod: payload.shipMethod,
     storeName: payload.storeName,
     note: payload.note,
-    // 物流狀態：pending = 訂單已收尚未自動建單成功（老闆娘會手動處理）；
-    //         processing = ECPay 自動建單成功，等老闆娘出貨；
-    //         （實際出貨/取件狀態需 webhook 同步 ECPay，本版未做）
-    status: stored.logistics ? 'processing' : 'pending',
+    status,
     logisticsId: stored.logistics?.allPayLogisticsId,
     logisticsError: stored.logisticsError,
+    // 完整時間軸 — UI 用來畫 ECPay 各階段事件，按 receivedAt asc 排好
+    statusHistory: Array.isArray(stored.statusHistory)
+      ? [...stored.statusHistory].sort((a, b) =>
+          String(a.receivedAt).localeCompare(String(b.receivedAt)),
+        )
+      : [],
+    latestStatus: stored.latestStatus || null,
   });
 }
 

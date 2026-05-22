@@ -10,10 +10,113 @@
 import { useEffect, useState } from 'react';
 import { PackageIcon } from './Chrome.jsx';
 
+// ECPay 物流 webhook 推進的階段 → 給買家看的中文 label + accent color。
+// pending / processing 是建單前後的 fallback；其餘 phase 由 worker
+// 端 rtnCodeToPhase() 從 RtnCode 推導。
 const STATUS_LABELS = {
   pending: { label: '訂單收到、處理中', color: 'var(--gold-3)' },
-  processing: { label: '物流單已建、等待出貨', color: 'var(--red)' },
+  processing: { label: '物流單已建、等待交寄', color: 'var(--clay)' },
+  lodged: { label: '已交寄至超商', color: 'var(--gold-3)' },
+  in_transit: { label: '配送中', color: 'var(--gold-3)' },
+  arrived: { label: '已送達取貨門市、可取件', color: 'var(--red)' },
+  picked_up: { label: '已取件、訂單完成', color: 'var(--tea)' },
+  returning: { label: '退貨處理中', color: 'var(--ink-60)' },
+  updated: { label: '物流狀態更新', color: 'var(--gold-3)' },
 };
+
+// 物流階段時間軸 ── 一條垂直 list，每行 RtnMsg + 收到時間
+function StatusTimeline({ history }) {
+  if (!history || history.length === 0) return null;
+  const fmt = (iso, updateStatusDate) => {
+    // ECPay UpdateStatusDate 是 "yyyy/MM/dd HH:mm:ss"（GMT+8）格式、優先用
+    if (updateStatusDate && /\d{4}\/\d{2}\/\d{2}/.test(updateStatusDate)) {
+      return updateStatusDate;
+    }
+    return formatDate(iso);
+  };
+  return (
+    <div
+      style={{
+        borderTop: '1px dotted var(--ink-15)',
+        paddingTop: 18,
+        marginTop: 4,
+      }}
+    >
+      <div
+        className="mono"
+        style={{
+          color: 'var(--gold-3)',
+          fontSize: 12,
+          letterSpacing: 2,
+          marginBottom: 14,
+        }}
+      >
+        物流進度
+      </div>
+      <ol
+        style={{
+          margin: 0,
+          padding: 0,
+          listStyle: 'none',
+          display: 'grid',
+          gap: 14,
+        }}
+      >
+        {history.map((event, i) => {
+          const isLatest = i === history.length - 1;
+          const phaseLabel = STATUS_LABELS[event.phase]?.label;
+          return (
+            <li
+              key={`${event.rtnCode}-${event.updateStatusDate}-${i}`}
+              style={{
+                display: 'grid',
+                gridTemplateColumns: '14px 1fr',
+                gap: 14,
+                alignItems: 'baseline',
+              }}
+            >
+              <span
+                aria-hidden="true"
+                style={{
+                  width: 10,
+                  height: 10,
+                  borderRadius: '50%',
+                  background: isLatest ? 'var(--red)' : 'var(--ink-15)',
+                  marginTop: 6,
+                }}
+              />
+              <div>
+                <div
+                  className="tc"
+                  style={{
+                    fontSize: 14,
+                    letterSpacing: 1,
+                    color: 'var(--sumi)',
+                    fontWeight: isLatest ? 500 : 400,
+                    lineHeight: 1.5,
+                  }}
+                >
+                  {event.rtnMsg || phaseLabel || `狀態 ${event.rtnCode}`}
+                </div>
+                <div
+                  className="mono"
+                  style={{
+                    fontSize: 11,
+                    color: 'var(--ink-60)',
+                    letterSpacing: 1.5,
+                    marginTop: 3,
+                  }}
+                >
+                  {fmt(event.receivedAt, event.updateStatusDate)}
+                </div>
+              </div>
+            </li>
+          );
+        })}
+      </ol>
+    </div>
+  );
+}
 
 function formatDate(iso) {
   if (!iso) return '';
@@ -301,6 +404,10 @@ export function OrderTracking({ orderId, navigate }) {
                 <span className="italic" style={{ color: 'var(--red)', fontSize: 20 }}>NT$ {data.total}</span>
               </div>
             </div>
+
+            {data.statusHistory && data.statusHistory.length > 0 && (
+              <StatusTimeline history={data.statusHistory} />
+            )}
 
             {data.logisticsError && (
               <div
