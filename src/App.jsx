@@ -46,10 +46,10 @@ const OrderTracking = lazy(() =>
 const TabFallback = () => <div style={{ minHeight: '60vh' }} />;
 
 const TABS = [
-  { id: 'about', zh: '本舍' },
-  { id: 'products', zh: '十二花' },
-  { id: 'process', zh: '製皂' },
-  { id: 'shop', zh: '購皂' },
+  { id: 'about', zh: '本舍', path: '/' },
+  { id: 'products', zh: '十二花', path: '/products' },
+  { id: 'process', zh: '製皂', path: '/process' },
+  { id: 'shop', zh: '購皂', path: '/shop' },
   { id: 'journal', zh: '本舍小記', path: '/journal' },
 ];
 
@@ -79,7 +79,13 @@ function parseRoute() {
     const slug = path.slice('/journal/'.length).replace(/\/+$/, '');
     if (slug) return { type: 'journal', slug };
   }
-  // `/products/concern/<slug>` — TA cluster listing (e.g. /products/concern/sensitive)
+  // Clean tab URLs — 01-05 each get their own path. `/products` is the 02
+  // 十二花 listing (note: must match BEFORE the /products/<slug> regex
+  // below). `/journal` is handled above.
+  if (path === '/products' || path === '/products/') return { type: 'tab', tab: 'products' };
+  if (path === '/process' || path === '/process/') return { type: 'tab', tab: 'process' };
+  if (path === '/shop' || path === '/shop/') return { type: 'tab', tab: 'shop' };
+  // `/products/concern/<slug>` — TA cluster listing (e.g. /products/concern/repair)
   const concernMatch = path.match(/^\/products\/concern\/([a-z0-9-]+)\/?$/);
   if (concernMatch) return { type: 'category', slug: concernMatch[1] };
   // `/products/<slug>` — single product detail (e.g. /products/haitang-xiufu)
@@ -272,7 +278,7 @@ export default function App() {
   } else if (route.type === 'category' && route.slug) {
     body = <CategoryListing slug={route.slug} navigate={navigate} />;
   } else if (tab === 'about') {
-    body = <About setTab={selectTab} />;
+    body = <About setTab={selectTab} navigate={navigate} />;
   } else if (tab === 'products') {
     body = <Products navigate={navigate} />;
   } else if (tab === 'process') {

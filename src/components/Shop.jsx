@@ -13,9 +13,17 @@ function leadLine(washFeel) {
   return first;
 }
 
-function CatalogCard({ p, onJumpToCart }) {
+function CatalogCard({ p, onJumpToCart, navigate }) {
   const product = useLocaleVariant(p);
   const priceDisplay = p.price > 0 ? `NT$ ${p.price}` : 'NT$ —';
+  const detailHref = p.slug ? `/products/${p.slug}` : null;
+  const onTitleClick = (e) => {
+    if (!detailHref || !navigate) return;
+    // Allow cmd/ctrl-click + middle-click to open in a new tab (browser default).
+    if (e.metaKey || e.ctrlKey || e.button === 1) return;
+    e.preventDefault();
+    navigate(detailHref);
+  };
   return (
     <article
       style={{
@@ -32,20 +40,41 @@ function CatalogCard({ p, onJumpToCart }) {
       <div className="mono" style={{ color: 'var(--gold-3)', fontSize: 12, letterSpacing: 1.5 }}>
         № {p.num} · {product.series}
       </div>
-      <div>
-        <div
-          className="tc"
-          style={{ fontSize: 20, letterSpacing: 4, color: 'var(--sumi)', lineHeight: 1.3 }}
+      {detailHref ? (
+        <a
+          href={detailHref}
+          onClick={onTitleClick}
+          style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}
         >
-          {product.zh}
+          <div
+            className="tc"
+            style={{ fontSize: 20, letterSpacing: 4, color: 'var(--sumi)', lineHeight: 1.3 }}
+          >
+            {product.zh}
+          </div>
+          <div
+            className="tc"
+            style={{ fontSize: 12, letterSpacing: 3, color: 'var(--gold-3)', marginTop: 4 }}
+          >
+            {product.subtitle}
+          </div>
+        </a>
+      ) : (
+        <div>
+          <div
+            className="tc"
+            style={{ fontSize: 20, letterSpacing: 4, color: 'var(--sumi)', lineHeight: 1.3 }}
+          >
+            {product.zh}
+          </div>
+          <div
+            className="tc"
+            style={{ fontSize: 12, letterSpacing: 3, color: 'var(--gold-3)', marginTop: 4 }}
+          >
+            {product.subtitle}
+          </div>
         </div>
-        <div
-          className="tc"
-          style={{ fontSize: 12, letterSpacing: 3, color: 'var(--gold-3)', marginTop: 4 }}
-        >
-          {product.subtitle}
-        </div>
-      </div>
+      )}
       <p
         className="tc"
         style={{
@@ -90,8 +119,7 @@ function CatalogCard({ p, onJumpToCart }) {
   );
 }
 
-function ProductCatalog({ onAdded }) {
-  const t = useT();
+function ProductCatalog({ onAdded, navigate }) {
   return (
     <section
       className="gf-pad-md"
@@ -101,32 +129,9 @@ function ProductCatalog({ onAdded }) {
         padding: '20px 44px 50px',
       }}
     >
-      <div className="gf-hide-md" style={{ textAlign: 'center', marginBottom: 28 }}>
-        <div className="mono" style={{ color: 'var(--red)' }}>
-          {t('pages.shop.catalog.kicker')}
-        </div>
-        <h2
-          className="tc gf-h2-md"
-          style={{
-            fontSize: 38,
-            fontWeight: 400,
-            letterSpacing: 8,
-            margin: '10px 0 6px',
-            color: 'var(--sumi)',
-          }}
-        >
-          {t('pages.shop.catalog.title')}
-        </h2>
-        <div
-          className="tc"
-          style={{ fontSize: 14, color: 'var(--gold-3)', letterSpacing: 3 }}
-        >
-          {t('pages.shop.catalog.subtitle')}
-        </div>
-      </div>
       <div className="gf-catalog-grid">
         {PRODUCTS.map((p) => (
-          <CatalogCard key={p.num} p={p} onJumpToCart={onAdded} />
+          <CatalogCard key={p.num} p={p} onJumpToCart={onAdded} navigate={navigate} />
         ))}
       </div>
     </section>
@@ -177,7 +182,7 @@ export function Shop({ navigate }) {
         </div>
       </section>
 
-      <ProductCatalog
+      <ProductCatalog navigate={navigate}
         onAdded={() => {
           if (navigate) navigate('/cart');
         }}

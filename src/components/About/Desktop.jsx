@@ -3,6 +3,7 @@
 import { Divider, PhotoPlaceholder } from '../GoldenFlower.jsx';
 import { IllSoap } from '../Illustrations.jsx';
 import { HERO, PILLARS, CREW } from './content.js';
+import { PRODUCTS } from '../../data/products.js';
 
 // Resolves a `*.png` path to its AVIF/WebP siblings (produced by
 // scripts/optimize-images.js). The original PNG is no longer requested —
@@ -29,10 +30,16 @@ function SoapPhoto({ src, alt, ratio = '4/5' }) {
   );
 }
 
-export function AboutDesktop({ setTab }) {
-  // Deep-link from About product card → Products tab + scroll to that product.
-  // sessionStorage hand-off keeps URL clean; Products.jsx reads + clears it.
+export function AboutDesktop({ setTab, navigate }) {
+  // Each product card jumps straight to its dedicated /products/<slug>
+  // URL (shareable, indexable). Falls back to the old sessionStorage
+  // hand-off + tab switch if navigate isn't passed.
   const goToProduct = (num) => {
+    const p = PRODUCTS.find((x) => x.num === num);
+    if (p?.slug && navigate) {
+      navigate(`/products/${p.slug}`);
+      return;
+    }
     if (!setTab) return;
     try {
       sessionStorage.setItem('gf_jump_product', num);

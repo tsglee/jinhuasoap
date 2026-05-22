@@ -49,8 +49,16 @@ function ProductCardPhoto({ src, alt }) {
   );
 }
 
-export function AboutMobile({ setTab }) {
+export function AboutMobile({ setTab, navigate }) {
+  // Each product card jumps straight to its dedicated /products/<slug>
+  // URL (shareable, indexable). Falls back to the old sessionStorage
+  // hand-off + tab switch if navigate isn't passed.
   const goToProduct = (num) => {
+    const p = PRODUCTS.find((x) => x.num === num);
+    if (p?.slug && navigate) {
+      navigate(`/products/${p.slug}`);
+      return;
+    }
     if (!setTab) return;
     try {
       sessionStorage.setItem('gf_jump_product', num);

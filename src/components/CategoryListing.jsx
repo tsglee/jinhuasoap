@@ -61,7 +61,7 @@ export function CategoryListing({ slug, navigate }) {
             cursor: 'pointer',
           }}
         >
-          看十二款全部 ▸
+          看十二款全部 →
         </button>
       </section>
     );
@@ -165,7 +165,7 @@ export function CategoryListing({ slug, navigate }) {
             cursor: 'pointer',
           }}
         >
-          看十二款全部 ▸
+          看十二款全部 →
         </button>
       </section>
     </div>

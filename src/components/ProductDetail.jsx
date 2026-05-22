@@ -72,7 +72,7 @@ export function ProductDetail({ slug, navigate }) {
             cursor: 'pointer',
           }}
         >
-          看十二款全部 ▸
+          看十二款全部 →
         </button>
       </section>
     );
@@ -103,7 +103,7 @@ export function ProductDetail({ slug, navigate }) {
             marginBottom: 24,
           }}
         >
-          ◂ 回十二款
+          ← 回十二款
         </button>
         <ProductDetailCard p={product} flip={false} first={true} />
       </section>
