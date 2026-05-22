@@ -521,3 +521,142 @@ export const PRODUCTS = [
     },
   },
 ];
+
+// PROTOTYPE — 五力分布（修復／保濕／起泡／香氣／溫和度，0-5）+ 適膚 chip
+// + ritual 一行儀式。2026-05 由我（tsglee）參照各款 oilProfile / skinType /
+// 系列定位給出的估值，老闆娘審完逐個調整。值不是配方公式比例、是給使用者
+// 一眼讀懂的「這款偏向哪」示意。
+export const PRODUCT_DEPTH = {
+  'haitang-xiufu': {
+    fiveAxis: [
+      { label: '修復', value: 5 },
+      { label: '保濕', value: 5 },
+      { label: '起泡', value: 3 },
+      { label: '香氣', value: 4 },
+      { label: '溫和', value: 5 },
+    ],
+    skinTypeChips: ['敏弱肌', '痘痘困擾肌', '瑕疵受損肌'],
+    ritual: '用於潔顏 · 早晚一次 · 起泡靜置三十秒再沖。',
+  },
+  'wumeng-runyu': {
+    fiveAxis: [
+      { label: '修復', value: 4 },
+      { label: '保濕', value: 5 },
+      { label: '起泡', value: 3 },
+      { label: '香氣', value: 4 },
+      { label: '溫和', value: 5 },
+    ],
+    skinTypeChips: ['極乾燥肌', '熟齡肌'],
+    ritual: '用於潔顏 · 早晚一次 · 細細按摩再沖。',
+  },
+  'lvdou-zaodou': {
+    fiveAxis: [
+      { label: '修復', value: 3 },
+      { label: '保濕', value: 3 },
+      { label: '起泡', value: 4 },
+      { label: '香氣', value: 3 },
+      { label: '溫和', value: 3 },
+    ],
+    skinTypeChips: ['角質肥厚肌', '膚色暗沉肌', '粉刺肌'],
+    ritual: '用於潔顏 · 早晚一次 · 起泡輕拍再沖。',
+  },
+  'diedou-meiyan': {
+    fiveAxis: [
+      { label: '修復', value: 4 },
+      { label: '保濕', value: 4 },
+      { label: '起泡', value: 3 },
+      { label: '香氣', value: 3 },
+      { label: '溫和', value: 4 },
+    ],
+    skinTypeChips: ['疲憊暗沉肌', '輕熟齡肌', '需加強代謝者'],
+    ritual: '用於潔顏 · 早晚一次 · 細細按摩再沖。',
+  },
+  'jinzhan-shufu': {
+    fiveAxis: [
+      { label: '修復', value: 4 },
+      { label: '保濕', value: 5 },
+      { label: '起泡', value: 3 },
+      { label: '香氣', value: 3 },
+      { label: '溫和', value: 5 },
+    ],
+    skinTypeChips: ['敏感肌', '過冬乾燥肌', '走過刺激肌'],
+    ritual: '用於潔顏 · 早晚一次 · 輕柔按摩再沖。',
+  },
+  'dami-nuanxin': {
+    fiveAxis: [
+      { label: '修復', value: 3 },
+      { label: '保濕', value: 4 },
+      { label: '起泡', value: 3 },
+      { label: '香氣', value: 3 },
+      { label: '溫和', value: 5 },
+    ],
+    skinTypeChips: ['偏乾肌', '季節敏感肌', '溫和滋潤者'],
+    ritual: '用於潔顏 · 早晚一次 · 起泡靜置三十秒再沖。',
+  },
+  'jiupo-zuiyue': {
+    fiveAxis: [
+      { label: '修復', value: 4 },
+      { label: '保濕', value: 4 },
+      { label: '起泡', value: 3 },
+      { label: '香氣', value: 4 },
+      { label: '溫和', value: 4 },
+    ],
+    skinTypeChips: ['暗沉肌', '紋路深沉肌', '成熟肌'],
+    ritual: '用於潔顏 · 早晚一次 · 起泡靜置三十秒再沖。',
+  },
+  'guihua-runfu': {
+    fiveAxis: [
+      { label: '修復', value: 3 },
+      { label: '保濕', value: 4 },
+      { label: '起泡', value: 3 },
+      { label: '香氣', value: 5 },
+      { label: '溫和', value: 4 },
+    ],
+    skinTypeChips: ['一般肌', '日常追香者', '皮膚薄者'],
+    ritual: '用於潔顏 · 早晚一次 · 起泡聞香再沖。',
+  },
+  'shancha-fa': {
+    fiveAxis: [
+      { label: '修復', value: 3 },
+      { label: '保濕', value: 4 },
+      { label: '起泡', value: 5 },
+      { label: '香氣', value: 4 },
+      { label: '溫和', value: 5 },
+    ],
+    skinTypeChips: ['一般髮質', '敏感頭皮', '弱酸護髮者'],
+    ritual: '濕髮起泡 · 揉至頭皮 · 一瓢冷水沖淨。',
+  },
+  'moli-mufu': {
+    fiveAxis: [
+      { label: '修復', value: 2 },
+      { label: '保濕', value: 3 },
+      { label: '起泡', value: 5 },
+      { label: '香氣', value: 5 },
+      { label: '溫和', value: 4 },
+    ],
+    skinTypeChips: ['全身肌', '夏日香氛者'],
+    ritual: '全身搓泡 · 留香三秒 · 溫水沖淨。',
+  },
+  'yizao-qingshuang': {
+    fiveAxis: [
+      { label: '修復', value: 2 },
+      { label: '保濕', value: 3 },
+      { label: '起泡', value: 5 },
+      { label: '香氣', value: 3 },
+      { label: '溫和', value: 4 },
+    ],
+    skinTypeChips: ['運動後肌', '油性肌', '夏日清爽者'],
+    ritual: '全身搓泡 · 洗淨汗與油 · 沖完即可。',
+  },
+  'yizao-baoshi': {
+    fiveAxis: [
+      { label: '修復', value: 3 },
+      { label: '保濕', value: 5 },
+      { label: '起泡', value: 4 },
+      { label: '香氣', value: 3 },
+      { label: '溫和', value: 4 },
+    ],
+    skinTypeChips: ['乾燥肌', '季節敏感肌', '一塊到底者'],
+    ritual: '全身搓泡 · 細細塗抹 · 留香沖淨。',
+  },
+};
