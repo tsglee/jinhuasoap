@@ -69,7 +69,12 @@ function parseRoute() {
     if (queryTab && TAB_QUERY_IDS.has(queryTab)) {
       return { type: 'tab', tab: queryTab };
     }
-    return { type: 'tab' };
+    // Bare `/` is the 本舍 tab. Make this explicit so navigating back to
+    // home from a deep page (e.g. /products/<slug>) actually resets the
+    // local tab state — the sync useEffect only fires when `route.tab` is
+    // set, so a missing `.tab` would otherwise leave `tab` on whatever the
+    // user was on before.
+    return { type: 'tab', tab: 'about' };
   }
   const legal = path.match(/^\/legal\/(privacy|returns|terms)\/?$/);
   if (legal) return { type: 'legal', page: legal[1] };
