@@ -1,25 +1,21 @@
-// 240×240 pentagonal radar — 5 axes, value 0..5 each.
+// Pentagonal radar — 5 axes, value 0..5 each.
 // Colors tuned to main-site cream/maroon/gold palette (NOT the redesign
 // prototype's white+sky-blue). No external deps; pure SVG + trig.
 //
 // axes prop: [{ label: '修復', value: 5 }, ...]  (exactly 5 entries)
 
-const SIZE = 240;
-const C = SIZE / 2;
-const RADIUS = 96;
+const SIZE = 320;
+const RADIUS = 124;
+const LABEL_OFFSET = 26;
 const RINGS = 5;
 const TAU = Math.PI * 2;
-
-function point(idx, total, distance) {
-  const angle = -Math.PI / 2 + (idx / total) * TAU; // start at top (north)
-  return [C + Math.cos(angle) * distance, C + Math.sin(angle) * distance];
-}
 
 export function RadarFive({ axes, size = SIZE }) {
   if (!axes || axes.length !== 5) return null;
   const n = 5;
   const scale = size / SIZE;
   const radius = RADIUS * scale;
+  const labelOffset = LABEL_OFFSET * scale;
   const center = (size / 2);
 
   function pt(idx, distance) {
@@ -42,6 +38,7 @@ export function RadarFive({ axes, size = SIZE }) {
       viewBox={`0 0 ${size} ${size}`}
       role="img"
       aria-label="五力分布圖"
+      style={{ overflow: 'visible', maxWidth: '100%', height: 'auto' }}
     >
       {/* concentric rings — clay/gold-tinted hairlines */}
       {ringPolys.map((pts, i) => (
@@ -83,15 +80,15 @@ export function RadarFive({ axes, size = SIZE }) {
       })}
       {/* axis labels — Noto Serif TC matches main site */}
       {axes.map((axis, i) => {
-        const [x, y] = pt(i, radius + 22 * scale);
+        const [x, y] = pt(i, radius + labelOffset);
         return (
           <text
             key={i}
             x={x}
             y={y}
-            fontSize={13 * scale}
+            fontSize={15 * scale}
             fontFamily="'Noto Serif TC', serif"
-            fill="var(--ink-60)"
+            fill="var(--sumi)"
             textAnchor="middle"
             dominantBaseline="middle"
             letterSpacing="2"

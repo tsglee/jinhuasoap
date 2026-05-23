@@ -1,11 +1,13 @@
 // Single-product detail page — addressed by URL like /products/haitang-xiufu.
 // Re-uses ProductDetailCard from Products.jsx so the spec sheet layout
 // stays identical to 02 十二花 (just shown in isolation with a back link).
-// Then appends a single-page-only "深度" section: 五力 radar + 適膚 chips
-// + ritual line (PROTOTYPE values per product, owner adjusts).
+// Single-page-specific additions:
+//   - 視角 gallery strip surfacing all photos at once (no carousel mode)
+//   - 深度 section: 五力 radar + 適膚 chips + whyForYou prose + ritual line
 import { useEffect } from 'react';
 import { PRODUCTS, PRODUCT_DEPTH } from '../data/products.js';
 import { ProductDetailCard } from './Products.jsx';
+import { ProductGalleryGrid } from './ProductGallery.jsx';
 import { RadarFive } from './RadarFive.jsx';
 
 export function ProductDetail({ slug, navigate }) {
@@ -108,10 +110,48 @@ export function ProductDetail({ slug, navigate }) {
         >
           ← 回十二款
         </button>
-        <ProductDetailCard p={product} flip={false} first={true} />
+        <ProductDetailCard p={product} flip={false} first={true} expandedGallery={true} />
       </section>
+      <GalleryStripSection product={product} />
       <DepthSection product={product} />
     </div>
+  );
+}
+
+function GalleryStripSection({ product }) {
+  // Photos 2..N — the hero (photo 1) already shows in the card above; this
+  // strip surfaces every other angle so visitors don't have to know there's
+  // more inside a carousel.
+  if (!product.photos || product.photos.length <= 1) return null;
+  const alt = `${product.zh} · ${product.subtitle}`;
+  return (
+    <section
+      className="gf-pad-md"
+      style={{
+        maxWidth: 1180,
+        margin: '0 auto',
+        padding: '10px 44px 70px',
+      }}
+    >
+      <div
+        className="mono"
+        style={{
+          color: 'var(--gold-3)',
+          fontSize: 11,
+          letterSpacing: 3,
+          marginBottom: 20,
+          textAlign: 'center',
+        }}
+      >
+        視角 · GALLERY
+      </div>
+      <ProductGalleryGrid
+        allPhotos={product.photos}
+        alt={alt}
+        startIndex={1}
+        ratio="1/1"
+      />
+    </section>
   );
 }
 
@@ -124,12 +164,16 @@ function DepthSection({ product }) {
       style={{
         maxWidth: 1080,
         margin: '0 auto',
-        padding: '40px 44px 100px',
+        padding: '20px 44px 100px',
         borderTop: '1px solid var(--ink-08)',
       }}
     >
       <FiveAxisRow axes={depth.fiveAxis} washFeel={product.washFeel} />
-      <SkinTypeRow chips={depth.skinTypeChips} ritual={depth.ritual} />
+      <SkinTypeRow
+        chips={depth.skinTypeChips}
+        whyForYou={depth.whyForYou}
+        ritual={depth.ritual}
+      />
     </section>
   );
 }
@@ -140,23 +184,23 @@ function FiveAxisRow({ axes, washFeel }) {
       className="gf-stack-md"
       style={{
         display: 'grid',
-        gridTemplateColumns: '240px 1fr',
-        gap: 48,
+        gridTemplateColumns: '360px 1fr',
+        gap: 64,
         alignItems: 'center',
-        padding: '40px 0',
+        padding: '60px 0 50px',
       }}
     >
       <div style={{ display: 'flex', justifyContent: 'center' }}>
-        <RadarFive axes={axes} />
+        <RadarFive axes={axes} size={320} />
       </div>
       <div>
         <div
           className="mono"
           style={{
             color: 'var(--gold-3)',
-            fontSize: 11,
+            fontSize: 12,
             letterSpacing: 3,
-            marginBottom: 14,
+            marginBottom: 16,
           }}
         >
           洗感 · WASH PROFILE
@@ -166,7 +210,7 @@ function FiveAxisRow({ axes, washFeel }) {
           style={{
             fontFamily: '"Cormorant Garamond", "Noto Serif TC", serif',
             fontStyle: 'italic',
-            fontSize: 22,
+            fontSize: 24,
             lineHeight: 1.85,
             color: 'var(--sumi)',
             margin: 0,
@@ -175,42 +219,31 @@ function FiveAxisRow({ axes, washFeel }) {
         >
           「{washFeel}」
         </p>
-        <div
-          className="mono"
-          style={{
-            color: 'var(--ink-40)',
-            fontSize: 10,
-            letterSpacing: 2,
-            marginTop: 16,
-          }}
-        >
-          PROTOTYPE · 五力分布為示意，非配方比例
-        </div>
       </div>
     </div>
   );
 }
 
-function SkinTypeRow({ chips, ritual }) {
+function SkinTypeRow({ chips, whyForYou, ritual }) {
   return (
     <div
       style={{
         padding: '60px 0 0',
         borderTop: '1px solid var(--ink-08)',
-        marginTop: 40,
+        marginTop: 20,
         textAlign: 'center',
       }}
     >
       <div
-        className="mono"
+        className="tc"
         style={{
           color: 'var(--gold-3)',
-          fontSize: 11,
-          letterSpacing: 3,
+          fontSize: 14,
+          letterSpacing: 4,
           marginBottom: 28,
         }}
       >
-        適合 · FOR
+        適合什麼樣的肌膚
       </div>
       <div
         style={{
@@ -219,7 +252,7 @@ function SkinTypeRow({ chips, ritual }) {
           justifyContent: 'center',
           alignItems: 'baseline',
           gap: '14px 24px',
-          marginBottom: 32,
+          marginBottom: 36,
         }}
       >
         {chips.map((chip, i) => (
@@ -248,6 +281,33 @@ function SkinTypeRow({ chips, ritual }) {
             )}
           </span>
         ))}
+      </div>
+      {whyForYou && (
+        <p
+          className="tc"
+          style={{
+            fontSize: 16,
+            lineHeight: 2.05,
+            letterSpacing: 1.5,
+            color: 'var(--sumi)',
+            margin: '0 auto 32px',
+            maxWidth: 560,
+            textAlign: 'left',
+          }}
+        >
+          {whyForYou}
+        </p>
+      )}
+      <div
+        className="tc"
+        style={{
+          color: 'var(--gold-3)',
+          fontSize: 14,
+          letterSpacing: 4,
+          margin: '24px 0 14px',
+        }}
+      >
+        建議使用方式
       </div>
       <p
         className="tc"

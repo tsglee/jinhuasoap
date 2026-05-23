@@ -8,7 +8,7 @@ import { useEffect } from 'react';
 import { Divider } from './GoldenFlower.jsx';
 import { TierNotice } from './TierNotice.jsx';
 import { PRODUCTS, CONCERNS } from '../data/products.js';
-import { ProductGallery } from './ProductGallery.jsx';
+import { ProductGallery, ProductHeroStatic } from './ProductGallery.jsx';
 import { AddToCartButton } from './BuyButton.jsx';
 import { useT, useLocaleVariant } from '../i18n/index.jsx';
 
@@ -85,7 +85,10 @@ function BuyBlock({ p }) {
 
 // Exported so ProductDetail.jsx (single product page) and CategoryListing.jsx
 // (concern-filtered listing) can render the same spec sheet card.
-export function ProductDetailCard({ p, flip, first, navigate }) {
+// `expandedGallery` — on the single-product page we replace the inline
+// carousel with a static hero; the rest of the photos are surfaced as a
+// thumbnail grid rendered separately below by ProductDetail.
+export function ProductDetailCard({ p, flip, first, navigate, expandedGallery = false }) {
   const t = useT();
   const product = useLocaleVariant(p);
   const href = `/products/${p.slug}`;
@@ -123,7 +126,19 @@ export function ProductDetailCard({ p, flip, first, navigate }) {
             pointerEvents: 'none',
           }}
         />
-        <ProductGallery photos={p.photos} alt={`${product.zh} · ${product.subtitle}`} ratio="4/5" />
+        {expandedGallery ? (
+          <ProductHeroStatic
+            photos={p.photos}
+            alt={`${product.zh} · ${product.subtitle}`}
+            ratio="4/5"
+          />
+        ) : (
+          <ProductGallery
+            photos={p.photos}
+            alt={`${product.zh} · ${product.subtitle}`}
+            ratio="4/5"
+          />
+        )}
         <div
           style={{
             position: 'absolute',
