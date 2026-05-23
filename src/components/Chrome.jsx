@@ -544,10 +544,10 @@ export function Footer({ navigate, setTab }) {
               <div>
                 Email ·{' '}
                 <a
-                  href="mailto:tsghsunlee@gmail.com"
+                  href="mailto:contact@jinhuasoap.com"
                   style={{ color: 'inherit' }}
                 >
-                  tsghsunlee@gmail.com
+                  contact@jinhuasoap.com
                 </a>
               </div>
               <div>
