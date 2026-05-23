@@ -469,3 +469,91 @@ export function ProductGallery({ photos, alt, ratio = '1/1' }) {
     </>
   );
 }
+
+// Static hero — single photo, no carousel UI. Click → lightbox at index 0.
+// Used on the single-product detail page where the carousel paradigm is
+// replaced by a fully-expanded gallery.
+export function ProductHeroStatic({ photos, alt, ratio = '4/5' }) {
+  const [zoomIndex, setZoomIndex] = useState(null);
+  if (!photos || !photos.length) return null;
+  return (
+    <>
+      <div style={{ position: 'relative', width: '100%', aspectRatio: ratio }}>
+        <button
+          type="button"
+          onClick={() => setZoomIndex(0)}
+          aria-label={
+            photos.length > 1 ? `放大檢視，共 ${photos.length} 張` : '放大檢視'
+          }
+          style={{
+            width: '100%',
+            height: '100%',
+            padding: 0,
+            border: 'none',
+            background: 'transparent',
+            cursor: 'zoom-in',
+            display: 'block',
+            minHeight: 0,
+          }}
+        >
+          <ResolvedImage src={photos[0]} alt={alt} loading="eager" />
+        </button>
+      </div>
+      {zoomIndex !== null && (
+        <ProductLightbox
+          photos={photos}
+          alt={alt}
+          initialIndex={zoomIndex}
+          onClose={() => setZoomIndex(null)}
+        />
+      )}
+    </>
+  );
+}
+
+// Grid of clickable thumbnails. Each thumbnail opens the lightbox at the
+// real index within the full `allPhotos` array (use `startIndex` to skip the
+// first N — e.g. skip the hero already shown above the grid).
+export function ProductGalleryGrid({ allPhotos, alt, startIndex = 0, ratio = '1/1' }) {
+  const [zoomIndex, setZoomIndex] = useState(null);
+  if (!allPhotos || !allPhotos.length) return null;
+  const visible = allPhotos.slice(startIndex);
+  if (!visible.length) return null;
+  return (
+    <>
+      <div className="gf-gallery-grid">
+        {visible.map((src, i) => {
+          const realIndex = startIndex + i;
+          return (
+            <button
+              type="button"
+              key={`${src}-${realIndex}`}
+              onClick={() => setZoomIndex(realIndex)}
+              aria-label={`放大第 ${realIndex + 1} 張，共 ${allPhotos.length} 張`}
+              style={{
+                padding: 0,
+                border: 'none',
+                background: 'transparent',
+                cursor: 'zoom-in',
+                aspectRatio: ratio,
+                overflow: 'hidden',
+                display: 'block',
+                minHeight: 0,
+              }}
+            >
+              <ResolvedImage src={src} alt={alt} fit="cover" />
+            </button>
+          );
+        })}
+      </div>
+      {zoomIndex !== null && (
+        <ProductLightbox
+          photos={allPhotos}
+          alt={alt}
+          initialIndex={zoomIndex}
+          onClose={() => setZoomIndex(null)}
+        />
+      )}
+    </>
+  );
+}

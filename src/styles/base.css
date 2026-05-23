@@ -114,3 +114,25 @@ button {
 .gf-carousel-track::-webkit-scrollbar {
   display: none;
 }
+
+/* Product detail page — gallery strip below the hero. Auto-fills with
+   square thumbs around 200px wide; collapses to 2 cols on narrow viewports
+   via the responsive override. */
+.gf-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 14px;
+}
+
+.gf-gallery-grid button {
+  transition: opacity 200ms ease, transform 400ms ease;
+}
+.gf-gallery-grid button:hover {
+  opacity: 0.88;
+}
+.gf-gallery-grid button:hover img {
+  transform: scale(1.04);
+}
+.gf-gallery-grid img {
+  transition: transform 400ms ease-out;
+}

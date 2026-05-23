@@ -717,7 +717,7 @@ function renderBuyerEmailHtml({
     <div style="margin-top:32px;padding-top:20px;border-top:1px dotted #c8a24a;font-size:12px;color:#666;line-height:1.85;">
       有任何問題請聯絡我們 ──<br>
       Line · <a href="https://lin.ee/7m167md" style="color:#8a2a22;">lin.ee/7m167md</a><br>
-      Email · <a href="mailto:tsghsunlee@gmail.com" style="color:#8a2a22;">tsghsunlee@gmail.com</a>
+      Email · <a href="mailto:contact@jinhuasoap.com" style="color:#8a2a22;">contact@jinhuasoap.com</a>
     </div>
 
     <p style="margin:24px 0 0;padding-top:16px;border-top:1px solid #eee;color:#999;font-size:11px;letter-spacing:1px;text-align:center;line-height:1.7;">
@@ -774,7 +774,7 @@ function renderBuyerEmailText({
     ``,
     `有任何問題請聯絡我們：`,
     `Line · https://lin.ee/7m167md`,
-    `Email · tsghsunlee@gmail.com`,
+    `Email · contact@jinhuasoap.com`,
     ``,
     `──`,
     `金花樓 · 一間位於林口的小小皂舍`,
