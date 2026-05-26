@@ -4,7 +4,7 @@
 // - About/Mobile.jsx renders a compact 2-col grid of all 12 at the bottom
 //   of the mobile About page.
 // - ProductDetail.jsx renders a single product by `slug` (URL like
-//   /products/haitang-xiufu).
+//   /products/haitang-biyu).
 // - CategoryListing.jsx filters by `concerns` (URL like
 //   /products/concern/sensitive).
 //

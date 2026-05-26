@@ -90,10 +90,10 @@ function parseRoute() {
   if (path === '/products' || path === '/products/') return { type: 'tab', tab: 'products' };
   if (path === '/process' || path === '/process/') return { type: 'tab', tab: 'process' };
   if (path === '/shop' || path === '/shop/') return { type: 'tab', tab: 'shop' };
-  // `/products/concern/<slug>` — TA cluster listing (e.g. /products/concern/repair)
+  // `/products/concern/<slug>` — TA cluster listing (e.g. /products/concern/nurture)
   const concernMatch = path.match(/^\/products\/concern\/([a-z0-9-]+)\/?$/);
   if (concernMatch) return { type: 'category', slug: concernMatch[1] };
-  // `/products/<slug>` — single product detail (e.g. /products/haitang-xiufu)
+  // `/products/<slug>` — single product detail (e.g. /products/haitang-biyu)
   const productMatch = path.match(/^\/products\/([a-z0-9-]+)\/?$/);
   if (productMatch) return { type: 'product', slug: productMatch[1] };
   const orderMatch = path.match(/^\/order\/(JH-\d{6}-[A-Z0-9]{4})\/?$/);

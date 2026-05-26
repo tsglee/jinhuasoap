@@ -1,4 +1,4 @@
-// Single-product detail page — addressed by URL like /products/haitang-xiufu.
+// Single-product detail page — addressed by URL like /products/haitang-biyu.
 // Re-uses ProductDetailCard from Products.jsx so the spec sheet layout
 // stays identical to 02 十二花 (just shown in isolation with a back link).
 // Single-page-specific additions:
