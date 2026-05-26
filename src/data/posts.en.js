@@ -150,7 +150,7 @@ export const POSTS_EN = {
     title: 'Skin in Menopause',
     lead: 'The soap you loved for years suddenly feels harsh — not because the soap changed. Your skin changed seasons.',
     description:
-      'Estrogen decline through menopause directly affects sebum, collagen, and barrier recovery. The soaps you used at 40 may feel wrong at 55. Why, and what to switch to — more nourishing bars, mild-acid for the face.',
+      'Estrogen decline through menopause directly affects sebum, collagen, and barrier care. The soaps you used at 40 may feel wrong at 55. Why, and what to switch to — more nourishing bars, mild-acid for the face.',
     kicker: 'Skin Records',
     keywords: ['menopause skin', 'mature skin care', 'thinning skin', 'hormones and skin', '50+ skincare'],
   },
@@ -176,7 +176,7 @@ export const POSTS_EN = {
     description:
       'Hands have no sebaceous glands. Each wash strips a little oil; a typical day sees 30+ cleansing events. Two axes to manage: reduce damage (gentler soaps, gloves, less alcohol) and repair (immediate cream after wash, nighttime balm). Practical advice.',
     kicker: 'Skin Records',
-    keywords: ['hand eczema', 'housewife hands', 'frequent hand washing', 'barrier repair', 'gentle hand soap'],
+    keywords: ['hand eczema', 'housewife hands', 'frequent hand washing', 'barrier care', 'gentle hand soap'],
   },
   'menstrual-skin': {
     title: 'Skin Through the Menstrual Cycle',
@@ -200,7 +200,7 @@ export const POSTS_EN = {
     description:
       'Why foot problems plague humid-climate populations: shoes that don\'t breathe, soles without sebaceous glands, and the bacterial-fungal feast that sweat enables. Daily practices and the soap formulations best suited to feet.',
     kicker: 'Skin Records',
-    keywords: ['athlete\'s foot prevention', 'foot care', 'humid climate skin', 'tea tree soap', 'foot odor'],
+    keywords: ['foot care', 'humid climate skin', 'athlete\'s foot awareness', 'foot odor'],
   },
   'last-sliver': {
     title: 'Saying Goodbye to a Soap Bar',
