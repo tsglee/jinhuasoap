@@ -26,6 +26,19 @@ export default {
   async fetch(request, env) {
     const url = new URL(request.url);
 
+    // 法規合規改名後的 301 redirect — 保留舊 URL 的 SEO/外鏈 equity。
+    // 2026-05 改名：海棠修復 → 海棠潤澤；concern repair → nurture。
+    const REDIRECTS = {
+      '/products/haitang-xiufu': '/products/haitang-biyu',
+      '/products/concern/repair': '/products/concern/nurture',
+    };
+    if (REDIRECTS[url.pathname]) {
+      return Response.redirect(
+        `${url.origin}${REDIRECTS[url.pathname]}${url.search}`,
+        301,
+      );
+    }
+
     if (url.pathname === '/api/order') {
       if (request.method !== 'POST') {
         return jsonResponse({ ok: false, error: '不支援此請求方式' }, 405, {

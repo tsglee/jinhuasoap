@@ -2,7 +2,7 @@
 // Colors tuned to main-site cream/maroon/gold palette (NOT the redesign
 // prototype's white+sky-blue). No external deps; pure SVG + trig.
 //
-// axes prop: [{ label: '修復', value: 5 }, ...]  (exactly 5 entries)
+// axes prop: [{ label: '潤澤', value: 5 }, ...]  (exactly 5 entries)
 
 const SIZE = 320;
 const RADIUS = 124;

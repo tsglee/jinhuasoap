@@ -189,7 +189,7 @@
   </url>
   <!-- ── 品牌正式系列（5 個 cluster landing pages）── -->
   <url>
-    <loc>https://jinhuasoap.com/products/concern/repair</loc>
+    <loc>https://jinhuasoap.com/products/concern/nurture</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
@@ -216,7 +216,7 @@
 
   <!-- ── 12 individual product pages ── -->
   <url>
-    <loc>https://jinhuasoap.com/products/haitang-xiufu</loc>
+    <loc>https://jinhuasoap.com/products/haitang-biyu</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
