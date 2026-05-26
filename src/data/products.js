@@ -61,7 +61,7 @@ export const PRODUCTS = [
     price: 380,
     skinType: '敏弱肌、易乾肌、熟齡肌與極乾性肌。',
     coreIngredients:
-      '有機初榨瓊崖海棠油、義大利純橄欖油、精製乳油木果脂、甜杏仁油、蓖麻油、椰子油、棕櫚油。',
+      '橄欖油、甜杏仁油、乳木果油、海棠油、椰子油、棕櫚油、蓖麻油、純水。',
     oilProfile:
       '瓊崖海棠油在法系芳療與傳統草本中，是滋養油的代名詞；乳油木果脂則如厚實護盾鎖住水分。',
     washFeel:
@@ -74,7 +74,7 @@ export const PRODUCTS = [
         subtitle: 'Calophyllum tamanu nurture bar',
         skinType: 'Sensitive, easily-dry, mature, or very dry skin.',
         coreIngredients:
-          'Organic cold-pressed tamanu (calophyllum) oil, Italian extra-virgin olive oil, refined shea butter, sweet almond, castor, coconut, palm.',
+          'Olive oil, sweet almond, shea butter, tamanu oil, coconut, palm, castor, purified water.',
         oilProfile:
           'Tamanu oil has been called the nourishing oil in French aromatherapy and traditional botanicals; shea butter locks the moisture in like a soft shield.',
         washFeel: 'A deep, woody-nutty scent. Fine lather. After rinsing, skin feels soft, never tight.',
@@ -101,7 +101,7 @@ export const PRODUCTS = [
     price: 300,
     skinType: '極乾燥肌、熟齡肌。',
     coreIngredients:
-      '霧峰特產純蜂蜜、義大利純橄欖油、乳油木果脂、甜杏仁油、蓖麻油、椰子油、棕櫚油。',
+      '橄欖油、榛果油、米糠油、椰子油、乳木果油、蓖麻油、蜂蜜、牛奶、純水。',
     oilProfile:
       '取霧峰百花蜜之精萃，蜂蜜帶有天然糖份是肌膚最熟悉的保濕分子。',
     washFeel:
@@ -114,7 +114,7 @@ export const PRODUCTS = [
         subtitle: 'Wufeng honey · soft jade bar',
         skinType: 'Very dry or mature skin.',
         coreIngredients:
-          'Pure Wufeng honey, Italian olive oil, shea butter, sweet almond, castor, coconut, palm.',
+          'Olive oil, hazelnut, rice bran, coconut, shea butter, castor, honey, milk, purified water.',
         oilProfile:
           'Honey carries natural sugars — the moisturising molecules skin knows best.',
         washFeel: 'Creamy milk-like lather with a soft honey scent. After rinsing, skin feels plump and never tight.',
@@ -143,7 +143,7 @@ export const PRODUCTS = [
     price: 280,
     skinType: '角質代謝異常、膚色暗沉、皮脂分泌旺盛之肌膚。',
     coreIngredients:
-      '研磨綠豆粉、白芷粉、義大利純橄欖油、乳油木果脂、椰子油、棕櫚油。',
+      '白芷粉、綠豆粉、橄欖油、棕櫚油、椰子油、葡萄籽油、芝麻油、蓖麻油、純水。',
     oilProfile:
       '研磨綠豆粉在手工皂中帶點細微的顆粒感，溫和的代謝角質。白芷粉在古方裡常被用來淡化暗沉。',
     washFeel:
@@ -156,7 +156,7 @@ export const PRODUCTS = [
         subtitle: 'Mung bean cleansing bar',
         skinType: 'Skin with uneven keratin renewal, dull tone, or active sebum.',
         coreIngredients:
-          'Ground mung bean powder, angelica dahurica powder, Italian olive oil, shea butter, coconut, palm.',
+          'Angelica dahurica powder, mung bean powder, olive oil, palm, coconut, grapeseed, sesame, castor, purified water.',
         oilProfile:
           'Ground mung bean powder gives a fine grain texture, gently turning over keratin. Angelica dahurica powder has long been used in traditional botanicals for dull-tone refining.',
         washFeel: 'Cool, creamy lather. After rinsing, skin feels bright with gentle exfoliation — never tight.',
@@ -183,7 +183,7 @@ export const PRODUCTS = [
     price: 320,
     skinType: '疲憊暗沉肌、輕熟齡肌、需加強代謝之肌膚。',
     coreIngredients:
-      '蝶豆花浸泡橄欖油、甜杏仁油、米糠油、乳油木果脂、椰子油、棕櫚油。',
+      '橄欖油、甜杏仁油、乳木果油、椰子油、米糠油、棕櫚油、山茶花油、純水。',
     oilProfile:
       '蝶豆花富含花青素，具備極佳的抗氧化與防禦能力 ── 維持肌膚的彈性。',
     washFeel:
@@ -196,7 +196,7 @@ export const PRODUCTS = [
         subtitle: 'Butterfly pea brightening bar',
         skinType: 'Tired, dull, or early-maturing skin in need of renewal.',
         coreIngredients:
-          'Butterfly pea infused olive oil, sweet almond, rice bran, shea butter, coconut, palm.',
+          'Olive oil, sweet almond, shea butter, coconut, rice bran, palm, camellia oil, purified water.',
         oilProfile:
           'Butterfly pea is rich in anthocyanins — strong antioxidant defense that brightens and supports skin elasticity.',
         washFeel: 'Light, refined lather. After rinsing, skin feels clear, supple, and luminous.',
@@ -227,7 +227,7 @@ export const PRODUCTS = [
     price: 320,
     skinType: '敏感肌、換季乾燥肌、走過幾道刺激的肌膚。',
     coreIngredients:
-      '長濱金盞花浸泡油、義大利純橄欖油、乳油木果脂、甜杏仁油、椰子油、棕櫚油。',
+      '椰子油、棕櫚油、金盞花橄欖油浸泡油、芥花油、葡萄籽油、乳木果油、純水。',
     oilProfile:
       '長濱金盞花於橄欖油中浸泡四週，金盞花烯與類黃酮慢慢釋進油裡；乳油木果脂接在後面把潤澤鎖住。',
     washFeel:
@@ -240,7 +240,7 @@ export const PRODUCTS = [
         subtitle: 'Changbin calendula soothing bar',
         skinType: 'Sensitive skin, season-dry, or skin recovering from irritation.',
         coreIngredients:
-          'Changbin calendula infused olive oil, Italian olive oil, shea butter, sweet almond, coconut, palm.',
+          'Coconut, palm, Changbin calendula olive-infused oil, canola, grapeseed, shea butter, purified water.',
         oilProfile:
           'Changbin calendula steeped in olive oil for four weeks releases calendulene and flavonoids; shea butter follows behind to lock the nourishment in.',
         washFeel: 'Warm, full-bodied lather. After rinsing, skin feels soft and never tight.',
