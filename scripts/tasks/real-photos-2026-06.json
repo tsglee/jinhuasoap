@@ -1,0 +1,50 @@
+[
+  {
+    "label": "蝶豆-02-threequarter",
+    "outputPath": "public/images/products/蝶豆花/02.png",
+    "referenceImagePath": "/tmp/gf_refs/diedou-ref.jpg",
+    "prompt": "Editorial product photo, East Asian artisanal soap atelier mood, soft natural daylight, low saturation warm neutral palette (raw linen beige, ink black, muted gold #C8A24A, charcoal), shallow depth of field, 1:1 aspect ratio, 1200x1200, no people, no text, no logos beyond the soap's own stamp, no modern packaging, slight film grain.\n\nThe soap bar in the reference is the EXACT product — preserve its pale cream / ivory color, the peaked irregular 'frosted' wavy top texture, and 'JIN HUA LOU' side stamp precisely. It is CREAM, NOT blue.\n\nComposition: 45-degree three-quarter angle showing both the peaked wavy top and the stamped side of a single bar. Resting on a small hand-thrown ceramic saucer with subtle natural glaze. Side rim light from a north-facing window catches the frosted top edge. Aged wood tabletop softly out of focus."
+  },
+  {
+    "label": "蝶豆-03-macro",
+    "outputPath": "public/images/products/蝶豆花/03.png",
+    "referenceImagePath": "/tmp/gf_refs/diedou-ref.jpg",
+    "prompt": "Editorial product photo, East Asian artisanal soap atelier mood, soft natural daylight, low saturation warm neutral palette, very shallow depth of field, 1:1 aspect ratio, 1200x1200, no people, no text overlay, no logos beyond the soap's own stamp, no modern packaging, slight film grain.\n\nThe soap bar in the reference is the EXACT product — preserve its pale cream / ivory color, surface micro-texture, the peaked frosted wavy top, and 'JIN HUA LOU' stamp exactly. CREAM, not blue.\n\nComposition: extreme macro close-up of the peaked frosted wavy top edge of the bar, the irregular cake-like crest filling the frame, sharp focus on the crest with the bar body falling into bokeh. Fine surface grain visible. Contemplative texture study."
+  },
+  {
+    "label": "蝶豆-04-sideprofile",
+    "outputPath": "public/images/products/蝶豆花/04.png",
+    "referenceImagePath": "/tmp/gf_refs/diedou-ref.jpg",
+    "prompt": "Editorial product photo, East Asian artisanal soap atelier mood, soft directional daylight, low saturation warm neutral palette, shallow depth of field, 1:1 aspect ratio, 1200x1200, no people, no text, no logos, no modern packaging, slight film grain.\n\nThe soap bar in the reference is the EXACT product — preserve its pale cream / ivory color and the distinctive peaked frosted wavy top exactly. CREAM, not blue.\n\nComposition: the bar standing upright on aged wood to show the full front face with the peaked wavy crest on top and the smooth body below, 'JIN HUA LOU' stamp readable. Side-lit from the right to emphasize the relief of the wavy crest. Aged wood tabletop in soft background. Contemplative still life of texture."
+  },
+  {
+    "label": "蝶豆-05-flatlay",
+    "outputPath": "public/images/products/蝶豆花/05.png",
+    "referenceImagePath": "/tmp/gf_refs/diedou-ref.jpg",
+    "prompt": "Editorial product photo, East Asian artisanal soap atelier mood, soft overhead natural daylight, low saturation warm neutral palette, shallow depth of field, 1:1 aspect ratio, 1200x1200, no people, no text, no logos beyond the soap's own stamp, no modern packaging, slight film grain.\n\nThe soap bar in the reference is the EXACT product — preserve its pale cream / ivory color, peaked frosted top, and brand stamp exactly. CREAM, not blue.\n\nComposition: top-down flat lay on aged wood. Centre: the cream soap bar. Surrounding, sparse and restrained: a few dried deep-blue butterfly-pea blossoms scattered to one side as a botanical ingredient note, a folded raw linen napkin in the opposite corner. The soap stays clearly cream; only the small dried blossoms are blue. Editorial ingredient story, generous negative space."
+  },
+  {
+    "label": "一皂清爽-02-threequarter",
+    "outputPath": "public/images/products/一皂到底清爽/02.png",
+    "referenceImagePath": "/tmp/gf_refs/lavender-green-ref.jpg",
+    "prompt": "Editorial product photo, East Asian artisanal soap atelier mood, soft natural daylight, low saturation warm neutral palette (raw linen beige, ink black, muted gold #C8A24A, charcoal), shallow depth of field, 1:1 aspect ratio, 1200x1200, no people, no text, no logos beyond the soap's own stamp, no modern packaging, slight film grain.\n\nThe round soap puck in the reference is the EXACT product — preserve its muted olive / sage-green color, matte hand-pressed surface, slightly irregular round edge, and 'JIN HUA LOU' top stamp precisely. OLIVE-GREEN, not purple.\n\nComposition: 45-degree three-quarter angle showing the round top stamp surface and the side thickness of a single puck. Resting on a small hand-thrown ceramic saucer with subtle natural glaze. Side rim light from a window catches the edge. Aged wood tabletop softly out of focus."
+  },
+  {
+    "label": "一皂清爽-03-macro",
+    "outputPath": "public/images/products/一皂到底清爽/03.png",
+    "referenceImagePath": "/tmp/gf_refs/lavender-green-ref.jpg",
+    "prompt": "Editorial product photo, East Asian artisanal soap atelier mood, soft natural daylight, low saturation warm neutral palette, very shallow depth of field, 1:1 aspect ratio, 1200x1200, no people, no text overlay, no logos beyond the soap's own stamp, no modern packaging, slight film grain.\n\nThe round soap puck in the reference is the EXACT product — preserve its muted olive / sage-green color, matte surface micro-texture, and 'JIN HUA LOU' top stamp exactly. OLIVE-GREEN, not purple.\n\nComposition: extreme macro close-up of the puck's top surface, the 'JIN HUA LOU' brand stamp filling most of the frame, stamp letters in sharp focus, the round edge falling into bokeh. Matte mineral surface grain visible. Contemplative texture study."
+  },
+  {
+    "label": "一皂清爽-04-duo",
+    "outputPath": "public/images/products/一皂到底清爽/04.png",
+    "referenceImagePath": "/tmp/gf_refs/lavender-green-ref.jpg",
+    "prompt": "Editorial product photo, East Asian artisanal soap atelier mood, soft directional daylight, low saturation warm neutral palette, shallow depth of field, 1:1 aspect ratio, 1200x1200, no people, no text, no logos beyond the soap's own stamp, no modern packaging, slight film grain.\n\nThe round soap puck in the reference is the EXACT product — preserve its muted olive / sage-green color, matte hand-pressed surface and 'JIN HUA LOU' stamp exactly. OLIVE-GREEN, not purple.\n\nComposition: two identical olive-green round pucks — one lying flat showing the stamped top, one standing on its edge beside it to reveal the side thickness. On aged dark hardwood with a folded raw linen cloth beneath. Soft daylight from upper-left. Quiet still life pairing."
+  },
+  {
+    "label": "一皂清爽-05-flatlay",
+    "outputPath": "public/images/products/一皂到底清爽/05.png",
+    "referenceImagePath": "/tmp/gf_refs/lavender-green-ref.jpg",
+    "prompt": "Editorial product photo, East Asian artisanal soap atelier mood, soft overhead natural daylight, low saturation warm neutral palette, shallow depth of field, 1:1 aspect ratio, 1200x1200, no people, no text, no logos beyond the soap's own stamp, no modern packaging, slight film grain.\n\nThe round soap puck in the reference is the EXACT product — preserve its muted olive / sage-green color, matte surface and brand stamp exactly. OLIVE-GREEN, not purple.\n\nComposition: top-down flat lay on aged wood. Centre: the olive-green round puck (stamp facing camera). Surrounding, sparse and restrained: a small sprig of dried lavender flowers and a pinch of pale lavender powder to one side as the botanical ingredient note, a folded raw linen napkin in the opposite corner. Editorial ingredient story, generous negative space."
+  }
+]
