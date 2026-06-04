@@ -173,8 +173,8 @@ export const PRODUCTS = [
     concerns: ['nurture'],
     series: '花神守護',
     seriesNote: '滋養與柔潤',
-    zh: '藍蝶清瑩 · 蝶豆',
-    subtitle: '蝶豆花美顏皂',
+    zh: '蝶語清瑩 · 蝶豆',
+    subtitle: '蝶豆花潤膚皂',
     photos: [
       '/images/products/蝶豆花/01.png',
       '/images/products/蝶豆花/02.png',
@@ -189,21 +189,21 @@ export const PRODUCTS = [
     coreIngredients:
       '橄欖油、甜杏仁油、乳木果油、椰子油、米糠油、棕櫚油、山茶花油、純水。',
     oilProfile:
-      '蝶豆花富含花青素，具備極佳的抗氧化與防禦能力 ── 維持肌膚的彈性。',
+      '蝶豆花是南島常見的草本，自古入饌、染色；在冷製皂的鹼性裡它不顯藍，靜靜沉成溫潤奶色。甜杏仁油與山茶花油接著補上親膚的潤澤。',
     washFeel:
-      '泡泡輕盈細膩，洗完肌膚清透、有彈性與光澤。',
+      '泡泡輕盈細膩，洗完肌膚清透、不緊繃。',
     translations: {
       en: {
         series: 'Flower Guardians',
         seriesNote: 'Nurture & soften',
-        zh: 'Butterfly Pea Brighten · Indigo',
-        subtitle: 'Butterfly pea brightening bar',
+        zh: 'Butterfly Pea Soft · Whisper',
+        subtitle: 'Butterfly pea nourishing bar',
         skinType: 'Tired, dull, or early-maturing skin in need of renewal.',
         coreIngredients:
           'Olive oil, sweet almond, shea butter, coconut, rice bran, palm, camellia oil, purified water.',
         oilProfile:
-          'Butterfly pea is rich in anthocyanins — strong antioxidant defense that brightens and supports skin elasticity.',
-        washFeel: 'Light, refined lather. After rinsing, skin feels clear, supple, and luminous.',
+          'Butterfly pea is a southern-island botanical long used to dye and flavour; in the alkaline cold-process bath the blue never holds, settling into a soft cream. Sweet almond and camellia oils follow with skin-friendly nourishment.',
+        washFeel: 'Light, refined lather. After rinsing, skin feels clear and never tight.',
       },
     },
   },
@@ -593,7 +593,7 @@ export const PRODUCT_DEPTH = {
     ],
     skinTypeChips: ['疲憊暗沉肌', '輕熟齡肌', '需加強代謝者'],
     whyForYou:
-      '如果你最近覺得肌膚「沒精神」── 早上鏡子裡看自己灰灰的，或開始注意到細紋慢慢冒出來，蝶豆花就是補抗氧化這一塊的。花青素的防禦力配上甜杏仁油的親膚滋潤 ── 透過溫和的方式讓肌膚維持透亮和彈性。',
+      '如果你最近覺得肌膚「沒精神」、看起來灰灰的 ── 想要一塊洗起來乾淨清爽、洗完不緊繃的皂，蝶豆就是這個調性。南島的蝶豆花入皂，冷製裡沉成溫潤奶色；配上甜杏仁油與山茶花油的親膚感，泡泡輕、洗感清透。',
     ritual: '用於潔顏 · 早晚一次 · 起泡後以指腹打圈按摩、再沖洗。',
   },
   'jinzhan-shufu': {
