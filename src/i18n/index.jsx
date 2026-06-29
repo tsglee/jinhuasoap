@@ -60,12 +60,14 @@ export function LocaleProvider({ children }) {
   return <LocaleContext.Provider value={value}>{children}</LocaleContext.Provider>;
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useLocale() {
   return useContext(LocaleContext);
 }
 
 // useT returns a translator function. Nested keys use dot notation.
 // Fallback chain: <locale> → zh → key itself
+// eslint-disable-next-line react-refresh/only-export-components
 export function useT() {
   const { locale } = useLocale();
   return (key) => {
@@ -86,6 +88,7 @@ export function useT() {
 // versions of an object (e.g. product or article translations).
 // Returns the .en variant if locale is 'en' AND the variant exists; else
 // returns the original object.
+// eslint-disable-next-line react-refresh/only-export-components
 export function useLocaleVariant(obj, enField = 'translations') {
   const { locale } = useLocale();
   if (locale === 'en' && obj && obj[enField] && obj[enField].en) {
