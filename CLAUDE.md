@@ -3,6 +3,15 @@
 林口的小小皂舍。夫妻檔 — 太太是研發老闆娘（配方）、tsglee 顧網站與行銷。
 2022 春起，每週手壓一批冷製天然皂。本 repo 是品牌官網。
 
+## Design Context
+
+設計脈絡的權威來源是兩份 root 檔（`/impeccable init` 產出 2026-06-30，改視覺前先讀）：
+
+- **[PRODUCT.md](PRODUCT.md)** — 策略：register=**brand**、主客群=**自用回購者**（非送禮客）、目標感受=**quietly premium**、四條 anti-references（generic e-commerce／drugstore promo／clinical 化妝品科學／trendy startup minimalism）、五條設計原則。
+- **[DESIGN.md](DESIGN.md)** — 視覺系統：North Star「**The Ink-Wash Handscroll 山居手卷**」、色票（暖象牙紙 `#f8f5eb`／松煙墨 `#1a1512`／朱印紅 `#8a2a22`／金 `#c69a3a`）、三套字（Cormorant Garamond 拉丁＋數字／Noto Serif TC 中文／DM Mono 標籤）、flat-on-paper、近直角。`.impeccable/design.json` 是配套 sidecar。
+
+紅線：朱紅一頁只一處（Single Seal Rule）；保持 flat、不要 drop shadow；產品用交錯 editorial rows、不要 card grid；body 對紙底 ≥ 4.5:1（`--ink-60` 是臨界點）。
+
 ## Stack
 
 - **React 18 + Vite 5**，無 Next/Astro。SPA tab routing 自寫於 [App.jsx](src/App.jsx) 的 `parseRoute()`。

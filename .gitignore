@@ -49,3 +49,4 @@ coverage/
 
 # Claude / per-tool agent state
 .claude/
+.impeccable/
