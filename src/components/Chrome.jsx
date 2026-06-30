@@ -624,7 +624,9 @@ export function Footer({ navigate, setTab }) {
                         {x.label}
                       </a>
                     ) : (
-                      x.label
+                      // Non-link captions (寄送方式 / 禮盒) — dimmed so they read as
+                      // information, not broken links sitting beside the real ones.
+                      <span style={{ color: 'rgba(248,245,235,0.45)' }}>{x.label}</span>
                     )}
                   </li>
                 ))}

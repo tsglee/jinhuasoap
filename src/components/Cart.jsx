@@ -412,6 +412,20 @@ function OrderRequestForm({ cart, total, onSent }) {
           transaction_id: data.orderId || '',
         });
       }
+      // Save this order's lines so a returning regular can re-add them in one
+      // tap (Shop「上次買的」+ /order「再買一次」). Non-fatal — never blocks success.
+      try {
+        window.localStorage.setItem(
+          'gf_last_order',
+          JSON.stringify({
+            orderId: data.orderId || '',
+            savedAt: Date.now(),
+            lines: cart.map((i) => ({ num: i.num, zh: i.zh, qty: i.qty })),
+          }),
+        );
+      } catch {
+        /* localStorage unavailable — skip */
+      }
       onSent && onSent(data.orderId || '');
     } catch (err) {
       setStatus('error');

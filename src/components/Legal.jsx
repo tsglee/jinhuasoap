@@ -238,8 +238,8 @@ export function Legal({ page, navigate }) {
                 letterSpacing: 4,
                 margin: '0 0 14px',
                 color: 'var(--sumi)',
-                paddingLeft: 12,
-                borderLeft: '3px solid var(--red)',
+                paddingBottom: 10,
+                borderBottom: '1px solid var(--ink-15)',
               }}
             >
               {s.h}

@@ -2,10 +2,13 @@
 // 結帳流程已搬到 /cart（Cart.jsx）。
 import { PRODUCTS } from '../data/products.js';
 import { TESTIMONIALS } from '../data/testimonials.js';
-import { ProductGallery } from './ProductGallery.jsx';
+import { ProductHeroStatic } from './ProductGallery.jsx';
 import { TestimonialCarousel } from './TestimonialCarousel.jsx';
 import { AddToCartButton } from './BuyButton.jsx';
 import { useT, useLocaleVariant } from '../i18n/index.jsx';
+import { useState } from 'react';
+import { useCart } from '../state/CartContext.jsx';
+import { readLastOrder, reorderToCart } from '../utils/reorder.js';
 
 function leadLine(washFeel) {
   if (!washFeel) return '';
@@ -35,10 +38,10 @@ function CatalogCard({ p, onJumpToCart, navigate }) {
         gap: 12,
       }}
     >
-      <ProductGallery photos={p.photos} alt={`${product.zh} · ${product.subtitle}`} ratio="1/1" />
+      <ProductHeroStatic photos={p.photos} alt={`${product.zh} · ${product.subtitle}`} ratio="1/1" />
 
       <div className="mono" style={{ color: 'var(--gold-3)', fontSize: 12, letterSpacing: 1.5 }}>
-        № {p.num} · {product.series}
+        № {p.num}
       </div>
       {detailHref ? (
         <a
@@ -120,19 +123,110 @@ function CatalogCard({ p, onJumpToCart, navigate }) {
 }
 
 function ProductCatalog({ onAdded, navigate }) {
+  // Group the twelve bars by series so the shelf reads as a curated apothecary,
+  // not one flat run of identical cards. Order follows first appearance.
+  const order = [];
+  const groups = new Map();
+  for (const p of PRODUCTS) {
+    if (!groups.has(p.series)) {
+      groups.set(p.series, []);
+      order.push(p.series);
+    }
+    groups.get(p.series).push(p);
+  }
   return (
-    <section
-      className="gf-pad-md"
-      style={{
-        maxWidth: 1280,
-        margin: '0 auto',
-        padding: '20px 44px 50px',
-      }}
-    >
-      <div className="gf-catalog-grid">
-        {PRODUCTS.map((p) => (
-          <CatalogCard key={p.num} p={p} onJumpToCart={onAdded} navigate={navigate} />
-        ))}
+    <div style={{ maxWidth: 1280, margin: '0 auto' }}>
+      {order.map((series) => (
+        <section key={series} className="gf-pad-md" style={{ padding: '8px 44px 40px' }}>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'baseline',
+              gap: 14,
+              margin: '0 0 22px',
+              paddingBottom: 10,
+              borderBottom: '1px solid var(--ink-15)',
+            }}
+          >
+            <h2
+              className="tc"
+              style={{
+                fontSize: 22,
+                fontWeight: 500,
+                letterSpacing: 6,
+                color: 'var(--sumi)',
+                margin: 0,
+              }}
+            >
+              {series}
+            </h2>
+            <span className="mono" style={{ color: 'var(--gold-3)', fontSize: 11, letterSpacing: 1.5 }}>
+              {groups.get(series).length} 款
+            </span>
+          </div>
+          <div className="gf-catalog-grid">
+            {groups.get(series).map((p) => (
+              <CatalogCard key={p.num} p={p} onJumpToCart={onAdded} navigate={navigate} />
+            ))}
+          </div>
+        </section>
+      ))}
+    </div>
+  );
+}
+
+// Returning-buyer fast path: if a past order is stashed in localStorage, offer
+// a one-tap re-add. No accounts — serves the self-care regular who reorders.
+function LastOrderRow({ navigate }) {
+  const { add } = useCart();
+  const [last] = useState(readLastOrder);
+  if (!last) return null;
+  const names = last.lines.map((l) => l.zh).filter(Boolean);
+  if (!names.length) return null;
+  const preview =
+    names.slice(0, 3).join('、') + (names.length > 3 ? ` 等 ${names.length} 款` : '');
+  return (
+    <section className="gf-pad-md" style={{ maxWidth: 1280, margin: '0 auto', padding: '0 44px 8px' }}>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: 16,
+          flexWrap: 'wrap',
+          padding: '14px 18px',
+          background: 'var(--paper-2)',
+          border: '1px solid var(--ink-15)',
+        }}
+      >
+        <div>
+          <div className="mono" style={{ color: 'var(--gold-3)', fontSize: 11, letterSpacing: 2 }}>
+            上次買的
+          </div>
+          <div className="tc" style={{ color: 'var(--sumi)', fontSize: 15, letterSpacing: 1, marginTop: 4 }}>
+            {preview}
+          </div>
+        </div>
+        <button
+          type="button"
+          onClick={() => {
+            reorderToCart(add, last.lines);
+            if (navigate) navigate('/cart');
+          }}
+          className="tc"
+          style={{
+            padding: '10px 18px',
+            background: 'transparent',
+            color: 'var(--sumi)',
+            border: '1px solid var(--sumi)',
+            fontSize: 13,
+            letterSpacing: 3,
+            cursor: 'pointer',
+            whiteSpace: 'nowrap',
+          }}
+        >
+          再買一次 →
+        </button>
       </div>
     </section>
   );
@@ -158,9 +252,9 @@ export function Shop({ navigate }) {
         <h1
           className="tc gf-h1-md"
           style={{
-            fontSize: 72,
+            fontSize: 64,
             fontWeight: 500,
-            letterSpacing: 16,
+            letterSpacing: 14,
             margin: '16px 0 10px',
             color: 'var(--sumi)',
           }}
@@ -182,11 +276,12 @@ export function Shop({ navigate }) {
         </div>
       </section>
 
-      <ProductCatalog navigate={navigate}
-        onAdded={() => {
-          if (navigate) navigate('/cart');
-        }}
-      />
+      <LastOrderRow navigate={navigate} />
+
+      {/* Add-to-cart stays on the page (✓ flash + header badge), consistent
+          with 02 十二花 — lets a returning regular build a basket of 2–3 bars
+          without being yanked to /cart each time. */}
+      <ProductCatalog navigate={navigate} />
 
       {/* Testimonials — 8 條真實感的客戶心得，編輯維護於 src/data/testimonials.js */}
       <section

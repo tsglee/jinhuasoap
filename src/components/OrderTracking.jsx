@@ -9,6 +9,8 @@
 // - 路由不帶 → 顯示輸入欄、按查詢 navigate 到 /order/:id
 import { useEffect, useState } from 'react';
 import { PackageIcon } from './Chrome.jsx';
+import { useCart } from '../state/CartContext.jsx';
+import { reorderToCart } from '../utils/reorder.js';
 
 // ECPay 物流 webhook 推進的階段 → 給買家看的中文 label + accent color。
 // pending / processing 是建單前後的 fallback；其餘 phase 由 worker
@@ -130,6 +132,7 @@ function formatDate(iso) {
 }
 
 export function OrderTracking({ orderId, navigate }) {
+  const { add } = useCart();
   const [data, setData] = useState(null);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -404,6 +407,30 @@ export function OrderTracking({ orderId, navigate }) {
                 <span className="italic" style={{ color: 'var(--red)', fontSize: 20 }}>NT$ {data.total}</span>
               </div>
             </div>
+
+            {/* Returning-buyer fast path: re-add this order's bars in one tap. */}
+            {(data.items || []).length > 0 && (
+              <button
+                type="button"
+                onClick={() => {
+                  reorderToCart(add, data.items || []);
+                  if (navigate) navigate('/cart');
+                }}
+                className="tc"
+                style={{
+                  justifySelf: 'start',
+                  padding: '12px 20px',
+                  background: 'transparent',
+                  color: 'var(--sumi)',
+                  border: '1px solid var(--sumi)',
+                  fontSize: 14,
+                  letterSpacing: 3,
+                  cursor: 'pointer',
+                }}
+              >
+                再買一次 →
+              </button>
+            )}
 
             {data.statusHistory && data.statusHistory.length > 0 && (
               <StatusTimeline history={data.statusHistory} />

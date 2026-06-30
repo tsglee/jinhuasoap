@@ -805,8 +805,8 @@ export function AboutDesktop({ setTab, navigate }) {
                       lineHeight: 1.7,
                       letterSpacing: 1,
                       color: 'var(--ink-60)',
-                      paddingLeft: 14,
-                      borderLeft: '2px solid var(--red)',
+                      paddingTop: 14,
+                      borderTop: '1px dotted var(--gold-3)',
                       maxWidth: 520,
                     }}
                   >
@@ -1043,8 +1043,8 @@ export function AboutDesktop({ setTab, navigate }) {
                       lineHeight: 1.7,
                       letterSpacing: 1,
                       color: 'var(--ink-60)',
-                      paddingLeft: 10,
-                      borderLeft: '2px solid var(--red)',
+                      paddingTop: 12,
+                      borderTop: '1px dotted var(--gold-3)',
                     }}
                   >
                     {s.note}
