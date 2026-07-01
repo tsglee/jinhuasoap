@@ -25,6 +25,9 @@ module.exports = {
     // 全形空白 U+3000（如 TierNotice 的「　·　」分隔）是刻意的中文排版，
     // 不是手誤。eslint:recommended 預設已 skipStrings，這裡一併 skipTemplates
     // 讓樣板字串裡的全形空白同等對待。
-    'no-irregular-whitespace': ['error', { skipStrings: true, skipTemplates: true }],
+    'no-irregular-whitespace': [
+      'error',
+      { skipStrings: true, skipTemplates: true, skipJSXText: true },
+    ],
   },
 };

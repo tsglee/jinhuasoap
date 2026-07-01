@@ -2,6 +2,7 @@
 import { lazy, Suspense, useCallback, useEffect, useState } from 'react';
 import { Header, Footer } from './components/Chrome.jsx';
 import { About } from './components/About/index.jsx';
+import { ConciseHome } from './components/About/Concise.jsx';
 import { LineFloat } from './components/LineFloat.jsx';
 import { CartProvider } from './state/CartContext.jsx';
 import { LocaleProvider } from './i18n/index.jsx';
@@ -265,6 +266,12 @@ export default function App() {
     [navigate, route.type],
   );
 
+  // `?classic=1` shows the previous (dense) home for side-by-side comparison
+  // during the concise redesign.
+  const classicHome =
+    typeof window !== 'undefined' &&
+    new URLSearchParams(window.location.search).has('classic');
+
   let body;
   if (route.type === 'notfound') {
     body = <NotFound navigate={navigate} />;
@@ -283,7 +290,11 @@ export default function App() {
   } else if (route.type === 'category' && route.slug) {
     body = <CategoryListing slug={route.slug} navigate={navigate} />;
   } else if (tab === 'about') {
-    body = <About setTab={selectTab} navigate={navigate} />;
+    body = classicHome ? (
+      <About setTab={selectTab} navigate={navigate} />
+    ) : (
+      <ConciseHome navigate={navigate} />
+    );
   } else if (tab === 'products') {
     body = <Products navigate={navigate} />;
   } else if (tab === 'process') {
