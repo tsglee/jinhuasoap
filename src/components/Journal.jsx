@@ -2231,9 +2231,9 @@ function PageHeader({ kicker, title, subtitle, date }) {
       <h1
         className="tc gf-h1-md"
         style={{
-          fontSize: 64,
+          fontSize: 60,
           fontWeight: 500,
-          letterSpacing: 14,
+          letterSpacing: 12,
           margin: '16px 0 10px',
           color: 'var(--sumi)',
         }}
