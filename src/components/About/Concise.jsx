@@ -3,6 +3,8 @@
 // single vertical-set (直排) title accent; one cinnabar per screen (Single Seal
 // Rule). Prose lives in content.js; the long-form voice stays in the journal.
 import { HERO, CREW } from './content.js';
+import { PRODUCTS } from '../../data/products.js';
+import { AddToCartButton } from '../BuyButton.jsx';
 
 function Img({ src, alt, eager }) {
   const base = src.replace(/\.(png|jpe?g|webp|avif)$/i, '');
@@ -21,7 +23,72 @@ function Img({ src, alt, eager }) {
   );
 }
 
-const HERO_PRODUCT = '/images/products/海棠/01.png';
+// Three signature bars to feature on the home — real photos + a shopping entry.
+const FEATURED = PRODUCTS.filter((p) => ['壹', '參', '伍'].includes(p.num));
+
+function leadLine(washFeel) {
+  return washFeel ? washFeel.split(/[，；。]/)[0].trim() : '';
+}
+
+function FeaturedBar({ p, navigate }) {
+  const href = p.slug ? `/products/${p.slug}` : null;
+  const onName = (e) => {
+    if (!href || !navigate || e.metaKey || e.ctrlKey || e.button === 1) return;
+    e.preventDefault();
+    navigate(href);
+  };
+  return (
+    <article style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+      <a
+        href={href || undefined}
+        onClick={onName}
+        aria-label={p.zh}
+        style={{ display: 'block', aspectRatio: '4 / 5', overflow: 'hidden' }}
+      >
+        <Img src={p.photos[0]} alt={`${p.zh} · ${p.subtitle}`} />
+      </a>
+      <a href={href || undefined} onClick={onName} style={{ textDecoration: 'none', color: 'inherit' }}>
+        <div className="tc" style={{ fontSize: 18, letterSpacing: 3, color: 'var(--sumi)', lineHeight: 1.3 }}>
+          {p.zh}
+        </div>
+      </a>
+      <p
+        className="tc"
+        style={{
+          fontSize: 13,
+          letterSpacing: 1,
+          color: 'var(--ink-60)',
+          lineHeight: 1.7,
+          margin: 0,
+          minHeight: '2.7em',
+        }}
+      >
+        {leadLine(p.washFeel)}
+      </p>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: 10,
+          marginTop: 'auto',
+          paddingTop: 10,
+          borderTop: '1px dotted var(--ink-15)',
+        }}
+      >
+        <div>
+          <span className="mono" style={{ fontSize: 11, letterSpacing: 1.5, color: 'var(--gold-3)' }}>
+            {p.weight}
+          </span>
+          <div className="tc" style={{ fontSize: 17, letterSpacing: 1, color: 'var(--sumi)' }}>
+            NT$ {p.price}
+          </div>
+        </div>
+        <AddToCartButton p={p} size="sm" />
+      </div>
+    </article>
+  );
+}
 
 export function ConciseHome({ navigate }) {
   const go = (path) => navigate && navigate(path);
@@ -56,19 +123,54 @@ export function ConciseHome({ navigate }) {
             margin: '0 auto',
           }}
         >
-          <div style={{ maxWidth: 280, minWidth: 0, flexShrink: 1 }}>
+          <div style={{ maxWidth: 320, minWidth: 0, flexShrink: 1 }}>
             <div
               className="mono"
               style={{ color: 'var(--gold-3)', letterSpacing: 4, marginBottom: 18 }}
             >
               林口 · 手壓天然皂
             </div>
-            <div
+            <p
               className="tc"
-              style={{ fontSize: 16, letterSpacing: 3, color: 'var(--gold-3)', lineHeight: 1.9 }}
+              style={{
+                fontSize: 'clamp(19px, 2.4vw, 23px)',
+                fontWeight: 500,
+                letterSpacing: 2,
+                lineHeight: 1.6,
+                color: 'var(--sumi)',
+                margin: '0 0 14px',
+              }}
             >
-              {HERO.tagline}
-            </div>
+              洗得乾淨，留得溫柔。
+            </p>
+            <p
+              className="tc"
+              style={{
+                fontSize: 14,
+                letterSpacing: 1,
+                lineHeight: 1.9,
+                color: 'var(--ink-60)',
+                margin: '0 0 26px',
+              }}
+            >
+              冷製手壓 · 四十二日熟成 · 只用親膚的天然材料。
+            </p>
+            <button
+              type="button"
+              onClick={() => go('/products')}
+              className="tc"
+              style={{
+                padding: '12px 26px',
+                background: 'transparent',
+                color: 'var(--sumi)',
+                border: '1px solid var(--sumi)',
+                fontSize: 14,
+                letterSpacing: 3,
+                cursor: 'pointer',
+              }}
+            >
+              看十二花 →
+            </button>
           </div>
           <h1
             className="tc"
@@ -125,52 +227,49 @@ export function ConciseHome({ navigate }) {
         </p>
       </section>
 
-      {/* 3 · 十二花 — one product beat, one path forward. */}
+      {/* 3 · 十二花 · 精選 — three signature bars: real product, real prices. */}
       <section
         style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-          alignItems: 'center',
-          gap: 'clamp(28px, 5vw, 72px)',
           maxWidth: 1120,
           margin: '0 auto',
-          padding: '0 clamp(24px, 5vw, 64px) clamp(64px, 12vh, 120px)',
+          padding: 'clamp(56px, 10vh, 100px) clamp(24px, 5vw, 64px) clamp(64px, 12vh, 120px)',
         }}
       >
-        <div style={{ aspectRatio: '4 / 5', overflow: 'hidden' }}>
-          <Img src={HERO_PRODUCT} alt="金花樓手工皂 · 瓊崖海棠潤膚皂" />
-        </div>
-        <div>
+        <div style={{ textAlign: 'center', marginBottom: 'clamp(32px, 5vh, 56px)' }}>
           <h2
             className="tc"
             style={{
-              fontSize: 'clamp(30px, 5vw, 48px)',
+              fontSize: 'clamp(28px, 4.4vw, 42px)',
               fontWeight: 500,
               letterSpacing: 8,
               color: 'var(--sumi)',
-              margin: '0 0 14px',
+              margin: '0 0 10px',
             }}
           >
             十二花
           </h2>
-          <p
-            className="tc"
-            style={{
-              fontSize: 16,
-              lineHeight: 1.9,
-              letterSpacing: 1,
-              color: 'var(--ink-60)',
-              margin: '0 0 26px',
-            }}
-          >
-            一月一方，一皂一花。
+          <p className="tc" style={{ fontSize: 15, letterSpacing: 2, color: 'var(--gold-3)', margin: 0 }}>
+            一月一方，一皂一花 —— 先從這三款開始。
           </p>
+        </div>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+            gap: 'clamp(20px, 3vw, 40px)',
+          }}
+        >
+          {FEATURED.map((p) => (
+            <FeaturedBar key={p.num} p={p} navigate={navigate} />
+          ))}
+        </div>
+        <div style={{ textAlign: 'center', marginTop: 'clamp(32px, 5vh, 52px)' }}>
           <button
             type="button"
             onClick={() => go('/products')}
             className="tc"
             style={{
-              padding: '13px 28px',
+              padding: '13px 30px',
               background: 'transparent',
               color: 'var(--sumi)',
               border: '1px solid var(--sumi)',
@@ -179,7 +278,7 @@ export function ConciseHome({ navigate }) {
               cursor: 'pointer',
             }}
           >
-            看十二花 →
+            看全部十二花 →
           </button>
         </div>
       </section>
