@@ -88,7 +88,7 @@ function BuyBlock({ p }) {
 // `expandedGallery` — on the single-product page we replace the inline
 // carousel with a static hero; the rest of the photos are surfaced as a
 // thumbnail grid rendered separately below by ProductDetail.
-export function ProductDetailCard({ p, flip, first, navigate, expandedGallery = false }) {
+export function ProductDetailCard({ p, flip, first, navigate, expandedGallery = false, concise = false }) {
   const t = useT();
   const product = useLocaleVariant(p);
   const href = `/products/${p.slug}`;
@@ -207,13 +207,37 @@ export function ProductDetailCard({ p, flip, first, navigate, expandedGallery = 
           {product.subtitle}
         </div>
         <Divider />
+        {/* Concise list pages show the two decision-relevant rows and link to
+            the full spec; the single-product page renders everything. */}
         <dl style={{ margin: '14px 0 0', display: 'grid', gap: 0 }}>
           <DetailRow label={t('pages.products.detailLabels.skinType')} value={product.skinType} />
-          <DetailRow label={t('pages.products.detailLabels.coreIngredients')} value={product.coreIngredients} />
-          <DetailRow label={t('pages.products.detailLabels.oilProfile')} value={product.oilProfile} />
           <DetailRow label={t('pages.products.detailLabels.washFeel')} value={product.washFeel} />
-          {p.batchDate && <DetailRow label={t('pages.products.detailLabels.batchDate')} value={p.batchDate} />}
+          {!concise && (
+            <>
+              <DetailRow label={t('pages.products.detailLabels.coreIngredients')} value={product.coreIngredients} />
+              <DetailRow label={t('pages.products.detailLabels.oilProfile')} value={product.oilProfile} />
+              {p.batchDate && <DetailRow label={t('pages.products.detailLabels.batchDate')} value={p.batchDate} />}
+            </>
+          )}
         </dl>
+        {concise && navigate && (
+          <a
+            href={href}
+            onClick={handleNav}
+            className="mono"
+            style={{
+              display: 'inline-block',
+              marginTop: 16,
+              color: 'var(--gold-3)',
+              fontSize: 12,
+              letterSpacing: 2,
+              borderBottom: '1px solid var(--ink-15)',
+              paddingBottom: 3,
+            }}
+          >
+            看完整成分與細節 →
+          </a>
+        )}
         <BuyBlock p={p} />
       </div>
     </div>
@@ -320,9 +344,9 @@ export function Products({ navigate }) {
         <h1
           className="tc gf-h1-md"
           style={{
-            fontSize: 68,
+            fontSize: 60,
             fontWeight: 500,
-            letterSpacing: 14,
+            letterSpacing: 12,
             margin: '16px 0 10px',
             color: 'var(--sumi)',
           }}
@@ -373,6 +397,7 @@ export function Products({ navigate }) {
             flip={i % 2 === 1}
             first={i === 0}
             navigate={navigate}
+            concise
           />
         ))}
       </section>
