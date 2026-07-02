@@ -136,3 +136,45 @@ button {
 .gf-gallery-grid img {
   transition: transform 400ms ease-out;
 }
+
+/* ── Interactive polish (精簡 redesign): hover + keyboard focus ───────
+   Outline CTAs invert to ink on hover; the one seal-red CTA deepens.
+   Both get a visible focus ring. Images drift per the Slow-Zoom Rule. */
+.gf-cta {
+  transition: background 200ms ease, border-color 200ms ease, color 200ms ease;
+}
+.gf-cta:hover {
+  background: var(--sumi);
+  border-color: var(--sumi);
+  color: var(--paper);
+}
+.gf-cta:focus-visible {
+  outline: 2px solid var(--red);
+  outline-offset: 3px;
+}
+.gf-cta-solid {
+  transition: background 200ms ease;
+}
+.gf-cta-solid:hover {
+  background: var(--red-2);
+}
+.gf-cta-solid:focus-visible {
+  outline: 2px solid var(--sumi);
+  outline-offset: 3px;
+}
+.gf-img-zoom {
+  overflow: hidden;
+}
+.gf-img-zoom img {
+  transition: transform 600ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.gf-img-zoom:hover img {
+  transform: scale(1.05);
+}
+@media (prefers-reduced-motion: reduce) {
+  .gf-img-zoom img,
+  .gf-img-zoom:hover img {
+    transition: none;
+    transform: none;
+  }
+}

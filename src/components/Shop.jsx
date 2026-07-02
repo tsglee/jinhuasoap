@@ -213,7 +213,7 @@ function LastOrderRow({ navigate }) {
             reorderToCart(add, last.lines);
             if (navigate) navigate('/cart');
           }}
-          className="tc"
+          className="tc gf-cta"
           style={{
             padding: '10px 18px',
             background: 'transparent',

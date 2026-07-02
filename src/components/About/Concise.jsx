@@ -43,6 +43,7 @@ function FeaturedBar({ p, navigate }) {
         href={href || undefined}
         onClick={onName}
         aria-label={p.zh}
+        className="gf-img-zoom"
         style={{ display: 'block', aspectRatio: '4 / 5', overflow: 'hidden' }}
       >
         <Img src={p.photos[0]} alt={`${p.zh} · ${p.subtitle}`} />
@@ -158,7 +159,7 @@ export function ConciseHome({ navigate }) {
             <button
               type="button"
               onClick={() => go('/products')}
-              className="tc"
+              className="tc gf-cta"
               style={{
                 padding: '12px 26px',
                 background: 'transparent',
@@ -267,7 +268,7 @@ export function ConciseHome({ navigate }) {
           <button
             type="button"
             onClick={() => go('/products')}
-            className="tc"
+            className="tc gf-cta"
             style={{
               padding: '13px 30px',
               background: 'transparent',
@@ -330,6 +331,7 @@ export function ConciseHome({ navigate }) {
             {CREW.members.map((m) => (
               <figure key={m.roleZh} style={{ margin: 0 }}>
                 <div
+                  className="gf-img-zoom"
                   style={{ aspectRatio: '4 / 3', overflow: 'hidden', border: '1px solid var(--ink-15)' }}
                 >
                   <Img src={m.photo} alt={m.photoAlt} />
@@ -364,7 +366,7 @@ export function ConciseHome({ navigate }) {
         <button
           type="button"
           onClick={() => go('/shop')}
-          className="tc"
+          className="tc gf-cta-solid"
           style={{
             padding: '14px 34px',
             background: 'var(--red)',

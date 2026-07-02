@@ -416,7 +416,7 @@ export function OrderTracking({ orderId, navigate }) {
                   reorderToCart(add, data.items || []);
                   if (navigate) navigate('/cart');
                 }}
-                className="tc"
+                className="tc gf-cta"
                 style={{
                   justifySelf: 'start',
                   padding: '12px 20px',

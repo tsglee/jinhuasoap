@@ -284,7 +284,7 @@ function ClusterChips({ navigate }) {
             key={c.slug}
             type="button"
             onClick={() => navigate && navigate(`/products/concern/${c.slug}`)}
-            className="tc"
+            className="tc gf-cta"
             style={{
               padding: '8px 16px',
               background: 'transparent',
