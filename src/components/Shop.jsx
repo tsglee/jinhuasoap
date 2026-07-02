@@ -3,7 +3,7 @@
 import { PRODUCTS } from '../data/products.js';
 import { TESTIMONIALS } from '../data/testimonials.js';
 import { ProductHeroStatic } from './ProductGallery.jsx';
-import { TestimonialCarousel } from './TestimonialCarousel.jsx';
+import { TierNotice } from './TierNotice.jsx';
 import { AddToCartButton } from './BuyButton.jsx';
 import { useT, useLocaleVariant } from '../i18n/index.jsx';
 import { useState } from 'react';
@@ -276,6 +276,9 @@ export function Shop({ navigate }) {
         </div>
       </section>
 
+      {/* 滿額規則唯一的靜態落點（全站紅 banner 已移除）——放在買皂決策發生的頁。 */}
+      <TierNotice variant="static" />
+
       <LastOrderRow navigate={navigate} />
 
       {/* Add-to-cart stays on the page (✓ flash + header badge), consistent
@@ -283,7 +286,8 @@ export function Shop({ navigate }) {
           without being yanked to /cart each time. */}
       <ProductCatalog navigate={navigate} />
 
-      {/* Testimonials — 8 條真實感的客戶心得，編輯維護於 src/data/testimonials.js */}
+      {/* 客戶心得 — 三則靜置引文（不轉動）。資料維護於 src/data/testimonials.js，
+          換前三筆的順序即可換展示的心得。 */}
       <section
         className="gf-pad-md"
         style={{
@@ -292,24 +296,56 @@ export function Shop({ navigate }) {
           padding: '60px 44px 80px',
         }}
       >
-        <div style={{ textAlign: 'center', marginBottom: 40 }}>
-          <div className="mono" style={{ color: 'var(--red)' }}>
-            {t('pages.shop.testimonials.kicker')}
-          </div>
-          <h2
-            className="tc gf-h2-md"
-            style={{
-              fontSize: 36,
-              fontWeight: 400,
-              letterSpacing: 8,
-              margin: '12px 0 6px',
-              color: 'var(--sumi)',
-            }}
-          >
-            {t('pages.shop.testimonials.title')}
-          </h2>
+        <h2
+          className="tc gf-h2-md"
+          style={{
+            fontSize: 36,
+            fontWeight: 400,
+            letterSpacing: 8,
+            margin: '0 0 40px',
+            color: 'var(--sumi)',
+            textAlign: 'center',
+          }}
+        >
+          {t('pages.shop.testimonials.title')}
+        </h2>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
+            gap: 'clamp(24px, 4vw, 48px)',
+          }}
+        >
+          {TESTIMONIALS.slice(0, 3).map((q) => (
+            <figure
+              key={q.id}
+              style={{
+                margin: 0,
+                paddingTop: 16,
+                borderTop: '1px dotted var(--gold-3)',
+              }}
+            >
+              <blockquote
+                className="tc"
+                style={{
+                  margin: '0 0 14px',
+                  fontSize: 15,
+                  lineHeight: 1.9,
+                  letterSpacing: 1,
+                  color: 'var(--sumi)',
+                }}
+              >
+                {q.quote}
+              </blockquote>
+              <figcaption
+                className="mono"
+                style={{ fontSize: 11, letterSpacing: 2, color: 'var(--gold-3)' }}
+              >
+                {q.name} · {q.tag}
+              </figcaption>
+            </figure>
+          ))}
         </div>
-        <TestimonialCarousel testimonials={TESTIMONIALS} />
       </section>
 
       {/* Wholesale */}

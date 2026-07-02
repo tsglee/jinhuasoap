@@ -6,7 +6,6 @@
 // which renders a compact grid).
 import { useEffect } from 'react';
 import { Divider } from './GoldenFlower.jsx';
-import { TierNotice } from './TierNotice.jsx';
 import { PRODUCTS, CONCERNS } from '../data/products.js';
 import { ProductGallery, ProductHeroStatic } from './ProductGallery.jsx';
 import { AddToCartButton } from './BuyButton.jsx';
@@ -338,9 +337,6 @@ export function Products({ navigate }) {
           textAlign: 'center',
         }}
       >
-        <div className="mono" style={{ color: 'var(--red)' }}>
-          {t('pages.products.kicker')}
-        </div>
         <h1
           className="tc gf-h1-md"
           style={{
@@ -363,21 +359,7 @@ export function Products({ navigate }) {
         >
           {t('pages.products.subtitle')}
         </div>
-        <div
-          className="tc"
-          style={{
-            maxWidth: 600,
-            margin: '26px auto 0',
-            fontSize: 16,
-            lineHeight: 1.85,
-            color: 'var(--sumi)',
-          }}
-        >
-          {t('pages.products.description')}
-        </div>
       </section>
-
-      <TierNotice variant="static" />
 
       <ClusterChips navigate={navigate} />
 

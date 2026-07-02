@@ -335,7 +335,11 @@ export default function App() {
             <Suspense fallback={<TabFallback />}>{body}</Suspense>
           </main>
           <Footer navigate={navigate} setTab={selectTab} />
-          <LineFloat />
+          {/* LINE 浮動鈕只在購買／訂單相關頁出現（購皂、購物籃、查詢訂單）——
+              其餘頁面靠 footer 聯絡區與購皂頁 QR；水墨頁面不被綠色浮鈕蓋住。 */}
+          {(route.type === 'cart' ||
+            route.type === 'order' ||
+            (route.type === 'tab' && tab === 'shop')) && <LineFloat />}
         </div>
       </CartProvider>
     </LocaleProvider>

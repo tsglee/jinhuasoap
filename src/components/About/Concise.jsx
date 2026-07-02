@@ -124,7 +124,7 @@ export function ConciseHome({ navigate }) {
             margin: '0 auto',
           }}
         >
-          <div style={{ maxWidth: 320, minWidth: 0, flexShrink: 1 }}>
+          <div style={{ maxWidth: 372, minWidth: 0, flexShrink: 1 }}>
             <div
               className="mono"
               style={{ color: 'var(--gold-3)', letterSpacing: 4, marginBottom: 18 }}
@@ -142,7 +142,10 @@ export function ConciseHome({ navigate }) {
                 margin: '0 0 14px',
               }}
             >
-              洗得乾淨，留得溫柔。
+              {/* 詞組為單位換行 —— 窄幅時在頓號處斷、不把「四十二日」拆開 */}
+              <span style={{ display: 'inline-block' }}>兩個人、</span>
+              <span style={{ display: 'inline-block' }}>一口鍋、</span>
+              <span style={{ display: 'inline-block' }}>四十二日。</span>
             </p>
             <p
               className="tc"
@@ -154,7 +157,7 @@ export function ConciseHome({ navigate }) {
                 margin: '0 0 26px',
               }}
             >
-              冷製手壓 · 四十二日熟成 · 只用親膚的天然材料。
+              冷製手壓、親膚天然 ── 洗得乾淨，留得溫柔。
             </p>
             <button
               type="button"
@@ -224,7 +227,7 @@ export function ConciseHome({ navigate }) {
             marginInline: 'auto',
           }}
         >
-          林口的小小皂舍。一次一個配方，一批四十二日，慢慢陳化。
+          林口的小小皂舍。一次一個配方，在架上慢慢陳化。
         </p>
       </section>
 

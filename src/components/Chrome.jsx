@@ -116,23 +116,9 @@ export function Header({ tab, setTab, tabs, navigate }) {
         borderBottom: isMobile ? '1px solid var(--ink-15)' : 'none',
       }}
     >
-      {/* Announcement bar */}
-      <div
-        className="gf-mono-md"
-        style={{
-          background: 'var(--red-2)',
-          color: 'var(--gold-2)',
-          textAlign: 'center',
-          padding: '6px 20px',
-          fontFamily: '"DM Mono", monospace',
-          fontSize: 12,
-          letterSpacing: 2,
-          textTransform: 'uppercase',
-        }}
-      >
-        {isMobile ? tr('banner.mobile') : tr('banner.full')}
-      </div>
-
+      {/* 促銷 banner 已移除（2026-07 精簡）：全站紅底條違反 Single Seal Rule
+          且與「never discount-led」相左。滿額規則改由 04 購皂頁頂的
+          TierNotice + 購物籃內的動態提示承載。 */}
       <div
         className="gf-pad-md"
         style={{
@@ -421,37 +407,17 @@ export function Header({ tab, setTab, tabs, navigate }) {
 }
 
 export function Footer({ navigate, setTab }) {
-  const columns = [
-    {
-      title: '購皂',
-      items: [{ label: '全系列', tab: 'products' }, { label: '禮盒' }],
-    },
-    {
-      title: '本舍',
-      items: [
-        { label: '製皂之序', tab: 'process' },
-        { label: '花材', tab: 'process', anchor: 'ingredients' },
-        { label: '本舍小記', href: '/journal' },
-      ],
-    },
-    {
-      title: '寄送',
-      items: [
-        { label: '臺灣本島' },
-        { label: '離島' },
-        { label: '7-11 店到店' },
-        { label: '全家 店到店' },
-        { label: '查詢訂單', href: '/order' },
-      ],
-    },
-    {
-      title: '法律',
-      items: [
-        { label: '隱私權', href: '/legal/privacy' },
-        { label: '退換貨', href: '/legal/returns' },
-        { label: '服務條款', href: '/legal/terms' },
-      ],
-    },
+  // 精簡 footer（2026-07）：四欄 nav 收成一列安靜連結，非連結的寄送說明
+  // 全數移除（寄送細節在購皂頁與訂購流程裡講）。手機版本來就只剩品牌 +
+  // 聯絡 + 版權，desktop 向它看齊。
+  const links = [
+    { label: '全系列', tab: 'products' },
+    { label: '製皂之序', tab: 'process' },
+    { label: '本舍小記', href: '/journal' },
+    { label: '查詢訂單', href: '/order' },
+    { label: '隱私權', href: '/legal/privacy' },
+    { label: '退換貨', href: '/legal/returns' },
+    { label: '服務條款', href: '/legal/terms' },
   ];
   return (
     <footer
@@ -568,71 +534,53 @@ export function Footer({ navigate, setTab }) {
         <div
           className="gf-hide-md"
           style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(4, 1fr)',
-            gap: 40,
+            display: 'flex',
+            flexWrap: 'wrap',
+            alignContent: 'center',
+            justifyContent: 'flex-end',
+            gap: '14px 28px',
           }}
         >
-          {columns.map(({ title, items }) => (
-            <div key={title}>
-              <div className="mono" style={{ color: 'var(--gold-2)', marginBottom: 18 }}>
-                {title}
-              </div>
-              <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'grid', gap: 10 }}>
-                {items.map((x) => (
-                  <li
-                    key={x.label}
-                    className="tc"
-                    style={{ fontSize: 15, letterSpacing: 2, color: 'rgba(248,245,235,0.85)' }}
-                  >
-                    {x.tab && setTab ? (
-                      <button
-                        type="button"
-                        onClick={() => {
-                          if (x.anchor) {
-                            try {
-                              sessionStorage.setItem('gf_jump_section', x.anchor);
-                            } catch {
-                              /* sessionStorage may be unavailable */
-                            }
-                          }
-                          setTab(x.tab);
-                        }}
-                        style={{
-                          color: 'inherit',
-                          background: 'transparent',
-                          border: 'none',
-                          padding: 0,
-                          cursor: 'pointer',
-                          font: 'inherit',
-                          letterSpacing: 'inherit',
-                          textAlign: 'left',
-                        }}
-                      >
-                        {x.label}
-                      </button>
-                    ) : x.href && navigate ? (
-                      <a
-                        href={x.href}
-                        onClick={(e) => {
-                          if (e.metaKey || e.ctrlKey || e.shiftKey) return;
-                          e.preventDefault();
-                          navigate(x.href);
-                        }}
-                        style={{ color: 'inherit' }}
-                      >
-                        {x.label}
-                      </a>
-                    ) : (
-                      // Non-link captions (寄送方式 / 禮盒) — dimmed so they read as
-                      // information, not broken links sitting beside the real ones.
-                      <span style={{ color: 'rgba(248,245,235,0.45)' }}>{x.label}</span>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+          {links.map((x) =>
+            x.tab && setTab ? (
+              <button
+                key={x.label}
+                type="button"
+                onClick={() => setTab(x.tab)}
+                className="tc"
+                style={{
+                  fontSize: 14,
+                  letterSpacing: 2,
+                  color: 'rgba(248,245,235,0.85)',
+                  background: 'transparent',
+                  border: 'none',
+                  padding: 0,
+                  cursor: 'pointer',
+                  minHeight: 0,
+                }}
+              >
+                {x.label}
+              </button>
+            ) : (
+              <a
+                key={x.label}
+                href={x.href}
+                onClick={(e) => {
+                  if (e.metaKey || e.ctrlKey || e.shiftKey) return;
+                  e.preventDefault();
+                  if (navigate) navigate(x.href);
+                }}
+                className="tc"
+                style={{
+                  fontSize: 14,
+                  letterSpacing: 2,
+                  color: 'rgba(248,245,235,0.85)',
+                }}
+              >
+                {x.label}
+              </a>
+            ),
+          )}
         </div>
       </div>
       <div
