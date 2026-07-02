@@ -5,6 +5,7 @@
 import { HERO, CREW } from './content.js';
 import { PRODUCTS } from '../../data/products.js';
 import { AddToCartButton } from '../BuyButton.jsx';
+import { getCurrentTerm } from '../../data/solarTerms.js';
 
 function Img({ src, alt, eager }) {
   const base = src.replace(/\.(png|jpe?g|webp|avif)$/i, '');
@@ -23,14 +24,24 @@ function Img({ src, alt, eager }) {
   );
 }
 
-// Three signature bars to feature on the home — real photos + a shopping entry.
-const FEATURED = PRODUCTS.filter((p) => ['壹', '參', '伍'].includes(p.num));
+// Featured trio on the home: the current 節氣 bar leads, two signatures follow
+// (deduped). If the term's num ever mismatches products.js, fall back to the
+// three signatures — the beat degrades, never breaks.
+const SIGNATURE_NUMS = ['壹', '參', '伍'];
+function featuredForTerm(term) {
+  const seasonal = term && PRODUCTS.find((p) => p.num === term.num);
+  const signatures = SIGNATURE_NUMS.map((n) => PRODUCTS.find((p) => p.num === n)).filter(
+    Boolean,
+  );
+  if (!seasonal) return signatures.slice(0, 3);
+  return [seasonal, ...signatures.filter((p) => p.num !== seasonal.num).slice(0, 2)];
+}
 
 function leadLine(washFeel) {
   return washFeel ? washFeel.split(/[，；。]/)[0].trim() : '';
 }
 
-function FeaturedBar({ p, navigate }) {
+function FeaturedBar({ p, navigate, badge }) {
   const href = p.slug ? `/products/${p.slug}` : null;
   const onName = (e) => {
     if (!href || !navigate || e.metaKey || e.ctrlKey || e.button === 1) return;
@@ -48,6 +59,11 @@ function FeaturedBar({ p, navigate }) {
       >
         <Img src={p.photos[0]} alt={`${p.zh} · ${p.subtitle}`} />
       </a>
+      {badge && (
+        <div className="mono" style={{ fontSize: 10, letterSpacing: 2, color: 'var(--gold-3)' }}>
+          {badge}
+        </div>
+      )}
       <a href={href || undefined} onClick={onName} style={{ textDecoration: 'none', color: 'inherit' }}>
         <div className="tc" style={{ fontSize: 18, letterSpacing: 3, color: 'var(--sumi)', lineHeight: 1.3 }}>
           {p.zh}
@@ -93,6 +109,8 @@ function FeaturedBar({ p, navigate }) {
 
 export function ConciseHome({ navigate }) {
   const go = (path) => navigate && navigate(path);
+  const term = getCurrentTerm();
+  const featured = featuredForTerm(term);
   return (
     <div style={{ position: 'relative', zIndex: 1 }}>
       {/* 1 · Hero — the ink-wash mood + one vertical-set title. */}
@@ -253,7 +271,7 @@ export function ConciseHome({ navigate }) {
             十二花
           </h2>
           <p className="tc" style={{ fontSize: 15, letterSpacing: 2, color: 'var(--gold-3)', margin: 0 }}>
-            一月一方，一皂一花 —— 先從這三款開始。
+            節氣 · {term.name} ── {term.line}
           </p>
         </div>
         <div
@@ -263,8 +281,13 @@ export function ConciseHome({ navigate }) {
             gap: 'clamp(20px, 3vw, 40px)',
           }}
         >
-          {FEATURED.map((p) => (
-            <FeaturedBar key={p.num} p={p} navigate={navigate} />
+          {featured.map((p, i) => (
+            <FeaturedBar
+              key={p.num}
+              p={p}
+              navigate={navigate}
+              badge={i === 0 ? `節氣之皂 · ${term.name}` : undefined}
+            />
           ))}
         </div>
         <div style={{ textAlign: 'center', marginTop: 'clamp(32px, 5vh, 52px)' }}>
