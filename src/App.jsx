@@ -41,6 +41,9 @@ const Legal = lazy(() =>
 const OrderTracking = lazy(() =>
   import('./components/OrderTracking.jsx').then((m) => ({ default: m.OrderTracking })),
 );
+const GiftPage = lazy(() =>
+  import('./components/GiftPage.jsx').then((m) => ({ default: m.GiftPage })),
+);
 
 // Empty placeholder while a lazy chunk loads. Sized to roughly match the
 // first viewport so the page doesn't snap shorter during the brief load.
@@ -80,6 +83,7 @@ function parseRoute() {
   const legal = path.match(/^\/legal\/(privacy|returns|terms)\/?$/);
   if (legal) return { type: 'legal', page: legal[1] };
   if (path === '/cart' || path === '/cart/') return { type: 'cart' };
+  if (path === '/gift' || path === '/gift/') return { type: 'gift' };
   if (path === '/journal' || path === '/journal/') return { type: 'journal' };
   if (path.startsWith('/journal/')) {
     const slug = path.slice('/journal/'.length).replace(/\/+$/, '');
@@ -277,6 +281,8 @@ export default function App() {
     body = <NotFound navigate={navigate} />;
   } else if (route.type === 'cart') {
     body = <Cart navigate={navigate} />;
+  } else if (route.type === 'gift') {
+    body = <GiftPage />;
   } else if (route.type === 'journal' && route.slug) {
     body = <JournalPost slug={route.slug} navigate={navigate} />;
   } else if (route.type === 'journal') {
@@ -305,6 +311,8 @@ export default function App() {
 
   const screenLabel = route.type === 'cart'
     ? 'cart'
+    : route.type === 'gift'
+    ? 'gift'
     : route.type === 'journal'
     ? (route.slug ? `journal/${route.slug}` : 'journal')
     : route.type === 'legal'
@@ -339,6 +347,7 @@ export default function App() {
               其餘頁面靠 footer 聯絡區與購皂頁 QR；水墨頁面不被綠色浮鈕蓋住。 */}
           {(route.type === 'cart' ||
             route.type === 'order' ||
+            route.type === 'gift' ||
             (route.type === 'tab' && tab === 'shop')) && <LineFloat />}
         </div>
       </CartProvider>

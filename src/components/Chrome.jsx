@@ -412,6 +412,7 @@ export function Footer({ navigate, setTab }) {
   // 聯絡 + 版權，desktop 向它看齊。
   const links = [
     { label: '全系列', tab: 'products' },
+    { label: '禮盒', href: '/gift' },
     { label: '製皂之序', tab: 'process' },
     { label: '本舍小記', href: '/journal' },
     { label: '查詢訂單', href: '/order' },
