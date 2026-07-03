@@ -6,6 +6,7 @@
 //   - 深度 section: 五力 radar + 適膚 chips + whyForYou prose + ritual line
 import { useEffect } from 'react';
 import { PRODUCTS, PRODUCT_DEPTH } from '../data/products.js';
+import { PRODUCT_JOURNAL } from '../data/productJournal.js';
 import { ProductDetailCard } from './Products.jsx';
 import { ProductGalleryGrid } from './ProductGallery.jsx';
 import { RadarFive } from './RadarFive.jsx';
@@ -114,7 +115,80 @@ export function ProductDetail({ slug, navigate }) {
       </section>
       <GalleryStripSection product={product} />
       <DepthSection product={product} />
+      <CraftClose product={product} navigate={navigate} />
     </div>
+  );
+}
+
+// 頁尾收束（深化信任）：工藝之念（四十二日陳化 + 批次）+ 一篇最相關的
+// 本舍小記。安靜作結 —— 不做 sticky buy bar、不做推銷式推薦。
+function CraftClose({ product, navigate }) {
+  const journal = PRODUCT_JOURNAL[product.slug];
+  const journalHref = journal ? `/journal/${journal.slug}` : null;
+  const goJournal = (e) => {
+    if (!journalHref || !navigate) return;
+    if (e.metaKey || e.ctrlKey || e.shiftKey) return;
+    e.preventDefault();
+    navigate(journalHref);
+  };
+  return (
+    <section
+      className="gf-pad-md"
+      style={{ maxWidth: 640, margin: '0 auto', padding: '30px 44px 100px' }}
+    >
+      <div className="edu-block">
+        <span className="edu-label">工藝之念</span>
+        <p className="edu-note">
+          這一塊，和本舍的每一塊一樣 ──
+          冷製手壓後，在架上陳化四十二日，才會離開林口。
+        </p>
+        {product.batchDate && (
+          <div
+            className="mono"
+            style={{ marginTop: 10, fontSize: 11, letterSpacing: 2, color: 'var(--gold-3)' }}
+          >
+            本批 · {product.batchDate}
+          </div>
+        )}
+      </div>
+      {journal && (
+        <div style={{ marginTop: 28 }}>
+          <span className="edu-label">相關小記</span>
+          <a
+            href={journalHref}
+            onClick={goJournal}
+            className="tc"
+            style={{
+              fontSize: 16,
+              letterSpacing: 1.5,
+              color: 'var(--sumi)',
+              borderBottom: '1px solid var(--ink-15)',
+              paddingBottom: 3,
+            }}
+          >
+            《{journal.title}》
+          </a>
+        </div>
+      )}
+      <div style={{ marginTop: 44 }}>
+        <button
+          type="button"
+          onClick={() => navigate && navigate('/products')}
+          className="mono"
+          style={{
+            background: 'transparent',
+            border: 'none',
+            color: 'var(--gold-3)',
+            fontSize: 12,
+            letterSpacing: 2,
+            cursor: 'pointer',
+            padding: 0,
+          }}
+        >
+          ← 回十二款
+        </button>
+      </div>
+    </section>
   );
 }
 
@@ -164,7 +238,7 @@ function DepthSection({ product }) {
       style={{
         maxWidth: 1080,
         margin: '0 auto',
-        padding: '20px 44px 100px',
+        padding: '20px 44px 40px',
         borderTop: '1px solid var(--ink-08)',
       }}
     >
