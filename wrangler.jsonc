@@ -22,6 +22,19 @@
  *   RESEND_API_KEY              — required for /api/order to work
  *   ECPAY_LOGISTICS_HASH_KEY    — ECPay 物流 C2C HashKey
  *   ECPAY_LOGISTICS_HASH_IV     — ECPay 物流 C2C HashIV
+ *   ECPAY_PAYMENT_HASH_KEY      — ECPay 金流 AIO HashKey（線上付款；與物流不同組）
+ *   ECPAY_PAYMENT_HASH_IV       — ECPay 金流 AIO HashIV
+ *
+ * 開通線上金流（ECPay AIO）步驟 —— 在此之前站上維持貨到付款、完全不受影響：
+ *   1. ECPay 廠商後台申請「全方位金流」，拿到金流 HashKey / HashIV
+ *      （與物流那組不同）。
+ *   2. 先測：vars 暫設 ECPAY_PAYMENT_BASE_URL = "https://payment-stage.ecpay.com.tw"，
+ *      並用測試 merchant 金鑰 `wrangler secret put ECPAY_PAYMENT_HASH_KEY`（IV 同）。
+ *      跑一筆測試單：確認 ECPay 收銀台開得起來、付完導回 /order/xxx 顯示
+ *      「付款完成」、老闆娘收到 [已付款] 通知信。
+ *   3. 測試通過 → 換正式金鑰、移除 ECPAY_PAYMENT_BASE_URL。前端 /api/config 讀到
+ *      paymentEnabled=true 後結帳自動改走線上付款。CheckMacValue(SHA256) 已用
+ *      官方 worked example 離線驗過 → `node scripts/ecpay-mac.test.mjs`。
  *
  * ⚠️ 切勿把上述 secret 名稱也加到下方 `vars` block — wrangler deploy
  *    會把 dashboard 的 vars 跟這個檔案 sync，重名的 plaintext var 會

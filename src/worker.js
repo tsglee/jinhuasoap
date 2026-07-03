@@ -18,6 +18,14 @@
  *   env.ECPAY_LOGISTICS_BASE_URL  — var, default https://logistics.ecpay.com.tw
  *   env.SENDER_NAME / SENDER_PHONE / SENDER_CELL_PHONE — var, 寄件人資料
  *   env.PUBLIC_BASE_URL        — var, 組列印 URL 用，例 https://jinhuasoap.com
+ *
+ *   金流（ECPay AIO 線上付款）— gated：沒設定這兩個 secret 時 /api/checkout
+ *   會回 { notConfigured:true }，前端自動 fallback 到 /api/order（貨到付款）。
+ *   兩個都補齊 + 前端才會走線上付款，現行流程完全不受影響。
+ *   env.ECPAY_PAYMENT_HASH_KEY — secret（金流 HashKey，與物流的不同組）
+ *   env.ECPAY_PAYMENT_HASH_IV  — secret（金流 HashIV）
+ *   env.ECPAY_PAYMENT_BASE_URL — var, default https://payment.ecpay.com.tw
+ *                                （測試改 https://payment-stage.ecpay.com.tw）
  */
 import { createHash } from 'node:crypto';
 import { normalizeTwMobile } from './utils/phone.js';
@@ -46,6 +54,22 @@ export default {
         });
       }
       return handleOrder(request, env);
+    }
+
+    // 金流：前端先打 /api/checkout。設定齊 → 回 ECPay 收銀台表單；
+    // 未設定 → 回 { notConfigured:true }，前端 fallback 到 /api/order。
+    if (url.pathname === '/api/checkout') {
+      if (request.method !== 'POST') {
+        return jsonResponse({ ok: false, error: '不支援此請求方式' }, 405, {
+          Allow: 'POST',
+        });
+      }
+      return handleCheckout(request, env);
+    }
+
+    // ECPay 金流付款結果 server-to-server 通知（ReturnURL）。
+    if (url.pathname === '/api/payment-callback') {
+      return handlePaymentCallback(request, env);
     }
 
     if (url.pathname === '/api/store-callback') {
@@ -78,6 +102,9 @@ export default {
             env.ECPAY_EMAP_URL ||
             env.VITE_ECPAY_EMAP_URL ||
             'https://logistics.ecpay.com.tw/Express/map',
+          // 線上金流是否啟用（兩個 payment secret 都設了才 true）。前端據此
+          // 決定結帳文案；未啟用時走貨到付款。
+          paymentEnabled: paymentConfigured(env),
         },
         200,
         { 'Cache-Control': 'public, max-age=300' },
@@ -647,7 +674,21 @@ function renderBuyerEmailHtml({
   recipientName,
   cart,
   total,
+  paid = false,
 }) {
+  // 貨到付款：Line 是「確認付款」的一步。線上已付款：Line 只是客服窗口。
+  const introLine = paid
+    ? '我們已經收到您的訂單與款項 ── 付款完成，謝謝您。接下來的流程：'
+    : '我們已經收到您的訂單。本舍每週手壓一批，每張單都由老闆娘親自整理。接下來的流程：';
+  const stepsHtml = paid
+    ? `
+      <li>本舍每週手壓一批，付款後 <strong>2-3 個工作天</strong>內為您出貨</li>
+      <li>出貨後您會再收到一封通知信</li>
+      <li>有任何問題，隨時用 <strong>Line</strong> 與我們聯繫</li>`
+    : `
+      <li>24 小時內，我們會用 <strong>Line</strong> 與您聯繫確認付款與寄送方式</li>
+      <li>確認付款後 <strong>2-3 個工作天</strong>內出貨</li>
+      <li>出貨後您會再收到一封通知信</li>`;
   const rows = cart
     .map(
       (i) => `
@@ -697,13 +738,10 @@ function renderBuyerEmailHtml({
 
     <p style="margin:0 0 16px;font-size:15px;line-height:1.85;">${escapeHtml(name)} 您好 ──</p>
     <p style="margin:0 0 14px;font-size:15px;line-height:1.85;">
-      我們已經收到您的訂單。本舍每週手壓一批，每張單都由老闆娘親自整理。接下來的流程：
+      ${introLine}
     </p>
 
-    <ol style="margin:0 0 8px;padding-left:20px;font-size:14px;line-height:2;color:#1a1512;">
-      <li>24 小時內，我們會用 <strong>Line</strong> 與您聯繫確認付款與寄送方式</li>
-      <li>確認付款後 <strong>2-3 個工作天</strong>內出貨</li>
-      <li>出貨後您會再收到一封通知信</li>
+    <ol style="margin:0 0 8px;padding-left:20px;font-size:14px;line-height:2;color:#1a1512;">${stepsHtml}
     </ol>
 
     <div style="text-align:center;background:#fcfaf2;border:1px solid #c8a24a;padding:18px;margin:24px 0;">
@@ -753,21 +791,33 @@ function renderBuyerEmailText({
   recipientName,
   cart,
   total,
+  paid = false,
 }) {
+  const introLines = paid
+    ? [`我們已經收到您的訂單與款項 ──`, `付款完成，謝謝您。`]
+    : [`我們已經收到您的訂單。本舍每週手壓一批，`, `每張單都由老闆娘親自整理。`];
+  const stepLines = paid
+    ? [
+        `  1. 本舍每週手壓一批，付款後 2-3 個工作天內出貨`,
+        `  2. 出貨後您會再收到一封通知信`,
+        `  3. 有任何問題，隨時用 Line 與我們聯繫`,
+      ]
+    : [
+        `  1. 24 小時內，我們會用 Line 與您聯繫`,
+        `     確認付款與寄送方式`,
+        `  2. 確認付款後 2-3 個工作天內出貨`,
+        `  3. 出貨後您會再收到一封通知信`,
+      ];
   const lines = [
     `金花樓 · 手壓天然皂`,
     `──`,
     ``,
     `${name} 您好，`,
     ``,
-    `我們已經收到您的訂單。本舍每週手壓一批，`,
-    `每張單都由老闆娘親自整理。`,
+    ...introLines,
     ``,
     `接下來的流程：`,
-    `  1. 24 小時內，我們會用 Line 與您聯繫`,
-    `     確認付款與寄送方式`,
-    `  2. 確認付款後 2-3 個工作天內出貨`,
-    `  3. 出貨後您會再收到一封通知信`,
+    ...stepLines,
     ``,
     `訂單編號：${orderId}`,
     `查詢狀態：${orderUrl}`,
@@ -1016,14 +1066,33 @@ function ecpayUrlEncode(str) {
     .replace(/%27/g, "'");
 }
 
-export function checkMacValue(params, hashKey, hashIV) {
+// CheckMacValue 的字串前處理 —— 物流 MD5 與金流 SHA256 這一段完全相同，
+// 只差最後的 digest。sort → k=v&k=v → 前後夾 HashKey/HashIV → .NET
+// URL-encode → 全小寫。抽出來共用，兩條路徑保證同一套規則。
+function ecpayMacString(params, hashKey, hashIV) {
   const keys = Object.keys(params)
     .filter((k) => k !== 'CheckMacValue' && params[k] !== undefined && params[k] !== null)
     .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
   const joined = keys.map((k) => `${k}=${params[k]}`).join('&');
   const wrapped = `HashKey=${hashKey}&${joined}&HashIV=${hashIV}`;
-  const encoded = ecpayUrlEncode(wrapped).toLowerCase();
-  return createHash('md5').update(encoded, 'utf8').digest('hex').toUpperCase();
+  return ecpayUrlEncode(wrapped).toLowerCase();
+}
+
+// 物流 C2C：MD5。
+export function checkMacValue(params, hashKey, hashIV) {
+  return createHash('md5')
+    .update(ecpayMacString(params, hashKey, hashIV), 'utf8')
+    .digest('hex')
+    .toUpperCase();
+}
+
+// 金流 AIO：SHA256（EncryptType=1）。演算法與物流版一致，只差 digest。
+// 已用 ECPay 官方文件 worked example 離線驗證 → scripts/ecpay-mac.test.mjs。
+export function paymentCheckMacValue(params, hashKey, hashIV) {
+  return createHash('sha256')
+    .update(ecpayMacString(params, hashKey, hashIV), 'utf8')
+    .digest('hex')
+    .toUpperCase();
 }
 
 function fmtDate(date = new Date()) {
@@ -1048,6 +1117,9 @@ async function createShippingOrder(input, env) {
     return { ok: false, error: '未設定 ECPAY_MERCHANT_ID' };
   }
 
+  // 預設代收貨款（貨到付款）。線上金流已付款的單傳 isCollection:false →
+  // 物流不再代收，超商取件不用付錢。
+  const collect = input.isCollection !== false;
   const params = {
     MerchantID: merchantId,
     MerchantTradeNo: tradeNo,
@@ -1055,8 +1127,8 @@ async function createShippingOrder(input, env) {
     LogisticsType: 'CVS',
     LogisticsSubType: subType, // UNIMARTC2C | FAMIC2C
     GoodsAmount: String(Math.round(total)),
-    CollectionAmount: String(Math.round(total)),
-    IsCollection: 'Y',
+    CollectionAmount: collect ? String(Math.round(total)) : '0',
+    IsCollection: collect ? 'Y' : 'N',
     GoodsName: `金花樓手工皂訂單 ${orderId}`.slice(0, 50),
     SenderName: env.SENDER_NAME || '金花樓',
     SenderPhone: normalizeTwMobile(env.SENDER_PHONE) || env.SENDER_PHONE || '',
@@ -1108,6 +1180,320 @@ async function createShippingOrder(input, env) {
     cvsPaymentNo: fields.CVSPaymentNo,
     cvsValidationNo: fields.CVSValidationNo,
   };
+}
+
+// ── ECPay 金流 AIO（線上付款）─────────────────────────────────────────────
+// Gated + additive：這整條路徑只有在 payment HashKey/IV 兩個 secret 都設定時
+// 才會啟用。沒設定時 /api/checkout 回 { notConfigured:true }，前端 fallback
+// 到 /api/order（現行貨到付款流程），線上行為完全不變。
+//
+// 流程：
+//   1. 前端 POST /api/checkout（同 order payload）
+//   2. handleCheckout：驗證 → 產 orderId → 寫「待付款」訂單進 KV →
+//      回 { action, fields }（ECPay 收銀台自動送出表單）
+//   3. 買家在 ECPay 付款
+//   4. ECPay POST /api/payment-callback（server-to-server）→ 驗 SHA256 MAC →
+//      標記 paid → fulfillPaidOrder（物流建單 + 通知老闆娘 + 買家確認信）
+//   5. 買家瀏覽器被導回 /order/{orderId} 查單頁
+
+function paymentConfigured(env) {
+  return !!(env.ECPAY_PAYMENT_HASH_KEY && env.ECPAY_PAYMENT_HASH_IV);
+}
+
+function paymentBaseUrl(env) {
+  // 正式 payment.ecpay.com.tw；測試 payment-stage.ecpay.com.tw
+  return env.ECPAY_PAYMENT_BASE_URL || 'https://payment.ecpay.com.tw';
+}
+
+// ECPay 收銀台顯示的品名。多項用 # 分隔，整段上限 400 字。
+function aioItemName(cart) {
+  const s = cart.map((i) => `${i.zh} x${i.qty}`).join('#');
+  return s.length > 400 ? s.slice(0, 397) + '...' : s;
+}
+
+// 組 ECPay AIO 付款表單參數（含 SHA256 CheckMacValue）。回 { action, fields }，
+// 前端據此組隱藏表單整頁 POST 到 ECPay。
+function buildAioOrder({ orderId, cart, amount }, env) {
+  const params = {
+    MerchantID: ecpayMerchantId(env),
+    MerchantTradeNo: orderIdToTradeNo(orderId),
+    MerchantTradeDate: fmtDate(),
+    PaymentType: 'aio',
+    TotalAmount: String(Math.round(amount)),
+    TradeDesc: '金花樓手工皂',
+    ItemName: aioItemName(cart),
+    ReturnURL: `${publicBaseUrl(env)}/api/payment-callback`, // server-to-server
+    ClientBackURL: `${publicBaseUrl(env)}/order/${orderId}`, // 買家付完導回查單頁
+    ChoosePayment: 'ALL',
+    EncryptType: 1,
+    NeedExtraPaidInfo: 'N',
+  };
+  params.CheckMacValue = paymentCheckMacValue(
+    params,
+    env.ECPAY_PAYMENT_HASH_KEY,
+    env.ECPAY_PAYMENT_HASH_IV,
+  );
+  return { action: `${paymentBaseUrl(env)}/Cashier/AioCheckOut/V5`, fields: params };
+}
+
+async function handleCheckout(request, env) {
+  let payload;
+  try {
+    payload = await request.json();
+  } catch {
+    return jsonResponse({ ok: false, error: '請求內容格式錯誤' }, 400);
+  }
+
+  const errors = validateOrder(payload);
+  if (errors.length) {
+    return jsonResponse({ ok: false, error: errors.join('；') }, 400);
+  }
+
+  // 金流未設定 → 明確告訴前端走舊流程（貨到付款）。200 而非 error status，
+  // 讓前端好判斷這是「預期中的 fallback」而非壞掉。
+  if (!paymentConfigured(env)) {
+    return jsonResponse({ ok: false, notConfigured: true, error: '線上金流尚未設定' });
+  }
+  // 沒 KV 就無法在 callback fulfill（會收了錢卻查不到單）→ 一樣走 fallback。
+  if (!env.ORDER_FALLBACK) {
+    console.error('checkout: ORDER_FALLBACK KV not bound — falling back');
+    return jsonResponse({ ok: false, notConfigured: true, error: '訂單儲存尚未設定' });
+  }
+
+  // 權威金額：後端一律從購物籃重算，不採信前端送來的 total。
+  const amount = payload.cart.reduce((s, i) => s + i.qty * i.price, 0);
+  if (!(amount > 0)) {
+    return jsonResponse({ ok: false, error: '訂單金額不正確' }, 400);
+  }
+
+  const orderId = generateOrderId();
+  const ip = request.headers.get('CF-Connecting-IP') || '未知';
+
+  // 先把「待付款」訂單寫進 KV，讓 payment-callback 找得到、fulfill 得了。
+  try {
+    await env.ORDER_FALLBACK.put(
+      `order/${orderId}/${Date.now()}`,
+      JSON.stringify({
+        orderId,
+        createdAt: new Date().toISOString(),
+        ip,
+        payload: { ...payload, total: amount }, // 用後端重算金額覆寫
+        payment: { status: 'pending', amount, method: 'ecpay' },
+      }),
+      { expirationTtl: 30 * 24 * 60 * 60 },
+    );
+  } catch (err) {
+    console.error('checkout: KV put failed', err);
+    return jsonResponse({ ok: false, error: '系統忙碌，請稍後再試' }, 500);
+  }
+
+  const { action, fields } = buildAioOrder({ orderId, cart: payload.cart, amount }, env);
+  return jsonResponse({ ok: true, orderId, action, fields });
+}
+
+async function handlePaymentCallback(request, env) {
+  const reply = (body = '1|OK', status = 200) =>
+    new Response(body, { status, headers: { 'Content-Type': 'text/plain' } });
+
+  if (request.method !== 'POST') return reply('0|Method not allowed', 405);
+
+  let params;
+  try {
+    params = Object.fromEntries(await request.formData());
+  } catch (err) {
+    console.error('payment-callback parse failed', err);
+    return reply('0|Bad request', 400);
+  }
+
+  if (!paymentConfigured(env)) {
+    console.error('payment-callback: payment not configured');
+    return reply('0|Not configured', 500);
+  }
+  const expected = paymentCheckMacValue(
+    params,
+    env.ECPAY_PAYMENT_HASH_KEY,
+    env.ECPAY_PAYMENT_HASH_IV,
+  );
+  if (!params.CheckMacValue || params.CheckMacValue !== expected) {
+    console.error('payment-callback CheckMacValue mismatch', {
+      tradeNo: params.MerchantTradeNo,
+    });
+    return reply('0|CheckMacValue mismatch', 400);
+  }
+
+  const orderId = tradeNoToOrderId(params.MerchantTradeNo);
+  // 認不出單號 / 沒 KV：仍 ack，避免 ECPay 無限重試。
+  if (!orderId || !env.ORDER_FALLBACK) return reply();
+
+  const list = await env.ORDER_FALLBACK.list({ prefix: `order/${orderId}/` });
+  if (!list.keys.length) {
+    console.error('payment-callback for unknown order', orderId);
+    return reply();
+  }
+  const key = list.keys[0].name;
+  const raw = await env.ORDER_FALLBACK.get(key);
+  if (!raw) return reply();
+  let stored;
+  try {
+    stored = JSON.parse(raw);
+  } catch (err) {
+    console.error('payment-callback stored JSON parse failed', err);
+    return reply();
+  }
+
+  const paid = params.RtnCode === '1';
+  stored.payment = {
+    ...(stored.payment || {}),
+    status: paid ? 'paid' : 'failed',
+    rtnCode: String(params.RtnCode || ''),
+    rtnMsg: String(params.RtnMsg || ''),
+    tradeNo: String(params.TradeNo || ''),
+    paymentType: String(params.PaymentType || ''),
+    tradeAmt: String(params.TradeAmt || ''),
+    paymentDate: String(params.PaymentDate || ''),
+    updatedAt: new Date().toISOString(),
+  };
+
+  // 只有第一次「付款成功」才 fulfill —— stored.fulfilledAt 當 idempotency key，
+  // ECPay 重送同一筆成功通知時不會重複建物流 / 重複寄信。
+  if (paid && !stored.fulfilledAt) {
+    try {
+      await fulfillPaidOrder(stored, env);
+      stored.fulfilledAt = new Date().toISOString();
+    } catch (err) {
+      // 付款已成立（KV 記 paid）。fulfill 失敗仍 ack —— 讓 ECPay 重試會
+      // 重複寄信，改由老闆娘從 KV / 後台補救比較安全。
+      console.error('payment-callback fulfill failed', err);
+    }
+  }
+
+  try {
+    await env.ORDER_FALLBACK.put(key, JSON.stringify(stored), {
+      expirationTtl: 30 * 24 * 60 * 60,
+    });
+  } catch (err) {
+    console.error('payment-callback KV put failed', err);
+  }
+
+  return reply();
+}
+
+// 付款成功後才跑：物流建單（若店到店、且已付款不代收）+ 通知老闆娘 +
+// 買家「付款完成」確認信。與 handleOrder（貨到付款）並存，兩條路徑共用
+// createShippingOrder 與 email 樣板。失敗只 log，不丟回 callback。
+async function fulfillPaidOrder(stored, env) {
+  const { orderId, payload } = stored;
+  const {
+    name, email, phone, shipMethod, shipKind, storeId, storeName,
+    recipientName, address, note, cart, total,
+  } = payload;
+
+  let logistics = null;
+  let logisticsError = null;
+  if (
+    shipKind === 'store' &&
+    payload.subType &&
+    env.ECPAY_LOGISTICS_HASH_KEY &&
+    env.ECPAY_LOGISTICS_HASH_IV
+  ) {
+    try {
+      const r = await createShippingOrder(
+        {
+          orderId,
+          subType: payload.subType,
+          total,
+          storeId,
+          recipientName: recipientName || name,
+          recipientPhone: phone,
+          recipientEmail: email,
+          isCollection: false, // 已線上付款 —— 物流不代收
+        },
+        env,
+      );
+      if (r.ok) {
+        logistics = {
+          allPayLogisticsId: r.allPayLogisticsId,
+          cvsPaymentNo: r.cvsPaymentNo,
+          cvsValidationNo: r.cvsValidationNo,
+          subType: payload.subType,
+          createdAt: new Date().toISOString(),
+        };
+      } else {
+        logisticsError = r.error || 'ECPay 回傳未知錯誤';
+        console.error('fulfillPaidOrder createShippingOrder failed:', logisticsError);
+      }
+    } catch (err) {
+      logisticsError = err.message || String(err);
+      console.error('fulfillPaidOrder createShippingOrder threw:', err);
+    }
+  }
+  stored.logistics = logistics;
+  stored.logisticsError = logisticsError;
+
+  if (!env.RESEND_API_KEY) return; // 沒信件服務 → 只更新 KV（呼叫端寫回）
+
+  const toEmail = env.ORDER_TO_EMAIL || 'tsghsunlee@gmail.com';
+  const fromEmail = env.ORDER_FROM_EMAIL || 'onboarding@resend.dev';
+  const labelUrl = logistics ? `${publicBaseUrl(env)}/api/label/${orderId}` : null;
+  const shipFields = { phone, shipMethod, shipKind, storeId, storeName, recipientName, address };
+  const ip = stored.ip || '線上付款';
+
+  // 老闆娘信 —— subject 標「已付款」，body 沿用同一份樣板。
+  const html = renderOrderEmailHtml({
+    orderId, name, email, note, cart, total, ip, ...shipFields, labelUrl, logistics, logisticsError,
+  });
+  const text = renderOrderEmailText({
+    orderId, name, email, note, cart, total, ip, ...shipFields, labelUrl, logistics, logisticsError,
+  });
+  try {
+    await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${env.RESEND_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        from: `金花樓 <${fromEmail}>`,
+        to: [toEmail],
+        reply_to: email,
+        subject: `[金花樓·已付款] ${orderId} · ${name} · NT$${total}`,
+        html,
+        text,
+      }),
+    });
+  } catch (err) {
+    console.error('fulfillPaidOrder owner email failed', err);
+  }
+
+  // 買家確認信 —— 付款完成版（paid:true 切換「接下來流程」文案）。
+  try {
+    const orderUrl = `${publicBaseUrl(env)}/order/${orderId}`;
+    const buyerHtml = renderBuyerEmailHtml({
+      orderId, orderUrl, name, phone, shipMethod, shipKind, storeName, address, recipientName,
+      cart, total, paid: true,
+    });
+    const buyerText = renderBuyerEmailText({
+      orderId, orderUrl, name, phone, shipMethod, shipKind, storeName, address, recipientName,
+      cart, total, paid: true,
+    });
+    await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${env.RESEND_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        from: `金花樓 <${fromEmail}>`,
+        to: [email],
+        reply_to: toEmail,
+        subject: `付款完成 · 金花樓 #${orderId}`,
+        html: buyerHtml,
+        text: buyerText,
+      }),
+    });
+  } catch (err) {
+    console.error('fulfillPaidOrder buyer email failed', err);
+  }
 }
 
 function buildPrintFormHtml(logistics, env) {
@@ -1191,6 +1577,10 @@ async function handleOrderQuery(orderId, env) {
     storeName: payload.storeName,
     note: payload.note,
     status,
+    // 線上金流付款狀態（貨到付款訂單為 null）。買家從 ECPay 付完導回查單頁
+    // 時，用這個顯示「付款完成」。
+    paid: stored.payment?.status === 'paid',
+    paymentStatus: stored.payment?.status || null,
     logisticsId: stored.logistics?.allPayLogisticsId,
     logisticsError: stored.logisticsError,
     // 完整時間軸 — UI 用來畫 ECPay 各階段事件，按 receivedAt asc 排好

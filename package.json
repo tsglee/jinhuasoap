@@ -9,6 +9,7 @@
     "build": "vite build && node scripts/strip-redundant-pngs.js",
     "preview": "vite preview",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+    "test": "node scripts/ecpay-mac.test.mjs && node scripts/ecpay-checkout.test.mjs",
     "format": "prettier --write \"src/**/*.{js,jsx,css,md}\" \"functions/**/*.{js,ts}\" \"*.{js,json,md,html}\"",
     "optimize:images": "node scripts/optimize-images.js"
   },

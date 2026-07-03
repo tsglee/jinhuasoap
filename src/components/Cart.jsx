@@ -268,6 +268,7 @@ function OrderRequestForm({ cart, total, onSent }) {
       ecpayMerchantId: import.meta.env.VITE_ECPAY_MERCHANT_ID || '',
       ecpayEmapUrl:
         import.meta.env.VITE_ECPAY_EMAP_URL || ECPAY_DEFAULT_EMAP_URL,
+      paymentEnabled: false, // 保守預設：拿不到 config 就當貨到付款
     };
     fetch('/api/config')
       .then((r) => (r.ok ? r.json() : null))
@@ -357,6 +358,32 @@ function OrderRequestForm({ cart, total, onSent }) {
     }
   };
 
+  // 線上金流是否啟用（worker 讀 payment secret 有沒有設）。決定按鈕文案 +
+  // 寄送方式是否標「貨到付款」；實際走哪條仍以 /api/checkout 回應為準。
+  const paymentEnabled = !!(ecpayConfig && ecpayConfig.paymentEnabled);
+
+  // 線上付款模式時，寄送方式不再是「貨到付款」，標籤把後綴拿掉。
+  const methodLabel = (m) =>
+    m ? (paymentEnabled ? m.label.replace('（貨到付款）', '') : m.label) : '';
+
+  // 組隱藏表單、整頁 POST 到 ECPay 收銀台。金流頁不能包在 iframe，必須是
+  // top-level navigation，所以用真的 <form> submit 而非 fetch。
+  const redirectToEcpay = (action, fields) => {
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = action;
+    form.style.display = 'none';
+    for (const [k, v] of Object.entries(fields)) {
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = k;
+      input.value = String(v);
+      form.appendChild(input);
+    }
+    document.body.appendChild(form);
+    form.submit();
+  };
+
   const submit = async (e) => {
     e.preventDefault();
     if (status === 'sending') return;
@@ -368,57 +395,40 @@ function OrderRequestForm({ cart, total, onSent }) {
     }
     setStatus('sending');
     setErrorMsg('');
-    try {
-      const selected = SHIP_METHODS.find((m) => m.id === shipMethod);
-      const res = await fetch('/api/order', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: name.trim(),
-          email: email.trim(),
-          phone: normalizeTwMobile(phone) || phone,
-          shipMethod: selected?.label || shipMethod,
-          shipKind: kind,
-          // 直送 ECPay LogisticsSubType（UNIMARTC2C / FAMIC2C），worker 用
-          // 這個自動 call CreateShippingOrder API。比從中文 shipMethod
-          // 反推 subType 穩。
-          subType: kind === 'store' ? ECPAY_SUBTYPE[shipMethod] : undefined,
-          storeId: kind === 'store' ? storeId.trim() : '',
-          storeName: kind === 'store' ? storeName.trim() : '',
-          recipientName: (recipientName.trim() || name.trim()),
-          address: '',
-          note: note.trim(),
-          cart: cart.map((i) => ({
-            num: i.num,
-            zh: i.zh,
-            lat: i.lat,
-            qty: i.qty,
-            price: i.price,
-          })),
-          total,
-        }),
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok || !data.ok) {
-        throw new Error(data.error || `伺服器回應 ${res.status}`);
-      }
-      // Google Ads conversion ── 訂單成功 server 回 ok 才送。transaction_id
-      // 帶 orderId 讓 Google Ads dedupe（避免 user 重整 success 頁重複計算）。
-      if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
-        window.gtag('event', 'conversion', {
-          send_to: 'AW-18179582977/VZRdCPbji7EcEIHY2dxD',
-          value: total,
-          currency: 'TWD',
-          transaction_id: data.orderId || '',
-        });
-      }
-      // Save this order's lines so a returning regular can re-add them in one
-      // tap (Shop「上次買的」+ /order「再買一次」). Non-fatal — never blocks success.
+
+    const selected = SHIP_METHODS.find((m) => m.id === shipMethod);
+    const payload = {
+      name: name.trim(),
+      email: email.trim(),
+      phone: normalizeTwMobile(phone) || phone,
+      shipMethod: methodLabel(selected) || shipMethod,
+      shipKind: kind,
+      // 直送 ECPay LogisticsSubType（UNIMARTC2C / FAMIC2C），worker 用這個
+      // 自動 call CreateShippingOrder。比從中文 shipMethod 反推 subType 穩。
+      subType: kind === 'store' ? ECPAY_SUBTYPE[shipMethod] : undefined,
+      storeId: kind === 'store' ? storeId.trim() : '',
+      storeName: kind === 'store' ? storeName.trim() : '',
+      recipientName: recipientName.trim() || name.trim(),
+      address: '',
+      note: note.trim(),
+      cart: cart.map((i) => ({
+        num: i.num,
+        zh: i.zh,
+        lat: i.lat,
+        qty: i.qty,
+        price: i.price,
+      })),
+      total,
+    };
+
+    // 記住這張單的品項，讓回頭客一鍵再買（Shop「上次買的」+ /order「再買一次」）。
+    // Non-fatal —— 存不進去也不擋結帳。
+    const rememberOrder = (orderId) => {
       try {
         window.localStorage.setItem(
           'gf_last_order',
           JSON.stringify({
-            orderId: data.orderId || '',
+            orderId: orderId || '',
             savedAt: Date.now(),
             lines: cart.map((i) => ({ num: i.num, zh: i.zh, qty: i.qty })),
           }),
@@ -426,6 +436,37 @@ function OrderRequestForm({ cart, total, onSent }) {
       } catch {
         /* localStorage unavailable — skip */
       }
+    };
+
+    try {
+      // 先試線上金流：設定齊 → 回 ECPay 收銀台表單，整頁轉跳過去付款。
+      const checkoutRes = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const checkout = await checkoutRes.json().catch(() => ({}));
+      if (checkoutRes.ok && checkout.ok && checkout.action && checkout.fields) {
+        rememberOrder(checkout.orderId);
+        redirectToEcpay(checkout.action, checkout.fields); // 離開本頁 → ECPay
+        return;
+      }
+      // 走到這代表沒拿到付款表單。notConfigured（金流未設定）→ 靜默 fallback
+      // 到 /api/order（貨到付款 + Line 確認）。其他錯誤 → 直接報，別重打。
+      if (!checkout.notConfigured && checkout.error) {
+        throw new Error(checkout.error);
+      }
+
+      const res = await fetch('/api/order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data.ok) {
+        throw new Error(data.error || `伺服器回應 ${res.status}`);
+      }
+      rememberOrder(data.orderId);
       onSent && onSent(data.orderId || '');
     } catch (err) {
       setStatus('error');
@@ -470,7 +511,9 @@ function OrderRequestForm({ cart, total, onSent }) {
         className="tc"
         style={{ fontSize: 13, color: 'var(--ink-60)', lineHeight: 1.7, letterSpacing: 1 }}
       >
-        送出後請加我們 Line 並告知訂單編號，我們會在 24 小時內回覆付款與寄送方式。無需先付款。
+        {paymentEnabled
+          ? '結帳後將轉跳綠界 ECPay 完成付款（信用卡 · ATM · 超商代碼）。付款完成即成立訂單；有任何問題都可以透過 Line 與我們聯繫。'
+          : '送出後請加我們 Line 並告知訂單編號，我們會在 24 小時內回覆付款與寄送方式。無需先付款。'}
       </div>
       <input
         type="text"
@@ -539,7 +582,7 @@ function OrderRequestForm({ cart, total, onSent }) {
       >
         <option value="">── 選擇寄送方式 ──</option>
         {SHIP_METHODS.map((m) => (
-          <option key={m.id} value={m.id}>{m.label}</option>
+          <option key={m.id} value={m.id}>{methodLabel(m)}</option>
         ))}
       </select>
       {kind === 'store' && (
@@ -664,7 +707,13 @@ function OrderRequestForm({ cart, total, onSent }) {
             cursor: status === 'sending' ? 'wait' : 'pointer',
           }}
         >
-          {status === 'sending' ? '寄送中…' : `送出 · NT$${total}`}
+          {status === 'sending'
+            ? paymentEnabled
+              ? '前往付款…'
+              : '寄送中…'
+            : paymentEnabled
+              ? `前往付款 · NT$${total}`
+              : `送出 · NT$${total}`}
         </button>
       </div>
     </form>

@@ -347,6 +347,11 @@ export function OrderTracking({ orderId, navigate }) {
               >
                 {STATUS_LABELS[data.status]?.label || data.status}
               </div>
+              {data.paid && (
+                <div className="mono" style={{ fontSize: 11, color: 'var(--gold-3)', marginTop: 12, letterSpacing: 1.5 }}>
+                  付款完成 · 綠界 ECPay ✓
+                </div>
+              )}
               {data.logisticsId && (
                 <div className="mono" style={{ fontSize: 11, color: 'var(--ink-60)', marginTop: 12, letterSpacing: 1.5 }}>
                   物流單號 · {data.logisticsId}
