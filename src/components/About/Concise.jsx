@@ -109,6 +109,11 @@ function FeaturedBar({ p, navigate, badge }) {
 
 export function ConciseHome({ navigate }) {
   const go = (path) => navigate && navigate(path);
+  const goProduct = (e, slug) => {
+    if (e.metaKey || e.ctrlKey || e.button === 1) return;
+    e.preventDefault();
+    navigate && navigate(`/products/${slug}`);
+  };
   const term = getCurrentTerm();
   const featured = featuredForTerm(term);
   return (
@@ -213,12 +218,54 @@ export function ConciseHome({ navigate }) {
         </div>
       </section>
 
+      {/* 十二花手卷 — all twelve soaps drift past like an unrolling handscroll.
+          Ambient, not scroll-jacking: the page still scrolls vertically; the
+          strip moves itself, pauses on hover, and turns swipeable under
+          reduced-motion. Low detail on purpose — № + name, no prices. */}
+      <section aria-label="十二花一覽" style={{ padding: 'clamp(40px, 7vh, 76px) 0 clamp(48px, 8vh, 88px)' }}>
+        <div style={{ textAlign: 'center', padding: '0 28px', marginBottom: 'clamp(22px, 4vh, 38px)' }}>
+          <div className="mono" style={{ color: 'var(--gold-3)', letterSpacing: 4, fontSize: 12 }}>
+            本舍十二花　·　一覽
+          </div>
+        </div>
+        <div className="gf-scroll-mask">
+          <div className="gf-scroll-track">
+            {[...PRODUCTS, ...PRODUCTS].map((p, i) => {
+              const dup = i >= PRODUCTS.length;
+              return (
+                <a
+                  key={i}
+                  href={`/products/${p.slug}`}
+                  onClick={(e) => goProduct(e, p.slug)}
+                  className="gf-soap-tile"
+                  aria-label={dup ? undefined : p.zh}
+                  aria-hidden={dup ? 'true' : undefined}
+                  tabIndex={dup ? -1 : undefined}
+                >
+                  <div className="gf-soap-img gf-img-zoom">
+                    <Img src={p.photos[0]} alt={dup ? '' : p.zh} />
+                  </div>
+                  <div className="gf-soap-cap">
+                    <div className="mono" style={{ fontSize: 11, letterSpacing: 2, color: 'var(--gold-3)' }}>
+                      № {p.num}
+                    </div>
+                    <div className="tc" style={{ fontSize: 13, letterSpacing: 1, color: 'var(--sumi)', marginTop: 4, lineHeight: 1.4 }}>
+                      {p.zh}
+                    </div>
+                  </div>
+                </a>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
       {/* 2 · Essence — the whole ethos in one line + one sentence. */}
       <section
         style={{
           maxWidth: 760,
           margin: '0 auto',
-          padding: 'clamp(64px, 12vh, 120px) 28px',
+          padding: 'clamp(48px, 9vh, 96px) 28px',
           textAlign: 'center',
         }}
       >
@@ -249,7 +296,7 @@ export function ConciseHome({ navigate }) {
         </p>
       </section>
 
-      {/* 3 · 十二花 · 精選 — three signature bars: real product, real prices. */}
+      {/* 3 · 本季精選 — the seasonal bar + two signatures, with real prices. */}
       <section
         style={{
           maxWidth: 1120,
@@ -268,7 +315,7 @@ export function ConciseHome({ navigate }) {
               margin: '0 0 10px',
             }}
           >
-            十二花
+            本季精選
           </h2>
           <p className="tc" style={{ fontSize: 15, letterSpacing: 2, color: 'var(--gold-3)', margin: 0 }}>
             節氣 · {term.name} ── {term.line}
@@ -374,21 +421,33 @@ export function ConciseHome({ navigate }) {
         </div>
       </section>
 
-      {/* 5 · Close — one quiet line, one seal-red CTA. */}
+      {/* 5 · Close — a quiet line, the one seal-red CTA, then calm ways onward. */}
       <section
         style={{
-          maxWidth: 560,
+          maxWidth: 640,
           margin: '0 auto',
           padding: 'clamp(64px, 12vh, 120px) 28px',
           textAlign: 'center',
           display: 'grid',
           justifyItems: 'center',
-          gap: 24,
+          gap: 'clamp(24px, 4vh, 36px)',
         }}
       >
-        <div className="mono" style={{ color: 'var(--gold-3)', letterSpacing: 3 }}>
-          每週四出貨 · 紅蠟封緘
-        </div>
+        <p
+          className="tc"
+          style={{
+            fontSize: 'clamp(20px, 3vw, 26px)',
+            fontWeight: 500,
+            lineHeight: 1.7,
+            letterSpacing: 2,
+            color: 'var(--sumi)',
+            margin: 0,
+            maxWidth: '18em',
+            textWrap: 'balance',
+          }}
+        >
+          洗澡，是一天裡最誠實的幾分鐘。
+        </p>
         <button
           type="button"
           onClick={() => go('/shop')}
@@ -405,6 +464,45 @@ export function ConciseHome({ navigate }) {
         >
           購皂
         </button>
+        <nav
+          aria-label="更多"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flexWrap: 'wrap',
+            gap: 'clamp(12px, 3vw, 22px)',
+            marginTop: 4,
+          }}
+        >
+          <a
+            href="/products"
+            onClick={(e) => { e.preventDefault(); go('/products'); }}
+            className="gf-quiet-link tc"
+            style={{ fontSize: 13.5, letterSpacing: 2, color: 'var(--ink-60)', textDecoration: 'none' }}
+          >
+            看十二花
+          </a>
+          <span aria-hidden="true" style={{ color: 'var(--ink-15)' }}>·</span>
+          <a
+            href="/journal"
+            onClick={(e) => { e.preventDefault(); go('/journal'); }}
+            className="gf-quiet-link tc"
+            style={{ fontSize: 13.5, letterSpacing: 2, color: 'var(--ink-60)', textDecoration: 'none' }}
+          >
+            本舍小記
+          </a>
+          <span aria-hidden="true" style={{ color: 'var(--ink-15)' }}>·</span>
+          <a
+            href="https://www.instagram.com/jinhuasoap/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="gf-quiet-link mono"
+            style={{ fontSize: 12, letterSpacing: 2, color: 'var(--ink-60)', textDecoration: 'none' }}
+          >
+            @jinhuasoap
+          </a>
+        </nav>
       </section>
     </div>
   );

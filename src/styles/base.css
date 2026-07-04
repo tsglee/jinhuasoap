@@ -162,6 +162,16 @@ button {
   outline: 2px solid var(--sumi);
   outline-offset: 3px;
 }
+.gf-quiet-link {
+  transition: color 200ms ease;
+}
+.gf-quiet-link:hover {
+  color: var(--sumi);
+}
+.gf-quiet-link:focus-visible {
+  outline: 2px solid var(--red);
+  outline-offset: 3px;
+}
 .gf-img-zoom {
   overflow: hidden;
 }
@@ -176,5 +186,55 @@ button {
   .gf-img-zoom:hover img {
     transition: none;
     transform: none;
+  }
+}
+
+/* 十二花手卷 — an ambient row of all twelve soaps that drifts by on its own,
+   like a handscroll unrolling. Not scroll-jacking: the page scrolls
+   vertically as usual; this strip moves itself. Hover pauses it so a bar can
+   be read and clicked; reduced-motion stops the drift and lets you swipe. */
+.gf-scroll-mask {
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+  overflow: hidden;
+}
+.gf-scroll-track {
+  display: flex;
+  gap: clamp(18px, 2.4vw, 34px);
+  width: max-content;
+  padding-inline: clamp(18px, 2.4vw, 34px);
+  animation: gf-drift 78s linear infinite;
+  will-change: transform;
+}
+.gf-scroll-track:hover {
+  animation-play-state: paused;
+}
+@keyframes gf-drift {
+  from { transform: translateX(0); }
+  to { transform: translateX(calc(-50% - clamp(9px, 1.2vw, 17px))); }
+}
+.gf-soap-tile {
+  flex: 0 0 auto;
+  width: clamp(140px, 17vw, 182px);
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+.gf-soap-img {
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: var(--paper-2);
+}
+.gf-soap-cap {
+  margin-top: 12px;
+  text-align: center;
+}
+@media (prefers-reduced-motion: reduce) {
+  .gf-scroll-mask {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .gf-scroll-track {
+    animation: none;
   }
 }
